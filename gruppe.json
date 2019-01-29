@@ -1,1 +1,37 @@
-
+{
+  "repository": "https://github.com/hhu-propra2/abschlussprojekt-bugrog-morgoth-ush-parse",
+  "people": [
+    {
+      "name": "Christian Laußmann",
+      "github-name": "claussmann"
+    },
+    {
+      "name": "Jonathan Bobak",
+      "github-name": "Grimaldus12"
+    },
+    {
+      "name": "Markus Günther",
+      "github-name": "DirtyDan007"
+    },
+    {
+      "name": "Sami Hamdan",
+      "github-name": "Sammoer"
+    },
+    {
+      "name": "Ingo Kral",
+      "github-name": "ik8472"
+    },
+    {
+      "name": "Lars Müller",
+      "github-name": "pYTR0N"
+    },
+    {
+      "name": "Phillip Krause",
+      "github-name": "brokelyn"
+    },
+    {
+      "name": "Stefan ...",
+      "github-name": "braunbearded"
+    }
+  ]
+}
