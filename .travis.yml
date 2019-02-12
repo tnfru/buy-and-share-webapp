@@ -19,6 +19,8 @@ matrix:
 branches:
   only:
     - /.*/
+  except:
+    - dev
 
 notifications:
   email: false
