@@ -30,7 +30,9 @@ public class UserFaker implements IFaker<User> {
 
     public User addToList(IFaker<Item> itemFaker, User owner, int count) {
         for (int i = 0; i < count; i++) {
-            owner.getItems().add(itemFaker.create());
+            Item item = itemFaker.create();
+            owner.getItems().add(item);
+            item.setOwner(owner);
         }
         return owner;
     }
