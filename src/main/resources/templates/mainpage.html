@@ -19,6 +19,24 @@
         <span th:case="${true}"><a href="/logout">Logout</a><a href="/account">My Borrow.ly</a> </span>
     </div>
 </div>
+<div class="itenlist">
+    <th:block th:each = "item : ${items}">
+        <div class="item">
+            <a th:href="@{/details/${item.getId()}}">
+                <h3 th:text="${item.getName()}">Jackhammer</h3>
+            </a>
+            <p th:text = "${item.getDescription()}">Brand new model! Very cheap!</p>
+            <p class="user">Offered by
+                <span th:text="${item.getOwner()}">CheapJackhammer24@gmx.mail</span></p>
+        </div>
+    </th:block>
+</div>
+<div class="footer">
+    <a href="/legal">Legal</a>
+    <a href="/about">About us</a>
+    <a href="/contact">Contact support</a>
+</div>
+
 </body>
 
 </html>
