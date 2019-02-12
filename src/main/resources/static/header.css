@@ -2,8 +2,9 @@
     display: grid;
     grid-template-areas: 'A A A A A B C';
     heigth:110px;
-    background-color: #EEEEEE;
     width:100%;
+    border-bottom-style: solid;
+    border-bottom-width: thin;
 }
 
 
