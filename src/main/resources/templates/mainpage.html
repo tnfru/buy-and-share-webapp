@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="shortcut icon" type="image/x-icon" href="Logo_Square_small.png">
     <link rel="stylesheet" media="screen" href="header.css">
+    <link rel="stylesheet" media="screen" href="footer.css">
+    <link rel="stylesheet" media="screen" href="items.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Share easy, Borrow simple">
     <meta name="robots" content="notranslate">
@@ -37,19 +39,22 @@
 </div>
 <div class="itemlist">
     <th:block th:each = "item : ${items}">
-        <div class="item">
-            <a th:href="@{/details/${item.getId()}}">
-                <h3 th:text="${item.getName()}">Jackhammer</h3>
-            </a>
-            <p th:text = "${item.getDescription()}">Brand new model! Very cheap!</p>
-            <p class="user">Offered by
-                <span th:text="${item.getOwner()}">CheapJackhammer24@gmx.mail</span></p>
+        <div class="card">
+            <div class="card-body">
+                <a th:href="@{/details/${item.getId()}}">
+                    <h4 class="card-title" th:text="${item.getName()}">Jackhammer</h4>
+                </a>
+                <p class="card-text" th:text = "${item.getDescription()}">Brand new model! Very
+                    cheap!</p>
+                <p class="card-text">Offered by
+                    <span th:text="${item.getOwner()}">CheapJackhammer24@gmx.mail</span></p>
+            </div>
         </div>
     </th:block>
 </div>
 <div class="footer">
-    <a href="/legal">Legal</a>
-    <a href="/about">About us</a>
+    <a href="/legal">Legal</a> |
+    <a href="/about">About us</a> |
     <a href="/contact">Contact support</a>
 </div>
 
