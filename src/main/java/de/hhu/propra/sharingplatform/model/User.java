@@ -20,12 +20,15 @@ public class User {
     private long id;
 
     private String name;
-    private String adress;
+    private String address;
     private String email;
     private int propayId;
     private int rating;
     private boolean ban;
     private boolean deleted;
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Contract> contracts;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "owner")
