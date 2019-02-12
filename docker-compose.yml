@@ -3,8 +3,6 @@ services:
   sharing:
     image: sharing
     build: .
-    volumes:
-      - ./:/app
     links:
       - sharingDB
     depends_on:
