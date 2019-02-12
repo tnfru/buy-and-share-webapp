@@ -19,7 +19,7 @@ public class Item {
     private int price; // each day
     private boolean available;
 
-    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User owner;
     private String location; // maybe change to java location class
     private boolean deleted;
