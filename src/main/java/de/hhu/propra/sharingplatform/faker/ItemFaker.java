@@ -3,6 +3,7 @@ package de.hhu.propra.sharingplatform.faker;
 import com.github.javafaker.Faker;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import java.util.List;
 
 public class ItemFaker {
 
@@ -21,7 +22,15 @@ public class ItemFaker {
         item.setAvailable(true);
         item.setLocation(faker.harryPotter().location());
         item.setDeleted(false);
+        item.setOwner(owner);
+        owner.getItems().add(item);
 
         return item;
+    }
+
+    public void createItems(List<Item> items, User owner, int count){
+        for (int i = 0; i < count; i++) {
+            items.add(create(owner));
+        }
     }
 }
