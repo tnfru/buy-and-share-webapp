@@ -1,6 +1,7 @@
 package de.hhu.propra.sharingplatform.model;
 
 
+import java.util.List;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -23,4 +24,8 @@ public class Item {
     private User owner;
     private String location; // maybe change to java location class
     private boolean deleted;
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+        CascadeType.REFRESH}, mappedBy = "item")
+    private List<Offer> offers;
 }
