@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>Borrow.ly</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="Logo_Square_small.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Share easy, Borrow simple">
+    <meta name="robots" content="notranslate">
+</head>
+
+<body>
+
+<div class="header">
+    <a href="/"><img src="Header.png"></a>
+    <div th:switch="${authenticated}?">
+        <span th:case="${false}"><a href="/login">Login</a><a href="/register">Register</a> </span>
+        <span th:case="${true}"><a href="/logout">Logout</a><a href="/account">My Borrow.ly</a> </span>
+    </div>
+</div>
+</body>
+
+</html>
