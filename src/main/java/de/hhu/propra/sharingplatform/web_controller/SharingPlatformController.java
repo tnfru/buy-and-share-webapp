@@ -14,6 +14,7 @@ public class SharingPlatformController {
 
     @GetMapping("/")
     public String mainPage(Model model) throws IOException {
+        model.addAttribute("authenticated", false);
         return "mainpage";
     }
 
