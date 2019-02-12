@@ -15,12 +15,12 @@ public class ItemFaker {
 
     public Item create(User owner) {
         Item item = new Item();
-        item.setName(faker.hitchhikersGuideToTheGalaxy().starship());
-        item.setDescription(faker.lorem().paragraph(6));
+        item.setName(faker.space().nasaSpaceCraft());
+        item.setDescription(faker.lorem().paragraph(1));
         item.setDeposit(faker.number().numberBetween(20, 999));
         item.setPrice(faker.number().numberBetween(5, 50));
         item.setAvailable(true);
-        item.setLocation(faker.harryPotter().location());
+        item.setLocation(faker.address().cityName());
         item.setDeleted(false);
         item.setOwner(owner);
         owner.getItems().add(item);
