@@ -1,0 +1,19 @@
+version: "3.1"
+services:
+  sharing:
+    image: sharing
+    build: .
+    volumes:
+      - ./:/app
+    links:
+      - sharingDB
+    depends_on:
+      - sharingDB
+
+  sharingDB:
+    image: postgres
+    environment:
+      - POSTGRES_USER=sharingDB
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - ./data:/var/lib/postgresql/data
