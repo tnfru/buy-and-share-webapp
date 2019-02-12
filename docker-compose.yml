@@ -9,6 +9,8 @@ services:
       - sharingDB
     depends_on:
       - sharingDB
+    ports:
+      - "8080:80"
 
   sharingDB:
     image: postgres
