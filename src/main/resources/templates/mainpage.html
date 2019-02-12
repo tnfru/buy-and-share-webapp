@@ -5,6 +5,7 @@
     <title>Borrow.ly</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="Logo_Square_small.png">
+    <link rel="stylesheet" media="screen" href="header.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Share easy, Borrow simple">
     <meta name="robots" content="notranslate">
@@ -13,13 +14,13 @@
 <body>
 
 <div class="header">
-    <a href="/"><img src="Header.png"></a>
-    <div th:switch="${authenticated}?">
+    <a href="/"><img src="Header.png" class="header_img"></a>
+    <div th:switch="${authenticated}">
         <span th:case="${false}"><a href="/login">Login</a><a href="/register">Register</a> </span>
         <span th:case="${true}"><a href="/logout">Logout</a><a href="/account">My Borrow.ly</a> </span>
     </div>
 </div>
-<div class="itenlist">
+<div class="itemlist">
     <th:block th:each = "item : ${items}">
         <div class="item">
             <a th:href="@{/details/${item.getId()}}">
