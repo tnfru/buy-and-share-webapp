@@ -37,15 +37,10 @@ public class SharingPlatformController {
         return "account";
     }
 
-    @GetMapping("/detailborrowed")
-    public String detailBorrowedPage(Model model,
+    @GetMapping("/details")
+    public String detailPage(Model model,
         @RequestParam(value = "id", required = true) long id) {
-        return "detailborrowed";
-    }
-
-    @GetMapping("/detaillent")
-    public String detailLentPage(Model model,
-        @RequestParam(value = "id", required = true) long id) {
-        return "detaillent";
+        //TODO: add param do differentiate users
+        return "details";
     }
 }
