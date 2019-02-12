@@ -29,7 +29,7 @@ public class User {
     private boolean deleted;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "wantsToBorrow")
+        CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Contract> contracts;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
@@ -37,7 +37,7 @@ public class User {
     private List<Item> items;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "wantsToBorrow")
+        CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Offer> offers;
 
 

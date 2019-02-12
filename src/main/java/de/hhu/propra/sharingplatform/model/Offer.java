@@ -20,7 +20,7 @@ public class Offer {
     private Item item;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private User wantsToBorrow;
+    private User borrower;
 
     private boolean accept = false;
 }
