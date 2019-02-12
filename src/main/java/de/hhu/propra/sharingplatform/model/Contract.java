@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.Data;
 
@@ -19,7 +18,7 @@ public class Contract {
     private long id;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private User wantsToBorrow;
+    private User borrower;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Item item;
@@ -30,7 +29,7 @@ public class Contract {
 
     public Contract(Offer offer) {
         //TODO offer can be null
-        this.wantsToBorrow = offer.getWantsToBorrow();
+        this.borrower = offer.getBorrower();
         this.item = offer.getItem();
     }
 }
