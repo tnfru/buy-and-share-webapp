@@ -23,7 +23,7 @@ public class User {
     private String name;
     private String address;
     private String email;
-    private int propayId;
+    private String propayId;
     private int rating;
     private boolean ban;
     private boolean deleted;
