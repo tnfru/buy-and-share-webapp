@@ -17,13 +17,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String name;
     private String address;
     private String email;
     private String propayId;
-    private int rating;
+    private Integer rating;
     private boolean ban;
     private boolean deleted;
 
