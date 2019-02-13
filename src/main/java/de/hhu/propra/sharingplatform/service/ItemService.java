@@ -21,4 +21,12 @@ public class ItemService {
         item.setOwner(owner);
         itemRepo.save(item);
     }
+
+    public void removeItem(long userId, long itemId) {
+        Item item = itemRepo.findOneById(itemId);
+        if(item.getOwner().getId() == userId) {
+            item.setDeleted(true);
+            itemRepo.save(item);
+        }
+    }
 }

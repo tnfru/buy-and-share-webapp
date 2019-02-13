@@ -1,7 +1,6 @@
 package de.hhu.propra.sharingplatform.web_controller;
 
 import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.modelDAO.UserRepo;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ItemController {
@@ -37,6 +37,13 @@ public class ItemController {
     @PostMapping("/item/newItem/{userId}")
     public String inputItemData(Model model, Item item, @PathVariable long userId) {
         itemService.persistItem(item, userId);
+        return "redirect:/user/account/" + userId;
+    }
+
+    @GetMapping("/item/removeItem/{userId}")
+    public String markItemAsRemoved(Model model,
+        @RequestParam(value = "itemId", required = true) long itemId, @PathVariable long userId) {
+        itemService.removeItem(userId, itemId);
         return "redirect:/user/account/" + userId;
     }
 }
