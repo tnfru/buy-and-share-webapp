@@ -6,11 +6,15 @@ import de.hhu.propra.sharingplatform.modelDAO.ContractRepo;
 import de.hhu.propra.sharingplatform.modelDAO.ItemRepo;
 import de.hhu.propra.sharingplatform.modelDAO.OfferRepo;
 import de.hhu.propra.sharingplatform.modelDAO.UserRepo;
+import de.hhu.propra.sharingplatform.form.UserForm;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -47,7 +51,15 @@ public class SharingPlatformController {
 
     @GetMapping("/register")
     public String registerPage(Model model) {
+        UserForm form = new UserForm();
+        model.addAttribute("userForm", form);
         return "register";
+    }
+
+    @PostMapping("/register")
+    public String registerNewUser(Model model, @ModelAttribute("userForm") UserForm userForm) {
+        System.out.println(userForm.parseToUser());
+        return "mainpage";
     }
 
     @GetMapping("/account/{id}")

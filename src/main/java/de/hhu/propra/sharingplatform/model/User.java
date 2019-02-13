@@ -8,7 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Data;
 
@@ -23,7 +22,7 @@ public class User {
     private String name;
     private String address;
     private String email;
-    private int propayId;
+    private String propayId;
     private int rating;
     private boolean ban;
     private boolean deleted;

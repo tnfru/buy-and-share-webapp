@@ -18,13 +18,14 @@ public class UserFaker {
         user.setName(faker.name().fullName());
         user.setAddress(faker.address().fullAddress());
         user.setEmail(faker.name().username() + "@example.com");
-        user.setPropayId(faker.number().numberBetween(123456789, 987654321));
+        user.setPropayId(faker.funnyName().name());
         user.setRating(faker.number().numberBetween(0, 5));
         user.setBan(false);
         user.setDeleted(false);
-        if (user.getItems() == null) {
-            user.setItems(new ArrayList<>());
-        }
+        user.setItems(new ArrayList<>());
+        user.setOffers(new ArrayList<>());
+        user.setContracts(new ArrayList<>());
+
         return user;
     }
 
