@@ -31,9 +31,12 @@ public class Offer {
     public Offer() {
     }
 
-    public Offer(Date start, Date end) {
+    public Offer(Item item, User borrower, Date start, Date end) {
         this.setStart(start);
         this.setEnd(end);
+
+        this.setItem(item);
+        this.setBorrower(borrower);
 
         this.accept = false;
         this.decline = false;

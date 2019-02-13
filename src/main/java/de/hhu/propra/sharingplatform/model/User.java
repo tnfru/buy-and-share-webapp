@@ -1,6 +1,7 @@
 package de.hhu.propra.sharingplatform.model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -46,5 +47,13 @@ public class User {
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "recipient")
     private List<Payment> paymentsReceive;
+
+    public User() {
+        contracts = new ArrayList<>();
+        items = new ArrayList<>();
+        offers = new ArrayList<>();
+        paymentsSend = new ArrayList<>();
+        paymentsReceive = new ArrayList<>();
+    }
 
 }

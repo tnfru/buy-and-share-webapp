@@ -10,11 +10,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class OfferService {
 
-    @Autowired
+    final
     OfferRepo offerRepo;
 
-    @Autowired
+    final
     ContractService contractService;
+
+    @Autowired
+    public OfferService(ContractService contractService, OfferRepo offerRepo) {
+        this.contractService = contractService;
+        this.offerRepo = offerRepo;
+    }
 
     public void accept(long id) {
         Offer offer = offerRepo.findOneById(id);
