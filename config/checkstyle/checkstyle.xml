@@ -158,11 +158,6 @@
         </module>
         <module name="OverloadMethodsDeclarationOrder"/>
         <module name="VariableDeclarationUsageDistance"/>
-        <module name="CustomImportOrder">
-            <property name="specialImportsRegExp" value="com.google"/>
-            <property name="sortImportsInGroupAlphabetically" value="true"/>
-            <property name="customImportOrderRules" value="STATIC###SPECIAL_IMPORTS###THIRD_PARTY_PACKAGE###STANDARD_JAVA_PACKAGE"/>
-        </module>
         <module name="MethodParamPad"/>
         <module name="OperatorWrap">
             <property name="option" value="NL"/>
@@ -185,15 +180,6 @@
             <property name="tagOrder" value="@param, @return, @throws, @deprecated"/>
             <property name="target" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
         </module>
-        <module name="JavadocMethod">
-            <property name="scope" value="public"/>
-            <property name="allowMissingParamTags" value="true"/>
-            <property name="allowMissingThrowsTags" value="true"/>
-            <property name="allowMissingReturnTag" value="true"/>
-            <property name="minLineCount" value="2"/>
-            <property name="allowedAnnotations" value="Override, Test"/>
-            <property name="allowThrowsTagsForSubclasses" value="true"/>
-        </module>
         <module name="MethodName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
             <message key="name.invalidPattern"
@@ -208,4 +194,3 @@
         <module name="CommentsIndentation"/>
     </module>
 </module>
-
