@@ -29,10 +29,13 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-jdbc')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    runtimeOnly('com.h2database:h2')
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
-    compileOnly('org.projectlombok:lombok')
-    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+	runtimeOnly('com.h2database:h2')
+	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
+	compileOnly('org.projectlombok:lombok')
+	annotationProcessor 'org.projectlombok:lombok:1.18.4'
+	
+	compile group: 'com.github.javafaker', name: 'javafaker', version: '0.16'
 
-    compile group: 'com.github.javafaker', name: 'javafaker', version: '0.16'
+	//hasing lib
+	compile 'com.google.guava:guava:27.0.1-jre'
 }

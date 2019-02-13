@@ -19,12 +19,12 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String name;
     private String description;
-    private int deposit;
-    private int price; // each day
+    private Integer deposit;
+    private Integer price; // each day
     private boolean available;
     private String location; // maybe change to java location class
     private boolean deleted;
