@@ -1,7 +1,13 @@
 package de.hhu.propra.sharingplatform.model;
 
 
+import com.google.common.hash.Hashing;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +16,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.data.annotation.Transient;
 
 @Data
 @Entity
@@ -26,6 +35,8 @@ public class User {
     private Integer rating;
     private boolean ban;
     private boolean deleted;
+    private String passwordHash;
+    private String salt;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
@@ -39,5 +50,25 @@ public class User {
         CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Offer> offers;
 
+    public void setPassword(String password){
+        String pepper = "";
+        salt = UUID.randomUUID().toString();
+        password += salt;
+        password += pepper;
+        passwordHash = Hashing.sha512().hashString(password, StandardCharsets.UTF_8).toString();
+    }
 
+    public boolean checkPassword(String password){
+        String pepper = "";
+        /*Properties properties = new Properties();
+        try (InputStream is = getClass().getResourceAsStream("application.properties")) {
+            properties.load(is);
+            pepper = properties.getProperty("passwords.pepper");
+        } catch (IOException ex) {
+            //TODO
+        }*/
+        password += salt;
+        password += pepper;
+        return passwordHash.equals(Hashing.sha512().hashString(password, StandardCharsets.UTF_8).toString());
+    }
 }
