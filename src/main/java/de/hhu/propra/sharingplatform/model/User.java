@@ -1,16 +1,10 @@
 package de.hhu.propra.sharingplatform.model;
 
 
-<<<<<<< HEAD
-import java.util.ArrayList;
-=======
 import com.google.common.hash.Hashing;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
->>>>>>> dev
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -20,9 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.data.annotation.Transient;
 
 @Data
 @Entity
