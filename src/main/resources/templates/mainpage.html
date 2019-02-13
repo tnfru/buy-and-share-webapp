@@ -22,7 +22,7 @@
             <a href="/login">
                 <button type="button" class="btn btn-success" id="login-button">Login</button>
             </a>
-            <a href="/register">
+            <a href="/user/register">
                 <button type="button" class="btn btn-primary" id="register-button">Register</button>
             </a>
         </span>
@@ -31,7 +31,7 @@
                 <button type="button" class="btn btn-danger" id="logout-button">Logout</button>
             </a>
 
-            <a href="/account">
+            <a href="/user/account">
                  <button type="button" class="btn btn-primary" id="account-button">My Borrow.ly</button>
             </a>
         </span>
@@ -41,7 +41,7 @@
     <th:block th:each = "item : ${items}">
         <div class="card">
             <div class="card-body">
-                <a th:href="@{/details/${item.getId()}}">
+                <a th:href="@{/item/details/${item.getId()}}">
                     <h4 class="card-title" th:text="${item.getName()}">Jackhammer</h4>
                 </a>
                 <p class="card-text" th:text = "${item.getDescription()}">Brand new model! Very
