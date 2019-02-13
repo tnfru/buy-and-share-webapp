@@ -8,7 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Data;
 
@@ -40,5 +39,12 @@ public class User {
         CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Offer> offers;
 
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+        CascadeType.REFRESH}, mappedBy = "sender")
+    private List<Payment> paymentsSend;
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+        CascadeType.REFRESH}, mappedBy = "recipient")
+    private List<Payment> paymentsReceive;
 
 }
