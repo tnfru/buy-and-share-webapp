@@ -37,7 +37,7 @@ public class ItemFakerTest {
         userFaker = new UserFaker(faker);
     }
 
-    @Test
+    //@Test
     public void createItemTest() {
         User user = userFaker.create();
 

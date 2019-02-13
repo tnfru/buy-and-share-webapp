@@ -40,7 +40,6 @@ public class UserFakerTest {
         assertEquals("Eloisa O'Kon Sr.", user.getName());
         assertEquals("Suite 347 3803 Collins Land, Valentinaview, UT 56193", user.getAddress());
         assertEquals("torrance.daniel@example.com", user.getEmail());
-        assertEquals(580981810, user.getPropayId());
         assertEquals(3, user.getRating());
         assertFalse(user.isBan());
         assertFalse(user.isDeleted());
