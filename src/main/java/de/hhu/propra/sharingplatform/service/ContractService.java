@@ -12,11 +12,17 @@ import org.springframework.stereotype.Service;
 @Data
 public class ContractService {
 
-    @Autowired
+    final
     ContractRepo contractRepo;
 
-    @Autowired
+    final
     PaymentService paymentService;
+
+    @Autowired
+    public ContractService(ContractRepo contractRepo, PaymentService paymentService) {
+        this.contractRepo = contractRepo;
+        this.paymentService = paymentService;
+    }
 
     public void create(Offer offer) {
         contractRepo.save(new Contract(offer));

@@ -76,7 +76,7 @@ public class OfferServiceTest {
     public void acceptOfferNotInDbTest() {
         when(offerRepo.findOneById(anyLong())).thenReturn(null);
 
-        offerService.accept(4);
+        offerService.accept(anyLong());
     }
 
     @Test
@@ -100,6 +100,6 @@ public class OfferServiceTest {
     public void declineOfferNotInDbTest() {
         when(offerRepo.findOneById(anyLong())).thenReturn(null);
 
-        offerService.decline(4);
+        offerService.decline(anyLong());
     }
 }
