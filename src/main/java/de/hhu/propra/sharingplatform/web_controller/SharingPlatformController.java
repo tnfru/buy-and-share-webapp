@@ -1,6 +1,5 @@
 package de.hhu.propra.sharingplatform.web_controller;
 
-import java.io.IOException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,13 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class SharingPlatformController {
 
-    public SharingPlatformController() {
-    }
-
     @GetMapping("/")
-    public String mainPage(Model model) throws IOException {
+    public String mainPage(Model model) {
         model.addAttribute("authenticated", false);
         return "mainpage";
     }
-
 }
