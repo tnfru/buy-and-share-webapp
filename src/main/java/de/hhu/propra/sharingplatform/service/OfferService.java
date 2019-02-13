@@ -22,4 +22,10 @@ public class OfferService {
         offerRepo.save(offer);
         contractService.create(offer);
     }
+
+    public void decline(long id) {
+        Offer offer = offerRepo.findOneById(id);
+        offer.setDecline(true);
+        offerRepo.save(offer);
+    }
 }

@@ -25,5 +25,17 @@ public class Offer {
 
     private Date start;
     private Date end;
-    private boolean accept = false;
+    private boolean accept;
+    private boolean decline;
+
+    public Offer() {
+    }
+
+    public Offer(Date start, Date end) {
+        this.setStart(start);
+        this.setEnd(end);
+
+        this.accept = false;
+        this.decline = false;
+    }
 }
