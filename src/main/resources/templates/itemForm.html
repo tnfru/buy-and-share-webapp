@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.com">
+<title>Neuer Gegenstand</title>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<link rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+  <h1>Neuer Gegenstand</h1>
+  <br>
+  <form method="post" style="margin-left: 1em;">
+    <label>
+      <h4>Gegenstand</h4>
+      <br>
+      <br>
+      Bezeichnung:(*)<br>
+      <input type="text" name="name" th:value="${item?.name}" required></input>
+      <br>
+      <br>
+      Bescheibung:(*)<br>
+      <input type="text" name="description" th:value="${item?.description}" required></input>
+      <br>
+      <br>
+      Tagessatz:(*)<br>
+      <input type="number" name="price" min="0" th:value="${item?.price}"></input>
+      <br>
+      <br>
+      Kaution:(*)<br>
+      <input type="number" name="deposit" min="0" th:value="${item?.deposit}"></input>
+      <br>
+      <br>
+      Abholadresse:(*)<br>
+      <input type="text" name="location" th:value="${item?.location}"></input>
+      <br>
+    </label>
+    <br>
+    <br>
+    Alle mit * versehenen Angaben sind Pflichtfelder!
+    <br>
+    <br>
+    <button type="submit" class="btn btn-primary" action="POST">Speichern</button>
+  </form>
+  <br>
+  <a th:href="|/account/${user.id}| ">Ohne speichern zurück</a>
+</div>
+</body>
+</html>
