@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class SharingPlatformController {
@@ -17,6 +18,7 @@ public class SharingPlatformController {
 
     @GetMapping("/")
     public String mainPage(Model model) throws IOException {
+        model.addAttribute("authenticated", false);
         return "mainpage";
     }
 
@@ -43,15 +45,14 @@ public class SharingPlatformController {
         return "mainpage";
     }
 
-
-    @GetMapping("/account")
-    public String accountPage(Model model, @RequestParam(value = "id", required = true) long id) {
+    @GetMapping("/account/{id}")
+    public String accountPage(Model model, @PathVariable(value = "id", required = true) long id) {
         return "account";
     }
 
-    @GetMapping("/details")
+    @GetMapping("/details/{id}")
     public String detailPage(Model model,
-        @RequestParam(value = "id", required = true) long id) {
+        @PathVariable(value = "id", required = true) long id) {
         //TODO: add param do differentiate users
         return "details";
     }
