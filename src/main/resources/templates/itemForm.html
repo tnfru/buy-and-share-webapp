@@ -27,15 +27,15 @@
       <br>
       <br>
       Tagessatz:(*)<br>
-      <input type="number" name="price" min="0" th:value="${item?.price}"></input>
+      <input type="number" name="price" min="0" th:value="${item?.price}" required></input>
       <br>
       <br>
       Kaution:(*)<br>
-      <input type="number" name="deposit" min="0" th:value="${item?.deposit}"></input>
+      <input type="number" name="deposit" min="0" th:value="${item?.deposit}" required></input>
       <br>
       <br>
       Abholadresse:(*)<br>
-      <input type="text" name="location" th:value="${item?.location}"></input>
+      <input type="text" name="location" th:value="${item?.location}" required></input>
       <br>
     </label>
     <br>
