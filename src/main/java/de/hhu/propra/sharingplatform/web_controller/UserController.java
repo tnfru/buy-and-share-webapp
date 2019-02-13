@@ -40,18 +40,4 @@ public class UserController {
         return "account";
     }
 
-    @GetMapping("/user/account/{id}/newItem")
-    public String newItem(Model model, @PathVariable long id) {
-        model.addAttribute("item", new Item());
-        model.addAttribute("user", userRepo.findOneById(id));
-        return "itemForm";
-    }
-
-    @PostMapping("/user/account/{id}/newItem")
-    public String inputItemData(Model model, Item item, @PathVariable long id) {
-        User user = userRepo.findOneById(id);
-        item.setOwner(user);
-        itemRepo.save(item);
-        return "redirect:/account/" + id;
-    }
 }
