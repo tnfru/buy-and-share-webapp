@@ -2,10 +2,7 @@ package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Offer;
-import de.hhu.propra.sharingplatform.model.Payment;
-import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.modelDAO.ContractRepo;
-import de.hhu.propra.sharingplatform.modelDAO.PaymentRepo;
 import java.util.Date;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,7 @@ public class ContractService {
     ContractRepo contractRepo;
 
     @Autowired
-    PaymentRepo paymentRepo;
+    PaymentService paymentService;
 
     public void create(Offer offer) {
         contractRepo.save(new Contract(offer));
@@ -35,14 +32,6 @@ public class ContractService {
 
     public void calcPrice(long contractId) {
         Contract contract = contractRepo.findOneById(contractId);
-
-        long startTime = contract.getStart().getTime();
-        long endTime = contract.getRealEnd().getTime();
-
-        long timePassed = (endTime - startTime) / (1000 * 60 * 60 * 24);
-        User from = contract.getBorrower();
-        User to = contract.getItem().getOwner();
-        Payment payment = new Payment(from, to, timePassed * contract.getItem().getPrice());
-        paymentRepo.save(payment);
+        paymentService.create(contract);
     }
 }
