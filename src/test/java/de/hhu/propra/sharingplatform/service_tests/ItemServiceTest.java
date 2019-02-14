@@ -79,7 +79,7 @@ public class ItemServiceTest {
     @Test
     public void getOneItemToEditValidUser() {
         itemService.persistItem(item, 1);
-        Item editItem = itemService.getItemToEdit(1, 1);
+        Item editItem = itemService.getItem(1, 1);
 
         assert editItem.equals(item);
     }
@@ -87,7 +87,7 @@ public class ItemServiceTest {
     @Test
     public void getOneItemToEditInvalidUser() {
         itemService.persistItem(item, 1);
-        Item editItem = itemService.getItemToEdit(1, 2);
+        Item editItem = itemService.getItem(1, 2);
 
         assert editItem == null;
     }
@@ -95,7 +95,7 @@ public class ItemServiceTest {
     @Test
     public void setEditedItemValidItemAndUser() {
         itemService.persistItem(item, 1);
-        Item editItem = itemService.getItemToEdit(1, 1);
+        Item editItem = itemService.getItem(1, 1);
         editItem.setDescription("This is edited");
         itemService.setEditedItem(editItem, 1);
 
@@ -105,7 +105,7 @@ public class ItemServiceTest {
     @Test
     public void setEditedItemValidItemAndInvalidUser() {
         itemService.persistItem(item, 1);
-        Item editTemplate = itemService.getItemToEdit(1, 1);
+        Item editTemplate = itemService.getItem(1, 1);
         Item editItem = new Item();
         editItem.setDescription("This is edited");
         editItem.setLocation(editTemplate.getLocation());
@@ -122,7 +122,7 @@ public class ItemServiceTest {
     @Test
     public void setEditedItemInvalidItemAndValidUser() {
         itemService.persistItem(item, 1);
-        Item editTemplate = itemService.getItemToEdit(1, 1);
+        Item editTemplate = itemService.getItem(1, 1);
         Item editItem = new Item();
         editItem.setDescription(null);
         editItem.setLocation(editTemplate.getLocation());
@@ -139,7 +139,7 @@ public class ItemServiceTest {
     @Test
     public void setEditedItemInvalidItemAndUser() {
         itemService.persistItem(item, 1);
-        Item editItem = itemService.getItemToEdit(1, 1);
+        Item editItem = itemService.getItem(1, 1);
         editItem.setDescription(null);
         itemService.setEditedItem(editItem, 2);
 

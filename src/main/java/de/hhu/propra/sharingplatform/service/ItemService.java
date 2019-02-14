@@ -33,7 +33,7 @@ public class ItemService {
         }
     }
 
-    public Item getItemToEdit(long itemId, long userId) {
+    public Item getItem(long itemId, long userId) {
         Item item = itemRepo.findOneById(itemId);
         if (userIsOwner(item, userId)) {
             return item;
