@@ -10,3 +10,11 @@ else
     exit 1
 fi
 
+echo "Running Tests..."
+
+./gradlew test
+
+RESULT=$?
+
+exit $RESULT
+
