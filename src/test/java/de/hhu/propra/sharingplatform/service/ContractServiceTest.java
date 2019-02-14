@@ -58,19 +58,18 @@ public class ContractServiceTest {
 
     @Test
     public void endContractTest() {
-        ArgumentCaptor<Contract> argument = ArgumentCaptor.forClass(Contract.class);
-
         when(contractRepo.findOneById(anyLong())).thenReturn(contract);
 
         Assert.assertEquals(contract.getExpectedEnd(), contract.getRealEnd());
 
         contractService.endContract(anyLong());
 
+        ArgumentCaptor<Contract> argument = ArgumentCaptor.forClass(Contract.class);
+
         verify(paymentService, times(0)).create(any());
         verify(contractRepo, times(1)).save(argument.capture());
 
         Assert.assertEquals(contract, argument.getValue());
-
         Assert.assertNotEquals(contract.getExpectedEnd(), contract.getRealEnd());
     }
 
