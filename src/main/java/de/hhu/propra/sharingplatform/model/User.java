@@ -2,7 +2,6 @@ package de.hhu.propra.sharingplatform.model;
 
 
 import com.google.common.hash.Hashing;
-
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +13,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.annotation.Transient;
 
 @Data
 @Entity
@@ -36,17 +36,21 @@ public class User {
     private String salt;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "borrower")
+            CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Contract> contracts;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "owner")
+            CascadeType.REFRESH}, mappedBy = "owner")
     private List<Item> items;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "borrower")
+            CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Offer> offers;
 
+    @Transient
+    @Value("${passwords.pepper}")
+    private String pepper;
+  
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "sender")
     private List<Payment> paymentsSend;
@@ -63,26 +67,18 @@ public class User {
         paymentsReceive = new ArrayList<>();
     }
 
-    public void setPassword(String password) {
-        String pepper = "";
+    public void setPassword(String password){
         salt = UUID.randomUUID().toString();
-        password += salt;
-        password += pepper;
-        passwordHash = Hashing.sha512().hashString(password, StandardCharsets.UTF_8).toString();
+        passwordHash = hashPassword(password);
     }
 
-    public boolean checkPassword(String password) {
-        String pepper = "";
-        /*Properties properties = new Properties();
-        try (InputStream is = getClass().getResourceAsStream("application.properties")) {
-            properties.load(is);
-            pepper = properties.getProperty("passwords.pepper");
-        } catch (IOException ex) {
-            //TODO
-        }*/
-        password += salt;
-        password += pepper;
-        return passwordHash
-            .equals(Hashing.sha512().hashString(password, StandardCharsets.UTF_8).toString());
+    public boolean checkPassword(String password){
+        return passwordHash.equals(hashPassword(password));
+    }
+
+    private String hashPassword(String plainPassword){
+        plainPassword += salt;
+        plainPassword += pepper;
+        return Hashing.sha512().hashString(plainPassword, StandardCharsets.UTF_8).toString();
     }
 }
