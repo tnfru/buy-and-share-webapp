@@ -1,7 +1,9 @@
 package de.hhu.propra.sharingplatform.security;
 
 import de.hhu.propra.sharingplatform.model.User;
+
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,7 +27,7 @@ public class PersonService implements UserDetailsService {
             u.setPassword("1234"); // this has to be deleted as soon as we have passwords in Databse
 
 
-            UserDetails userdetails =  org.springframework.security.core.userdetails.User.builder()
+            UserDetails userdetails = org.springframework.security.core.userdetails.User.builder()
                 .username(u.getEmail())
                 .password(u.getPasswordHash())
                 .authorities("Admin")

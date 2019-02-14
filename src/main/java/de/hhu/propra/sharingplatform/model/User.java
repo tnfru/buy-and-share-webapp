@@ -2,6 +2,7 @@ package de.hhu.propra.sharingplatform.model;
 
 
 import com.google.common.hash.Hashing;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Transient;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Data
 @Entity
@@ -36,21 +39,21 @@ public class User {
     private String salt;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH}, mappedBy = "borrower")
+        CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Contract> contracts;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH}, mappedBy = "owner")
+        CascadeType.REFRESH}, mappedBy = "owner")
     private List<Item> items;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH}, mappedBy = "borrower")
+        CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Offer> offers;
 
     @Transient
     @Value("${passwords.pepper}")
     private String pepper;
-  
+
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "sender")
     private List<Payment> paymentsSend;
@@ -66,9 +69,10 @@ public class User {
         paymentsSend = new ArrayList<>();
         paymentsReceive = new ArrayList<>();
     }
-    public void setPassword(String password){
+
+    public void setPassword(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        passwordHash= passwordEncoder.encode(password);
+        passwordHash = passwordEncoder.encode(password);
     }
     /*
     public void setPassword(String password){
@@ -77,11 +81,11 @@ public class User {
     }
     */
 
-    public boolean checkPassword(String password){
+    public boolean checkPassword(String password) {
         return passwordHash.equals(hashPassword(password));
     }
 
-    private String hashPassword(String plainPassword){
+    private String hashPassword(String plainPassword) {
         plainPassword += salt;
         plainPassword += pepper;
         return Hashing.sha512().hashString(plainPassword, StandardCharsets.UTF_8).toString();
