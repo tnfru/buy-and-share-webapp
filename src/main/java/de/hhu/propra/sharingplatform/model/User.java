@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Transient;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Data
 @Entity
@@ -71,9 +72,15 @@ public class User {
     }
 
     public void setPassword(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        passwordHash = passwordEncoder.encode(password);
+    }
+    /*
+    public void setPassword(String password){
         salt = UUID.randomUUID().toString();
         passwordHash = hashPassword(password);
     }
+    */
 
     public boolean checkPassword(String password) {
         return passwordHash.equals(hashPassword(password));
