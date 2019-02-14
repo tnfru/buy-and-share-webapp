@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -27,6 +28,8 @@ public class DataFaker implements ServletContextInitializer {
     @Autowired
     private ItemRepo itemRepo;
 
+    private Logger log = Logger.getLogger(DataFaker.class.getName());
+
     private Faker faker;
 
     public DataFaker() {
@@ -43,15 +46,15 @@ public class DataFaker implements ServletContextInitializer {
 
     @Override
     public void onStartup(ServletContext servletContext) {
-        System.out.println("Generating Database");
+        log.info("Generating Database");
         UserFaker userFaker = new UserFaker(faker);
         ItemFaker itemFaker = new ItemFaker(faker);
 
-        System.out.println("    Creating User...");
+        log.info("    Creating User...");
         List<User> users = new ArrayList<>();
         userFaker.createUsers(users, 10);
 
-        System.out.println("    Creating Items...");
+        log.info("    Creating Items...");
         List<Item> items = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             User user = getRandomUser(users);
@@ -61,7 +64,7 @@ public class DataFaker implements ServletContextInitializer {
         persistUser(users);
         persistItem(items);
 
-        System.out.println("Done!");
+        log.info("Done!");
     }
 
     private void persistUser(List<User> users) {

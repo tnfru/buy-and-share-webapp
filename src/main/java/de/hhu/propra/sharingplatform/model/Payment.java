@@ -1,6 +1,5 @@
 package de.hhu.propra.sharingplatform.model;
 
-import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,34 +10,23 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Offer {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private Item item;
+    private User sender;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private User borrower;
+    private User recipient;
+    private long amount;
 
-    private Date start;
-    private Date end;
-    private boolean accept;
-    private boolean decline;
-
-    public Offer() {
+    public Payment(User from, User to, long amount) {
+        this.sender = from;
+        this.recipient = to;
+        this.amount = amount;
     }
 
-    public Offer(Item item, User borrower, Date start, Date end) {
-        this.setStart(start);
-        this.setEnd(end);
-
-        this.setItem(item);
-        this.setBorrower(borrower);
-
-        this.accept = false;
-        this.decline = false;
-    }
 }

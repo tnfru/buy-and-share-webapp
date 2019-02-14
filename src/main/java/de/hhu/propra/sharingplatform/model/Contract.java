@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.model;
 
+import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,21 +16,26 @@ public class Contract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User borrower;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Item item;
-
+    private Date start;
+    private Date expectedEnd;
+    private Date realEnd;
+    private boolean isConflict;
 
     public Contract() {
     }
 
     public Contract(Offer offer) {
-        //TODO offer can be null
         this.borrower = offer.getBorrower();
         this.item = offer.getItem();
+        this.expectedEnd = offer.getEnd();
+        this.realEnd = offer.getEnd();
+        this.start = offer.getStart();
     }
 }

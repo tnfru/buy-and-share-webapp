@@ -47,8 +47,8 @@ public class ItemFakerTest {
         assertEquals(user, item.getOwner());
         assertEquals("Enterprise", item.getName());
         assertEquals("Qui maxime qui. Nobis vel veniam iure numquam in.", item.getDescription());
-        assertEquals(50, item.getDeposit());
-        assertEquals(30, item.getPrice());
+        assertEquals(50, (int) item.getDeposit());
+        assertEquals(30, (int) item.getPrice());
         assertTrue(item.isAvailable());
         assertFalse(item.isDeleted());
         assertEquals("Lake Kiarra", item.getLocation());
