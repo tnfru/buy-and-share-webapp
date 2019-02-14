@@ -35,4 +35,12 @@ public class Item {
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "item")
     private List<Offer> offers;
+
+    public Item() {
+
+    }
+
+    public Item(User owner) {
+        this.owner = owner;
+    }
 }
