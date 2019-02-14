@@ -41,7 +41,7 @@ public class ItemService {
         return null;
     }
 
-    public void setEditedItem(Item newItem, long oldItemId, long userId) {
+    public void editItem(Item newItem, long oldItemId, long userId) {
         if (validateItem(newItem) && userIsOwner(itemRepo.findOneById(oldItemId), userId)) {
             Item oldItem = itemRepo.findOneById(oldItemId);
             newItem.setOwner(oldItem.getOwner());

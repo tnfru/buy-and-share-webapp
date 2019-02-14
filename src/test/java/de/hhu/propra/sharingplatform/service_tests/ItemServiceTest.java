@@ -93,7 +93,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void setEditedItemValidItemAndUser() {
+    public void editItemValidItemAndUser() {
         itemService.persistItem(item, 1);
         Item editTemplate = itemService.getItem(1, 1);
         Item editItem = new Item();
@@ -102,13 +102,13 @@ public class ItemServiceTest {
         editItem.setPrice(editTemplate.getPrice());
         editItem.setDeposit(editTemplate.getDeposit());
         editItem.setName(editTemplate.getName());
-        itemService.setEditedItem(editItem, 1, 1);
+        itemService.editItem(editItem, 1, 1);
 
         assert itemRepo.findOneById(1).getDescription().equals("This is edited");
     }
 
     @Test
-    public void setEditedItemValidItemAndInvalidUser() {
+    public void editItemValidItemAndInvalidUser() {
         itemService.persistItem(item, 1);
         Item editTemplate = itemService.getItem(1, 1);
         Item editItem = new Item();
@@ -117,13 +117,13 @@ public class ItemServiceTest {
         editItem.setPrice(editTemplate.getPrice());
         editItem.setDeposit(editTemplate.getDeposit());
         editItem.setName(editTemplate.getName());
-        itemService.setEditedItem(editItem, 1, 2);
+        itemService.editItem(editItem, 1, 2);
 
         assert !itemRepo.findOneById(1).getDescription().equals("This is edited");
     }
 
     @Test
-    public void setEditedItemInvalidItemAndValidUser() {
+    public void editItemInvalidItemAndValidUser() {
         itemService.persistItem(item, 1);
         Item editTemplate = itemService.getItem(1, 1);
         Item editItem = new Item();
@@ -132,7 +132,7 @@ public class ItemServiceTest {
         editItem.setPrice(editTemplate.getPrice());
         editItem.setDeposit(editTemplate.getDeposit());
         editItem.setName(editTemplate.getName());
-        itemService.setEditedItem(editItem, 1, 1);
+        itemService.editItem(editItem, 1, 1);
 
         assert itemRepo.findOneById(1).getDescription() != null;
     }
@@ -147,7 +147,7 @@ public class ItemServiceTest {
         editItem.setPrice(editTemplate.getPrice());
         editItem.setDeposit(editTemplate.getDeposit());
         editItem.setName(editTemplate.getName());
-        itemService.setEditedItem(editItem, 1, 2);
+        itemService.editItem(editItem, 1, 2);
 
         assert itemRepo.findOneById(1).equals(item);
     }
