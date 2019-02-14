@@ -11,7 +11,10 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class ItemServiceTest {
@@ -108,7 +111,6 @@ public class ItemServiceTest {
 
     @Test
     public void editItemValidItemAndUser() {
-        ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
         item.setOwner(user);
         Item editItem = new Item();
         editItem.setDescription("This is edited");
@@ -116,6 +118,7 @@ public class ItemServiceTest {
         editItem.setPrice(item.getPrice());
         editItem.setDeposit(item.getDeposit());
         editItem.setName(item.getName());
+        ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
 
         when(itemRepo.findOneById(1)).thenReturn(item);
 
