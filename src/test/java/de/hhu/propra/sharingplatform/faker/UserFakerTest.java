@@ -3,6 +3,7 @@ package de.hhu.propra.sharingplatform.faker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.github.javafaker.Faker;
 import de.hhu.propra.sharingplatform.model.User;
@@ -12,14 +13,8 @@ import java.util.Locale;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@DataJpaTest
-@Import({ItemFaker.class, DataFaker.class, Faker.class})
+
 public class UserFakerTest {
 
     private UserFaker userFaker;
@@ -37,15 +32,20 @@ public class UserFakerTest {
     public void createUserTest() {
         User user = userFaker.create();
 
-        assertEquals("Eloisa O'Kon Sr.", user.getName());
-        assertEquals("Suite 347 3803 Collins Land, Valentinaview, UT 56193", user.getAddress());
-        assertEquals("torrance.daniel@example.com", user.getEmail());
-        assertEquals(3, (int) user.getRating());
+        String pattern = "^[a-zA-Z0-9?!',\\. ]*$";
+
+        assertTrue(user.getName().matches(pattern));
+        assertTrue(user.getAddress().matches(pattern));
+        assertTrue(user.getEmail().contains("@"));
+        assertTrue(user.getEmail().replace("@", "!?").matches(pattern));
+        assertTrue(0 < user.getRating() && user.getRating() < 6);
         assertFalse(user.isBan());
         assertFalse(user.isDeleted());
         assertNotEquals(null, user.getItems());
         assertNotEquals(null, user.getContracts());
         assertNotEquals(null, user.getOffers());
+        assertNotEquals(null, user.getPaymentsSend());
+        assertNotEquals(null, user.getPaymentsReceive());
     }
 
     @Test
