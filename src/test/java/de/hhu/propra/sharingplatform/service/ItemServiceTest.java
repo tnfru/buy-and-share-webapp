@@ -153,6 +153,8 @@ public class ItemServiceTest {
 
     @Test
     public void findOneItem() {
+        itemRepo.save(item);
+        
         assert itemRepo.findOneById(1) != null;
     }
 }
