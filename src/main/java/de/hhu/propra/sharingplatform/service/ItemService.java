@@ -41,9 +41,12 @@ public class ItemService {
         return null;
     }
 
-    public void setEditedItem(Item item, long userId) {
-        if (validateItem(item) && userIsOwner(item, userId)) {
-            itemRepo.save(item);
+    public void setEditedItem(Item newItem, long oldItemId, long userId) {
+        if (validateItem(newItem) && userIsOwner(itemRepo.findOneById(oldItemId), userId)) {
+            Item oldItem = itemRepo.findOneById(oldItemId);
+            newItem.setOwner(oldItem.getOwner());
+            newItem.setId(oldItem.getId());
+            itemRepo.save(newItem);
         }
     }
 
