@@ -24,7 +24,7 @@ public class ItemController {
     @GetMapping("/item/details/{itemId}/{userId}")
     public String detailPage(Model model, @PathVariable long itemId, @PathVariable long userId) {
         //TODO: add param do differentiate users
-        model.addAttribute("item", itemService.forceGetItem(itemId));
+        model.addAttribute("item", itemService.findItem(itemId));
         model.addAttribute("user", userRepo.findOneById(userId));
         return "details";
     }
@@ -51,7 +51,7 @@ public class ItemController {
 
     @GetMapping("/item/editItem/{userId}/{itemId}")
     public String editItem(Model model, @PathVariable long itemId, @PathVariable long userId) {
-        Item item = itemService.forceGetItem(itemId);
+        Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
         model.addAttribute("itemId", itemId);
         model.addAttribute("userId", userId);
