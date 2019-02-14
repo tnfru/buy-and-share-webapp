@@ -1,7 +1,7 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.model.Offer;
-import de.hhu.propra.sharingplatform.modelDAO.OfferRepo;
+import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,11 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class OfferService {
 
-    final
-    OfferRepo offerRepo;
+    final OfferRepo offerRepo;
 
-    final
-    ContractService contractService;
+    final ContractService contractService;
 
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo) {

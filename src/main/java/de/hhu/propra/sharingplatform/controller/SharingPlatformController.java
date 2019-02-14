@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.web_controller;
+package de.hhu.propra.sharingplatform.controller;
 
 import java.security.Principal;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;

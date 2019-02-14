@@ -2,8 +2,10 @@ package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Offer;
-import de.hhu.propra.sharingplatform.modelDAO.ContractRepo;
+import de.hhu.propra.sharingplatform.dao.ContractRepo;
+
 import java.util.Date;
+
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +14,9 @@ import org.springframework.stereotype.Service;
 @Data
 public class ContractService {
 
-    final
-    ContractRepo contractRepo;
+    final ContractRepo contractRepo;
 
-    final
-    PaymentService paymentService;
+    final PaymentService paymentService;
 
     @Autowired
     public ContractService(ContractRepo contractRepo, PaymentService paymentService) {

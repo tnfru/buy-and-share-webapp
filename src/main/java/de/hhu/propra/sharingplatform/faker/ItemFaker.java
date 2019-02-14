@@ -3,6 +3,7 @@ package de.hhu.propra.sharingplatform.faker;
 import com.github.javafaker.Faker;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+
 import java.util.List;
 
 public class ItemFaker {
