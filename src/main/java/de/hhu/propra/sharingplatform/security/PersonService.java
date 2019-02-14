@@ -23,13 +23,12 @@ public class PersonService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = users.findByEmail(email);
         if (user.isPresent()) {
-            User u = user.get();
-            u.setPassword("1234"); // this has to be deleted as soon as we have passwords in Databse
+            User user1 = user.get();
 
 
             UserDetails userdetails = org.springframework.security.core.userdetails.User.builder()
-                .username(u.getEmail())
-                .password(u.getPasswordHash())
+                .username(user1.getEmail())
+                .password(user1.getPasswordHash())
                 .authorities("Admin")
                 .build();
             return userdetails;

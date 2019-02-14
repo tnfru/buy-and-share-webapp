@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class SharingPlatformController {
 
     @GetMapping("/")
-    public String mainPage(Model model, Principal p) {
+    public String mainPage(Model model) {
         boolean authenticate = false;
         if (!(SecurityContextHolder.getContext().getAuthentication()
             instanceof AnonymousAuthenticationToken)) {
