@@ -5,6 +5,7 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.modelDAO.ItemRepo;
 import de.hhu.propra.sharingplatform.modelDAO.UserRepo;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,8 +36,9 @@ public class UserController {
         return "redirect:/";
     }
 
-    @GetMapping("/user/account/{id}")
-    public String accountPage(Model model, @PathVariable(value = "id", required = true) long id) {
+    @GetMapping("/user/account/")
+    public String accountPage(Model model, Principal principal) {
+        model.addAttribute("principal", principal);
         return "account";
     }
 

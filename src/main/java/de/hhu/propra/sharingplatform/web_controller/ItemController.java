@@ -3,6 +3,7 @@ package de.hhu.propra.sharingplatform.web_controller;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.modelDAO.UserRepo;
 import de.hhu.propra.sharingplatform.service.ItemService;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +22,10 @@ public class ItemController {
     private ItemService itemService;
 
     @GetMapping("/item/details/{id}")
-    public String detailPage(Model model,
+    public String detailPage(Model model, Principal principal,
         @PathVariable(value = "id", required = true) long id) {
         //TODO: add param do differentiate users
+        model.addAttribute("principal", principal);
         return "details";
     }
 
