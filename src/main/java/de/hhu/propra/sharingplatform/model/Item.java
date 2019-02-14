@@ -1,6 +1,7 @@
 package de.hhu.propra.sharingplatform.model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -37,7 +38,7 @@ public class Item {
     private List<Offer> offers;
 
     public Item() {
-
+        offers = new ArrayList<>();
     }
 
     public Item(User owner) {
