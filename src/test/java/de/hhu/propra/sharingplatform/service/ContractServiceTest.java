@@ -10,8 +10,10 @@ import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.modelDAO.ContractRepo;
+import de.hhu.propra.sharingplatform.dao.ContractRepo;
+
 import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +25,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@Import({Offer.class, Contract.class, ContractService.class})
+@Import( {Offer.class, Contract.class, ContractService.class})
 public class ContractServiceTest {
 
     private User owner;

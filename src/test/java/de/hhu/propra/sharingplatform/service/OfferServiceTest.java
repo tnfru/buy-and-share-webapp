@@ -9,8 +9,10 @@ import static org.mockito.Mockito.when;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.modelDAO.OfferRepo;
+import de.hhu.propra.sharingplatform.dao.OfferRepo;
+
 import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@Import({Offer.class, OfferService.class})
+@Import( {Offer.class, OfferService.class})
 public class OfferServiceTest {
 
     @MockBean

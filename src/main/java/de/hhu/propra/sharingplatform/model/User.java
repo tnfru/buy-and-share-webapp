@@ -2,6 +2,7 @@ package de.hhu.propra.sharingplatform.model;
 
 
 import com.google.common.hash.Hashing;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
 import lombok.Data;
 
 @Data
@@ -61,7 +63,7 @@ public class User {
         paymentsReceive = new ArrayList<>();
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         String pepper = "";
         salt = UUID.randomUUID().toString();
         password += salt;
@@ -69,7 +71,7 @@ public class User {
         passwordHash = Hashing.sha512().hashString(password, StandardCharsets.UTF_8).toString();
     }
 
-    public boolean checkPassword(String password){
+    public boolean checkPassword(String password) {
         String pepper = "";
         /*Properties properties = new Properties();
         try (InputStream is = getClass().getResourceAsStream("application.properties")) {
@@ -80,6 +82,7 @@ public class User {
         }*/
         password += salt;
         password += pepper;
-        return passwordHash.equals(Hashing.sha512().hashString(password, StandardCharsets.UTF_8).toString());
+        return passwordHash
+            .equals(Hashing.sha512().hashString(password, StandardCharsets.UTF_8).toString());
     }
 }

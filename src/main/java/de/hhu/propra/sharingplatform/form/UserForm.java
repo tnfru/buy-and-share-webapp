@@ -1,13 +1,14 @@
 package de.hhu.propra.sharingplatform.form;
 
-import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
-
 import de.hhu.propra.sharingplatform.model.User;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
 
 @Data
 public class UserForm {
@@ -35,11 +36,21 @@ public class UserForm {
 
     //TODO default propayid = name
     private boolean validateUserForm() {
-        if (name == null || address == null || email == null || propayId == null) return false;
-        if (name.length() == 0 || name.length() > 255 || !isAlphanumeric(name)) return false;
-        if (address.length() == 0 || address.length() > 255) return false;
-        if (email.length() == 0 || email.length() > 255 || !validateMail()) return false;
-        if (propayId.length() == 0 || propayId.length() > 255) return false;
+        if (name == null || address == null || email == null || propayId == null) {
+            return false;
+        }
+        if (name.length() == 0 || name.length() > 255 || !isAlphanumeric(name)) {
+            return false;
+        }
+        if (address.length() == 0 || address.length() > 255) {
+            return false;
+        }
+        if (email.length() == 0 || email.length() > 255 || !validateMail()) {
+            return false;
+        }
+        if (propayId.length() == 0 || propayId.length() > 255) {
+            return false;
+        }
         return true;
     }
 
