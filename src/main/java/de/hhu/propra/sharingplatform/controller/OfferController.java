@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.web_controller;
+package de.hhu.propra.sharingplatform.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class OfferController {
 
     @GetMapping("/offer/request")
-    public String createOffer(){
+    public String createOffer() {
         return "offerReguest";
     }
 }

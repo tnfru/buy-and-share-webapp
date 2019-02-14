@@ -1,13 +1,14 @@
 package de.hhu.propra.sharingplatform.form;
 
-import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
-
 import de.hhu.propra.sharingplatform.model.User;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
 
 @Data
 public class UserForm {

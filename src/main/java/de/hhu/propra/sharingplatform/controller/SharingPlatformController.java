@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.web_controller;
+package de.hhu.propra.sharingplatform.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
