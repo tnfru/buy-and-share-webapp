@@ -1,10 +1,9 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
-import de.hhu.propra.sharingplatform.service.ItemService;
+import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -150,5 +149,10 @@ public class ItemServiceTest {
         itemService.editItem(editItem, 1, 2);
 
         assert itemRepo.findOneById(1).equals(item);
+    }
+
+    @Test
+    public void findOneItem() {
+        assert itemRepo.findOneById(1) != null;
     }
 }
