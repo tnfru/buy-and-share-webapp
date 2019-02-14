@@ -12,14 +12,24 @@
 
 <body>
 
-<div >
-   <form action="#" th:action="@{/user/register}" th:object="${userForm}" method="post">
-       <label>Name</label><input type="text" th:field="*{name}">
-       <label>Address</label><input type="text" th:field="*{address}">
-       <label>Email</label><input type="text" th:field="*{email}">
-       <label>PropayID</label><input type="text" th:field="*{propayId}">
-       <button type="submit">Send Form</button>
-   </form>
+<div>
+    <form action="#" th:action="@{/user/register}" th:object="${userForm}" method="post">
+        <dd class="grid">
+        <dt>Name:</dt>
+        <dd><input type="text" th:field="*{name}"></dd>
+        <dt>Address</dt>
+        <dd><input type="text" th:field="*{address}"></dd>
+        <dt>Email</dt>
+        <dd><input type="text" th:field="*{email}"></dd>
+        <dt>PropayID</dt>
+        <dd><input type="text" th:field="*{propayId}"></dd>
+        <dt>Password</dt>
+        <dd><input type="password" th:field="*{password}"></dd>
+        <dt>Confirm Password</dt>
+        <dd><input type="password" th:field="*{passwordConfirm}"></dd>
+        <button type="submit">Send Form</button>
+        </dl>
+    </form>
 </div>
 <div class="footer">
     <a href="/legal">Legal</a>
