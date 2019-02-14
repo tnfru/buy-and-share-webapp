@@ -1,47 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-  <meta charset="utf-8">
-  <title>Borrow.ly</title>
-  <link rel="stylesheet"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-        crossorigin="anonymous">
-  <link rel="shortcut icon" type="image/x-icon" href="Logo_Square_small.png">
-  <link rel="stylesheet" media="screen" href="header.css">
-  <link rel="stylesheet" media="screen" href="footer.css">
-  <link rel="stylesheet" media="screen" href="items.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Share easy, Borrow simple">
-  <meta name="robots" content="notranslate">
-</head>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{base}"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
 
 <body>
-
-<div class="header">
-  <a href="/"><img src="Header.png" class="header_img"></a>
-  <div th:switch="${authenticated}">
-        <span th:case="${false}">
-            <a href="/login">
-                <button type="button" class="btn btn-success" id="login-button">Login</button>
-            </a>
-            <a href="/user/register">
-                <button type="button" class="btn btn-primary" id="register-button">Register</button>
-            </a>
-        </span>
-    <span th:case="${true}">
-            <a href="/logout">
-                <button type="button" class="btn btn-danger" id="logout-button">Logout</button>
-            </a>
-
-            <a href="/user/account">
-                 <button type="button" class="btn btn-primary"
-                         id="account-button">My Borrow.ly</button>
-            </a>
-        </span>
-  </div>
-</div>
-<div class="container">
+<div layout:fragment="content">
   <div class="card-columns">
     <div class="card border-dark" th:each="item : ${items}">
       <img src="bike-dummy.png" class="card-img-top">
@@ -68,12 +30,6 @@
       </div>
     </div>
   </div>
-</div>
-</div>
-<div class="footer">
-  <a href="/legal">Legal</a> |
-  <a href="/about">About us</a> |
-  <a href="/contact">Contact support</a>
 </div>
 </body>
 
