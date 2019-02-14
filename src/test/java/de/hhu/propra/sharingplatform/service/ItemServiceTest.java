@@ -7,36 +7,41 @@ import de.hhu.propra.sharingplatform.model.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.mockito.ArgumentCaptor;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 @RunWith(SpringRunner.class)
-@DataJpaTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ItemServiceTest {
 
-    @Autowired
+    @MockBean
     private UserRepo userRepo;
-    @Autowired
+    @MockBean
     private ItemRepo itemRepo;
 
     private Item item;
+    private User user;
+    private User user2;
     private ItemService itemService;
 
     @Before
     public void init() {
         itemService = new ItemService(itemRepo, userRepo);
 
-        User user = new User();
+        user = new User();
         user.setName("Test");
-        User user2 = new User();
-        user.setName("Test2");
-        userRepo.save(user);
-        userRepo.save(user2);
+        user.setId((long) 1);
+        user2 = new User();
+        user2.setName("Test2");
+        user2.setId((long) 2);
 
         item = new Item();
+        item.setId((long) 1);
         item.setName("TestItem");
         item.setDeposit(100);
         item.setPrice(20);
@@ -45,15 +50,22 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void persistOneItem() {
+    public void persistOneValidItem() {
+        ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
+        when(userRepo.findOneById(1)).thenReturn(user);
+
         itemService.persistItem(item, 1);
 
-        assert itemRepo.findOneById(1).getOwner().getId() == 1;
+        verify(itemRepo, times(1)).save(argument.capture());
+        assert item.equals(argument.getValue());
+        assert argument.getValue().getOwner().getId() == 1;
     }
 
     @Test
     public void removeOneItemValidUser() {
-        itemService.persistItem(item, 1);
+        item.setOwner(user);
+        when(itemRepo.findOneById(1)).thenReturn(item);
+
         itemService.removeItem(1, 1);
 
         assert itemRepo.findOneById(1).isDeleted();
@@ -61,7 +73,9 @@ public class ItemServiceTest {
 
     @Test
     public void removeOneItemInvalidUser() {
-        itemService.persistItem(item, 1);
+        item.setOwner(user);
+        when(itemRepo.findOneById(1)).thenReturn(item);
+
         itemService.removeItem(1, 2);
 
         assert !itemRepo.findOneById(1).isDeleted();
@@ -70,22 +84,26 @@ public class ItemServiceTest {
     @Test
     public void dontPersistInvalidItem() {
         item.setLocation(null);
-        itemService.persistItem(item, 1);
+        when(userRepo.findOneById(1)).thenReturn(user);
 
-        assert itemRepo.findOneById(1) == null;
+        itemService.persistItem(item, 1);
+        verify(itemRepo, times(0)).save(any());
     }
 
     @Test
-    public void getOneItemToEditValidUser() {
-        itemService.persistItem(item, 1);
+    public void getItemValidUser() {
+        item.setOwner(user);
+        when(itemRepo.findOneById(1)).thenReturn(item);
+
         Item editItem = itemService.getItem(1, 1);
 
         assert editItem.equals(item);
     }
 
     @Test
-    public void getOneItemToEditInvalidUser() {
-        itemService.persistItem(item, 1);
+    public void getItemInvalidUser() {
+        item.setOwner(user);
+        when(itemRepo.findOneById(1)).thenReturn(item);
         Item editItem = itemService.getItem(1, 2);
 
         assert editItem == null;
@@ -93,66 +111,78 @@ public class ItemServiceTest {
 
     @Test
     public void editItemValidItemAndUser() {
-        itemService.persistItem(item, 1);
-        Item editTemplate = itemService.getItem(1, 1);
+        item.setOwner(user);
         Item editItem = new Item();
         editItem.setDescription("This is edited");
-        editItem.setLocation(editTemplate.getLocation());
-        editItem.setPrice(editTemplate.getPrice());
-        editItem.setDeposit(editTemplate.getDeposit());
-        editItem.setName(editTemplate.getName());
+        editItem.setLocation(item.getLocation());
+        editItem.setPrice(item.getPrice());
+        editItem.setDeposit(item.getDeposit());
+        editItem.setName(item.getName());
+        ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
+
+        when(itemRepo.findOneById(1)).thenReturn(item);
+
         itemService.editItem(editItem, 1, 1);
 
-        assert itemRepo.findOneById(1).getDescription().equals("This is edited");
+        verify(itemRepo, times(1)).save(argument.capture());
+        assert argument.getValue().getDescription().equals(editItem.getDescription());
     }
 
     @Test
     public void editItemValidItemAndInvalidUser() {
-        itemService.persistItem(item, 1);
-        Item editTemplate = itemService.getItem(1, 1);
+        item.setOwner(user);
         Item editItem = new Item();
         editItem.setDescription("This is edited");
-        editItem.setLocation(editTemplate.getLocation());
-        editItem.setPrice(editTemplate.getPrice());
-        editItem.setDeposit(editTemplate.getDeposit());
-        editItem.setName(editTemplate.getName());
+        editItem.setLocation(item.getLocation());
+        editItem.setPrice(item.getPrice());
+        editItem.setDeposit(item.getDeposit());
+        editItem.setName(item.getName());
+
+        when(itemRepo.findOneById(1)).thenReturn(item);
+
         itemService.editItem(editItem, 1, 2);
 
-        assert !itemRepo.findOneById(1).getDescription().equals("This is edited");
+        verify(itemRepo, times(0)).save(any());
     }
 
     @Test
     public void editItemInvalidItemAndValidUser() {
-        itemService.persistItem(item, 1);
-        Item editTemplate = itemService.getItem(1, 1);
+        item.setOwner(user);
         Item editItem = new Item();
         editItem.setDescription(null);
-        editItem.setLocation(editTemplate.getLocation());
-        editItem.setPrice(editTemplate.getPrice());
-        editItem.setDeposit(editTemplate.getDeposit());
-        editItem.setName(editTemplate.getName());
+        editItem.setLocation(item.getLocation());
+        editItem.setPrice(item.getPrice());
+        editItem.setDeposit(item.getDeposit());
+        editItem.setName(item.getName());
+
+        when(itemRepo.findOneById(1)).thenReturn(item);
+
         itemService.editItem(editItem, 1, 1);
 
-        assert itemRepo.findOneById(1).getDescription() != null;
+        verify(itemRepo, times(0)).save(any());
     }
 
     @Test
     public void setItemInvalidItemAndUser() {
-        itemService.persistItem(item, 1);
-        Item editTemplate = itemService.getItem(1, 1);
+        item.setOwner(user);
         Item editItem = new Item();
         editItem.setDescription(null);
-        editItem.setLocation(editTemplate.getLocation());
-        editItem.setPrice(editTemplate.getPrice());
-        editItem.setDeposit(editTemplate.getDeposit());
-        editItem.setName(editTemplate.getName());
-        itemService.editItem(editItem, 1, 2);
+        editItem.setLocation(item.getLocation());
+        editItem.setPrice(item.getPrice());
+        editItem.setDeposit(item.getDeposit());
+        editItem.setName(item.getName());
 
-        assert itemRepo.findOneById(1).equals(item);
+        when(itemRepo.findOneById(1)).thenReturn(item);
+
+        itemService.editItem(editItem, 1, 1);
+
+        verify(itemRepo, times(0)).save(any());
     }
 
     @Test
     public void findOneItem() {
-        assert itemRepo.findOneById(1) != null;
+        when(itemRepo.findOneById(1)).thenReturn(item);
+        Item resultItem = itemService.findItem(1);
+        assert resultItem.equals(item);
     }
 }

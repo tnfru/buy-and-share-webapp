@@ -62,8 +62,4 @@ public class ItemService {
         return (item.getDescription() != null && item.getDeposit() != null
             && item.getLocation() != null && item.getName() != null && item.getPrice() != null);
     }
-
-    public Item forceGetItem(long itemId) {
-        return itemRepo.findOneById(itemId);
-    }
 }
