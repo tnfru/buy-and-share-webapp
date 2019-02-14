@@ -1,0 +1,12 @@
+echo "Running CheckStyle..."
+
+./gradlew checkstyleMain
+
+if [ "$status" = 0 ] ; then
+    echo "No Style Errors :>"
+    exit 0
+else
+    echo 1>&2 "Please format correctly or Lars will be sad :("
+    exit 1
+fi
+
