@@ -38,12 +38,12 @@
   <span>Abholort:</span>
   <span th:text="${item?.location}"></span>
   <br>
-  <a th:if="${item?.owner?.accountName} != ${principal?.getName()} " class="btn btn-primary"
+<!--  <a th:if="${item?.owner?.accountName} != ${principal?.getName()} " class="btn btn-primary"
      th:href="|/offer/request/§{item?.id}|">Leihe anfragen</a>
   <a th:unless="${item?.owner?.accountName} != ${principal?.getName()} " class="btn btn-primary"
      th:href="|/account/|">Anfragen anzeigen</a>
-  <a th:href="/">zur Hauptseite</a>
-  <a th:href="/user/account/${principal?.id}">zum Account</a>
+  <a th:href="">zur Hauptseite</a>
+  <a th:href="/user/account/${principal?.id}">zum Account</a> -->
 </div>
 </body>
 </html>

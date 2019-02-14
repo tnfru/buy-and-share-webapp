@@ -21,11 +21,11 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @GetMapping("/item/details/{id}")
-    public String detailPage(Model model, Principal principal,
-        @PathVariable(value = "id", required = true) long id) {
+    @GetMapping("/item/details/{itemId}/{userId}")
+    public String detailPage(Model model, @PathVariable long itemId, @PathVariable long userId) {
         //TODO: add param do differentiate users
-        model.addAttribute("principal", principal);
+        model.addAttribute("item", itemService.forceGetItem(itemId));
+        model.addAttribute("user", userRepo.findOneById(userId));
         return "details";
     }
 
@@ -48,4 +48,19 @@ public class ItemController {
         itemService.removeItem(userId, itemId);
         return "redirect:/user/account/" + userId;
     }
+
+    @GetMapping("/item/editItem/{userId}/{itemId}")
+    public String editItem(Model model, @PathVariable long itemId, @PathVariable long userId) {
+        Item item = itemService.forceGetItem(itemId);
+        model.addAttribute("item", item);
+        model.addAttribute("itemId", itemId);
+        model.addAttribute("userId", userId);
+        return "itemForm";
+    }
+/*
+    @PostMapping("/item/editItem/{userId}")
+    public String editItemData(Model model, Item item, @PathVariable long userId) {
+        itemService.editItem(item, itemId, userId);
+        return "redirect:/user/account/" + userId;
+    }*/
 }
