@@ -9,22 +9,22 @@ import static org.mockito.Mockito.when;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.modelDAO.OfferRepo;
+import de.hhu.propra.sharingplatform.dao.OfferRepo;
+
 import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
-@Import({Offer.class, OfferService.class})
+@Import( {Offer.class, OfferService.class})
 public class OfferServiceTest {
 
     @MockBean
@@ -55,12 +55,10 @@ public class OfferServiceTest {
 
     @Test
     public void acceptOfferTest() {
+        when(offerRepo.findOneById(anyLong())).thenReturn(offer);
+        offerService.accept(anyLong());
         ArgumentCaptor<Offer> argument1 = ArgumentCaptor.forClass(Offer.class);
         ArgumentCaptor<Offer> argument2 = ArgumentCaptor.forClass(Offer.class);
-
-        when(offerRepo.findOneById(anyLong())).thenReturn(offer);
-
-        offerService.accept(anyLong());
 
         verify(contractService, times(1)).create(argument1.capture());
         verify(offerRepo, times(1)).save(argument2.capture());
@@ -81,11 +79,9 @@ public class OfferServiceTest {
 
     @Test
     public void declineOfferTest() {
-        ArgumentCaptor<Offer> argument = ArgumentCaptor.forClass(Offer.class);
-
         when(offerRepo.findOneById(anyLong())).thenReturn(offer);
-
         offerService.decline(anyLong());
+        ArgumentCaptor<Offer> argument = ArgumentCaptor.forClass(Offer.class);
 
         verify(contractService, times(0)).create(any());
         verify(offerRepo, times(1)).save(argument.capture());

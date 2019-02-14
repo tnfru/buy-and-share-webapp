@@ -1,6 +1,6 @@
 version: "3.1"
 services:
-  sharingAPP:
+  sharing:
     image: sharing
     build: .
     links:
@@ -19,8 +19,12 @@ services:
       - POSTGRES_PASSWORD=secret
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
   propay:
     image: propra/propay:latest
     volumes:
       - ./data/propay:/code/data
+    ports:
+      - "8888:8888"
