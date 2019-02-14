@@ -1,7 +1,7 @@
-package de.hhu.propra.sharingplatform.web_controller;
+package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.modelDAO.UserRepo;
+import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;

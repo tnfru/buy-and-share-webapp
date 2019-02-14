@@ -2,8 +2,8 @@ package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.modelDAO.ItemRepo;
-import de.hhu.propra.sharingplatform.modelDAO.UserRepo;
+import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.UserRepo;
 import org.springframework.stereotype.Service;
 
 @Service

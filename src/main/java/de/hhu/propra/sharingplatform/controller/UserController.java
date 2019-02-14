@@ -1,10 +1,10 @@
-package de.hhu.propra.sharingplatform.web_controller;
+package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.form.UserForm;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.modelDAO.ItemRepo;
-import de.hhu.propra.sharingplatform.modelDAO.UserRepo;
+import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.UserRepo;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
