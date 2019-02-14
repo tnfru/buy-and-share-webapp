@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,15 +20,23 @@ public class ItemFakerTest {
 
     private ItemFaker itemFaker;
     private UserFaker userFaker;
+    private Faker faker;
 
     @Before
     public void initDataFaker() {
         long seed = 1337;
         Random rnd = new Random();
         rnd.setSeed(seed);
-        Faker faker = new Faker(Locale.ENGLISH, rnd);
+        faker = new Faker(Locale.ENGLISH, rnd);
         itemFaker = new ItemFaker(faker);
         userFaker = new UserFaker(faker);
+    }
+
+    @Test
+    public void seedConsistentOutputTest() {
+        Assert.assertEquals("Octavia", faker.name().firstName());
+        Assert.assertEquals("58262", faker.number().digits(5));
+        Assert.assertEquals("Dicta ex laudantium in quidem sed.", faker.lorem().paragraph(1));
     }
 
     @Test
