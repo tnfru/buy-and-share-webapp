@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface  PersonProvider extends JpaRepository<User, Long> {
-        Optional<User> findByEmail( String username);
+        Optional<User> findByEmail(String username);
 }
