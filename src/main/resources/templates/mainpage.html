@@ -1,42 +1,80 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8">
-    <title>Borrow.ly</title>
-
-    <link rel="shortcut icon" type="image/x-icon" href="Logo_Square_small.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Share easy, Borrow simple">
-    <meta name="robots" content="notranslate">
+  <meta charset="utf-8">
+  <title>Borrow.ly</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/x-icon" href="images/Logo_Square_small.png">
+    <link rel="stylesheet" media="screen" href="css/header.css">
+    <link rel="stylesheet" media="screen" href="css/footer.css">
+    <link rel="stylesheet" media="screen" href="css/items.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Share easy, Borrow simple">
+  <meta name="robots" content="notranslate">
 </head>
 
 <body>
 
 <div class="header">
-    <a href="/"><img src="Header.png"></a>
-    <div th:switch="${authenticated}?">
-        <span th:case="${false}"><a href="/login">Login</a><a href="/register">Register</a> </span>
-        <span th:case="${true}"><a href="/logout">Logout</a><a href="/account">My Borrow.ly</a> </span>
-    </div>
-</div>
-<div class="itenlist">
-    <th:block th:each = "item : ${items}">
-        <div class="item">
-            <a th:href="@{/details/${item.getId()}}">
-                <h3 th:text="${item.getName()}">Jackhammer</h3>
+    <a href="/"><img src="images/Header.png" class="header_img"></a>
+    <div th:switch="${authenticated}">
+        <span th:case="${false}">
+            <a href="/login">
+                <button type="button" class="btn btn-success" id="login-button">Login</button>
             </a>
-            <p th:text = "${item.getDescription()}">Brand new model! Very cheap!</p>
-            <p class="user">Offered by
-                <span th:text="${item.getOwner()}">CheapJackhammer24@gmx.mail</span></p>
-        </div>
-    </th:block>
+            <a href="/user/register">
+                <button type="button" class="btn btn-primary" id="register-button">Register</button>
+            </a>
+        </span>
+    <span th:case="${true}">
+            <a href="/logout">
+                <button type="button" class="btn btn-danger" id="logout-button">Logout</button>
+            </a>
+
+            <a href="/user/account">
+                 <button type="button" class="btn btn-primary"
+                         id="account-button">My Borrow.ly</button>
+            </a>
+        </span>
+  </div>
+</div>
+<div class="container">
+  <div class="card-columns">
+    <div class="card border-dark" th:each="item : ${items}">
+      <img src="images/bike-dummy.png" class="card-img-top">
+      <div class="card-body">
+        <h4 class="card-title" th:text="${item.getName()}">Item Name</h4>
+        <p class="card-text" th:text="${item.getDescription()}">Some quick example text to build on
+          the card title and make up the bulk of the card's content.</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <b>Price:</b>
+          <span th:text="|${item.getPrice()}€|">5€</span>
+        </li>
+
+        <li class="list-group-item">
+          <b>Availability:</b>
+          <span th:text="${item.isAvailable()}">5€</span>
+        </li>
+      </ul>
+      <div class="card-body">
+        <a th:href="|/item/details/${item.getId()}|"
+           class="btn btn-outline-info btn-block">Details</a>
+        <a href="#" class="btn btn-outline-secondary btn-block">User Details</a>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 <div class="footer">
-    <a href="/legal">Legal</a>
-    <a href="/about">About us</a>
-    <a href="/contact">Contact support</a>
+  <a href="/legal">Legal</a> |
+  <a href="/about">About us</a> |
+  <a href="/contact">Contact support</a>
 </div>
-
 </body>
 
 </html>

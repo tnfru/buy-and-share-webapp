@@ -1,0 +1,30 @@
+version: "3.1"
+services:
+  sharing:
+    image: sharing
+    build: .
+    links:
+      - sharingDB
+      - propay
+    depends_on:
+      - sharingDB
+      - propay
+    ports:
+      - "8080:8080"
+
+  sharingDB:
+    image: postgres
+    environment:
+      - POSTGRES_USER=sharingDB
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  propay:
+    image: propra/propay:latest
+    volumes:
+      - ./data/propay:/code/data
+    ports:
+      - "8888:8888"
