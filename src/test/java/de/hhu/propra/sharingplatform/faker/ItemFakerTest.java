@@ -14,14 +14,7 @@ import java.util.Locale;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@DataJpaTest
-@Import({ItemFaker.class, DataFaker.class, Faker.class})
 public class ItemFakerTest {
 
     private ItemFaker itemFaker;
@@ -37,21 +30,22 @@ public class ItemFakerTest {
         userFaker = new UserFaker(faker);
     }
 
-    //@Test
+    @Test
     public void createItemTest() {
         User user = userFaker.create();
 
         Item item = itemFaker.create(user);
-        System.out.println(item);
+
+        String pattern = "^[a-zA-Z0-9?!',\\. ]*$";
 
         assertEquals(user, item.getOwner());
-        assertEquals("Enterprise", item.getName());
-        assertEquals("Qui maxime qui. Nobis vel veniam iure numquam in.", item.getDescription());
-        assertEquals(50, (int) item.getDeposit());
-        assertEquals(30, (int) item.getPrice());
+        assertTrue(item.getName().matches(pattern));
+        assertTrue(item.getDescription().matches(pattern));
+        assertTrue(item.getDeposit() < 9999 && 0 < item.getDeposit());
+        assertTrue(item.getPrice() < 200 && 0 < item.getPrice());
         assertTrue(item.isAvailable());
         assertFalse(item.isDeleted());
-        assertEquals("Lake Kiarra", item.getLocation());
+        assertTrue(item.getLocation().matches(pattern));
         assertNotEquals(null, item.getOffers());
     }
 
