@@ -33,7 +33,7 @@ public class UserController {
     @PostMapping("/user/register")
     public String registerNewUser(Model model, @ModelAttribute("userForm") UserForm userForm) {
         User user = userForm.parseToUser();
-        if(userRepo.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepo.findByEmail(user.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-Mail exists.");
         }
         userRepo.save(user);
