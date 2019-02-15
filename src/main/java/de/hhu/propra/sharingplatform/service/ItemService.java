@@ -1,10 +1,12 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
+import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ItemService {
@@ -54,12 +56,17 @@ public class ItemService {
         }
     }
 
-    private boolean userIsOwner(Item item, long userId) {
+    public boolean userIsOwner(Item item, long userId) {
         return item.getOwner().getId() == userId;
     }
 
-    private boolean validateItem(Item item) {
+    public boolean validateItem(Item item) {
         return (item.getDescription() != null && item.getDeposit() != null
             && item.getLocation() != null && item.getName() != null && item.getPrice() != null);
+    }
+
+    public long getUserIdFromAccountName(String accountName) {
+        Optional<User> user = userRepo.findByAccountName(accountName);
+        return user.get().getId();
     }
 }
