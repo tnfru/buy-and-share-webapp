@@ -1,7 +1,6 @@
 package de.hhu.propra.sharingplatform.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,7 +25,8 @@ public class SecConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/", "/css/**", "/images/**", "/h2/**", "/user/register")
+            .antMatchers("/", "/css/**", "/images/**",
+                "/h2/**", "/user/register", "/item/editItem/**", "/item/details/**")
             .permitAll() // h2 has to be removed in production
             .anyRequest().authenticated();
         http.formLogin().permitAll();

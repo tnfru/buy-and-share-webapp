@@ -17,6 +17,7 @@ public class UserFaker {
         User user = new User();
         user.setName(faker.name().fullName());
         user.setAddress(faker.address().fullAddress());
+        user.setAccountName(faker.name().firstName());
         user.setEmail(faker.name().username() + "@example.com");
         user.setPropayId(faker.funnyName().name());
         user.setRating(faker.number().numberBetween(0, 5));

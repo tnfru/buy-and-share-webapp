@@ -19,14 +19,14 @@ public class PersonService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = users.findByEmail(email);
+    public UserDetails loadUserByUsername(String accountName) throws UsernameNotFoundException {
+        Optional<User> user = users.findByAccountName(accountName);
         if (user.isPresent()) {
             User user1 = user.get();
 
 
             UserDetails userdetails = org.springframework.security.core.userdetails.User.builder()
-                .username(user1.getEmail())
+                .username(user1.getAccountName())
                 .password(user1.getPasswordHash())
                 .authorities("Admin")
                 .build();
