@@ -3,7 +3,12 @@ package de.hhu.propra.sharingplatform.model;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Data
 @Entity
@@ -17,7 +22,8 @@ public class Payment {
     private String proPayIdSender;
     private String proPayIdRecipient;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "payment")
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+        mappedBy = "payment")
     private Contract contract;
 
     public Payment() {
