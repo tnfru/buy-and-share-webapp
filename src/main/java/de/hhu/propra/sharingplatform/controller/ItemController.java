@@ -21,40 +21,39 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @GetMapping("/item/details/{itemId}/{userId}")
-    public String detailPage(Model model, @PathVariable long itemId, @PathVariable long userId) {
-        //TODO: add param do differentiate users
+    @GetMapping("/item/details/{itemId}")
+    public String detailPage(Model model, @PathVariable long itemId, Principal principal) {
         model.addAttribute("item", itemService.findItem(itemId));
-        model.addAttribute("user", userRepo.findOneById(userId));
+        model.addAttribute("user", userRepo.findByAccountName(principal.getName()));
         return "details";
     }
 
-    @GetMapping("/item/newItem/{userId}")
-    public String newItem(Model model, @PathVariable long userId) {
+    @GetMapping("/item/newItem")
+    public String newItem(Model model, Principal principal) {
         model.addAttribute("item", new Item());
-        model.addAttribute("user", userRepo.findOneById(userId));
+        model.addAttribute("user", userRepo.findByAccountName(principal.getName()));
         return "itemForm";
     }
 
-    @PostMapping("/item/newItem/{userId}")
-    public String inputItemData(Model model, Item item, @PathVariable long userId) {
-        itemService.persistItem(item, userId);
-        return "redirect:/user/account/" + userId;
+    @PostMapping("/item/newItem")
+    public String inputItemData(Model model, Item item, Principal principal) {
+        itemService.persistItem(item, itemService.getUserIdFromAccountName(principal.getName()));
+        return "redirect:/user/account/";
     }
 
-    @GetMapping("/item/removeItem/{userId}")
+    @GetMapping("/item/removeItem/")
     public String markItemAsRemoved(Model model,
-        @RequestParam(value = "itemId", required = true) long itemId, @PathVariable long userId) {
-        itemService.removeItem(userId, itemId);
-        return "redirect:/user/account/" + userId;
+        @RequestParam(value = "itemId", required = true) long itemId, Principal principal) {
+        itemService.removeItem(itemService.getUserIdFromAccountName(principal.getName()), itemId);
+        return "redirect:/user/account/";
     }
 
-    @GetMapping("/item/editItem/{userId}/{itemId}")
-    public String editItem(Model model, @PathVariable long itemId, @PathVariable long userId) {
+    @GetMapping("/item/editItem/{itemId}")
+    public String editItem(Model model, @PathVariable long itemId, Principal principal) {
         Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
         model.addAttribute("itemId", itemId);
-        model.addAttribute("userId", userId);
+        model.addAttribute("userId", itemService.getUserIdFromAccountName(principal.getName()));
         return "itemForm";
     }
 /*
