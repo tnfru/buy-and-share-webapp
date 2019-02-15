@@ -34,7 +34,7 @@ public class PaymentService {
         apiService.enforcePayment(payment);
     }
 
-    private double calculateTotalPrice(Contract contract) {
+    double calculateTotalPrice(Contract contract) {
         long startTime = contract.getStart().getTime();
         long endTime = contract.getRealEnd().getTime();
         //time passed in full days
