@@ -13,8 +13,6 @@
 <body>
 <div class="container" style="margin: 0 auto; width: 75%;">
     <h1 th:text="${item?.name}"></h1>
-
-    <h5 th:text="|${item?.name}|"></h5>
     <br>
     <p>Bild Platzhalter</p>
     <p th:if="${item?.available} == true" th:text="Verfügbar"></p>
@@ -38,6 +36,8 @@
     <span>Abholort:</span>
     <span th:text="${item?.location}"></span>
     <br>
+    <!--<textarea cols="80" name="description" rows="20"
+              th:field="${item.description}" required></textarea> -->
     <!--  <a th:if="${item?.owner?.accountName} != ${principal?.getName()} " class="btn btn-primary"
          th:href="|/offer/request/§{item?.id}|">Leihe anfragen</a>
       <a th:unless="${item?.owner?.accountName} != ${principal?.getName()} " class="btn btn-primary"
