@@ -2,10 +2,48 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link rel="stylesheet" media="screen" href="/css/account.css">
     <title>Account</title>
 </head>
 <body>
-<h1>Welcome <span th:text="${principal}">Name</span></h1>
+<h1>Welcome <span th:text="${user.getName()}">Name</span></h1>
+<div class="userdata">
+    <div class="card border-dark">
+        <img src="images/bike-dummy.png" class="card-img-top">
+        <div class="card-body">
+            <h4 class="card-title" th:text="${user.getName()}">Item Name</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <b>Username:</b>
+                <span th:text="${user.getAccountName()}">name</span>
+            </li>
+
+            <li class="list-group-item">
+                <b>Mail:</b>
+                <span th:text="${user.getEmail()}">name@abc.de</span>
+            </li>
+
+            <li class="list-group-item">
+                <b>ProPayID:</b>
+                <span th:text="${user.getPropayId()}">abc</span>
+            </li>
+
+            <li class="list-group-item">
+                <b>Rating:</b>
+                <span th:text="${user.getRating()}">5</span>
+            </li>
+        </ul>
+        <div class="card-body">
+            <a th:href="edit" class="btn btn-outline-info btn-block">Edit</a>
+            <a th:href="changePassword" class="btn btn-outline-danger btn-block">Change Password</a>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
