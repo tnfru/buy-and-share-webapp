@@ -68,7 +68,7 @@ public class UserForm {
     }
 
     private void validatePasswords() {
-        if (password == null || name.length() == 0) {
+        if (password == null || password.length() == 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password was empty");
         }
         if (password.length() > 255) {
@@ -76,6 +76,9 @@ public class UserForm {
         }
         if (password.length() < 8) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too short");
+        }
+        if (!password.equals(passwordConfirm)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
         }
     }
 
