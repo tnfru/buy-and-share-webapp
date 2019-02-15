@@ -8,8 +8,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
-
 @Data
 public class UserForm {
 
@@ -52,7 +50,7 @@ public class UserForm {
         if (name.length() > 255) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is too long");
         }
-        if (!isAlphanumeric(name)) {
+        if (hastSpecialChars(name)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is invalid.");
         }
     }
@@ -64,7 +62,7 @@ public class UserForm {
         if (address.length() > 255) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is too long");
         }
-        if (!isAlphanumeric(address)) {
+        if (hastSpecialChars(address)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is invalid.");
         }
     }
@@ -79,5 +77,11 @@ public class UserForm {
         if (password.length() < 8) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too short");
         }
+    }
+
+    private boolean hastSpecialChars(String s) {
+        Pattern p = Pattern.compile("[^a-z0-9 -]", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(s);
+        return m.find();
     }
 }
