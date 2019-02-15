@@ -13,6 +13,7 @@ public class UserForm {
 
     private String name;
     private String address;
+    private String accountName;
     private String email;
     private String propayId;
     private String password;
@@ -28,6 +29,7 @@ public class UserForm {
         }
         User user = new User();
         user.setName(name);
+        user.setAccountName(accountName);
         user.setAddress(address);
         user.setEmail(email);
         user.setPropayId(propayId);

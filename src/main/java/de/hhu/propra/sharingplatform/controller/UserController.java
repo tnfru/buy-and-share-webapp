@@ -13,6 +13,7 @@ import de.hhu.propra.sharingplatform.model.User;
 import java.security.Principal;
 import java.util.Optional;
 
+import de.hhu.propra.sharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class UserController {
 
@@ -31,6 +35,12 @@ public class UserController {
 
     @Autowired
     private ItemRepo itemRepo;
+
+    @Autowired
+    private HttpServletRequest request;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/user/register")
     public String registerPage(Model model) {
@@ -46,12 +56,14 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-Mail exists.");
         }
         userRepo.save(user);
+        userService.loginUsingSpring(request, userForm.getAccountName(), userForm.getPassword());
         return "redirect:/";
     }
 
+
     @GetMapping("/user/account")
     public String accountPage(Model model, Principal principal) {
-        Optional<User> search = userRepo.findByEmail(principal.getName());
+        Optional<User> search = userRepo.findByAccountName(principal.getName());
         if (!search.isPresent()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
         }

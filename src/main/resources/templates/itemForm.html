@@ -12,19 +12,14 @@
 </head>
 <body>
 <div layout:fragment="content">
-  <h1>Neuer Gegenstand</h1>
+    <h1 th:if="${item?.Id} == NULL">Neuen Gegenstand anlegen</h1>
+    <h1 th:unless="${item?.Id} == NULL" th:text="|${item?.name} editieren|"></h1>
   <br>
-  <form method="post" style="margin-left: 1em;">
+  <form method="post" style="margin-left: 1em;" th:object="${item}">
     <label>
-      <h4>Gegenstand</h4>
-      <br>
       <br>
       Bezeichnung:(*)<br>
       <input type="text" name="name" th:value="${item?.name}" required></input>
-      <br>
-      <br>
-      Bescheibung:(*)<br>
-      <input type="text" name="description" th:value="${item?.description}" required></input>
       <br>
       <br>
       Tagessatz:(*)<br>
@@ -38,6 +33,10 @@
       Abholadresse:(*)<br>
       <input type="text" name="location" th:value="${item?.location}" required></input>
       <br>
+      <br>
+      Beschreibung:(*)<br>
+      <textarea cols="80" name="description" rows="20"
+                th:field="*{description}" required></textarea>
     </label>
     <br>
     <br>

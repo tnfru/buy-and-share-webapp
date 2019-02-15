@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{base}"
-      xmlns:layout="http://www.w3.org/1999/xhtml">
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.com">
 <head>
   <meta charset="UTF-8">
   <title>Details</title>
@@ -32,12 +33,13 @@
     <span>Abholort:</span>
     <span th:text="${item?.location}"></span>
     <br>
-    <!--  <a th:if="${item?.owner?.accountName} != ${principal?.getName()} " class="btn btn-primary"
-         th:href="|/offer/request/§{item?.id}|">Leihe anfragen</a>
-      <a th:unless="${item?.owner?.accountName} != ${principal?.getName()} " class="btn btn-primary"
-         th:href="|/account/|">Anfragen anzeigen</a> -->
-    <a href="/">zur Hauptseite</a>
-    <!--  <a th:href="/user/account/${principal?.id}">zum Account</a> -->
+    <br>
+    <a th:if="${ownItem} == false " class="btn btn-success"
+       th:href="|/offer/request/§{item?.id}|">Leihe anfragen</a>
+    <a th:unless="${ownItem} == false " class="btn btn-primary"
+       th:href="|/offer/request|">Anfragen anzeigen</a>
+    <a style="margin-left: 1em;" th:unless="${ownItem} == false " class="btn btn-warning"
+       th:href="|/item/editItem/${item?.Id}|">Gegenstand bearbeiten</a>
 </div>
 </body>
 </html>
