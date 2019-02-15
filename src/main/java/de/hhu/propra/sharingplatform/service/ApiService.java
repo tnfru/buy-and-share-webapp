@@ -29,8 +29,8 @@ public class ApiService {
 
         try {
             return mapper.readValue(jsonResponse, ProPay.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
             return null;
         }
     }
