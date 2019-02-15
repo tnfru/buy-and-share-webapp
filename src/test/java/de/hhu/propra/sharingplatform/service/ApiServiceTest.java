@@ -17,7 +17,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@Import(ApiService.class)
 public class ApiServiceTest {
 
     private String fakeJson;
