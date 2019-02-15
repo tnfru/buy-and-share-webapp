@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.com">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{base}"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
 <title>Neuer Gegenstand</title>
 <meta charset="UTF-8">
 <meta name="viewport"
@@ -10,7 +11,7 @@
       crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
+<div layout:fragment="content">
   <h1>Neuer Gegenstand</h1>
   <br>
   <form method="post" style="margin-left: 1em;">

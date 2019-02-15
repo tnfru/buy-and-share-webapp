@@ -1,18 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8">
-    <title>Borrow.ly</title>
-
-    <link rel="shortcut icon" type="image/x-icon" href="images/Logo_Square_small.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Share easy, Borrow simple">
-    <meta name="robots" content="notranslate">
-</head>
-
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{base}">
 <body>
 
-<div>
+<div layout:fragment="content">
     <form action="#" th:action="@{/user/register}" th:object="${userForm}" method="post">
         <dd class="grid">
         <dt>Name:</dt>
@@ -30,11 +21,6 @@
         <button type="submit">Send Form</button>
         </dl>
     </form>
-</div>
-<div class="footer">
-    <a href="/legal">Legal</a>
-    <a href="/about">About us</a>
-    <a href="/contact">Contact support</a>
 </div>
 
 </body>
