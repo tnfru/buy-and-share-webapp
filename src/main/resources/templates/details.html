@@ -1,10 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de" xmlns:th="http://www.thymeleaf.com">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+    <meta charset="UTF-8">
+    <title>Item Detail</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
 </head>
 <body>
+<div class="container" style="margin: 0 auto; width: 75%;">
+    <h1 th:text="${item?.name}"></h1>
 
+    <h5 th:text="|${item?.name}|"></h5>
+    <br>
+    <p>Bild Platzhalter</p>
+    <p th:if="${item?.available} == true" th:text="Verfügbar"></p>
+    <p th:if="${item?.available} == false" th:text="Momentan leider nicht Verfügbar"></p>
+    <strong>Beschreibung:</strong>
+    <span th:text="|${item?.description}|"></span>
+    <br>
+    <br>
+    <strong>Kosten:</strong>
+    <br>
+    <p>Tagessatz:</p>
+    <span th:text="${item?.price}"></span>
+    <br>
+    <p>Kaution:</p>
+    <p th:text="${item?.deposit}"></p>
+    <strong>Anbieter:</strong>
+    <span>Account-Name:</span>
+    <span th:text="${item?.owner?.accountName}"></span>
+    <span th:text="|${item?.owner?.rating}|"></span>
+    <br>
+    <span>Abholort:</span>
+    <span th:text="${item?.location}"></span>
+    <br>
+    <!--  <a th:if="${item?.owner?.accountName} != ${principal?.getName()} " class="btn btn-primary"
+         th:href="|/offer/request/§{item?.id}|">Leihe anfragen</a>
+      <a th:unless="${item?.owner?.accountName} != ${principal?.getName()} " class="btn btn-primary"
+         th:href="|/account/|">Anfragen anzeigen</a> -->
+    <a href="/">zur Hauptseite</a>
+    <!--  <a th:href="/user/account/${principal?.id}">zum Account</a> -->
+</div>
 </body>
 </html>

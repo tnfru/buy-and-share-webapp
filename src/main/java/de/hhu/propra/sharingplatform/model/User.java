@@ -29,6 +29,7 @@ public class User {
     private Long id;
 
     private String name;
+    private String accountName;
     private String address;
     private String email;
     private String propayId;
