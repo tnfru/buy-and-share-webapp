@@ -13,7 +13,7 @@ public class ChangePasswordForm {
 
     public void applyToUser(User user) {
         validatePasswords();
-            user.setPassword(newPW);
+        user.setPassword(newPW);
     }
 
     private void validatePasswords() {
