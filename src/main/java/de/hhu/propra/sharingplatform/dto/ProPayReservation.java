@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProPayReservation {
 
-    private long amount;
+    private double amount;
     private long id;
 }

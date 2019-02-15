@@ -11,6 +11,6 @@ public class ProPay {
 
 
     private String account;
-    private long amount;
+    private double amount;
     List<ProPayReservation> reservations;
 }
