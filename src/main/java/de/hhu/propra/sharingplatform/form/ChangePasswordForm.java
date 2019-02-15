@@ -8,25 +8,25 @@ import org.springframework.web.server.ResponseStatusException;
 @Data
 public class ChangePasswordForm {
 
-    private String newPW;
-    private String repeatPW;
+    private String newPw;
+    private String repeatPw;
 
     public void applyToUser(User user) {
         validatePasswords();
-        user.setPassword(newPW);
+        user.setPassword(newPw);
     }
 
     private void validatePasswords() {
-        if (newPW == null || newPW.length() == 0) {
+        if (newPw == null || newPw.length() == 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password was empty");
         }
-        if (newPW.length() > 255) {
+        if (newPw.length() > 255) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too long");
         }
-        if (newPW.length() < 8) {
+        if (newPw.length() < 8) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too short");
         }
-        if (!newPW.equals(repeatPW)) {
+        if (!newPw.equals(repeatPw)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
         }
     }

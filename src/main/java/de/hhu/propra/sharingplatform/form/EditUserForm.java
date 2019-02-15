@@ -56,9 +56,9 @@ public class EditUserForm {
         }
     }
 
-    private boolean hastSpecialChars(String s) {
-        Pattern p = Pattern.compile("[^a-z0-9 -]", Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(s);
-        return m.find();
+    private boolean hastSpecialChars(String string) {
+        Pattern pattern = Pattern.compile("[^a-z0-9 -]", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(string);
+        return matcher.find();
     }
 }
