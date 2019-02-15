@@ -3,12 +3,14 @@ package de.hhu.propra.sharingplatform.controller;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.service.ItemService;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ItemController {
@@ -19,10 +21,11 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @GetMapping("/item/details/{id}")
-    public String detailPage(Model model,
-                             @PathVariable(value = "id", required = true) long id) {
+    @GetMapping("/item/details/{itemId}/{userId}")
+    public String detailPage(Model model, @PathVariable long itemId, @PathVariable long userId) {
         //TODO: add param do differentiate users
+        model.addAttribute("item", itemService.findItem(itemId));
+        model.addAttribute("user", userRepo.findOneById(userId));
         return "details";
     }
 
@@ -38,4 +41,26 @@ public class ItemController {
         itemService.persistItem(item, userId);
         return "redirect:/user/account/" + userId;
     }
+
+    @GetMapping("/item/removeItem/{userId}")
+    public String markItemAsRemoved(Model model,
+        @RequestParam(value = "itemId", required = true) long itemId, @PathVariable long userId) {
+        itemService.removeItem(userId, itemId);
+        return "redirect:/user/account/" + userId;
+    }
+
+    @GetMapping("/item/editItem/{userId}/{itemId}")
+    public String editItem(Model model, @PathVariable long itemId, @PathVariable long userId) {
+        Item item = itemService.findItem(itemId);
+        model.addAttribute("item", item);
+        model.addAttribute("itemId", itemId);
+        model.addAttribute("userId", userId);
+        return "itemForm";
+    }
+/*
+    @PostMapping("/item/editItem/{userId}")
+    public String editItemData(Model model, Item item, @PathVariable long userId) {
+        itemService.editItem(item, itemId, userId);
+        return "redirect:/user/account/" + userId;
+    }*/
 }
