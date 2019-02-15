@@ -56,11 +56,11 @@ public class ItemService {
         }
     }
 
-    private boolean userIsOwner(Item item, long userId) {
+    public boolean userIsOwner(Item item, long userId) {
         return item.getOwner().getId() == userId;
     }
 
-    private boolean validateItem(Item item) {
+    public boolean validateItem(Item item) {
         return (item.getDescription() != null && item.getDeposit() != null
             && item.getLocation() != null && item.getName() != null && item.getPrice() != null);
     }

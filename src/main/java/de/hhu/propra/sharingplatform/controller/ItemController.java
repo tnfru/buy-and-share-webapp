@@ -55,8 +55,12 @@ public class ItemController {
         Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
         model.addAttribute("itemId", itemId);
-        model.addAttribute("userId", itemService.getUserIdFromAccountName(principal.getName()));
-        return "itemForm";
+        long userId = itemService.getUserIdFromAccountName(principal.getName());
+        model.addAttribute("userId", userId);
+        if (itemService.userIsOwner(item, userId)) {
+            return "itemForm";
+        }
+        return "error";
     }
 /*
     @PostMapping("/item/editItem/{userId}")
