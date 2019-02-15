@@ -1,20 +1,34 @@
 package de.hhu.propra.sharingplatform.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.dto.ProPay;
+import de.hhu.propra.sharingplatform.dto.ProPayReservation;
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 @Data
 @Service
 public class ApiService {
 
+    private PaymentService paymentService;
+    private PaymentRepo paymentRepo;
     String host = "localhost";
+
+    public ApiService(PaymentService paymentService, PaymentRepo paymentRepo) {
+        this.paymentService = paymentService;
+        this.paymentRepo = paymentRepo;
+    }
 
     String fetchJson(String userName) {
         String url = "http://" + host + ":8888/account/" + userName;
@@ -35,8 +49,51 @@ public class ApiService {
         }
     }
 
-    public void enforcePayment(Payment payment) {
+    public void enforcePayment(Payment payment, double totalPrice) {
+        long id = reservateMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
+            payment.getBail());
+        payment.setBailProPayId(id);
+        id = reservateMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
+            totalPrice);
+        payment.setAmountProPayId(id);
+        paymentRepo.save(payment);
+    }
 
+    private long reservateMoney(String proPayIdSender, String proPayIdRecipient, double amount) {
+        try {
+            URL url =
+                new URL("http://localhost:8888/reservation/reserve/" + proPayIdSender +
+                    "/" + proPayIdRecipient);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+            out.writeBytes("amount=" + amount);
+            out.flush();
+            out.close();
+            String response = convertHttpResponse(new InputStreamReader(conn.getInputStream()));
+            ObjectMapper mapper = new ObjectMapper();
+            ProPayReservation proPayReservation = mapper.readValue(response,
+                ProPayReservation.class);
+            return proPayReservation.getId();
+        } catch (IOException ignored) {
+        }
+        return 0;
+    }
+
+    private String convertHttpResponse(InputStreamReader inStream) {
+        try {
+            BufferedReader in = new BufferedReader(inStream);
+            String input;
+            StringBuilder inBuffer = new StringBuilder();
+            while ((input = in.readLine()) != null) {
+                inBuffer.append(input);
+            }
+            in.close();
+            return inBuffer.toString();
+        } catch (IOException ignored) {
+        }
+        return null;
     }
 
     public boolean checkSolvent(User borrower, double totalAmount) {
