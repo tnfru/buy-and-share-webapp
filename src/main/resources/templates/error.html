@@ -38,11 +38,12 @@
 </div>
 
 <div class="Error">
-    <h1 th:text="${errorcode}">ERROR</h1>
+    <h1 th:text="${'One does not simply ' + errorcode}">ERROR</h1>
+    <img src="/images/OneDoesNotSimplyJens.png">
     <p>
         An error occurred: <br>
         <span th:text="${errormsg}">Errormessage foo bar.</span> <br>
-        <a href="/">Back to safety!</a>
+        <a href="/">Back to the safe space!</a>
     </p>
 
 </div>
