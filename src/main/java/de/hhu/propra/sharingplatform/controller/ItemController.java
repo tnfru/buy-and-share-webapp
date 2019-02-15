@@ -64,7 +64,9 @@ public class ItemController {
     }
 
     @PostMapping("/item/editItem/{itemId}")
-    public String editItemData(Model model, Item item, @PathVariable long itemId, Principal principal) {
+    public String editItemData(Model model, Item item,
+                               @PathVariable long itemId,
+                               Principal principal) {
         long userId = itemService.getUserIdFromAccountName(principal.getName());
         itemService.editItem(item, itemId, userId);
         return "redirect:/user/account";
