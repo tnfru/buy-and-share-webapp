@@ -44,7 +44,8 @@ public class ItemController {
 
     @GetMapping("/item/removeItem/")
     public String markItemAsRemoved(Model model,
-                                    @RequestParam(value = "itemId", required = true) long itemId, Principal principal) {
+                                    @RequestParam(value = "itemId", required = true) long itemId,
+                                    Principal principal) {
         itemService.removeItem(itemService.getUserIdFromAccountName(principal.getName()), itemId);
         return "redirect:/user/account/";
     }
