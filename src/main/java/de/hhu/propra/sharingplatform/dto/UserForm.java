@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.form;
+package de.hhu.propra.sharingplatform.dto;
 
 import de.hhu.propra.sharingplatform.model.User;
 import lombok.Data;
