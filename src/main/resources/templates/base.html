@@ -8,9 +8,9 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
   <link rel="shortcut icon" type="image/x-icon" href="Logo_Square_small.png">
-  <link rel="stylesheet" media="screen" href="header.css">
-  <link rel="stylesheet" media="screen" href="footer.css">
-  <link rel="stylesheet" media="screen" href="items.css">
+  <link rel="stylesheet" media="screen" href="/css/header.css">
+  <link rel="stylesheet" media="screen" href="/css/footer.css">
+  <link rel="stylesheet" media="screen" href="/css/items.css">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Share easy, Borrow simple">
   <meta name="robots" content="notranslate">
@@ -18,7 +18,7 @@
 <body>
 
 <div class="header">
-  <a href="/"><img src="Header.png" class="header_img"></a>
+  <a href="/"><img src="/images/Header.png" class="header_img"></a>
   <div th:switch="${authenticated}">
         <span th:case="${false}">
             <a href="/login">
