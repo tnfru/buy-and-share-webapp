@@ -12,7 +12,7 @@ public class UserService {
 
     public void loginUsingSpring(HttpServletRequest request, String accountName, String password) {
         try {
-            request.login(accountName,password);
+            request.login(accountName, password);
         } catch (ServletException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Auto login went wrong");
         }
