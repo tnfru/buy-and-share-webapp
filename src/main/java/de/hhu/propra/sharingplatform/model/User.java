@@ -6,7 +6,6 @@ import com.google.common.hash.Hashing;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,7 +36,6 @@ public class User {
     private boolean ban;
     private boolean deleted;
     private String passwordHash;
-    private String salt;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
@@ -50,10 +48,6 @@ public class User {
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Offer> offers;
-
-    @Transient
-    @Value("${passwords.pepper}")
-    private String pepper;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "sender")
@@ -72,23 +66,11 @@ public class User {
     }
 
     public void setPassword(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        passwordHash = passwordEncoder.encode(password);
-    }
-    /*
-    public void setPassword(String password){
-        salt = UUID.randomUUID().toString();
         passwordHash = hashPassword(password);
-    }
-    */
-
-    public boolean checkPassword(String password) {
-        return passwordHash.equals(hashPassword(password));
     }
 
     private String hashPassword(String plainPassword) {
-        plainPassword += salt;
-        plainPassword += pepper;
-        return Hashing.sha512().hashString(plainPassword, StandardCharsets.UTF_8).toString();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(plainPassword);
     }
 }
