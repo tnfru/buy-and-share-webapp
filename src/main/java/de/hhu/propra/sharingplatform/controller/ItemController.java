@@ -24,8 +24,12 @@ public class ItemController {
 
     @GetMapping("/item/details/{itemId}")
     public String detailPage(Model model, @PathVariable long itemId, Principal principal) {
-        model.addAttribute("item", itemService.findItem(itemId));
+        Item item = itemService.findItem(itemId);
+        model.addAttribute("item", item);
         model.addAttribute("user", userRepo.findByAccountName(principal.getName()));
+        boolean ownItem = itemService.userIsOwner(item,
+            itemService.getUserIdFromAccountName(principal.getName()));
+        model.addAttribute("ownItem", ownItem);
         return "details";
     }
 
