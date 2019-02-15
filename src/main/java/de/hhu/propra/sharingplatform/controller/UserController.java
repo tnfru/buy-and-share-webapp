@@ -59,8 +59,6 @@ public class UserController {
     }
 
 
-
-
     @GetMapping("/user/account")
     public String accountPage(Model model, Principal principal) {
         Optional<User> search = userRepo.findByAccountName(principal.getName());
