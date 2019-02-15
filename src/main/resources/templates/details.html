@@ -6,10 +6,38 @@
   <title>Details</title>
 </head>
 <body>
-
 <div layout:fragment="content">
-  Details Page
+	<h1 th:text="${item?.name}"></h1>
+    <h5 th:text="|${item?.name}|"></h5>
+    <br>
+    <p>Bild Platzhalter</p>
+    <p th:if="${item?.available} == true" th:text="Verfügbar"></p>
+    <p th:if="${item?.available} == false" th:text="Momentan leider nicht Verfügbar"></p>
+    <strong>Beschreibung:</strong>
+    <span th:text="|${item?.description}|"></span>
+    <br>
+    <br>
+    <strong>Kosten:</strong>
+    <br>
+    <p>Tagessatz:</p>
+    <span th:text="${item?.price}"></span>
+    <br>
+    <p>Kaution:</p>
+    <p th:text="${item?.deposit}"></p>
+    <strong>Anbieter:</strong>
+    <span>Account-Name:</span>
+    <span th:text="${item?.owner?.accountName}"></span>
+    <span th:text="|${item?.owner?.rating}|"></span>
+    <br>
+    <span>Abholort:</span>
+    <span th:text="${item?.location}"></span>
+    <br>
+    <!--  <a th:if="${item?.owner?.accountName} != ${principal?.getName()} " class="btn btn-primary"
+         th:href="|/offer/request/§{item?.id}|">Leihe anfragen</a>
+      <a th:unless="${item?.owner?.accountName} != ${principal?.getName()} " class="btn btn-primary"
+         th:href="|/account/|">Anfragen anzeigen</a> -->
+    <a href="/">zur Hauptseite</a>
+    <!--  <a th:href="/user/account/${principal?.id}">zum Account</a> -->
 </div>
-
 </body>
 </html>
