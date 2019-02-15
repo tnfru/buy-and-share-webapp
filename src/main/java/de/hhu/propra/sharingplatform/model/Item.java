@@ -25,7 +25,7 @@ public class Item {
 
     private String name;
     private String description;
-    private Integer deposit;
+    private Integer bail;
     private Integer price; // each day
     private boolean available;
     private String location; // maybe change to java location class

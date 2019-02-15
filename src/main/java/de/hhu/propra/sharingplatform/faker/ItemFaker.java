@@ -18,7 +18,7 @@ public class ItemFaker {
         Item item = new Item();
         item.setName(faker.space().nasaSpaceCraft());
         item.setDescription(faker.lorem().paragraph(1));
-        item.setDeposit(faker.number().numberBetween(20, 999));
+        item.setBail(faker.number().numberBetween(20, 999));
         item.setPrice(faker.number().numberBetween(5, 50));
         item.setAvailable(true);
         item.setLocation(faker.address().cityName());
