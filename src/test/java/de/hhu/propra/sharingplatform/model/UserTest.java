@@ -9,7 +9,6 @@ import org.junit.Test;
 
 public class UserTest {
 
-    /*
     @Test
     public void checkCorrectPassword() {
         User user = new User();
@@ -17,7 +16,6 @@ public class UserTest {
 
         assertTrue(user.checkPassword("testpw"));
     }
-    */
 
     @Test
     public void checkWrongPassword() {
@@ -26,7 +24,6 @@ public class UserTest {
         assertFalse(user.checkPassword("123"));
     }
 
-    /*
     @Test
     public void checkCorrectPasswordWithSpecialChars() {
         User user = new User();
@@ -34,7 +31,6 @@ public class UserTest {
 
         assertTrue(user.checkPassword("@²³{[]}~öä"));
     }
-    */
 
     @Test
     public void checkPasswordHashNotPassword() {
@@ -43,28 +39,4 @@ public class UserTest {
 
         assertNotEquals(user.getPasswordHash(), "@²³{[]}~öä");
     }
-
-    //TODO: Start some spring magic to inject the pepper...
-    //@Test
-    public void checkSaltPepperExists() {
-        User user = new User();
-        user.setPassword("123");
-
-        assertNotNull(user.getPepper());
-        assertNotNull(user.getSalt());
-        assert user.getPepper().length() > 0;
-        assert user.getSalt().length() > 0;
-    }
-
-    /* @Test
-    public void checkSaltChangesAfterResetPassword() {
-        User user = new User();
-        user.setPassword("123");
-        String firstSalt = user.getSalt();
-
-        user.setPassword("222");
-
-        assertNotEquals(user.getSalt().length(), firstSalt);
-    }
-    */
 }
