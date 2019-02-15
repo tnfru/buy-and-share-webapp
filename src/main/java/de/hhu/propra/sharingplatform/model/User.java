@@ -55,20 +55,10 @@ public class User {
     @Value("${passwords.pepper}")
     private String pepper;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "sender")
-    private List<Payment> paymentsSend;
-
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "recipient")
-    private List<Payment> paymentsReceive;
-
     public User() {
         contracts = new ArrayList<>();
         items = new ArrayList<>();
         offers = new ArrayList<>();
-        paymentsSend = new ArrayList<>();
-        paymentsReceive = new ArrayList<>();
     }
 
     public void setPassword(String password) {
