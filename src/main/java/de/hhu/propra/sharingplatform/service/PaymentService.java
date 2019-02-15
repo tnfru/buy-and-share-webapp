@@ -31,7 +31,7 @@ public class PaymentService {
         Payment payment = new Payment(sender, recipient, totalPrice, contract.getItem().getBail());
         payment.setContract(contract);
         paymentRepo.save(payment);
-        apiService.enforcePayment(payment);
+        apiService.enforcePayment(payment, calculateTotalPrice(contract));
     }
 
     double calculateTotalPrice(Contract contract) {
