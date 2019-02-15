@@ -49,10 +49,6 @@ public class User {
         CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Offer> offers;
 
-    @Transient
-    @Value("${passwords.pepper}")
-    private String pepper;
-
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "sender")
     private List<Payment> paymentsSend;
@@ -73,14 +69,7 @@ public class User {
         passwordHash = hashPassword(password);
     }
 
-    public boolean checkPassword(String password) {
-        System.out.println(hashPassword(password));
-        System.out.println(passwordHash);
-        return passwordHash.equals(hashPassword(password));
-    }
-
     private String hashPassword(String plainPassword) {
-        plainPassword += pepper;
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(plainPassword);
     }

@@ -8,18 +8,12 @@ import org.springframework.web.server.ResponseStatusException;
 @Data
 public class ChangePasswordForm {
 
-    private String current;
     private String newPW;
     private String repeatPW;
 
     public void applyToUser(User user) {
         validatePasswords();
-        if (user.checkPassword(current)) {
             user.setPassword(newPW);
-        }
-        else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong Password");
-        }
     }
 
     private void validatePasswords() {
