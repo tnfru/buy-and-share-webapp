@@ -9,6 +9,7 @@ import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
 
 import java.security.Principal;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,7 +49,12 @@ public class UserController {
 
     @GetMapping("/user/account")
     public String accountPage(Model model, Principal principal) {
-        model.addAttribute("principal", principal.getName());
+        Optional<User> search = userRepo.findByEmail(principal.getName());
+        if(!search.isPresent()){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+        }
+        User user = search.get();
+        model.addAttribute("user", user);
         return "account";
     }
 
