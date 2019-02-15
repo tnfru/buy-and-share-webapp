@@ -7,6 +7,7 @@ import de.hhu.propra.sharingplatform.dto.ProPayReservation;
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,12 +22,11 @@ import java.net.URL;
 @Service
 public class ApiService {
 
-    private PaymentService paymentService;
     private PaymentRepo paymentRepo;
     String host = "localhost";
 
-    public ApiService(PaymentService paymentService, PaymentRepo paymentRepo) {
-        this.paymentService = paymentService;
+    @Autowired
+    public ApiService(PaymentRepo paymentRepo) {
         this.paymentRepo = paymentRepo;
     }
 
