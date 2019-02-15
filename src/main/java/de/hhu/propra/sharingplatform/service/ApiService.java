@@ -2,6 +2,8 @@ package de.hhu.propra.sharingplatform.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.hhu.propra.sharingplatform.dto.ProPay;
+import de.hhu.propra.sharingplatform.model.Payment;
+import de.hhu.propra.sharingplatform.model.User;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,10 +23,24 @@ public class ApiService {
         return jsonResponse.getForObject(url, String.class);
     }
 
-    public ProPay mapJson(String userName) throws IOException {
+    public ProPay mapJson(String userName) {
         String jsonResponse = fetchJson(userName);
         ObjectMapper mapper = new ObjectMapper();
 
-        return mapper.readValue(jsonResponse, ProPay.class);
+        try {
+            return mapper.readValue(jsonResponse, ProPay.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void enforcePayment(Payment payment) {
+
+    }
+
+    public boolean checkSolvent(User borrower, double totalAmount) {
+        ProPay borrowerProPay = mapJson(borrower.getPropayId());
+        return borrowerProPay.getAmount() >= totalAmount;
     }
 }
