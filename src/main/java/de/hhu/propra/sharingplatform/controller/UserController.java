@@ -44,9 +44,9 @@ public class UserController {
         return "redirect:/";
     }
 
-    @GetMapping("/user/account/")
+    @GetMapping("/user/account")
     public String accountPage(Model model, Principal principal) {
-        model.addAttribute("principal", principal);
+        model.addAttribute("principal", userRepo.findByAccountName(principal.getName()));
         return "account";
     }
 
