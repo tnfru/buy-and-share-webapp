@@ -11,7 +11,8 @@
            role="tab" aria-controls="v-pills-home" aria-selected="true">Profile</a>
         <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-ownItems"
            role="tab" aria-controls="v-pills-messages" aria-selected="false">Own Items</a>
-        <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-borrowedItems"
+        <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill"
+           href="#v-pills-borrowedItems"
            role="tab" aria-controls="v-pills-settings" aria-selected="false">Borrowed Items</a>
       </div>
     </div>
@@ -19,7 +20,33 @@
       <div class="tab-content" id="v-pills-tabContent">
         <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
              aria-labelledby="v-pills-home-tab">
-          User Info
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <h4 th:text="${user.getName()}">Item Name</h4>
+            </li>
+            <li class="list-group-item">
+              <img src="/images/bike-dummy.png" class="card-img-top" style="max-height: 20em; max-width: 70em">
+            </li>
+            <li class="list-group-item">
+              <b>Username:</b>
+              <span th:text="${user.getAccountName()}">name</span>
+            </li>
+
+            <li class="list-group-item">
+              <b>Mail:</b>
+              <span th:text="${user.getEmail()}">name@abc.de</span>
+            </li>
+
+            <li class="list-group-item">
+              <b>ProPayID:</b>
+              <span th:text="${user.getPropayId()}">abc</span>
+            </li>
+
+            <li class="list-group-item">
+              <b>Rating:</b>
+              <span th:text="${user.getRating()}">5</span>
+            </li>
+          </ul>
         </div>
         <div class="tab-pane fade" id="v-pills-ownItems" role="tabpanel"
              aria-labelledby="v-pills-profile-tab">
@@ -63,7 +90,40 @@
           </table>
         </div>
         <div class="tab-pane fade" id="v-pills-borrowedItems" role="tabpanel"
-             aria-labelledby="v-pills-messages-tab">Items borrowed
+             aria-labelledby="v-pills-messages-tab">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Item Price</th>
+              <th scope="col">Item Deposit</th>
+              <th scope="col">Start Date</th>
+              <th scope="col">Expected End Date</th>
+              <th scope="col">End Date</th>
+              <th scope="col">Conflict</th>
+              <th scope="col" class="mx-auto">Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="con : ${user.getContracts()}">
+              <td th:text="${con.getId()}"> -1 </td>
+              <td th:text="${con.getItem().getName()}"> Item Name </td>
+              <td th:text="${con.getItem().getPrice()}"> Item Price </td>
+              <td th:text="${con.getItem().getDeposit()}"> Item Deposit </td>
+              <td th:text="${con.getStart()}"> Contract Start Date </td>
+              <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date </td>
+              <td th:text="${con.getRealEnd()}"> Contract Real End Date </td>
+              <td th:text="${con.isConflict()}"> Is Conflict </td>
+              <td>
+                <a th:href="#"
+                   class="btn btn-primary btn-sm">Return Item</a>
+                <a th:href="#"
+                   class="btn btn-danger btn-sm">Item Owner</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
