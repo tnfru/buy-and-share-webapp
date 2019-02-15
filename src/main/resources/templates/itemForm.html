@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.com">
-<title>Gegenstand Bearbeitung</title>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{base}"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<title>Neuer Gegenstand</title>
 <meta charset="UTF-8">
 <meta name="viewport"
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -10,9 +11,9 @@
       crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
-  <h1 th:if="${item?.Id} == NULL">Neuen Gegenstand anlegen</h1>
-  <h1 th:unless="${item?.Id} == NULL" th:text="|${item?.name} editieren|"></h1>
+<div layout:fragment="content">
+    <h1 th:if="${item?.Id} == NULL">Neuen Gegenstand anlegen</h1>
+    <h1 th:unless="${item?.Id} == NULL" th:text="|${item?.name} editieren|"></h1>
   <br>
   <form method="post" style="margin-left: 1em;" th:object="${item}">
     <label>
@@ -33,7 +34,7 @@
       <input type="text" name="location" th:value="${item?.location}" required></input>
       <br>
       <br>
-      Bescheibung:(*)<br>
+      Beschreibung:(*)<br>
       <textarea cols="80" name="description" rows="20"
                 th:field="*{description}" required></textarea>
     </label>
@@ -42,8 +43,6 @@
     Alle mit * versehenen Angaben sind Pflichtfelder!
     <br>
     <br>
-    <br>
-    <p th:text="${userId}"></p>
     <button type="submit" class="btn btn-primary" action="POST">Speichern</button>
   </form>
   <br>
