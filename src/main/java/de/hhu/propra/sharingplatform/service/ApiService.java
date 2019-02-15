@@ -62,8 +62,8 @@ public class ApiService {
     private long reservateMoney(String proPayIdSender, String proPayIdRecipient, double amount) {
         try {
             URL url =
-                new URL("http://localhost:8888/reservation/reserve/" + proPayIdSender +
-                    "/" + proPayIdRecipient);
+                new URL("http://localhost:8888/reservation/reserve/" + proPayIdSender
+                    + "/" + proPayIdRecipient);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
@@ -76,7 +76,8 @@ public class ApiService {
             ProPayReservation proPayReservation = mapper.readValue(response,
                 ProPayReservation.class);
             return proPayReservation.getId();
-        } catch (IOException ignored) {
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
         return 0;
     }
@@ -91,7 +92,8 @@ public class ApiService {
             }
             in.close();
             return inBuffer.toString();
-        } catch (IOException ignored) {
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
         return null;
     }
