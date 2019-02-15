@@ -20,6 +20,7 @@ public class UserFaker {
         user.setEmail(faker.name().username() + "@example.com");
         user.setPropayId(faker.funnyName().name());
         user.setRating(faker.number().numberBetween(0, 5));
+        user.setPassword("123");
         user.setBan(false);
         user.setDeleted(false);
 
