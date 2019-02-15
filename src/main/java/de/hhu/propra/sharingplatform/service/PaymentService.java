@@ -38,9 +38,7 @@ public class PaymentService {
         long startTime = contract.getStart().getTime();
         long endTime = contract.getRealEnd().getTime();
         //time passed in full days
-        long timePassed =
-            (long) Math.ceil(((float) endTime - (float) startTime) / (1000 * 60 * 60 * 24));
-
+        double timePassed = Math.ceil(((double) endTime - startTime) / (1000.0 * 60 * 60 * 24));
         return timePassed * contract.getItem().getPrice();
     }
 
