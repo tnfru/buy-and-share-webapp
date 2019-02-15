@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.controller;
 
+import de.hhu.propra.sharingplatform.form.EditUserForm;
 import de.hhu.propra.sharingplatform.form.UserForm;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
@@ -56,6 +57,30 @@ public class UserController {
         User user = search.get();
         model.addAttribute("user", user);
         return "account";
+    }
+
+    @GetMapping("/user/edit")
+    public String editUserPage(Model model, Principal principal) {
+        Optional<User> search = userRepo.findByEmail(principal.getName());
+        if (!search.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+        }
+        User user = search.get();
+        EditUserForm form = new EditUserForm(user);
+        model.addAttribute("edituser", form);
+        return "editUser";
+    }
+
+    @PostMapping("/user/edit")
+    public String editUser(Model model, Principal principal, @ModelAttribute("edituser") EditUserForm form) {
+        Optional<User> search = userRepo.findByEmail(principal.getName());
+        if (!search.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+        }
+        User user = search.get();
+        form.applyToUser(user);
+        userRepo.save(user);
+        return "redirect:/user/account";
     }
 
 }
