@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.controller;
 
+import de.hhu.propra.sharingplatform.form.ChangePasswordForm;
 import de.hhu.propra.sharingplatform.form.EditUserForm;
 import de.hhu.propra.sharingplatform.form.UserForm;
 import de.hhu.propra.sharingplatform.model.Item;
@@ -83,4 +84,22 @@ public class UserController {
         return "redirect:/user/account";
     }
 
+    @GetMapping("/user/changePassword")
+    public String changePasswordPage(Model model, Principal principal) {
+        ChangePasswordForm form = new ChangePasswordForm();
+        model.addAttribute("passwordForm", form);
+        return "changePassword";
+    }
+
+    @PostMapping("/user/changePassword")
+    public String changePassword(Model model, Principal principal, @ModelAttribute("passwordForm") ChangePasswordForm form) {
+        Optional<User> search = userRepo.findByEmail(principal.getName());
+        if (!search.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+        }
+        User user = search.get();
+        form.applyToUser(user);
+        userRepo.save(user);
+        return "redirect:/user/account";
+    }
 }
