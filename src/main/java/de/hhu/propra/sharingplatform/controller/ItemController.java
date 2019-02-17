@@ -1,9 +1,8 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
+import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.service.ItemService;
-import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.Principal;
 
 @Controller
 public class ItemController {
@@ -21,46 +22,57 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @GetMapping("/item/details/{itemId}/{userId}")
-    public String detailPage(Model model, @PathVariable long itemId, @PathVariable long userId) {
-        //TODO: add param do differentiate users
-        model.addAttribute("item", itemService.findItem(itemId));
-        model.addAttribute("user", userRepo.findOneById(userId));
+    @GetMapping("/item/details/{itemId}")
+    public String detailPage(Model model, @PathVariable long itemId, Principal principal) {
+        Item item = itemService.findItem(itemId);
+        model.addAttribute("item", item);
+        model.addAttribute("user", userRepo.findByAccountName(principal.getName()));
+        boolean ownItem = itemService.userIsOwner(item,
+            itemService.getUserIdFromAccountName(principal.getName()));
+        model.addAttribute("ownItem", ownItem);
         return "details";
     }
 
-    @GetMapping("/item/newItem/{userId}")
-    public String newItem(Model model, @PathVariable long userId) {
+    @GetMapping("/item/newItem")
+    public String newItem(Model model, Principal principal) {
         model.addAttribute("item", new Item());
-        model.addAttribute("user", userRepo.findOneById(userId));
+        model.addAttribute("user", userRepo.findByAccountName(principal.getName()));
         return "itemForm";
     }
 
-    @PostMapping("/item/newItem/{userId}")
-    public String inputItemData(Model model, Item item, @PathVariable long userId) {
-        itemService.persistItem(item, userId);
-        return "redirect:/user/account/" + userId;
+    @PostMapping("/item/newItem")
+    public String inputItemData(Model model, Item item, Principal principal) {
+        itemService.persistItem(item, itemService.getUserIdFromAccountName(principal.getName()));
+        return "redirect:/user/account/";
     }
 
-    @GetMapping("/item/removeItem/{userId}")
+    @GetMapping("/item/removeItem/")
     public String markItemAsRemoved(Model model,
-        @RequestParam(value = "itemId", required = true) long itemId, @PathVariable long userId) {
-        itemService.removeItem(userId, itemId);
-        return "redirect:/user/account/" + userId;
+                                    @RequestParam(value = "itemId", required = true) long itemId,
+                                    Principal principal) {
+        itemService.removeItem(itemService.getUserIdFromAccountName(principal.getName()), itemId);
+        return "redirect:/user/account/";
     }
 
-    @GetMapping("/item/editItem/{userId}/{itemId}")
-    public String editItem(Model model, @PathVariable long itemId, @PathVariable long userId) {
+    @GetMapping("/item/editItem/{itemId}")
+    public String editItem(Model model, @PathVariable long itemId, Principal principal) {
         Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
         model.addAttribute("itemId", itemId);
+        long userId = itemService.getUserIdFromAccountName(principal.getName());
         model.addAttribute("userId", userId);
-        return "itemForm";
+        if (itemService.userIsOwner(item, userId)) {
+            return "itemForm";
+        }
+        return "error";
     }
-/*
-    @PostMapping("/item/editItem/{userId}")
-    public String editItemData(Model model, Item item, @PathVariable long userId) {
+
+    @PostMapping("/item/editItem/{itemId}")
+    public String editItemData(Model model, Item item,
+                               @PathVariable long itemId,
+                               Principal principal) {
+        long userId = itemService.getUserIdFromAccountName(principal.getName());
         itemService.editItem(item, itemId, userId);
-        return "redirect:/user/account/" + userId;
-    }*/
+        return "redirect:/user/account";
+    }
 }

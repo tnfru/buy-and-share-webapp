@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8">
-  <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Blog</title>
+  <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Borrow.Ly - Overview</title>
   <link rel="stylesheet"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
@@ -17,31 +17,45 @@
 </head>
 <body>
 
-<div class="header">
-  <a href="/"><img src="/images/Header.png" class="header_img"></a>
-  <div th:switch="${authenticated}">
-        <span th:case="${false}">
-            <a href="/login">
-                <button type="button" class="btn btn-success" id="login-button">Login</button>
-            </a>
-            <a href="/user/register">
-                <button type="button" class="btn btn-primary" id="register-button">Register</button>
-            </a>
-        </span>
-    <span th:case="${true}">
-            <a href="/logout">
-                <button type="button" class="btn btn-danger" id="logout-button">Logout</button>
-            </a>
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">
+      <img src="/images/Logo_Square_small.png" width="30" height="30"
+           class="d-inline-block align-top" alt="">
+      Borrow.Ly
+    </a>
 
-            <a href="/user/account">
-                 <button type="button" class="btn btn-primary"
-                         id="account-button">My Borrow.ly</button>
-            </a>
-        </span>
-  </div>
-</div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-<div class="container">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0 mx-auto w-50">
+        <input class="form-control mr-sm-2 w-50" type="search" placeholder="Search for Item"
+               aria-label="Search">
+        <button class="btn btn-warning my-2 my-sm-0" type="submit">Search</button>
+      </form>
+
+      <div th:switch="${user != null}">
+        <a href="/user/account" th:case="${true}" class="btn btn-primary my-2 my-sm-0">Profile</a>
+        <div class="btn-group" role="group" th:case="${false}">
+          <a href="/user/account" class="btn btn-success my-2 my-sm-0">Login</a>
+          <a href="/user/register" class="btn btn-primary my-2 my-sm-0">Sign up</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="container mt-3">
   <div layout:fragment="content">
     Content goes here
   </div>

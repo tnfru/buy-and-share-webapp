@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.dto;
+package de.hhu.propra.sharingplatform.form;
 
 import de.hhu.propra.sharingplatform.model.User;
 import lombok.Data;
@@ -9,40 +9,27 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Data
-public class UserForm {
+public class EditUserForm {
 
     private String name;
-    private String address;
-    private String accountName;
-    private String email;
     private String propayId;
-    private String password;
-    private String passwordConfirm;
+    private String address;
 
-    public User parseToUser() {
-        validateAdress();
-        validateMail();
-        validateName();
-        validatePasswords();
-        if (propayId == null) {
-            propayId = "propay-" + email;
-        }
-        User user = new User();
-        user.setName(name);
-        user.setAccountName(accountName);
-        user.setAddress(address);
-        user.setEmail(email);
-        user.setPropayId(propayId);
-        user.setPassword(password);
-        return user;
+    public EditUserForm() {
     }
 
-    private void validateMail() {
-        Pattern pattern = Pattern.compile("^.+@.+\\..+$");
-        Matcher matcher = pattern.matcher(email);
-        if (!matcher.matches()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not a valid E-Mail");
-        }
+    public EditUserForm(User user) {
+        name = user.getName();
+        address = user.getAddress();
+        propayId = user.getPropayId();
+    }
+
+    public void applyToUser(User user) {
+        validateAdress();
+        validateName();
+        user.setName(name);
+        user.setAddress(address);
+        user.setPropayId(propayId);
     }
 
     private void validateName() {
@@ -66,21 +53,6 @@ public class UserForm {
         }
         if (hastSpecialChars(address)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is invalid.");
-        }
-    }
-
-    private void validatePasswords() {
-        if (password == null || password.length() == 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password was empty");
-        }
-        if (password.length() > 255) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too long");
-        }
-        if (password.length() < 8) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too short");
-        }
-        if (!password.equals(passwordConfirm)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
         }
     }
 
