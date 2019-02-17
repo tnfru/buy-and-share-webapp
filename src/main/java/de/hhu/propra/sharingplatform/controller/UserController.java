@@ -1,18 +1,11 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import de.hhu.propra.sharingplatform.form.ChangePasswordForm;
-import de.hhu.propra.sharingplatform.form.EditUserForm;
-import de.hhu.propra.sharingplatform.form.UserForm;
-import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
-
+import de.hhu.propra.sharingplatform.dto.UserForm;
+import de.hhu.propra.sharingplatform.form.ChangePasswordForm;
+import de.hhu.propra.sharingplatform.form.EditUserForm;
 import de.hhu.propra.sharingplatform.model.User;
-
-import java.security.Principal;
-import java.util.Optional;
-
 import de.hhu.propra.sharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 public class UserController {

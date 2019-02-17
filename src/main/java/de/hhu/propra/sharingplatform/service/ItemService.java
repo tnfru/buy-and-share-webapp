@@ -61,7 +61,7 @@ public class ItemService {
     }
 
     public boolean validateItem(Item item) {
-        return (item.getDescription() != null && item.getDeposit() != null
+        return (item.getDescription() != null && item.getBail() != null
             && item.getLocation() != null && item.getName() != null && item.getPrice() != null);
     }
 

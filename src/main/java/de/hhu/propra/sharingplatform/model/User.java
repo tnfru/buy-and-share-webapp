@@ -1,11 +1,11 @@
 package de.hhu.propra.sharingplatform.model;
 
 
-import com.google.common.hash.Hashing;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.annotation.Transient;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,11 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.annotation.Transient;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -49,20 +46,14 @@ public class User {
         CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Offer> offers;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "sender")
-    private List<Payment> paymentsSend;
-
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "recipient")
-    private List<Payment> paymentsReceive;
+    @Transient
+    @Value("${passwords.pepper}")
+    private String pepper;
 
     public User() {
         contracts = new ArrayList<>();
         items = new ArrayList<>();
         offers = new ArrayList<>();
-        paymentsSend = new ArrayList<>();
-        paymentsReceive = new ArrayList<>();
     }
 
     public void setPassword(String password) {
