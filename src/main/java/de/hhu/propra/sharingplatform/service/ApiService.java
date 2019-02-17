@@ -50,19 +50,19 @@ public class ApiService {
     }
 
     public void enforcePayment(Payment payment, double totalPrice) {
-        long id = reservateMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
+        long id = reserveMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
             payment.getBail());
         payment.setBailProPayId(id);
-        id = reservateMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
+        id = reserveMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
             totalPrice);
         payment.setAmountProPayId(id);
         paymentRepo.save(payment);
     }
 
-    private long reservateMoney(String proPayIdSender, String proPayIdRecipient, double amount) {
+    private long reserveMoney(String proPayIdSender, String proPayIdRecipient, double amount) {
         try {
             URL url =
-                new URL("http://localhost:8888/reservation/reserve/" + proPayIdSender
+                new URL("http://" + host + ":8888/reservation/reserve/" + proPayIdSender
                     + "/" + proPayIdRecipient);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -82,6 +82,7 @@ public class ApiService {
         return 0;
     }
 
+    //converts any http response to String and return it
     private String convertHttpResponse(InputStreamReader inStream) {
         try {
             BufferedReader in = new BufferedReader(inStream);
