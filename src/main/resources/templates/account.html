@@ -48,7 +48,8 @@
 
             <li class="list-group-item">
               <b>Rating:</b>
-              <span th:text="${user.getRating()}">5</span>
+              <span th:text="|${user.totalRatings()}|"></span> Bewertungen:
+              <span th:text="|${user.getRating()}|"></span> &#128077;
             </li>
           </ul>
         </div>
@@ -71,7 +72,12 @@
               <td th:text="${item.getName()}"> Test Name</td>
               <td th:text="${item.getPrice()}"> 33</td>
               <td th:text="${item.getBail()}"> 333</td>
-              <td th:text="${item.isAvailable()}"> true</td>
+              <td th:if="${item?.isAvailable()} == true">
+                <span style="color: green;">&#10004;</span>
+              </td>
+              <td th:if="${item?.isAvailable()} == false">
+                <span style="color: red;">&#10006;</span>
+              </td>
               <td>
                 <a th:href="|/item/${item.getId()}/offers|" class="btn-primary">
                   <button type="button" class="btn btn-primary btn-sm">
@@ -84,7 +90,7 @@
               <td>
                 <a th:href="|/item/details/${item.getId()}|"
                    class="btn btn-primary btn-sm">Details</a>
-                <a th:href="|/item/removeItem/${item.getId()}|"
+                <a th:href="|/item/remove/${item.getId()}|"
                    class="btn btn-danger btn-sm">Remove</a>
               </td>
             </tr>
@@ -127,7 +133,7 @@
         </div>
         <div class="tab-pane fade" id="v-pills-newItem" role="tabpanel"
              aria-labelledby="v-pills-newItem-tab">
-          <a class="btn btn-primary" href="/item/newItem">New Item</a>
+          <a class="btn btn-primary" href="/item/new">New Item</a>
           <br>
           <a style="margin-top:1em; " class="btn btn-info" href="/user/edit">Edit Profile</a>
           <br>

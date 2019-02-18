@@ -20,15 +20,12 @@ public class SharingPlatformErrorController implements ErrorController {
     @RequestMapping("/error")
     public String errorHandling(HttpServletRequest request, Model model) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-        Object errormsg = request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
-        int statusCode = 0;
-        if (status != null) {
-            statusCode = Integer.valueOf(status.toString());
-            model.addAttribute("errorcode", statusCode);
+        String errormsg = String.valueOf(request.getAttribute(RequestDispatcher.ERROR_MESSAGE));
+        model.addAttribute("errorcode", Integer.valueOf(status.toString()));
+        if (errormsg.length() <= 0) {
+            errormsg = "No message provided";
         }
-        if (errormsg != null) {
-            model.addAttribute("errormsg", (String) errormsg);
-        }
+        model.addAttribute("errormsg", errormsg);
         return "error";
     }
 }
