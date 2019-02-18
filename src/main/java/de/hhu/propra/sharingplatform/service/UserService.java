@@ -2,7 +2,6 @@ package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,10 +10,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
 
 @Service
 public class UserService {
@@ -137,6 +135,14 @@ public class UserService {
         }*/
         oldUser.setPasswordHash(generatePassword(newPassword, confirm));
         userRepo.save(oldUser);
+    }
+
+    public long fetchUserIdByAccountName(String AccountName) {
+        Optional<User> search = userRepo.findByAccountName(AccountName);
+        if (!search.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+        }
+        return (search.get().getId());
     }
 }
 

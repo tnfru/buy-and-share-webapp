@@ -1,8 +1,8 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.service.ItemService;
+import de.hhu.propra.sharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,19 +16,23 @@ import java.security.Principal;
 @Controller
 public class ItemController {
 
-    @Autowired
-    private UserRepo userRepo;
+    private final ItemService itemService;
+
+    private final UserService userService;
 
     @Autowired
-    private ItemService itemService;
+    public ItemController(ItemService itemService, UserService userService) {
+        this.itemService = itemService;
+        this.userService = userService;
+    }
 
     @GetMapping("/item/details/{itemId}")
     public String detailPage(Model model, @PathVariable long itemId, Principal principal) {
         Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
-        model.addAttribute("user", userRepo.findByAccountName(principal.getName()));
+        model.addAttribute("user", userService.fetchUserByAccountName(principal.getName()));
         boolean ownItem = itemService.userIsOwner(item,
-            itemService.getUserIdFromAccountName(principal.getName()));
+            userService.fetchUserIdByAccountName(principal.getName()));
         model.addAttribute("ownItem", ownItem);
         return "details";
     }
@@ -36,13 +40,13 @@ public class ItemController {
     @GetMapping("/item/newItem")
     public String newItem(Model model, Principal principal) {
         model.addAttribute("item", new Item());
-        model.addAttribute("user", userRepo.findByAccountName(principal.getName()));
+        model.addAttribute("user", userService.fetchUserByAccountName(principal.getName()));
         return "itemForm";
     }
 
     @PostMapping("/item/newItem")
     public String inputItemData(Model model, Item item, Principal principal) {
-        itemService.persistItem(item, itemService.getUserIdFromAccountName(principal.getName()));
+        itemService.persistItem(item, userService.fetchUserIdByAccountName(principal.getName()));
         return "redirect:/user/account/";
     }
 
@@ -50,7 +54,7 @@ public class ItemController {
     public String markItemAsRemoved(Model model,
                                     @RequestParam(value = "itemId", required = true) long itemId,
                                     Principal principal) {
-        itemService.removeItem(itemService.getUserIdFromAccountName(principal.getName()), itemId);
+        itemService.removeItem(userService.fetchUserIdByAccountName(principal.getName()), itemId);
         return "redirect:/user/account/";
     }
 
@@ -59,7 +63,7 @@ public class ItemController {
         Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
         model.addAttribute("itemId", itemId);
-        long userId = itemService.getUserIdFromAccountName(principal.getName());
+        long userId = userService.fetchUserIdByAccountName(principal.getName());
         model.addAttribute("userId", userId);
         if (itemService.userIsOwner(item, userId)) {
             return "itemForm";
@@ -71,7 +75,7 @@ public class ItemController {
     public String editItemData(Model model, Item item,
                                @PathVariable long itemId,
                                Principal principal) {
-        long userId = itemService.getUserIdFromAccountName(principal.getName());
+        long userId = userService.fetchUserIdByAccountName(principal.getName());
         itemService.editItem(item, itemId, userId);
         return "redirect:/user/account";
     }
