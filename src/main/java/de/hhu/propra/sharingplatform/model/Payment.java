@@ -1,33 +1,42 @@
 package de.hhu.propra.sharingplatform.model;
 
+import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-import lombok.Data;
+import javax.persistence.OneToOne;
 
 @Data
 @Entity
+@ToString(exclude = "contract")
 public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private double amount;
+    private long amountProPayId;
+    private String proPayIdSender;
+    private String proPayIdRecipient;
+    private double bail;
+    private long bailProPayId;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private User sender;
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+        mappedBy = "payment")
+    private Contract contract;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private User recipient;
-    private long amount;
+    public Payment() {
+    }
 
-    public Payment(User from, User to, long amount) {
-        this.sender = from;
-        this.recipient = to;
+    public Payment(User sender, User recipient, double amount, double bail) {
+        this.proPayIdSender = sender.getPropayId();
+        this.proPayIdRecipient = recipient.getPropayId();
         this.amount = amount;
+        this.bail = bail;
     }
 
 }

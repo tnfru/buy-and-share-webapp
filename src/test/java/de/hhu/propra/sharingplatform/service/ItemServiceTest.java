@@ -43,8 +43,8 @@ public class ItemServiceTest {
         item = new Item();
         item.setId((long) 1);
         item.setName("TestItem");
-        item.setDeposit(100);
-        item.setPrice(20);
+        item.setBail(100.0);
+        item.setPrice(20.0);
         item.setDescription("This is a test");
         item.setLocation("Test-Location");
     }
@@ -116,7 +116,7 @@ public class ItemServiceTest {
         editItem.setDescription("This is edited");
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
-        editItem.setDeposit(item.getDeposit());
+        editItem.setBail(item.getBail());
         editItem.setName(item.getName());
         ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
 
@@ -135,7 +135,7 @@ public class ItemServiceTest {
         editItem.setDescription("This is edited");
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
-        editItem.setDeposit(item.getDeposit());
+        editItem.setBail(item.getBail());
         editItem.setName(item.getName());
 
         when(itemRepo.findOneById(1)).thenReturn(item);
@@ -152,7 +152,7 @@ public class ItemServiceTest {
         editItem.setDescription(null);
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
-        editItem.setDeposit(item.getDeposit());
+        editItem.setBail(item.getBail());
         editItem.setName(item.getName());
 
         when(itemRepo.findOneById(1)).thenReturn(item);
@@ -169,7 +169,7 @@ public class ItemServiceTest {
         editItem.setDescription(null);
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
-        editItem.setDeposit(item.getDeposit());
+        editItem.setBail(item.getBail());
         editItem.setName(item.getName());
 
         when(itemRepo.findOneById(1)).thenReturn(item);

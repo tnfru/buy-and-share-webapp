@@ -3,8 +3,11 @@ package de.hhu.propra.sharingplatform.controller;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
+
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.security.Principal;
 
 import org.springframework.http.HttpStatus;

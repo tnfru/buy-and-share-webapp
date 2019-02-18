@@ -1,14 +1,13 @@
 package de.hhu.propra.sharingplatform.service;
 
+import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Offer;
-import de.hhu.propra.sharingplatform.dao.ContractRepo;
-
-import java.util.Date;
-
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 @Data
@@ -25,7 +24,14 @@ public class ContractService {
     }
 
     public void create(Offer offer) {
-        contractRepo.save(new Contract(offer));
+        Contract contract = new Contract(offer);
+        if (paymentService.recipientSolvent(contract)) {
+            contractRepo.save(contract);
+            // -> Payment
+            paymentService.create(contract);
+        } else {
+            //TODO
+        }
     }
 
     public void endContract(long contractId) {

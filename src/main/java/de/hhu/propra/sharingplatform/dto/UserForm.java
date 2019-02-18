@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.form;
+package de.hhu.propra.sharingplatform.dto;
 
 import de.hhu.propra.sharingplatform.model.User;
 import lombok.Data;
@@ -7,8 +7,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
 
 @Data
 public class UserForm {
@@ -54,7 +52,7 @@ public class UserForm {
         if (name.length() > 255) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is too long");
         }
-        if (!isAlphanumeric(name)) {
+        if (hastSpecialChars(name)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is invalid.");
         }
     }
@@ -66,13 +64,13 @@ public class UserForm {
         if (address.length() > 255) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is too long");
         }
-        if (!isAlphanumeric(address)) {
+        if (hastSpecialChars(address)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is invalid.");
         }
     }
 
     private void validatePasswords() {
-        if (password == null || name.length() == 0) {
+        if (password == null || password.length() == 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password was empty");
         }
         if (password.length() > 255) {
@@ -81,5 +79,14 @@ public class UserForm {
         if (password.length() < 8) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too short");
         }
+        if (!password.equals(passwordConfirm)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
+        }
+    }
+
+    private boolean hastSpecialChars(String string) {
+        Pattern pattern = Pattern.compile("[^a-z0-9 -]", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(string);
+        return matcher.find();
     }
 }
