@@ -2,7 +2,6 @@ package de.hhu.propra.sharingplatform.faker;
 
 import com.github.javafaker.Faker;
 import de.hhu.propra.sharingplatform.model.User;
-
 import java.util.List;
 
 public class UserFaker {
@@ -17,8 +16,9 @@ public class UserFaker {
         User user = new User();
         user.setName(faker.name().fullName());
         user.setAddress(faker.address().fullAddress());
-        user.setAccountName(faker.name().firstName());
-        user.setEmail(faker.name().username() + "@example.com");
+        String username = faker.name().username();
+        user.setAccountName(username);
+        user.setEmail(username + "@example.com");
         user.setPropayId(faker.funnyName().name());
         user.setPositiveRating(faker.number().numberBetween(0, 40));
         user.setNegativeRating(faker.number().numberBetween(0, 20));
