@@ -14,7 +14,8 @@
       <span>Address:(*)</span>
       <p><input type="text" name="address" th:value="${user?.address}" required></p>
       <span th:if="${user?.Id} == NULL">AccountName:(*)</span>
-      <p th:if="${user?.Id} == NULL"><input type="text" name="accountName" th:value="${user?.accountName}" required></p>
+      <p th:if="${user?.Id} == NULL"><input type="text" name="accountName"
+                                            th:value="${user?.accountName}" required></p>
       <span>Email:(*)</span>
       <p><input type="text" name="email" th:value="${user?.email}" required></p>
       <span>PropayID:</span>

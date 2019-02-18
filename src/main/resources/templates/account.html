@@ -28,7 +28,8 @@
               <h4 th:text="${user.getName()}">User Name</h4>
             </li>
             <li class="list-group-item">
-              <img src="/images/bike-dummy.png" class="card-img-top" style="max-height: 20em; max-width: 70em">
+              <img src="/images/bike-dummy.png" class="card-img-top"
+                   style="max-height: 20em; max-width: 70em">
             </li>
             <li class="list-group-item">
               <b>Username:</b>
@@ -107,13 +108,13 @@
             </thead>
             <tbody>
             <tr th:each="con : ${user.getContracts()}">
-              <td th:text="${con.getItem().getName()}"> Item Name </td>
-              <td th:text="${con.getItem().getPrice()}"> Item Price </td>
-              <td th:text="${con.getItem().getBail()}"> Item Bail </td>
-              <td th:text="${con.getStart()}"> Contract Start Date </td>
-              <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date </td>
-              <td th:text="${con.getRealEnd()}"> Contract Real End Date </td>
-              <td th:text="${con.isConflict()}"> Is Conflict </td>
+              <td th:text="${con.getItem().getName()}"> Item Name</td>
+              <td th:text="${con.getItem().getPrice()}"> Item Price</td>
+              <td th:text="${con.getItem().getBail()}"> Item Bail</td>
+              <td th:text="${con.getStart()}"> Contract Start Date</td>
+              <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date</td>
+              <td th:text="${con.getRealEnd()}"> Contract Real End Date</td>
+              <td th:text="${con.isConflict()}"> Is Conflict</td>
               <td>
                 <a th:href="#"
                    class="btn btn-primary btn-sm">Return Item</a>
@@ -130,7 +131,8 @@
           <br>
           <a style="margin-top:1em; " class="btn btn-info" href="/user/edit">Edit Profile</a>
           <br>
-          <a style="margin-top:1em; " class="btn btn-info" href="/user/changePassword">Change Password</a>
+          <a style="margin-top:1em; " class="btn btn-info" href="/user/changePassword">Change
+            Password</a>
         </div>
       </div>
     </div>

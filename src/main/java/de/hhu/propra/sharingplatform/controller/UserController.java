@@ -2,8 +2,6 @@ package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
-import de.hhu.propra.sharingplatform.form.ChangePasswordForm;
-import de.hhu.propra.sharingplatform.form.EditUserForm;
 import de.hhu.propra.sharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.Optional;
 
 @Controller
 public class UserController {
