@@ -2,24 +2,27 @@ package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.security.Principal;
+import java.util.Optional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.security.Principal;
-
 @Controller
 public class ItemController {
 
-    @Autowired
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
 
-    @Autowired
-    private ItemService itemService;
+    private final ItemService itemService;
+
+    public ItemController(ItemService itemService, UserRepo userRepo) {
+        this.itemService = itemService;
+        this.userRepo = userRepo;
+    }
 
     @GetMapping("/item/details/{itemId}")
     public String detailPage(Model model, @PathVariable long itemId, Principal principal) {
@@ -34,8 +37,9 @@ public class ItemController {
 
     @GetMapping("/item/new")
     public String newItem(Model model, Principal principal) {
-        model.addAttribute("item", new Item());
-        model.addAttribute("user", userRepo.findByAccountName(principal.getName()));
+        Optional<User> optionalUser = userRepo.findByAccountName(principal.getName());
+        model.addAttribute("item", new Item(optionalUser.get()));
+        model.addAttribute("user", optionalUser);
         return "itemForm";
     }
 
@@ -47,7 +51,7 @@ public class ItemController {
 
     @GetMapping("/item/remove/{itemId}")
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
-                                    Principal principal) {
+        Principal principal) {
         itemService.removeItem(itemService.getUserIdFromAccountName(principal.getName()), itemId);
         return "redirect:/user/account/";
     }
@@ -66,9 +70,8 @@ public class ItemController {
     }
 
     @PostMapping("/item/edit/{itemId}")
-    public String editItemData(Model model, Item item,
-                               @PathVariable long itemId,
-                               Principal principal) {
+    public String editItemData(Model model, Item item, @PathVariable long itemId,
+        Principal principal) {
         long userId = itemService.getUserIdFromAccountName(principal.getName());
         itemService.editItem(item, itemId, userId);
         return "redirect:/user/account";

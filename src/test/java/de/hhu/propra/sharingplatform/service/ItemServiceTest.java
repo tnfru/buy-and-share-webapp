@@ -85,23 +85,6 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void getItemValidUser() {
-        when(itemRepo.findOneById(1)).thenReturn(item);
-
-        Item editItem = itemService.getItem(1, 1);
-
-        assert editItem.equals(item);
-    }
-
-    @Test
-    public void getItemInvalidUser() {
-        when(itemRepo.findOneById(1)).thenReturn(item);
-        Item editItem = itemService.getItem(1, 2);
-
-        assert editItem == null;
-    }
-
-    @Test
     public void editItemValidItemAndUser() {
         Item editItem = new Item(user);
         editItem.setDescription("This is edited");
