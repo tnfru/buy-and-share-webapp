@@ -26,7 +26,7 @@ public class Item {
     private String description;
     private Double bail;
     private Double price; // each day
-    private boolean available;
+    private boolean available = true;
     private String location; // maybe change to java location class
     private boolean deleted;
 
