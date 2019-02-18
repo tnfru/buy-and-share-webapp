@@ -73,7 +73,7 @@ public class User {
         if (sum > 0) {
             float rating = positiveRating / sum;
             rating *= 100;
-            return String.format(format, rating);
+            return String.format(format, rating).replace(',', '.');
         }
         return "0.0%";
     }
