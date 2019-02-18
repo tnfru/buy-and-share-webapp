@@ -56,7 +56,7 @@ public class UserService {
         }
     }
 
-    public String generatePassword(String password, String confirm) {
+    private String generatePassword(String password, String confirm) {
         if (!(password.equals(confirm))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                 "Passwörter müssen übereinstimmen");
@@ -96,11 +96,14 @@ public class UserService {
         return Hashing.sha512().hashString(plainPassword, StandardCharsets.UTF_8).toString();
     }
 
-    public void persistUser(User user){
+    public void persistUser(User user, String password, String confirm) {
+        validateUser(user);
+        String hashPassword = generatePassword(password, confirm);
+        user.setPasswordHash(hashPassword);
         userRepo.save(user);
     }
 
-    public void validate(User user){
+    private void validateUser(User user) {
         validateMail(user);
         validateAdress(user);
         validateName(user);

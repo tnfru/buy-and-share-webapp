@@ -71,10 +71,12 @@ public class User {
         paymentsReceive = new ArrayList<>();
     }
 
+
     public void setPassword(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         passwordHash = passwordEncoder.encode(password);
     }
+
     /*
     public void setPassword(String password){
         salt = UUID.randomUUID().toString();
@@ -82,6 +84,7 @@ public class User {
     }
     */
 
+    /*
     public boolean checkPassword(String password) {
         return passwordHash.equals(hashPassword(password));
     }
@@ -91,4 +94,5 @@ public class User {
         plainPassword += pepper;
         return Hashing.sha512().hashString(plainPassword, StandardCharsets.UTF_8).toString();
     }
+    */
 }

@@ -4,25 +4,25 @@
 <body>
 
 <div layout:fragment="content">
-    <form action="#" th:action="@{/user/register}" th:object="${userForm}" method="post">
-        <dd class="grid">
-        <dt>Name:</dt>
-        <dd><input type="text" th:field="*{name}"></dd>
-        <dt>Address</dt>
-        <dd><input type="text" th:field="*{accountName}"></dd>
-        <dt>AccountName</dt>
-        <dd><input type="text" th:field="*{address}"></dd>
-        <dt>Email</dt>
-        <dd><input type="text" th:field="*{email}"></dd>
-        <dt>PropayID</dt>
-        <dd><input type="text" th:field="*{propayId}"></dd>
-        <dt>Password</dt>
-        <dd><input type="password" th:field="*{password}"></dd>
-        <dt>Confirm Password</dt>
-        <dd><input type="password" th:field="*{passwordConfirm}"></dd>
-        <button type="submit">Send Form</button>
-        </dl>
-    </form>
+  <form method="post">
+    <dd class="grid">
+    <dt>Name:</dt>
+    <dd><input type="text" name="name" th:value="${user?.name}"></dd>
+    <dt>Address</dt>
+    <dd><input type="text" name="address" th:value="${user?.address}"></dd>
+    <dt>AccountName</dt>
+    <dd><input type="text" name="accountName" th:value="${user?.accountName}"></dd>
+    <dt>Email</dt>
+    <dd><input type="text" name="email" th:value="${user?.email}"></dd>
+    <dt>PropayID</dt>
+    <dd><input type="text" name="propayId" th:value="${user?.propayId}"></dd>
+    <dt>Password</dt>
+    <dd><input type="password" name="password"></dd>
+    <dt>Confirm Password</dt>
+    <dd><input type="password" name="confirm"></dd>
+    <button type="submit">Send Form</button>
+    </dl>
+  </form>
 </div>
 
 </body>

@@ -36,16 +36,11 @@ public class UserController {
 
     @GetMapping("/user/register")
     public String registerPage(Model model) {
-        // UserForm form = new UserForm();
-        // model.addAttribute("userForm", form);
-        model.addAttribute("userForm", new User() );
-
         return "register";
     }
 
     @PostMapping("/user/register")
-    public String registerNewUser(Model model, @ModelAttribute("userForm") User user,
-        String password, String confirm) {
+    public String registerNewUser(Model model, User user, String password, String confirm) {
 
         /*
         if (userRepo.findByEmail(user.getEmail()).isPresent()) {
@@ -53,8 +48,7 @@ public class UserController {
         }
         */
 
-        String hashPasswort = userService.generatePassword(password, confirm);
-        userRepo.save(user);
+        userService.persistUser(user, password, confirm);
         return "redirect:/";
     }
 
