@@ -1,18 +1,16 @@
 package de.hhu.propra.sharingplatform.faker;
 
 import com.github.javafaker.Faker;
-import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
-
+import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.env.Environment;
