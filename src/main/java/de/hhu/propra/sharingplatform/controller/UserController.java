@@ -41,11 +41,6 @@ public class UserController {
 
     @PostMapping("/user/register")
     public String registerNewUser(Model model, User user, String password, String confirm) {
-
-        /*
-        if (userRepo.findByEmail(user.getEmail()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-Mail exists.");
-        }*/
         userService.persistUser(user, password, confirm);
         userService.loginUsingSpring(request, user.getAccountName(), password);
         return "redirect:/";
