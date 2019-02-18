@@ -8,6 +8,7 @@ import de.hhu.propra.sharingplatform.dao.UserRepo;
 
 import de.hhu.propra.sharingplatform.model.User;
 
+import de.hhu.propra.sharingplatform.service.UserService;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -30,19 +31,29 @@ public class UserController {
     @Autowired
     private ItemRepo itemRepo;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/user/register")
     public String registerPage(Model model) {
-        UserForm form = new UserForm();
-        model.addAttribute("userForm", form);
+        // UserForm form = new UserForm();
+        // model.addAttribute("userForm", form);
+        model.addAttribute("userForm", new User() );
+
         return "register";
     }
 
     @PostMapping("/user/register")
-    public String registerNewUser(Model model, @ModelAttribute("userForm") UserForm userForm) {
-        User user = userForm.parseToUser();
+    public String registerNewUser(Model model, @ModelAttribute("userForm") User user,
+        String password, String confirm) {
+
+        /*
         if (userRepo.findByEmail(user.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-Mail exists.");
         }
+        */
+
+        String hashPasswort = userService.generatePassword(password, confirm);
         userRepo.save(user);
         return "redirect:/";
     }
