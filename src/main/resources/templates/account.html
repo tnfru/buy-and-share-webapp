@@ -56,10 +56,9 @@
           <table class="table table-striped">
             <thead>
             <tr>
-              <th scope="col">ID</th>
               <th scope="col">Name</th>
               <th scope="col">Price</th>
-              <th scope="col">Deposit</th>
+              <th scope="col">Bail</th>
               <th scope="col">Availability</th>
               <th scope="col">Offers</th>
               <th scope="col">Conflict</th>
@@ -68,10 +67,9 @@
             </thead>
             <tbody>
             <tr th:each="item : ${user.getItems()}">
-              <td th:text="${item.getId()}"> -1</td>
               <td th:text="${item.getName()}"> Test Name</td>
               <td th:text="${item.getPrice()}"> 33</td>
-              <td th:text="${item.getDeposit()}"> 333</td>
+              <td th:text="${item.getBail()}"> 333</td>
               <td th:text="${item.isAvailable()}"> true</td>
               <td>
                 <a th:href="|/item/${item.getId()}/offers|" class="btn-primary">
@@ -97,10 +95,9 @@
           <table class="table table-striped">
             <thead>
             <tr>
-              <th scope="col">ID</th>
               <th scope="col">Name</th>
               <th scope="col">Item Price</th>
-              <th scope="col">Item Deposit</th>
+              <th scope="col">Item Bail</th>
               <th scope="col">Start Date</th>
               <th scope="col">Expected End Date</th>
               <th scope="col">End Date</th>
@@ -110,10 +107,9 @@
             </thead>
             <tbody>
             <tr th:each="con : ${user.getContracts()}">
-              <td th:text="${con.getId()}"> -1 </td>
               <td th:text="${con.getItem().getName()}"> Item Name </td>
               <td th:text="${con.getItem().getPrice()}"> Item Price </td>
-              <td th:text="${con.getItem().getDeposit()}"> Item Deposit </td>
+              <td th:text="${con.getItem().getBail()}"> Item Bail </td>
               <td th:text="${con.getStart()}"> Contract Start Date </td>
               <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date </td>
               <td th:text="${con.getRealEnd()}"> Contract Real End Date </td>
