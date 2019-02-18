@@ -1,25 +1,24 @@
 package de.hhu.propra.sharingplatform.service;
 
-import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
-
-import com.google.common.hash.Hashing;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
-import java.nio.charset.StandardCharsets;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
 
 @Service
 public class UserService {
 
-    final private UserRepo userRepo;
+    final UserRepo userRepo;
 
     @Autowired
     public UserService(UserRepo userRepo) {
