@@ -80,7 +80,7 @@ public class DataFaker implements ServletContextInitializer {
         persistUser(users);
 
         log.info("    Creating Offers...");
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 10; i++) {
             User user = getRandomUser(users);
             Item item = getRandomItem(items);
 
