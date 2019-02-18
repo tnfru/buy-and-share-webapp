@@ -45,7 +45,10 @@
       </form>
 
       <div th:switch="${user != null}">
-        <a href="/user/account" th:case="${true}" class="btn btn-primary my-2 my-sm-0">Profile</a>
+        <div class="btn-group" role="group" th:case="${true}">
+          <a href="/user/account" class="btn btn-success my-2 my-sm-0">Profile</a>
+          <a href="/logout" class="btn btn-danger my-2 my-sm-0">Logout</a>
+        </div>
         <div class="btn-group" role="group" th:case="${false}">
           <a href="/user/account" class="btn btn-success my-2 my-sm-0">Login</a>
           <a href="/user/register" class="btn btn-primary my-2 my-sm-0">Sign up</a>
