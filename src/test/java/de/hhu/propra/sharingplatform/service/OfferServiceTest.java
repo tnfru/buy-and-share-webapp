@@ -43,7 +43,6 @@ public class OfferServiceTest {
     @MockBean
     private ApiService apiService;
 
-    @Autowired
     private OfferService offerService;
 
     private User owner;
@@ -53,6 +52,8 @@ public class OfferServiceTest {
 
     @Before
     public void setUpTests() {
+        offerService = new OfferService(contractService, offerRepo, apiService, paymentService,
+            paymentRepo);
         owner = new User();
         borrower = new User();
         item = new Item(owner);
