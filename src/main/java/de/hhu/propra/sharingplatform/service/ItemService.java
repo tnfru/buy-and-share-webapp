@@ -52,6 +52,7 @@ public class ItemService {
             Item oldItem = itemRepo.findOneById(oldItemId);
             newItem.setOwner(oldItem.getOwner());
             newItem.setId(oldItem.getId());
+            newItem.setAvailable(oldItem.isAvailable());
             itemRepo.save(newItem);
         }
     }
