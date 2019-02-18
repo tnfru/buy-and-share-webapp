@@ -29,10 +29,11 @@ public class User {
     private String address;
     private String email;
     private String propayId;
-    private Integer rating;
     private boolean ban;
     private boolean deleted;
     private String passwordHash;
+    private int positiveRating;
+    private int negativeRating;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
@@ -63,5 +64,28 @@ public class User {
     private String hashPassword(String plainPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(plainPassword);
+    }
+
+    public String getRating() {
+        String format = "%.1f%%";
+        float sum = (float) positiveRating + (float) negativeRating;
+        if (sum > 0) {
+            float rating = positiveRating / sum;
+            rating *= 100;
+            return String.format(format, rating);
+        }
+        return "0.0%";
+    }
+
+    public int totalRatings() {
+        return positiveRating + negativeRating;
+    }
+
+    void addPositiveRating() {
+        positiveRating++;
+    }
+
+    void addNegativeRating() {
+        negativeRating++;
     }
 }
