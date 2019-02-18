@@ -120,8 +120,8 @@ public class UserService {
         userRepo.save(oldUser);
     }
 
-    public User fetchUserByAccountName(String AccountName) {
-        Optional<User> search = userRepo.findByAccountName(AccountName);
+    public User fetchUserByAccountName(String accountName) {
+        Optional<User> search = userRepo.findByAccountName(accountName);
         if (!search.isPresent()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
         }
@@ -137,8 +137,8 @@ public class UserService {
         userRepo.save(oldUser);
     }
 
-    public long fetchUserIdByAccountName(String AccountName) {
-        Optional<User> search = userRepo.findByAccountName(AccountName);
+    public long fetchUserIdByAccountName(String accountName) {
+        Optional<User> search = userRepo.findByAccountName(accountName);
         if (!search.isPresent()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
         }
