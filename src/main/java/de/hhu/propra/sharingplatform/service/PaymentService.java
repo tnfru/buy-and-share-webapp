@@ -35,10 +35,12 @@ public class PaymentService {
     }
 
     double calculateTotalPrice(Contract contract) {
+        //TODO deal with start date behind end date -> not possible
         long startTime = contract.getStart().getTime();
         long endTime = contract.getRealEnd().getTime();
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
         //time passed in full days
-        double timePassed = Math.ceil(((double) endTime - startTime) / (1000.0 * 60 * 60 * 24));
+        double timePassed = Math.ceil(((double) endTime - startTime) / millisecondsInDay);
         return timePassed * contract.getItem().getPrice();
     }
 
