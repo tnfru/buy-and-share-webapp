@@ -23,13 +23,15 @@ public class OfferService {
         this.offerRepo = offerRepo;
     }
 
-    public void requestOffer(Item item, User requester) {
+    public void create(Item item, User requester) {
         Date start = new Date();
         Date end = new Date();
 
         // todo item is rented for 7 days now
         end.setTime(start.getTime() + 7 * (1000 * 60 * 60 * 24));
         Offer offer = new Offer(item, requester, start, end);
+        item.getOffers().add(offer);
+        requester.getOffers().add(offer);
         offerRepo.save(offer);
     }
 
