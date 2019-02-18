@@ -10,10 +10,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
 
 @Service
 public class UserService {
@@ -40,9 +39,10 @@ public class UserService {
         if (user.getName().length() > 255) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is too long");
         }
+        /*
         if (!isAlphanumeric(user.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is invalid.");
-        }
+        }*/
     }
 
     private void validateAdress(User user) {
@@ -52,15 +52,16 @@ public class UserService {
         if (user.getAddress().length() > 255) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is too long");
         }
+        /*
         if (!isAlphanumeric(user.getAddress())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is invalid.");
-        }
+        } */
     }
 
     private String generatePassword(String password, String confirm) {
         if (!(password.equals(confirm))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                "Passwörter müssen übereinstimmen");
+                "Passwords need to be the same.");
         }
 
         validatePasswords(password);
@@ -110,5 +111,38 @@ public class UserService {
         }
     }
 
+    public void updateUser(User oldUser, User newUser) {
+        validateUser(newUser);
+        oldUser.setName(newUser.getName());
+        oldUser.setAddress(newUser.getAddress());
+        oldUser.setEmail(newUser.getEmail());
+        oldUser.setPropayId(newUser.getPropayId());
+        userRepo.save(oldUser);
+    }
+
+    public User fetchUserByAccountName(String accountName) {
+        Optional<User> search = userRepo.findByAccountName(accountName);
+        if (!search.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+        }
+        return search.get();
+    }
+
+    public void updatePassword(User oldUser, String newPassword, String confirm) {
+        /* ToDo comparison for salted Hash
+        if (!checkPassword(oldPassword, oldUser)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
+        }*/
+        oldUser.setPasswordHash(generatePassword(newPassword, confirm));
+        userRepo.save(oldUser);
+    }
+
+    public long fetchUserIdByAccountName(String accountName) {
+        Optional<User> search = userRepo.findByAccountName(accountName);
+        if (!search.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+        }
+        return (search.get().getId());
+    }
 }
 
