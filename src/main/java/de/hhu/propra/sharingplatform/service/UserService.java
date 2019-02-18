@@ -81,21 +81,13 @@ public class UserService {
         }
     }
 
-    /*
-    public void setPassword(String password){
-        salt = UUID.randomUUID().toString();
-        passwordHash = hashPassword(password);
-    }
-    */
-
     public boolean checkPassword(String password, User user) {
-        return user.getPasswordHash().equals(hashPassword(password, user));
+        return user.getPasswordHash().equals(hashPassword(password));
     }
 
-    private String hashPassword(String plainPassword, User user) {
-        plainPassword += user.getSalt();
-        plainPassword += user.getPepper();
-        return Hashing.sha512().hashString(plainPassword, StandardCharsets.UTF_8).toString();
+    private String hashPassword(String plainPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(plainPassword);
     }
 
     public void persistUser(User user, String password, String confirm) {

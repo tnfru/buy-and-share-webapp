@@ -56,6 +56,7 @@ public class User {
         offers = new ArrayList<>();
     }
 
+    // ToDo remove setPassword method (only used by Faker)
     public void setPassword(String password) {
         passwordHash = hashPassword(password);
     }

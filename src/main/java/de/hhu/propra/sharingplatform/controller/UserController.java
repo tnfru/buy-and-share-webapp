@@ -1,14 +1,10 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import de.hhu.propra.sharingplatform.form.UserForm;
-import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
-import de.hhu.propra.sharingplatform.dto.UserForm;
 import de.hhu.propra.sharingplatform.form.ChangePasswordForm;
 import de.hhu.propra.sharingplatform.form.EditUserForm;
-import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,7 +47,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-Mail exists.");
         }*/
         userService.persistUser(user, password, confirm);
-        userService.loginUsingSpring(request, userForm.getAccountName(), userForm.getPassword());
+        userService.loginUsingSpring(request, user.getAccountName(), password);
         return "redirect:/";
     }
 
