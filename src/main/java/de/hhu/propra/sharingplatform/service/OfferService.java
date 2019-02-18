@@ -1,7 +1,10 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
+import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.Offer;
+import de.hhu.propra.sharingplatform.model.User;
+import java.util.Date;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,16 @@ public class OfferService {
     public OfferService(ContractService contractService, OfferRepo offerRepo) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
+    }
+
+    public void requestOffer(Item item, User requester) {
+        Date start = new Date();
+        Date end = new Date();
+
+        // todo item is rented for 7 days now
+        end.setTime(start.getTime() + 7 * (1000 * 60 * 60 * 24));
+        Offer offer = new Offer(item, requester, start, end);
+        offerRepo.save(offer);
     }
 
     public void accept(long id) {
