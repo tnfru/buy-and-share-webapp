@@ -47,7 +47,7 @@ public class OfferService {
         long millisecondsInDay = 1000 * 60 * 60 * 24;
         double totalCost = paymentService.calculateTotalPrice(item, start, end) + item.getBail();
 
-        if (end.getTime() - start.getTime() / millisecondsInDay < 1) {
+        if ((end.getTime() - start.getTime()) / millisecondsInDay < 1) {
             return 1;
         } else if (!item.isAvailable()) {
             return 2;
