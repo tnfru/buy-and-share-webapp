@@ -62,11 +62,12 @@ public class OfferController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong dateformat");
         }
     }
+
     private Date getEnd(String formattedDateRange) {
         String[] dates = formattedDateRange.split(" - ");
         DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         try {
-            Date end =format.parse(dates[1]);
+            Date end = format.parse(dates[1]);
             end.setHours(23);
             end.setMinutes(59);
             end.setSeconds(59);
