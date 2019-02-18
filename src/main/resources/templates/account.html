@@ -14,6 +14,9 @@
         <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill"
            href="#v-pills-borrowedItems"
            role="tab" aria-controls="v-pills-settings" aria-selected="false">Borrowed Items</a>
+        <a class="nav-link" id="v-pills-new-tab" data-toggle="pill"
+           href="#v-pills-newItem"
+           role="tab" aria-controls="v-pills-settings" aria-selected="false">New Item</a>
       </div>
     </div>
     <div class="col-9">
@@ -22,7 +25,7 @@
              aria-labelledby="v-pills-home-tab">
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
-              <h4 th:text="${user.getName()}">Item Name</h4>
+              <h4 th:text="${user.getName()}">User Name</h4>
             </li>
             <li class="list-group-item">
               <img src="/images/bike-dummy.png" class="card-img-top" style="max-height: 20em; max-width: 70em">
@@ -49,7 +52,7 @@
           </ul>
         </div>
         <div class="tab-pane fade" id="v-pills-ownItems" role="tabpanel"
-             aria-labelledby="v-pills-profile-tab">
+             aria-labelledby="v-pills-ownItems-tab">
           <table class="table table-striped">
             <thead>
             <tr>
@@ -82,7 +85,7 @@
               <td>
                 <a th:href="|/item/details/${item.getId()}|"
                    class="btn btn-primary btn-sm">Details</a>
-                <a th:href="|/item/remove/${item.getId()}|"
+                <a th:href="|/item/removeItem/${item.getId()}|"
                    class="btn btn-danger btn-sm">Remove</a>
               </td>
             </tr>
@@ -124,6 +127,10 @@
             </tr>
             </tbody>
           </table>
+        </div>
+        <div class="tab-pane fade" id="v-pills-newItem" role="tabpanel"
+             aria-labelledby="v-pills-newItem-tab">
+          <a class="btn btn-primary" href="/item/newItem"> New Item</a>
         </div>
       </div>
     </div>
