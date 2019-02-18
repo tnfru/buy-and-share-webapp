@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Data
 @Entity
@@ -29,10 +30,11 @@ public class User {
     private String address;
     private String email;
     private String propayId;
-    private Integer rating;
     private boolean ban;
     private boolean deleted;
     private String passwordHash;
+    private int positiveRating;
+    private int negativeRating;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
@@ -56,6 +58,7 @@ public class User {
         offers = new ArrayList<>();
     }
 
+    // ToDo remove setPassword method (only used by Faker)
     public void setPassword(String password) {
         passwordHash = hashPassword(password);
     }
@@ -63,5 +66,28 @@ public class User {
     private String hashPassword(String plainPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(plainPassword);
+    }
+
+    public String getRating() {
+        String format = "%.1f%%";
+        float sum = (float) positiveRating + (float) negativeRating;
+        if (sum > 0) {
+            float rating = positiveRating / sum;
+            rating *= 100;
+            return String.format(Locale.ROOT, format, rating);
+        }
+        return "0.0%";
+    }
+
+    public int totalRatings() {
+        return positiveRating + negativeRating;
+    }
+
+    void addPositiveRating() {
+        positiveRating++;
+    }
+
+    void addNegativeRating() {
+        negativeRating++;
     }
 }

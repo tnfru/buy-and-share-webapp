@@ -12,26 +12,29 @@
     <h5 th:text="|${item?.name}|"></h5>
     <br>
     <p>Bild Platzhalter</p>
-  <p th:if="${item?.available} == true" text="Verfügbar"></p>
-  <p th:if="${item?.available} == false" text="Momentan leider nicht Verfügbar"></p>
+    <p th:if="${item?.available} == true" style="color: forestgreen">Verfügbar</p>
+    <p th:if="${item?.available} == false" style="color: crimson">Aktuell verliehen</p>
     <strong>Beschreibung:</strong>
     <span th:text="|${item?.description}|"></span>
     <br>
     <br>
     <strong>Kosten:</strong>
     <br>
-    <p>Tagessatz:</p>
+    Tagessatz:
     <span th:text="${item?.price}"></span>
     <br>
-    <p>Kaution:</p>
-    <p th:text="${item?.bail}"></p>
-    <strong>Anbieter:</strong>
-    <span>Account-Name:</span>
-    <span th:text="${item?.owner?.accountName}"></span>
-    <span th:text="|${item?.owner?.rating}|"></span>
+    Kaution:
+    <span th:text="${item?.bail}"></span>
     <br>
-    <span>Abholort:</span>
+    <br>
+    <strong>Abholort:</strong>
     <span th:text="${item?.location}"></span>
+    <br>
+    <br>
+    <strong>Anbieter:</strong>
+    <span th:text="${item?.owner?.accountName}"></span>
+    (<span th:text="|${item?.owner?.totalRatings()}|"></span> Bewertungen:
+    <span th:text="|${item?.owner?.getRating()}|"></span> &#128077;)
     <br>
     <br>
     <a th:if="${ownItem} == false " class="btn btn-success"
@@ -39,7 +42,9 @@
     <a th:unless="${ownItem} == false " class="btn btn-primary"
        th:href="|/offer/request|">Anfragen anzeigen</a>
     <a style="margin-left: 1em;" th:unless="${ownItem} == false " class="btn btn-warning"
-       th:href="|/item/editItem/${item?.Id}|">Gegenstand bearbeiten</a>
+       th:href="|/item/edit/${item?.Id}|">Gegenstand bearbeiten</a>
+    <br>
+    <br>
 </div>
 </body>
 </html>

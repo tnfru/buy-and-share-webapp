@@ -20,7 +20,8 @@ public class UserFaker {
         user.setAccountName(username);
         user.setEmail(username + "@example.com");
         user.setPropayId(faker.funnyName().name());
-        user.setRating(faker.number().numberBetween(0, 5));
+        user.setPositiveRating(faker.number().numberBetween(0, 40));
+        user.setNegativeRating(faker.number().numberBetween(0, 20));
         user.setPassword("123");
         user.setBan(false);
         user.setDeleted(false);

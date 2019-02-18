@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
@@ -30,31 +29,30 @@ public class ItemController {
         boolean ownItem = itemService.userIsOwner(item,
             itemService.getUserIdFromAccountName(principal.getName()));
         model.addAttribute("ownItem", ownItem);
-        return "details";
+        return "itemDetails";
     }
 
-    @GetMapping("/item/newItem")
+    @GetMapping("/item/new")
     public String newItem(Model model, Principal principal) {
         model.addAttribute("item", new Item());
         model.addAttribute("user", userRepo.findByAccountName(principal.getName()));
         return "itemForm";
     }
 
-    @PostMapping("/item/newItem")
+    @PostMapping("/item/new")
     public String inputItemData(Model model, Item item, Principal principal) {
         itemService.persistItem(item, itemService.getUserIdFromAccountName(principal.getName()));
         return "redirect:/user/account/";
     }
 
-    @GetMapping("/item/removeItem/")
-    public String markItemAsRemoved(Model model,
-                                    @RequestParam(value = "itemId", required = true) long itemId,
+    @GetMapping("/item/remove/{itemId}")
+    public String markItemAsRemoved(Model model, @PathVariable long itemId,
                                     Principal principal) {
         itemService.removeItem(itemService.getUserIdFromAccountName(principal.getName()), itemId);
         return "redirect:/user/account/";
     }
 
-    @GetMapping("/item/editItem/{itemId}")
+    @GetMapping("/item/edit/{itemId}")
     public String editItem(Model model, @PathVariable long itemId, Principal principal) {
         Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
@@ -67,7 +65,7 @@ public class ItemController {
         return "error";
     }
 
-    @PostMapping("/item/editItem/{itemId}")
+    @PostMapping("/item/edit/{itemId}")
     public String editItemData(Model model, Item item,
                                @PathVariable long itemId,
                                Principal principal) {
