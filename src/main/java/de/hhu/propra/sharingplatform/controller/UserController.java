@@ -67,7 +67,7 @@ public class UserController {
 
     @GetMapping("/user/edit")
     public String editUserPage(Model model, Principal principal) {
-        Optional<User> search = userRepo.findByEmail(principal.getName());
+        Optional<User> search = userRepo.findByAccountName(principal.getName());
         if (!search.isPresent()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
         }
@@ -80,7 +80,7 @@ public class UserController {
     @PostMapping("/user/edit")
     public String editUser(Model model, Principal principal,
                            @ModelAttribute("edituser") EditUserForm form) {
-        Optional<User> search = userRepo.findByEmail(principal.getName());
+        Optional<User> search = userRepo.findByAccountName(principal.getName());
         if (!search.isPresent()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
         }
@@ -100,7 +100,7 @@ public class UserController {
     @PostMapping("/user/changePassword")
     public String changePassword(Model model, Principal principal,
                                  @ModelAttribute("passwordForm") ChangePasswordForm form) {
-        Optional<User> search = userRepo.findByEmail(principal.getName());
+        Optional<User> search = userRepo.findByAccountName(principal.getName());
         if (!search.isPresent()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
         }

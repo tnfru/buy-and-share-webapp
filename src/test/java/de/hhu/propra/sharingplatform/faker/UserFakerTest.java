@@ -38,7 +38,7 @@ public class UserFakerTest {
         assertTrue(user.getAddress().matches(pattern));
         assertTrue(user.getEmail().contains("@"));
         assertTrue(user.getEmail().replace("@", "!?").matches(pattern));
-        assertTrue(0 < user.getRating() && user.getRating() < 6);
+        assertTrue(0 < user.getPositiveRating() && 0 < user.getNegativeRating());
         assertFalse(user.isBan());
         assertFalse(user.isDeleted());
         assertNotEquals(null, user.getItems());
