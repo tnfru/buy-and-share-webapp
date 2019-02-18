@@ -38,7 +38,7 @@
     <br>
     <br>
     <a th:if="${ownItem} == false " class="btn btn-success"
-       th:href="|/offer/request/§{item?.id}|">Leihe anfragen</a>
+       th:href="|/offer/request/${item?.id}|">Leihe anfragen</a>
     <a th:unless="${ownItem} == false " class="btn btn-primary"
        th:href="|/offer/request|">Anfragen anzeigen</a>
     <a style="margin-left: 1em;" th:unless="${ownItem} == false " class="btn btn-warning"

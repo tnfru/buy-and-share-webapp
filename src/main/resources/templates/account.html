@@ -16,7 +16,7 @@
            role="tab" aria-controls="v-pills-settings" aria-selected="false">Borrowed Items</a>
         <a class="nav-link" id="v-pills-new-tab" data-toggle="pill"
            href="#v-pills-newItem"
-           role="tab" aria-controls="v-pills-settings" aria-selected="false">New Item</a>
+           role="tab" aria-controls="v-pills-settings" aria-selected="false">Options</a>
       </div>
     </div>
     <div class="col-9">
@@ -28,7 +28,8 @@
               <h4 th:text="${user.getName()}">User Name</h4>
             </li>
             <li class="list-group-item">
-              <img src="/images/bike-dummy.png" class="card-img-top" style="max-height: 20em; max-width: 70em">
+              <img src="/images/bike-dummy.png" class="card-img-top"
+                   style="max-height: 20em; max-width: 70em">
             </li>
             <li class="list-group-item">
               <b>Username:</b>
@@ -47,7 +48,8 @@
 
             <li class="list-group-item">
               <b>Rating:</b>
-              <span th:text="${user.getRating()}">5</span>
+              <span th:text="|${user.totalRatings()}|"></span> Bewertungen:
+              <span th:text="|${user.getRating()}|"></span> &#128077;
             </li>
           </ul>
         </div>
@@ -56,10 +58,9 @@
           <table class="table table-striped">
             <thead>
             <tr>
-              <th scope="col">ID</th>
               <th scope="col">Name</th>
               <th scope="col">Price</th>
-              <th scope="col">Deposit</th>
+              <th scope="col">Bail</th>
               <th scope="col">Availability</th>
               <th scope="col">Offers</th>
               <th scope="col">Conflict</th>
@@ -68,11 +69,15 @@
             </thead>
             <tbody>
             <tr th:each="item : ${user.getItems()}">
-              <td th:text="${item.getId()}"> -1</td>
               <td th:text="${item.getName()}"> Test Name</td>
               <td th:text="${item.getPrice()}"> 33</td>
               <td th:text="${item.getBail()}"> 333</td>
-              <td th:text="${item.isAvailable()}"> true</td>
+              <td th:if="${item?.isAvailable()} == true">
+                <span style="color: green;">&#10004;</span>
+              </td>
+              <td th:if="${item?.isAvailable()} == false">
+                <span style="color: red;">&#10006;</span>
+              </td>
               <td>
                 <a th:href="|/item/${item.getId()}/offers|" class="btn-primary">
                   <button type="button" class="btn btn-primary btn-sm">
@@ -97,10 +102,9 @@
           <table class="table table-striped">
             <thead>
             <tr>
-              <th scope="col">ID</th>
               <th scope="col">Name</th>
               <th scope="col">Item Price</th>
-              <th scope="col">Item Deposit</th>
+              <th scope="col">Item Bail</th>
               <th scope="col">Start Date</th>
               <th scope="col">Expected End Date</th>
               <th scope="col">End Date</th>
@@ -110,14 +114,13 @@
             </thead>
             <tbody>
             <tr th:each="con : ${user.getContracts()}">
-              <td th:text="${con.getId()}"> -1 </td>
-              <td th:text="${con.getItem().getName()}"> Item Name </td>
-              <td th:text="${con.getItem().getPrice()}"> Item Price </td>
-              <td th:text="${con.getItem().getDeposit()}"> Item Deposit </td>
-              <td th:text="${con.getStart()}"> Contract Start Date </td>
-              <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date </td>
-              <td th:text="${con.getRealEnd()}"> Contract Real End Date </td>
-              <td th:text="${con.isConflict()}"> Is Conflict </td>
+              <td th:text="${con.getItem().getName()}"> Item Name</td>
+              <td th:text="${con.getItem().getPrice()}"> Item Price</td>
+              <td th:text="${con.getItem().getBail()}"> Item Bail</td>
+              <td th:text="${con.getStart()}"> Contract Start Date</td>
+              <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date</td>
+              <td th:text="${con.getRealEnd()}"> Contract Real End Date</td>
+              <td th:text="${con.isConflict()}"> Is Conflict</td>
               <td>
                 <a th:href="#"
                    class="btn btn-primary btn-sm">Return Item</a>
@@ -130,7 +133,12 @@
         </div>
         <div class="tab-pane fade" id="v-pills-newItem" role="tabpanel"
              aria-labelledby="v-pills-newItem-tab">
-          <a class="btn btn-primary" href="/item/new"> New Item</a>
+          <a class="btn btn-primary" href="/item/new">New Item</a>
+          <br>
+          <a style="margin-top:1em; " class="btn btn-info" href="/user/edit">Edit Profile</a>
+          <br>
+          <a style="margin-top:1em; " class="btn btn-info" href="/user/changePassword">Change
+            Password</a>
         </div>
       </div>
     </div>
