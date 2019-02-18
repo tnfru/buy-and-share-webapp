@@ -130,11 +130,11 @@ public class UserService {
         return search.get();
     }
 
-    public void updatePassword(User oldUser, String oldPassword, String newPassword,
-        String confirm) {
+    public void updatePassword(User oldUser, String newPassword, String confirm) {
+        /* ToDo comparison for salted Hash
         if (!checkPassword(oldPassword, oldUser)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
-        }
+        }*/
         oldUser.setPasswordHash(generatePassword(newPassword, confirm));
         userRepo.save(oldUser);
     }
