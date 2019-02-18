@@ -42,7 +42,9 @@ public class OfferController {
     }
 
     @PostMapping("/offer/request/{itemId}")
-    public String createOffer(@PathVariable long itemId, @RequestParam(name = "daterange") String dateRange, Principal principal) {
+    public String createOffer(@PathVariable long itemId,
+                              @RequestParam(name = "daterange") String dateRange,
+                              Principal principal) {
         User user = userRepo.findByAccountName(principal.getName()).get();
         Date start = getStart(dateRange);
         Date end = getEnd(dateRange);
@@ -57,8 +59,8 @@ public class OfferController {
         DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         try {
             return format.parse(dates[0]);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (ParseException parseException) {
+            parseException.printStackTrace();
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong dateformat");
         }
     }
@@ -72,8 +74,8 @@ public class OfferController {
             end.setMinutes(59);
             end.setSeconds(59);
             return end;
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (ParseException parseException) {
+            parseException.printStackTrace();
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong dateformat");
         }
     }
