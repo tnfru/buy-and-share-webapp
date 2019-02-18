@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Data
 @Entity
@@ -57,6 +58,7 @@ public class User {
         offers = new ArrayList<>();
     }
 
+    // ToDo remove setPassword method (only used by Faker)
     public void setPassword(String password) {
         passwordHash = hashPassword(password);
     }
@@ -72,7 +74,7 @@ public class User {
         if (sum > 0) {
             float rating = positiveRating / sum;
             rating *= 100;
-            return String.format(format, rating);
+            return String.format(Locale.ROOT, format, rating);
         }
         return "0.0%";
     }
