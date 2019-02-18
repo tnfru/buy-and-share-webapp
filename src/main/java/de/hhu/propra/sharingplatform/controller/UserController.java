@@ -1,7 +1,6 @@
 package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.form.ChangePasswordForm;
 import de.hhu.propra.sharingplatform.form.EditUserForm;
@@ -23,12 +22,6 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UserRepo userRepo;
-
-    @Autowired
-    private ItemRepo itemRepo;
-
-    @Autowired
     private HttpServletRequest request;
 
     @Autowired
@@ -36,7 +29,7 @@ public class UserController {
 
     @GetMapping("/user/register")
     public String registerPage(Model model) {
-        return "register";
+        return "userForm";
     }
 
     @PostMapping("/user/register")
@@ -48,57 +41,37 @@ public class UserController {
 
     @GetMapping("/user/account")
     public String accountPage(Model model, Principal principal) {
-        Optional<User> search = userRepo.findByAccountName(principal.getName());
-        if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
-        }
-        User user = search.get();
+        User user = userService.fetchUserByAccountName(principal.getName());
         model.addAttribute("user", user);
         return "account";
     }
 
     @GetMapping("/user/edit")
     public String editUserPage(Model model, Principal principal) {
-        Optional<User> search = userRepo.findByAccountName(principal.getName());
-        if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
-        }
-        User user = search.get();
-        EditUserForm form = new EditUserForm(user);
-        model.addAttribute("edituser", form);
-        return "editUser";
+        User user = userService.fetchUserByAccountName(principal.getName());
+        model.addAttribute("user", user);
+        return "userForm";
     }
 
     @PostMapping("/user/edit")
-    public String editUser(Model model, Principal principal,
-                           @ModelAttribute("edituser") EditUserForm form) {
-        Optional<User> search = userRepo.findByAccountName(principal.getName());
-        if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
-        }
-        User user = search.get();
-        form.applyToUser(user);
-        userRepo.save(user);
+    public String editUser(Model model, Principal principal, User user) {
+        User dbUser = userService.fetchUserByAccountName(principal.getName());
+        userService.updateUser(dbUser, user);
         return "redirect:/user/account";
     }
 
     @GetMapping("/user/changePassword")
     public String changePasswordPage(Model model, Principal principal) {
-        ChangePasswordForm form = new ChangePasswordForm();
-        model.addAttribute("passwordForm", form);
+        User user = userService.fetchUserByAccountName(principal.getName());
+        model.addAttribute("user", user);
         return "changePassword";
     }
 
     @PostMapping("/user/changePassword")
-    public String changePassword(Model model, Principal principal,
-                                 @ModelAttribute("passwordForm") ChangePasswordForm form) {
-        Optional<User> search = userRepo.findByAccountName(principal.getName());
-        if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
-        }
-        User user = search.get();
-        form.applyToUser(user);
-        userRepo.save(user);
+    public String changePassword(Model model, Principal principal, String oldPassword,
+        String newPassword, String confirm) {
+        User user = userService.fetchUserByAccountName(principal.getName());
+        userService.updatePassword(user, oldPassword, newPassword, confirm);
         return "redirect:/user/account";
     }
 }

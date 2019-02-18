@@ -2,6 +2,7 @@ package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,9 +41,10 @@ public class UserService {
         if (user.getName().length() > 255) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is too long");
         }
+        /*
         if (!isAlphanumeric(user.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is invalid.");
-        }
+        }*/
     }
 
     private void validateAdress(User user) {
@@ -52,15 +54,16 @@ public class UserService {
         if (user.getAddress().length() > 255) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is too long");
         }
+        /*
         if (!isAlphanumeric(user.getAddress())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is invalid.");
-        }
+        } */
     }
 
     private String generatePassword(String password, String confirm) {
         if (!(password.equals(confirm))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                "Passwörter müssen übereinstimmen");
+                "Passwords need to be the same.");
         }
 
         validatePasswords(password);
@@ -110,5 +113,29 @@ public class UserService {
         }
     }
 
+    public void updateUser(User oldUser, User newUser) {
+        validateUser(newUser);
+        oldUser.setName(newUser.getName());
+        oldUser.setAddress(newUser.getAddress());
+        oldUser.setEmail(newUser.getEmail());
+        oldUser.setPropayId(newUser.getPropayId());
+        userRepo.save(oldUser);
+    }
+
+    public User fetchUserByAccountName(String AccountName) {
+        Optional<User> search = userRepo.findByAccountName(AccountName);
+        if (!search.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+        }
+        return search.get();
+    }
+
+    public void updatePassword(User oldUser, String oldPassword, String newPassword, String confirm) {
+        if (!checkPassword(oldPassword, oldUser)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
+        }
+        oldUser.setPasswordHash(generatePassword(newPassword, confirm));
+        userRepo.save(oldUser);
+    }
 }
 
