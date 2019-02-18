@@ -1,5 +1,7 @@
 package de.hhu.propra.sharingplatform.service;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
@@ -7,22 +9,19 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
-import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 
 import java.util.Date;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -68,11 +67,11 @@ public class OfferServiceTest {
         verify(offerRepo, times(1)).save(argument.capture());
         Offer saveOffer = argument.getValue();
 
-        Assert.assertTrue(borrower.getOffers().contains(saveOffer));
-        Assert.assertTrue(item.getOffers().contains(saveOffer));
+        assertTrue(borrower.getOffers().contains(saveOffer));
+        assertTrue(item.getOffers().contains(saveOffer));
 
-        Assert.assertFalse(offer.isAccept());
-        Assert.assertFalse(offer.isDecline());
+        assertFalse(offer.isAccept());
+        assertFalse(offer.isDecline());
     }
 
     @Test(expected = NullPointerException.class)
@@ -95,11 +94,11 @@ public class OfferServiceTest {
         verify(contractService, times(1)).create(argument1.capture());
         verify(offerRepo, times(1)).save(argument2.capture());
 
-        Assert.assertEquals(offer, argument1.getValue());
-        Assert.assertEquals(offer, argument2.getValue());
+        assertEquals(offer, argument1.getValue());
+        assertEquals(offer, argument2.getValue());
 
-        Assert.assertTrue(offer.isAccept());
-        Assert.assertFalse(offer.isDecline());
+        assertTrue(offer.isAccept());
+        assertFalse(offer.isDecline());
     }
 
     @Test(expected = NullPointerException.class)
@@ -118,10 +117,10 @@ public class OfferServiceTest {
         verify(contractService, times(0)).create(any());
         verify(offerRepo, times(1)).save(argument.capture());
 
-        Assert.assertEquals(offer, argument.getValue());
+        assertEquals(offer, argument.getValue());
 
-        Assert.assertTrue(offer.isDecline());
-        Assert.assertFalse(offer.isAccept());
+        assertTrue(offer.isDecline());
+        assertFalse(offer.isAccept());
     }
 
     @Test(expected = NullPointerException.class)
@@ -130,4 +129,5 @@ public class OfferServiceTest {
 
         offerService.decline(anyLong());
     }
+
 }
