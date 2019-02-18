@@ -7,10 +7,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
+import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
+
 import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,18 +21,27 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@Import( {Offer.class, OfferService.class})
 public class OfferServiceTest {
+
+    @MockBean
+    private OfferRepo offerRepo;
+
+    @MockBean
+    private PaymentRepo paymentRepo;
 
     @MockBean
     private ContractService contractService;
 
     @MockBean
-    private OfferRepo offerRepo;
+    private PaymentService paymentService;
+
+    @MockBean
+    private ApiService apiService;
 
     @Autowired
     private OfferService offerService;
@@ -53,7 +65,7 @@ public class OfferServiceTest {
 
     @Test
     public void createTest() {
-        offerService.create(item, borrower);
+        offerService.create(item, borrower, new Date(), new Date());
 
         ArgumentCaptor<Offer> argument = ArgumentCaptor.forClass(Offer.class);
         verify(offerRepo, times(1)).save(argument.capture());
@@ -68,12 +80,12 @@ public class OfferServiceTest {
 
     @Test(expected = NullPointerException.class)
     public void createItemNullTest() {
-        offerService.create(null, borrower);
+        offerService.create(null, borrower, new Date(), new Date());
     }
 
     @Test(expected = NullPointerException.class)
     public void createUserNullTest() {
-        offerService.create(item, null);
+        offerService.create(item, null, new Date(), new Date());
     }
 
     @Test

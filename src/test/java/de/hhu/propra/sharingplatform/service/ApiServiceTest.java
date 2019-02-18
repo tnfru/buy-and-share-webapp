@@ -66,9 +66,9 @@ public class ApiServiceTest {
         ApiService apiService = mock(ApiService.class);
         when(apiService.fetchJson(anyString())).thenReturn(fakeJson);
         when(apiService.mapJson(anyString())).thenCallRealMethod();
-        when(apiService.checkSolvent(any(), anyDouble())).thenCallRealMethod();
+        when(apiService.isSolvent(any(), anyDouble())).thenCallRealMethod();
 
-        assertTrue(apiService.checkSolvent(fakeUser, 1000));
+        assertTrue(apiService.isSolvent(fakeUser, 1000));
     }
 
     @Test
@@ -82,8 +82,10 @@ public class ApiServiceTest {
         ApiService apiService = mock(ApiService.class);
         when(apiService.fetchJson(anyString())).thenReturn(fakeJson);
         when(apiService.mapJson(anyString())).thenCallRealMethod();
-        when(apiService.checkSolvent(any(), anyDouble())).thenCallRealMethod();
+        when(apiService.isSolvent(any(), anyDouble())).thenCallRealMethod();
 
-        assertFalse(apiService.checkSolvent(fakeUser, 10000));
+        assertFalse(apiService.isSolvent(fakeUser, 10000));
     }
+
+    //TODO check if solvent fails if too much money is reservated
 }
