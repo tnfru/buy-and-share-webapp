@@ -86,6 +86,20 @@ public class ApiServiceTest {
 
         assertFalse(apiService.isSolvent(fakeUser, 10000));
     }
+    
+    @Test
+    public void notSolventReservations() {
+        this.fakeJson = "{\"account\":\"foo\"," + "\"amount\":700.0,\"reservations\":[{\"id\":4,"
+            + "\"amount\":500.0}]}";
 
-    //TODO check if solvent fails if too much money is reservated
+        User fakeUser = mock(User.class);
+        when(fakeUser.getPropayId()).thenReturn("foo");
+
+        ApiService apiService = mock(ApiService.class);
+        when(apiService.fetchJson(anyString())).thenReturn(fakeJson);
+        when(apiService.mapJson(anyString())).thenCallRealMethod();
+        when(apiService.isSolvent(any(), anyDouble())).thenCallRealMethod();
+
+        assertFalse(apiService.isSolvent(fakeUser, 600));
+    }
 }
