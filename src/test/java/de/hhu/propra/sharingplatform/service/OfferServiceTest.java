@@ -6,13 +6,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.dao.OfferRepo;
-
 import java.util.Date;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +49,31 @@ public class OfferServiceTest {
         Date end = new Date();
         end.setTime(start.getTime() + 1337);
         offer = new Offer(item, borrower, start, end);
+    }
+
+    @Test
+    public void createTest() {
+        offerService.create(item, borrower);
+
+        ArgumentCaptor<Offer> argument = ArgumentCaptor.forClass(Offer.class);
+        verify(offerRepo, times(1)).save(argument.capture());
+        Offer saveOffer = argument.getValue();
+
+        Assert.assertTrue(borrower.getOffers().contains(saveOffer));
+        Assert.assertTrue(item.getOffers().contains(saveOffer));
+
+        Assert.assertFalse(offer.isAccept());
+        Assert.assertFalse(offer.isDecline());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void createItemNullTest() {
+        offerService.create(null, borrower);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void createUserNullTest() {
+        offerService.create(item, null);
     }
 
     @Test
