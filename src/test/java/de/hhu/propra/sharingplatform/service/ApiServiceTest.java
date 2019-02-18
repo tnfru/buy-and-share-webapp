@@ -86,7 +86,7 @@ public class ApiServiceTest {
 
         assertFalse(apiService.isSolvent(fakeUser, 10000));
     }
-    
+
     @Test
     public void notSolventReservations() {
         this.fakeJson = "{\"account\":\"foo\"," + "\"amount\":700.0,\"reservations\":[{\"id\":4,"

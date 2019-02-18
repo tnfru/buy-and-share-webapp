@@ -4,9 +4,6 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
@@ -16,6 +13,7 @@ import de.hhu.propra.sharingplatform.model.User;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -128,6 +126,127 @@ public class OfferServiceTest {
         when(offerRepo.findOneById(anyLong())).thenReturn(null);
 
         offerService.decline(anyLong());
+    }
+
+    /* Validate functions tests for each return value */
+
+    @Test
+    public void startAfterEnd() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        User requester = mock(User.class);
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(1336 * millisecondsInDay);
+
+        PaymentService paymentService = mock(PaymentService.class);
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+
+        assertEquals(1, offerService.validate(item, requester, start, end));
+    }
+
+    @Test
+    public void sameStartAndEnd() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        User requester = mock(User.class);
+
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(1337 * millisecondsInDay);
+
+        PaymentService paymentService = mock(PaymentService.class);
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+
+        assertEquals(1, offerService.validate(item, requester, start, end));
+    }
+
+    @Test
+    public void itemUnavailable() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        when(item.isAvailable()).thenReturn(false);
+        User requester = mock(User.class);
+
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+
+        PaymentService paymentService = mock(PaymentService.class);
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+
+        assertEquals(2, offerService.validate(item, requester, start, end));
+    }
+
+    @Test
+    public void notSolvent() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        when(item.isAvailable()).thenReturn(true);
+        User requester = mock(User.class);
+
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+
+        PaymentService paymentService = mock(PaymentService.class);
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+        ApiService apiService = mock(ApiService.class);
+        when(apiService.isSolvent(any(), anyDouble())).thenReturn(false);
+
+        assertEquals(3, offerService.validate(item, requester, start, end));
+    }
+
+    @Test
+    public void requesterBanned() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        when(item.isAvailable()).thenReturn(true);
+        User requester = mock(User.class);
+        when(requester.isBan()).thenReturn(true);
+
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+
+        PaymentService paymentService = mock(PaymentService.class);
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+        ApiService apiService = mock(ApiService.class);
+        when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);
+
+        assertEquals(4, offerService.validate(item, requester, start, end));
+    }
+
+    @Test
+    public void allGucci() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        when(item.isAvailable()).thenReturn(true);
+        User requester = mock(User.class);
+        when(requester.isBan()).thenReturn(false);
+
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+
+        PaymentService paymentService = mock(PaymentService.class);
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+        ApiService apiService = mock(ApiService.class);
+        when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);
+
+        assertEquals(0, offerService.validate(item, requester, start, end));
     }
 
 }
