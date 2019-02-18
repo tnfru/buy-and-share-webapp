@@ -6,8 +6,6 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class ItemService {
 
@@ -64,10 +62,5 @@ public class ItemService {
     public boolean validateItem(Item item) {
         return (item.getDescription() != null && item.getBail() != null
             && item.getLocation() != null && item.getName() != null && item.getPrice() != null);
-    }
-
-    public long getUserIdFromAccountName(String accountName) {
-        Optional<User> user = userRepo.findByAccountName(accountName);
-        return user.get().getId();
     }
 }
