@@ -44,8 +44,6 @@ public class UserFakerTest {
         assertNotEquals(null, user.getItems());
         assertNotEquals(null, user.getContracts());
         assertNotEquals(null, user.getOffers());
-        assertNotEquals(null, user.getPaymentsSend());
-        assertNotEquals(null, user.getPaymentsReceive());
     }
 
     @Test

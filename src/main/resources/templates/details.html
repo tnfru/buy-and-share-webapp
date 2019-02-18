@@ -12,8 +12,8 @@
     <h5 th:text="|${item?.name}|"></h5>
     <br>
     <p>Bild Platzhalter</p>
-    <p th:if="${item?.available} == true" th:text="Verfügbar"></p>
-    <p th:if="${item?.available} == false" th:text="Momentan leider nicht Verfügbar"></p>
+  <p th:if="${item?.available} == true" text="Verfügbar"></p>
+  <p th:if="${item?.available} == false" text="Momentan leider nicht Verfügbar"></p>
     <strong>Beschreibung:</strong>
     <span th:text="|${item?.description}|"></span>
     <br>
@@ -24,7 +24,7 @@
     <span th:text="${item?.price}"></span>
     <br>
     <p>Kaution:</p>
-    <p th:text="${item?.deposit}"></p>
+    <p th:text="${item?.bail}"></p>
     <strong>Anbieter:</strong>
     <span>Account-Name:</span>
     <span th:text="${item?.owner?.accountName}"></span>
