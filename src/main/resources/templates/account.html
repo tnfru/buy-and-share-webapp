@@ -70,7 +70,12 @@
               <td th:text="${item.getName()}"> Test Name</td>
               <td th:text="${item.getPrice()}"> 33</td>
               <td th:text="${item.getBail()}"> 333</td>
-              <td th:text="${item.isAvailable()}"> true</td>
+              <td th:if="${item?.isAvailable()} == true">
+                <span style="color: green;">&#10004;</span>
+              </td>
+              <td th:if="${item?.isAvailable()} == false">
+                <span style="color: red;">&#10006;</span>
+              </td>
               <td>
                 <a th:href="|/item/${item.getId()}/offers|" class="btn-primary">
                   <button type="button" class="btn btn-primary btn-sm">
