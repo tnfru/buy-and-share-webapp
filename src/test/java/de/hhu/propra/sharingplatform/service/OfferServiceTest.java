@@ -32,9 +32,6 @@ public class OfferServiceTest {
     private OfferRepo offerRepo;
 
     @MockBean
-    private PaymentRepo paymentRepo;
-
-    @MockBean
     private ContractService contractService;
 
     @MockBean
@@ -52,8 +49,7 @@ public class OfferServiceTest {
 
     @Before
     public void setUpTests() {
-        offerService = new OfferService(contractService, offerRepo, apiService, paymentService,
-            paymentRepo);
+        offerService = new OfferService(contractService, offerRepo, apiService, paymentService);
         owner = new User();
         borrower = new User();
         item = new Item(owner);

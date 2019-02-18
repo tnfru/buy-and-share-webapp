@@ -17,26 +17,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class OfferService {
 
-    OfferRepo offerRepo;
+    private OfferRepo offerRepo;
 
-    PaymentRepo paymentRepo;
 
-    ContractService contractService;
+    private ContractService contractService;
 
-    ApiService apiService;
+    private ApiService apiService;
 
-    PaymentService paymentService;
+    private PaymentService paymentService;
 
 
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-                        ApiService apiService, PaymentService paymentService,
-                        PaymentRepo paymentRepo) {
+                        ApiService apiService, PaymentService paymentService) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
         this.apiService = apiService;
         this.paymentService = paymentService;
-        this.paymentRepo = paymentRepo;
     }
 
     /* Return values:
@@ -70,14 +67,14 @@ public class OfferService {
         offerRepo.save(offer);
     }
 
-    public void accept(long id) {
+    void accept(long id) {
         Offer offer = offerRepo.findOneById(id);
         offer.setAccept(true);
         offerRepo.save(offer);
         contractService.create(offer);
     }
 
-    public void decline(long id) {
+    void decline(long id) {
         Offer offer = offerRepo.findOneById(id);
         offer.setDecline(true);
         offerRepo.save(offer);
