@@ -1,18 +1,13 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
-import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
-
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Service
 public class OfferService {
@@ -51,7 +46,7 @@ public class OfferService {
             return 1;
         } else if (!item.isAvailable()) {
             return 2;
-        } else if (!apiService.isSolvent(requester, totalCost)) {
+        } else if (!(apiService.isSolvent(requester, totalCost))) {
             return 3;
         } else if (requester.isBan()) {
             return 4;

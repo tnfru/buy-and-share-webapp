@@ -1,26 +1,24 @@
 package de.hhu.propra.sharingplatform.service;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-
-import java.util.Date;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Date;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 public class OfferServiceTest {
@@ -141,7 +139,6 @@ public class OfferServiceTest {
         Date end = mock(Date.class);
         when(end.getTime()).thenReturn(1336 * millisecondsInDay);
 
-        PaymentService paymentService = mock(PaymentService.class);
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
 
         assertEquals(1, offerService.validate(item, requester, start, end));
@@ -159,7 +156,6 @@ public class OfferServiceTest {
         Date end = mock(Date.class);
         when(end.getTime()).thenReturn(1337 * millisecondsInDay);
 
-        PaymentService paymentService = mock(PaymentService.class);
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
 
         assertEquals(1, offerService.validate(item, requester, start, end));
@@ -178,7 +174,6 @@ public class OfferServiceTest {
         Date end = mock(Date.class);
         when(end.getTime()).thenReturn(7331 * millisecondsInDay);
 
-        PaymentService paymentService = mock(PaymentService.class);
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
 
         assertEquals(2, offerService.validate(item, requester, start, end));
@@ -197,9 +192,7 @@ public class OfferServiceTest {
         Date end = mock(Date.class);
         when(end.getTime()).thenReturn(7331 * millisecondsInDay);
 
-        PaymentService paymentService = mock(PaymentService.class);
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
-        ApiService apiService = mock(ApiService.class);
         when(apiService.isSolvent(any(), anyDouble())).thenReturn(false);
 
         assertEquals(3, offerService.validate(item, requester, start, end));
@@ -211,6 +204,7 @@ public class OfferServiceTest {
 
         Item item = mock(Item.class);
         when(item.isAvailable()).thenReturn(true);
+        when(item.getBail()).thenReturn(10.0);
         User requester = mock(User.class);
         when(requester.isBan()).thenReturn(true);
 
@@ -219,9 +213,7 @@ public class OfferServiceTest {
         Date end = mock(Date.class);
         when(end.getTime()).thenReturn(7331 * millisecondsInDay);
 
-        PaymentService paymentService = mock(PaymentService.class);
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
-        ApiService apiService = mock(ApiService.class);
         when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);
 
         assertEquals(4, offerService.validate(item, requester, start, end));
@@ -241,9 +233,7 @@ public class OfferServiceTest {
         Date end = mock(Date.class);
         when(end.getTime()).thenReturn(7331 * millisecondsInDay);
 
-        PaymentService paymentService = mock(PaymentService.class);
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
-        ApiService apiService = mock(ApiService.class);
         when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);
 
         assertEquals(0, offerService.validate(item, requester, start, end));
