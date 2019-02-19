@@ -8,5 +8,7 @@ import java.util.List;
 public interface OfferRepo extends CrudRepository<Offer, Long> {
     Offer findOneById(long id);
     
-    List<Offer> findAllByItemId(long id);
+    List<Offer> findAllByItemId(long itemId);
+
+    List<Offer> findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(long itemId);
 }
