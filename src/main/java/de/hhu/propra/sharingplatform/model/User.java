@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -89,5 +90,18 @@ public class User {
 
     void addNegativeRating() {
         negativeRating++;
+    }
+
+    /**
+     * @return all items the user has. Items that are marked as removed are not returned
+     */
+    public Collection getItemsExcludeRemoved(){
+        ArrayList<Item> notRemovedItems = new ArrayList<>();
+        for (Item item: items) {
+            if(! item.isRemoved()){
+                notRemovedItems.add(item);
+            }
+        }
+        return notRemovedItems;
     }
 }
