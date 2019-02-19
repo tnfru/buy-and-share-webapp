@@ -9,7 +9,7 @@ public class Validator {
     /**
      * Valid mails are like foo.bar@mail.de
      *
-     * @param mail
+     * @param mail e-mail address
      * @return true if mail is valid
      */
     public static boolean isValidMail(String mail) {
@@ -21,7 +21,7 @@ public class Validator {
     /**
      * Allowed chars are: a-z, A-Z, 0-9, '-', ' ', '.', ','
      *
-     * @param string
+     * @param string string to check
      * @return true for strings free of special chars
      */
     public static boolean freeOfSpecialChars(String string) {
@@ -31,9 +31,9 @@ public class Validator {
     }
 
     /**
-     * Allowed chars are: a-z, A-Z, 0-9
+     * Allowed chars are: a-z, A-Z, 0-9.
      *
-     * @param string
+     * @param string string to check
      * @return true for alphanumeric strings
      */
     public static boolean isAlphanumeric(String string) {
@@ -44,21 +44,21 @@ public class Validator {
 
     /**
      * Guidlines:
-     * String not null,
-     * String not empty,
-     * String length < 256
+     * String not null.
+     * String not empty.
+     * String length < 256.
      *
-     * @param string
+     * @param string string to check
      * @return true for guidline matching strings
      */
-    public static boolean matchesDBGuidlines(String string) {
+    public static boolean matchesDbGuidlines(String string) {
         return string != null && string.length() != 0 && string.length() < 256;
     }
 
     /**
-     * Allewed chars are printable chars
+     * Allewed chars are printable chars.
      *
-     * @param string
+     * @param string string to check
      * @return true for printable strings
      */
     public static boolean isPrintable(String string) {

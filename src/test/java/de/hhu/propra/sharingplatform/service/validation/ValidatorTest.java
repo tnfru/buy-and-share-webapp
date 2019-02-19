@@ -104,17 +104,17 @@ public class ValidatorTest {
 
     @Test
     public void matchesGuidlinesEmpty() {
-        assertFalse(Validator.matchesDBGuidlines(""));
+        assertFalse(Validator.matchesDbGuidlines(""));
     }
 
     @Test
     public void matchesGuidlinesNull() {
-        assertFalse(Validator.matchesDBGuidlines(null));
+        assertFalse(Validator.matchesDbGuidlines(null));
     }
 
     @Test
     public void matchesGuidlinesNormal() {
-        assertTrue(Validator.matchesDBGuidlines("!_llslfg$"));
+        assertTrue(Validator.matchesDbGuidlines("!_llslfg$"));
     }
 
     @Test
@@ -123,7 +123,7 @@ public class ValidatorTest {
         for (int i = 0; i < 256; i++) {
             veryLongSTring += "B";
         }
-        assertFalse(Validator.matchesDBGuidlines(veryLongSTring));
+        assertFalse(Validator.matchesDbGuidlines(veryLongSTring));
     }
 
     //////////////////////////////
