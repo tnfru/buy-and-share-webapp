@@ -1,7 +1,5 @@
 package de.hhu.propra.sharingplatform.service.validation;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
