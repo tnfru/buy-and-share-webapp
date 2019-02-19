@@ -39,9 +39,8 @@ public class OfferService {
 
     public void create(long itemId, User requester, Date start, Date end) {
         Item item = itemRepo.findOneById(itemId);
+        validate(item, requester, start, end);
 
-        // todo item is rented for 7 days now
-        end.setTime(start.getTime() + 7 * (1000 * 60 * 60 * 24));
         Offer offer = new Offer(item, requester, start, end);
         item.getOffers().add(offer);
         requester.getOffers().add(offer);
