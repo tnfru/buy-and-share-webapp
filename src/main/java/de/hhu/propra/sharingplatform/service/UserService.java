@@ -154,8 +154,8 @@ public class UserService {
         ArrayList<User> users = userRepo.findAll();
         for (User dbuser : users) {
             if (dbuser.getAccountName().equals(user.getAccountName())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Name already " +
-                    "exists");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Account Name already exists");
             }
         }
         if (user.getAccountName().length() > 30) {
