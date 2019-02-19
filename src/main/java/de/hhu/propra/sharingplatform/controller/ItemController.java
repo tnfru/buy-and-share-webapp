@@ -1,16 +1,21 @@
 package de.hhu.propra.sharingplatform.controller;
 
+import de.hhu.propra.sharingplatform.dao.ImageService;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.UserService;
+
 import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class ItemController {
@@ -19,10 +24,14 @@ public class ItemController {
 
     private final UserService userService;
 
+    private final ImageService storageService;
+
     @Autowired
-    public ItemController(ItemService itemService, UserService userService) {
+    public ItemController(ItemService itemService, UserService userService,
+                          ImageService storageService) {
         this.itemService = itemService;
         this.userService = userService;
+        this.storageService = storageService;
     }
 
     @GetMapping("/item/details/{itemId}")
@@ -45,8 +54,10 @@ public class ItemController {
     }
 
     @PostMapping("/item/new")
-    public String inputItemData(Model model, Item item, Principal principal) {
+    public String inputItemData(Model model, Item item, Principal principal,
+                                @RequestParam("file") MultipartFile file) {
         itemService.persistItem(item, userService.fetchUserIdByAccountName(principal.getName()));
+        storageService.store(file, "item" + item.getId());
         return "redirect:/user/account/";
     }
 
