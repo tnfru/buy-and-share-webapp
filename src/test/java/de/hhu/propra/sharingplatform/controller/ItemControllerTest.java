@@ -111,7 +111,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setBan(false);
         user.setDeleted(false);
-        user.setId(1l);
+        user.setId(1L);
 
         Item item = new Item(user);
         item.setAvailable(true);
@@ -122,7 +122,7 @@ public class ItemControllerTest {
         item.setName("item");
         //item.setOwner(user);
         item.setPrice(2.0);
-        item.setId(3l);
+        item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);
         Optional<User> optU = Optional.of(user);
@@ -130,7 +130,7 @@ public class ItemControllerTest {
         when(itemRepo.findById(3)).thenReturn(optI);
         //when(userRepo.findByAccountName("accountname")).thenReturn(optU);
         when(userService.fetchUserByAccountName("accountname")).thenReturn(user);
-        when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1l);
+        when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
 
         mvc.perform(get("/item/details/3")
             .contentType(MediaType.TEXT_HTML))
@@ -149,7 +149,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setBan(false);
         user.setDeleted(false);
-        user.setId(1l);
+        user.setId(1L);
 
         User user2 = new User();
         user2.setAccountName("otheraccountname");
@@ -170,7 +170,7 @@ public class ItemControllerTest {
         item.setName("item");
         item.setOwner(user);
         item.setPrice(2.0);
-        item.setId(3l);
+        item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);
         Optional<User> optU2 = Optional.of(user2);
@@ -204,7 +204,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setBan(false);
         user.setDeleted(false);
-        user.setId(1l);
+        user.setId(1L);
 
         Optional<User> optU = Optional.of(user);
 
@@ -228,7 +228,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setBan(false);
         user.setDeleted(false);
-        user.setId(1l);
+        user.setId(1L);
 
         Optional<User> optU = Optional.of(user);
 
@@ -255,7 +255,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setBan(false);
         user.setDeleted(false);
-        user.setId(1l);
+        user.setId(1L);
 
         Optional<User> optU = Optional.of(user);
 
@@ -277,7 +277,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setBan(false);
         user.setDeleted(false);
-        user.setId(1l);
+        user.setId(1L);
 
         User user2 = new User();
         user2.setAccountName("otheraccountname");
@@ -287,7 +287,7 @@ public class ItemControllerTest {
         user2.setName("name2");
         user2.setBan(false);
         user2.setDeleted(false);
-        user2.setId(2l);
+        user2.setId(2L);
 
         Item item = new Item(user);
         item.setAvailable(true);
@@ -298,7 +298,7 @@ public class ItemControllerTest {
         item.setName("item");
         item.setOwner(user);
         item.setPrice(2.0);
-        item.setId(3l);
+        item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);
         Optional<User> optU2 = Optional.of(user2);
@@ -324,7 +324,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setBan(false);
         user.setDeleted(false);
-        user.setId(1l);
+        user.setId(1L);
 
         Item item = new Item(user);
         item.setAvailable(true);
@@ -335,11 +335,11 @@ public class ItemControllerTest {
         item.setName("item");
         item.setOwner(user);
         item.setPrice(2.0);
-        item.setId(3l);
+        item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);
 
-        when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1l);
+        when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
         when(itemRepo.findById(3)).thenReturn(optI);
 
         mvc.perform(get("/item/remove/3")
