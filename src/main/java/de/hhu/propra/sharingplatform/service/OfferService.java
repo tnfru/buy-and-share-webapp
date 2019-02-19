@@ -6,9 +6,12 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class OfferService {
@@ -22,21 +25,21 @@ public class OfferService {
 
     private PaymentService paymentService;
 
-
-    @Autowired
-    private ItemRepo itemRepo;
+    private ItemService itemService;
 
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-                        ApiService apiService, PaymentService paymentService) {
+                        ApiService apiService, PaymentService paymentService,
+                        ItemService itemService) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
         this.apiService = apiService;
         this.paymentService = paymentService;
+        this.itemService = itemService;
     }
 
     public void create(long itemId, User requester, Date start, Date end) {
-        Item item = itemRepo.findOneById(itemId);
+        Item item = itemService.findItem(itemId);
         validate(item, requester, start, end);
 
         Offer offer = new Offer(item, requester, start, end);
@@ -80,5 +83,63 @@ public class OfferService {
         Offer offer = offerRepo.findOneById(id);
         offer.setDecline(true);
         offerRepo.save(offer);
+    }
+
+    public List<Offer> getItemOffers(long itemId, User user) {
+        if (itemService.userIsOwner(itemId, user.getId())) {
+            return offerRepo.findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "This item does not belong to you");
+        }
+
+    }
+
+    public void acceptOffer(long offerId, User user) {
+        Offer offer = offerRepo.findOneById(offerId);
+        if (itemService.userIsOwner(offer.getItem().getId(), user.getId())) {
+            offer.setAccept(true);
+            offerRepo.save(offer);
+            //TODO: create contract needs ProPay Api
+            // contractService.create(offer);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "This item does not belong to you");
+        }
+    }
+
+    public void declineOffer(long offerId, User user) {
+        Offer offer = offerRepo.findOneById(offerId);
+        if (itemService.userIsOwner(offer.getItem().getId(), user.getId())) {
+            offer.setDecline(true);
+            offerRepo.save(offer);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "This item does not belong to you");
+        }
+    }
+
+    public void deleteOffer(long offerId, User user) {
+        Offer offer = offerRepo.findOneById(offerId);
+        if (userIsOfferOwner(offer, user.getId())) {
+            offerRepo.delete(offer);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "This offer does not belong to you");
+        }
+    }
+
+    private boolean userIsOfferOwner(Offer offer, long userId) {
+        return offer.getBorrower().getId() == userId;
+    }
+
+    public void removeOffersFromDeletedItem(long itemId) {
+        List<Offer> toBeDeleted =
+            offerRepo.findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
+        for (Offer offer :
+            toBeDeleted) {
+            offer.setDecline(true);
+            offerRepo.save(offer);
+        }
     }
 }

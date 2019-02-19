@@ -70,7 +70,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="item : ${user.getItems()}">
+            <tr th:each="item : ${user.getItemsExcludeRemoved()}">
               <td th:text="${item.getName()}"> Test Name</td>
               <td th:text="${item.getPrice()}"> 33</td>
               <td th:text="${item.getBail()}"> 333</td>
@@ -81,7 +81,7 @@
                 <span style="color: red;">&#10006;</span>
               </td>
               <td>
-                <a th:href="|/item/${item.getId()}/offers|" class="btn-primary">
+                <a th:href="|/offer/show/${item.getId()}|" class="btn-primary">
                   <button type="button" class="btn btn-primary btn-sm">
                     Offers
                     <span class="badge badge-light" th:text="${item.getOffers().size()}"></span>

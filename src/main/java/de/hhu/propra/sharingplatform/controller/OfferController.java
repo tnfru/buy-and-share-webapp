@@ -4,7 +4,9 @@ import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
+import de.hhu.propra.sharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -25,17 +27,17 @@ import java.util.Date;
 public class OfferController {
 
     @Autowired
-    private ItemRepo itemRepo;
+    private ItemService itemService;
 
     @Autowired
-    private UserRepo userRepo;
+    private UserService userService;
 
     @Autowired
     OfferService offerService;
 
     @GetMapping("/offer/request/{itemId}")
     public String gotOfferForm(@PathVariable long itemId, Model model) {
-        Item item = itemRepo.findOneById(itemId);
+        Item item = itemService.findItem(itemId);
         model.addAttribute(item);
         item.getOwner().getAccountName();
         return "offerReguest";
@@ -45,9 +47,38 @@ public class OfferController {
     public String createOffer(@PathVariable long itemId,
                               @RequestParam(name = "daterange") String dateRange,
                               Principal principal) {
-        User user = userRepo.findByAccountName(principal.getName()).get();
+        User user = userService.fetchUserByAccountName(principal.getName());
         offerService.create(itemId, user, getStart(dateRange), getEnd(dateRange));
         return "redirect:/";
+    }
+
+    @GetMapping("/offer/show/{itemId}")
+    public String showAllOffers(@PathVariable long itemId, Principal principal, Model model) {
+        User user = userService.fetchUserByAccountName(principal.getName());
+        model.addAttribute("item", itemService.findItem(itemId));
+        model.addAttribute("offers", offerService.getItemOffers(itemId, user));
+        return "showOffers";
+    }
+
+    @GetMapping("/offer/remove/{offerId}")
+    public String deleteOwnOffer(@PathVariable long offerId, Principal principal) {
+        User user = userService.fetchUserByAccountName(principal.getName());
+        offerService.deleteOffer(offerId, user);
+        return "redirect:/user/account";
+    }
+
+    @GetMapping("/offer/show/{offerId}/accept")
+    public String acceptOffer(@PathVariable long offerId, Principal principal) {
+        User user = userService.fetchUserByAccountName(principal.getName());
+        offerService.acceptOffer(offerId, user);
+        return "redirect:/user/account";
+    }
+
+    @GetMapping("/offer/show/{offerId}/decline")
+    public String declineOffer(@PathVariable long offerId, Principal principal) {
+        User user = userService.fetchUserByAccountName(principal.getName());
+        offerService.declineOffer(offerId, user);
+        return "redirect:/user/account";
     }
 
 
