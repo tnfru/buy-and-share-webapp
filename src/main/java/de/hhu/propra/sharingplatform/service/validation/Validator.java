@@ -13,7 +13,7 @@ public class Validator {
      * @return true if mail is valid
      */
     public static boolean isValidMail(String mail) {
-        Pattern pattern = Pattern.compile("^.+@.+\\..+$");
+        Pattern pattern = Pattern.compile("[\\w|.|-]+@\\w[\\w|-]*\\.[a-z]{2,3}");
         Matcher matcher = pattern.matcher(mail);
         return matcher.matches();
     }
@@ -25,7 +25,7 @@ public class Validator {
      * @return true for strings free of special chars
      */
     public static boolean freeOfSpecialChars(String string) {
-        Pattern pattern = Pattern.compile("[a-zA-Z0-9:blank:,._]", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9| |,|.|-]*$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(string);
         return matcher.find();
     }
@@ -37,7 +37,7 @@ public class Validator {
      * @return true for alphanumeric strings
      */
     public static boolean isAlphanumeric(String string) {
-        Pattern pattern = Pattern.compile("[a-zA-Z0-9]", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
         Matcher matcher = pattern.matcher(string);
         return matcher.find();
     }
@@ -62,7 +62,7 @@ public class Validator {
      * @return true for printable strings
      */
     public static boolean isPrintable(String string) {
-        Pattern pattern = Pattern.compile("[:print:]*");
+        Pattern pattern = Pattern.compile("^[\\p{Graph}\\x20]+$");
         Matcher matcher = pattern.matcher(string);
         return matcher.find();
     }
