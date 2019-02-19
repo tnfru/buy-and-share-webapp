@@ -1,12 +1,9 @@
 package de.hhu.propra.sharingplatform.model;
 
 
-import com.google.common.hash.Hashing;
-
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Locale;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Transient;
@@ -29,65 +29,79 @@ public class User {
     private Long id;
 
     private String name;
+    private String accountName;
     private String address;
     private String email;
     private String propayId;
-    private Integer rating;
     private boolean ban;
     private boolean deleted;
     private String passwordHash;
-    private String salt;
+    private int positiveRating;
+    private int negativeRating;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
-    private List<Contract> contracts;
+    private List<Contract> contracts = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "owner")
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
-    private List<Offer> offers;
+    private List<Offer> offers = new ArrayList<>();
 
     @Transient
     @Value("${passwords.pepper}")
     private String pepper;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "sender")
-    private List<Payment> paymentsSend;
-
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "recipient")
-    private List<Payment> paymentsReceive;
-
     public User() {
-        contracts = new ArrayList<>();
-        items = new ArrayList<>();
-        offers = new ArrayList<>();
-        paymentsSend = new ArrayList<>();
-        paymentsReceive = new ArrayList<>();
+        // used by jpa
     }
 
+    // ToDo remove setPassword method (only used by Faker)
     public void setPassword(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        passwordHash = passwordEncoder.encode(password);
-    }
-    /*
-    public void setPassword(String password){
-        salt = UUID.randomUUID().toString();
         passwordHash = hashPassword(password);
-    }
-    */
-
-    public boolean checkPassword(String password) {
-        return passwordHash.equals(hashPassword(password));
     }
 
     private String hashPassword(String plainPassword) {
-        plainPassword += salt;
-        plainPassword += pepper;
-        return Hashing.sha512().hashString(plainPassword, StandardCharsets.UTF_8).toString();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(plainPassword);
+    }
+
+    public String getRating() {
+        String format = "%.1f%%";
+        float sum = (float) positiveRating + (float) negativeRating;
+        if (sum > 0) {
+            float rating = positiveRating / sum;
+            rating *= 100;
+            return String.format(Locale.ROOT, format, rating);
+        }
+        return "0.0%";
+    }
+
+    public int totalRatings() {
+        return positiveRating + negativeRating;
+    }
+
+    void addPositiveRating() {
+        positiveRating++;
+    }
+
+    void addNegativeRating() {
+        negativeRating++;
+    }
+
+    /**
+     * @return all items the user has. Items that are marked as removed are not returned
+     */
+    public Collection getItemsExcludeRemoved() {
+        ArrayList<Item> notRemovedItems = new ArrayList<>();
+        for (Item item : items) {
+            if (!item.isDeleted()) {
+                notRemovedItems.add(item);
+            }
+        }
+        return notRemovedItems;
     }
 }

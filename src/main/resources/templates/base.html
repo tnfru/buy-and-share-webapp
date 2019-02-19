@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Borrow.Ly - Overview</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+  <link rel="shortcut icon" type="image/x-icon" href="Logo_Square_small.png">
+  <link rel="stylesheet" media="screen" href="/css/header.css">
+  <link rel="stylesheet" media="screen" href="/css/footer.css">
+  <link rel="stylesheet" media="screen" href="/css/items.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Share easy, Borrow simple">
+  <meta name="robots" content="notranslate">
+</head>
+<body>
+
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">
+      <img src="/images/Logo_Square_small.png" width="30" height="30"
+           class="d-inline-block align-top" alt="">
+      Borrow.Ly
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+
+      <form method="post" action="/" class="form-inline my-2 my-lg-0 mx-auto w-50">
+        <input class="form-control mr-sm-2 w-50" type="search" placeholder="Search for Item"
+               aria-label="Search" name="search">
+        <button class="btn btn-warning my-2 my-sm-0" type="submit">Search</button>
+      </form>
+
+      <div th:switch="${#authorization.expression('isAuthenticated()')}">
+        <div class="btn-group" role="group" th:case="${true}">
+          <a href="/user/account" class="btn btn-success my-2 my-sm-0">Profile</a>
+          <a href="/logout" class="btn btn-danger my-2 my-sm-0">Logout</a>
+        </div>
+        <div class="btn-group" role="group" th:case="${false}">
+          <a href="/user/account" class="btn btn-success my-2 my-sm-0">Login</a>
+          <a href="/user/register" class="btn btn-primary my-2 my-sm-0">Sign up</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="container mt-3">
+  <div layout:fragment="content">
+    Content goes here
+  </div>
+</div>
+
+<nav class="navbar navbar-light bg-light">
+  <nav class="nav">
+    <a class="nav-link" href="/legal">Legal</a>
+    <a class="nav-link" href="/about">About us</a>
+    <a class="nav-link" href="/contact">Contact support</a>
+  </nav>
+</nav>
+
+</body>
+</html>

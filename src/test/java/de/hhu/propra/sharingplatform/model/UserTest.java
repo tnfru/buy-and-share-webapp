@@ -1,70 +1,43 @@
 package de.hhu.propra.sharingplatform.model;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class UserTest {
 
-    /*
-    @Test
-    public void checkCorrectPassword() {
-        User user = new User();
-        user.setPassword("testpw");
-
-        assertTrue(user.checkPassword("testpw"));
-    }
-    */
+    private User user = new User();
 
     @Test
-    public void checkWrongPassword() {
-        User user = new User();
-        user.setPassword("testpw");
-        assertFalse(user.checkPassword("123"));
-    }
+    public void getRatingNoRatings() {
+        user.setNegativeRating(0);
+        user.setPositiveRating(0);
 
-    /*
-    @Test
-    public void checkCorrectPasswordWithSpecialChars() {
-        User user = new User();
-        user.setPassword("@²³{[]}~öä");
-
-        assertTrue(user.checkPassword("@²³{[]}~öä"));
+        assertEquals("0.0%", user.getRating());
     }
-    */
 
     @Test
-    public void checkPasswordHashNotPassword() {
-        User user = new User();
-        user.setPassword("@²³{[]}~öä");
+    public void getRatingOnlyPositive() {
+        user.setPositiveRating(42);
+        user.setNegativeRating(0);
 
-        assertNotEquals(user.getPasswordHash(), "@²³{[]}~öä");
+        assertEquals("100.0%", user.getRating());
     }
 
-    //TODO: Start some spring magic to inject the pepper...
-    //@Test
-    public void checkSaltPepperExists() {
-        User user = new User();
-        user.setPassword("123");
+    @Test
+    public void getRatingOnlyNegative() {
+        user.setPositiveRating(0);
+        user.setNegativeRating(233);
 
-        assertNotNull(user.getPepper());
-        assertNotNull(user.getSalt());
-        assert user.getPepper().length() > 0;
-        assert user.getSalt().length() > 0;
+        assertEquals("0.0%", user.getRating());
     }
 
-    /* @Test
-    public void checkSaltChangesAfterResetPassword() {
-        User user = new User();
-        user.setPassword("123");
-        String firstSalt = user.getSalt();
+    @Test
+    public void getRatingRandomDistribution() {
+        user.setPositiveRating(501);
+        user.setNegativeRating(398);
 
-        user.setPassword("222");
-
-        assertNotEquals(user.getSalt().length(), firstSalt);
+        assertEquals("55.7%", user.getRating());
     }
-    */
 }

@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
 import lombok.Data;
 import lombok.ToString;
 
@@ -25,9 +24,9 @@ public class Item {
 
     private String name;
     private String description;
-    private Integer deposit;
-    private Integer price; // each day
-    private boolean available;
+    private Double bail;
+    private Double price; // each day
+    private boolean available = true;
     private String location; // maybe change to java location class
     private boolean deleted;
 
@@ -36,10 +35,11 @@ public class Item {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "item")
-    private List<Offer> offers;
+    private List<Offer> offers = new ArrayList<>();
 
-    public Item() {
-        offers = new ArrayList<>();
+    @SuppressWarnings("unused")
+    private Item() {
+        // used for jpa
     }
 
     public Item(User owner) {

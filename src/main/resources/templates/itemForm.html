@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.com">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{base}"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
 <title>Neuer Gegenstand</title>
 <meta charset="UTF-8">
 <meta name="viewport"
@@ -10,20 +11,15 @@
       crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
-  <h1>Neuer Gegenstand</h1>
+<div layout:fragment="content">
+    <h1 th:if="${item?.Id} == NULL">Neuen Gegenstand anlegen</h1>
+    <h1 th:unless="${item?.Id} == NULL" th:text="|${item?.name} editieren|"></h1>
   <br>
-  <form method="post" style="margin-left: 1em;">
+  <form method="post" style="margin-left: 1em;" th:object="${item}">
     <label>
-      <h4>Gegenstand</h4>
-      <br>
       <br>
       Bezeichnung:(*)<br>
       <input type="text" name="name" th:value="${item?.name}" required></input>
-      <br>
-      <br>
-      Bescheibung:(*)<br>
-      <input type="text" name="description" th:value="${item?.description}" required></input>
       <br>
       <br>
       Tagessatz:(*)<br>
@@ -31,12 +27,16 @@
       <br>
       <br>
       Kaution:(*)<br>
-      <input type="number" name="deposit" min="0" th:value="${item?.deposit}" required></input>
+      <input type="number" name="bail" min="0" th:value="${item?.bail}" required></input>
       <br>
       <br>
       Abholadresse:(*)<br>
       <input type="text" name="location" th:value="${item?.location}" required></input>
       <br>
+      <br>
+      Beschreibung:(*)<br>
+      <textarea cols="80" name="description" rows="20"
+                th:field="*{description}" required></textarea>
     </label>
     <br>
     <br>
@@ -46,7 +46,7 @@
     <button type="submit" class="btn btn-primary" action="POST">Speichern</button>
   </form>
   <br>
-  <a th:href="|/user/account/${user.id}| ">Ohne speichern zurück</a>
+  <!-- <a th:href="|/user/account/${user.id}| ">Ohne speichern zurück</a> -->
 </div>
 </body>
 </html>

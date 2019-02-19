@@ -8,10 +8,12 @@ import static org.junit.Assert.assertTrue;
 import com.github.javafaker.Faker;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +52,7 @@ public class ItemFakerTest {
         assertEquals(user, item.getOwner());
         assertTrue(item.getName().matches(pattern));
         assertTrue(item.getDescription().matches(pattern));
-        assertTrue(item.getDeposit() < 9999 && 0 < item.getDeposit());
+        assertTrue(item.getBail() < 9999 && 0 < item.getBail());
         assertTrue(item.getPrice() < 200 && 0 < item.getPrice());
         assertTrue(item.isAvailable());
         assertFalse(item.isDeleted());

@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-
 import lombok.Data;
 
 @Data
@@ -23,13 +22,18 @@ public class Contract {
     private User borrower;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private Payment payment;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Item item;
     private Date start;
     private Date expectedEnd;
     private Date realEnd;
     private boolean isConflict;
 
-    public Contract() {
+    @SuppressWarnings("unused")
+    private Contract() {
+        // used by jpa
     }
 
     public Contract(Offer offer) {

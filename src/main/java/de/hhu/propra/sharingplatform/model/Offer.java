@@ -7,11 +7,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
+@ToString(exclude = {"item", "borrower"})
 public class Offer {
 
     @Id
@@ -29,7 +30,9 @@ public class Offer {
     private boolean accept;
     private boolean decline;
 
-    public Offer() {
+    @SuppressWarnings("unused")
+    private Offer() {
+        // used for jpa
     }
 
     public Offer(Item item, User borrower, Date start, Date end) {

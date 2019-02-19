@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{base}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>Details</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="Error">
+        <h1 th:text="${'One does not simply ' + errorcode}">ERROR</h1>
+        <img src="/images/OneDoesNotSimplyJens.png">
+        <h3><br><br>
+            An error occurred:
+            <br>
+            <span th:if="${errormsg != null}" th:text="${errormsg}">No Message</span> <br>
+        </h3>
+        <a href="/">Back to the safe space!</a>
+    </div>
+
+</div>
+
+</body>
+
+</html>

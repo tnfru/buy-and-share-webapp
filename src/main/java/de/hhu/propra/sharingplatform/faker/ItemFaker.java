@@ -3,7 +3,6 @@ package de.hhu.propra.sharingplatform.faker;
 import com.github.javafaker.Faker;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
-
 import java.util.List;
 
 public class ItemFaker {
@@ -15,15 +14,14 @@ public class ItemFaker {
     }
 
     public Item create(User owner) {
-        Item item = new Item();
+        Item item = new Item(owner);
         item.setName(faker.space().nasaSpaceCraft());
         item.setDescription(faker.lorem().paragraph(1));
-        item.setDeposit(faker.number().numberBetween(20, 999));
-        item.setPrice(faker.number().numberBetween(5, 50));
+        item.setBail((double)faker.number().numberBetween(20, 999));
+        item.setPrice((double)faker.number().numberBetween(5, 50));
         item.setAvailable(true);
         item.setLocation(faker.address().cityName());
         item.setDeleted(false);
-        item.setOwner(owner);
         owner.getItems().add(item);
 
         return item;
