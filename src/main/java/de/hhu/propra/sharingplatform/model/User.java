@@ -95,10 +95,10 @@ public class User {
     /**
      * @return all items the user has. Items that are marked as removed are not returned
      */
-    public Collection getItemsExcludeRemoved(){
+    public Collection getItemsExcludeRemoved() {
         ArrayList<Item> notRemovedItems = new ArrayList<>();
-        for (Item item: items) {
-            if(! item.isDeleted()){
+        for (Item item : items) {
+            if (!item.isDeleted()) {
                 notRemovedItems.add(item);
             }
         }

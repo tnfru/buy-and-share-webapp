@@ -45,7 +45,7 @@ public class ItemService {
 
     public Item findItem(long itemId) {
         Item item = itemRepo.findOneById(itemId);
-        if(item.isDeleted()){
+        if (item.isDeleted()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This Item was deleted");
         }
         return item;
