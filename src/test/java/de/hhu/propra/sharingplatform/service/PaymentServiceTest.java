@@ -89,7 +89,7 @@ public class PaymentServiceTest {
         User fakeUser = new User();
         when(contract.getBorrower()).thenReturn(fakeUser);
         double totalAmount = 1000.0 + paymentService.calculateTotalPrice(contract);
-        when(apiService.checkSolvent(fakeUser, totalAmount)).thenReturn(true);
+        when(apiService.isSolvent(fakeUser, totalAmount)).thenReturn(true);
 
         assertTrue(paymentService.recipientSolvent(contract));
     }
@@ -113,7 +113,7 @@ public class PaymentServiceTest {
         when(contract.getBorrower()).thenReturn(fakeUser);
 
         double totalAmount = 1000.0 + paymentService.calculateTotalPrice(contract);
-        when(apiService.checkSolvent(fakeUser, totalAmount)).thenReturn(false);
+        when(apiService.isSolvent(fakeUser, totalAmount)).thenReturn(false);
 
         assertFalse(paymentService.recipientSolvent(contract));
     }
