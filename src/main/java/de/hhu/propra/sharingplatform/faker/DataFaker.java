@@ -86,6 +86,7 @@ public class DataFaker implements ServletContextInitializer {
                 offerService.create(item.getId(), user,
                     new Date(29, 2, 30),
                     new Date(30, 3, 10));
+
             } else {
                 i--;
             }

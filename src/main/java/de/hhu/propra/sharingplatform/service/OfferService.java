@@ -60,7 +60,7 @@ public class OfferService {
             return 1;
         } else if (!item.isAvailable()) {
             return 2;
-        } else if (!(apiService.isSolvent(requester, totalCost))) {
+        } else if (!(apiService.isSolventFake(requester, totalCost))) {
             return 3;
         } else if (requester.isBan()) {
             return 4;
