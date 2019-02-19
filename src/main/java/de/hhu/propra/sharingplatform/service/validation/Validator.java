@@ -1,9 +1,13 @@
 package de.hhu.propra.sharingplatform.service.validation;
 
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//TODO annotations?
 public class Validator {
 
     /**
@@ -65,5 +69,13 @@ public class Validator {
         Pattern pattern = Pattern.compile("^[\\p{Graph}\\x20]+$");
         Matcher matcher = pattern.matcher(string);
         return matcher.find();
+    }
+
+    public static void validateName(String accountName, String s) {
+        if (!Validator.matchesDbGuidlines(accountName) ||
+            !Validator.isPrintable(accountName) ||
+            !Validator.freeOfSpecialChars(accountName)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
+        }
     }
 }
