@@ -138,7 +138,8 @@ public class OfferService {
     }
 
     public void removeOffersFromDeletedItem(long itemId) {
-        List<Offer> toBeDeleted = offerRepo.findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
+        List<Offer> toBeDeleted =
+            offerRepo.findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
         for (Offer offer :
             toBeDeleted) {
             offer.setDecline(true);

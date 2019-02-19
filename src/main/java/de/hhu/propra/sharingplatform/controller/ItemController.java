@@ -21,7 +21,8 @@ public class ItemController {
     private final UserService userService;
 
     @Autowired
-    public ItemController(ItemService itemService, OfferService offerService, UserService userService) {
+    public ItemController(ItemService itemService, OfferService offerService,
+                          UserService userService) {
         this.itemService = itemService;
         this.offerService = offerService;
         this.userService = userService;
