@@ -34,6 +34,7 @@ public class ItemService {
         Item item = itemRepo.findOneById(itemId);
         if (userIsOwner(item, userId)) {
             item.setDeleted(true);
+
             itemRepo.save(item);
         }
     }

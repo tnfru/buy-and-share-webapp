@@ -113,10 +113,25 @@ public class OfferService {
     public void declineOffer(long offerId, User user) {
         Offer offer = offerRepo.findOneById(offerId);
         if (itemService.userIsOwner(offer.getItem().getId(), user.getId())) {
-            offerRepo.delete(offer);
+            offer.setDecline(true);
+            offerRepo.save(offer);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This item does not belong to you");
         }
+    }
+
+    public void deleteOffer(long offerId, User user) {
+        Offer offer = offerRepo.findOneById(offerId);
+        if (userIsOfferOwner(offer, user.getId())) {
+            offerRepo.delete(offer);
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "This offer does not belong to you");
+        }
+    }
+
+    private boolean userIsOfferOwner(Offer offer, long userId) {
+        return offer.getBorrower().getId() == userId;
     }
 }
