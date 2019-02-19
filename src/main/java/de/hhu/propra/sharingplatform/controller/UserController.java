@@ -65,10 +65,10 @@ public class UserController {
     }
 
     @PostMapping("/user/changePassword")
-    public String changePassword(Model model, Principal principal, String newPassword,
+    public String changePassword(Model model, Principal principal,String oldPassword, String newPassword,
         String confirm) {
         User user = userService.fetchUserByAccountName(principal.getName());
-        userService.updatePassword(user, newPassword, confirm);
+        userService.updatePassword(user,oldPassword, newPassword, confirm);
         return "redirect:/user/account";
     }
 }
