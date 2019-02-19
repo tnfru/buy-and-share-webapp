@@ -3,6 +3,7 @@ package de.hhu.propra.sharingplatform.service;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,11 +23,10 @@ public class ItemService {
     }
 
     public void persistItem(Item item, long userId) {
-        if (validateItem(item)) {
-            User owner = userService.fetchUserById(userId);
-            item.setOwner(owner);
-            itemRepo.save(item);
-        }
+        validateItem(item);
+        User owner = userService.fetchUserById(userId);
+        item.setOwner(owner);
+        itemRepo.save(item);
     }
 
     public void removeItem(long itemId, long userId) {
@@ -46,7 +46,8 @@ public class ItemService {
     }
 
     public void editItem(Item newItem, long oldItemId, long userId) {
-        if (validateItem(newItem) && userIsOwner(findItem(oldItemId), userId)) {
+        validateItem(newItem);
+        if (userIsOwner(findItem(oldItemId), userId)) {
             Item oldItem = itemRepo.findOneById(oldItemId);
             newItem.setOwner(oldItem.getOwner());
             newItem.setId(oldItem.getId());
@@ -64,9 +65,8 @@ public class ItemService {
         return userIsOwner(item, userId);
     }
 
-    public boolean validateItem(Item item) {
-        return (item.getDescription() != null && item.getBail() != null
-            && item.getLocation() != null && item.getName() != null && item.getPrice() != null);
+    public void validateItem(Item item) {
+        ItemValidator.validateItem(item);
     }
 
     public List<String> searchKeywords(String search) {
