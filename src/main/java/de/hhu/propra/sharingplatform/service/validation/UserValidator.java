@@ -36,9 +36,9 @@ public class UserValidator {
 
     //TODO is this correct?
     private static void validateMail(User user) {
-        if (!Validator.matchesDbGuidlines(user.getEmail()) ||
-            !Validator.isValidMail(user.getEmail()) ||
-            !Validator.isPrintable(user.getEmail())) {
+        if (!Validator.matchesDbGuidlines(user.getEmail())
+            || !Validator.isValidMail(user.getEmail())
+            || !Validator.isPrintable(user.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid E-Mail");
         }
     }

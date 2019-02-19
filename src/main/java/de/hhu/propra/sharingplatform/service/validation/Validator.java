@@ -71,11 +71,11 @@ public class Validator {
         return matcher.find();
     }
 
-    public static void validateName(String accountName, String s) {
-        if (!Validator.matchesDbGuidlines(accountName) ||
-            !Validator.isPrintable(accountName) ||
-            !Validator.freeOfSpecialChars(accountName)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
+    public static void validateName(String accountName, String message) {
+        if (!Validator.matchesDbGuidlines(accountName)
+            || !Validator.isPrintable(accountName)
+            || !Validator.freeOfSpecialChars(accountName)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
         }
     }
 }

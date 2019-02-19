@@ -9,8 +9,8 @@ import static de.hhu.propra.sharingplatform.service.validation.Validator.validat
 public class ItemValidator {
     public static void validateItem(Item item) {
 
-        if (!Validator.matchesDbGuidlines(item.getDescription()) ||
-            !Validator.isPrintable(item.getDescription())) {
+        if (!Validator.matchesDbGuidlines(item.getDescription())
+            || !Validator.isPrintable(item.getDescription())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Description");
         } else if (item.getBail() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Bail");
