@@ -1,37 +1,44 @@
 package de.hhu.propra.sharingplatform.service;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import java.util.Date;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
+
 @RunWith(SpringRunner.class)
-@Import( {Offer.class, OfferService.class})
 public class OfferServiceTest {
+
+    @MockBean
+    private OfferRepo offerRepo;
 
     @MockBean
     private ContractService contractService;
 
     @MockBean
-    private OfferRepo offerRepo;
+    private PaymentService paymentService;
 
-    @Autowired
+    @MockBean
+    private ApiService apiService;
+
+    @MockBean
+    private ItemService itemService;
+
     private OfferService offerService;
 
     private User owner;
@@ -41,6 +48,8 @@ public class OfferServiceTest {
 
     @Before
     public void setUpTests() {
+        offerService = new OfferService(contractService, offerRepo, apiService,
+            paymentService, itemService);
         owner = new User();
         borrower = new User();
         item = new Item(owner);
@@ -51,30 +60,31 @@ public class OfferServiceTest {
         offer = new Offer(item, borrower, start, end);
     }
 
+    /*
     @Test
     public void createTest() {
-        offerService.create(item, borrower);
+        offerService.create(item, borrower, new Date(), new Date());
 
         ArgumentCaptor<Offer> argument = ArgumentCaptor.forClass(Offer.class);
         verify(offerRepo, times(1)).save(argument.capture());
         Offer saveOffer = argument.getValue();
 
-        Assert.assertTrue(borrower.getOffers().contains(saveOffer));
-        Assert.assertTrue(item.getOffers().contains(saveOffer));
+        assertTrue(borrower.getOffers().contains(saveOffer));
+        assertTrue(item.getOffers().contains(saveOffer));
 
-        Assert.assertFalse(offer.isAccept());
-        Assert.assertFalse(offer.isDecline());
+        assertFalse(offer.isAccept());
+        assertFalse(offer.isDecline());
     }
 
     @Test(expected = NullPointerException.class)
     public void createItemNullTest() {
-        offerService.create(null, borrower);
+        offerService.create(null, borrower, new Date(), new Date());
     }
 
     @Test(expected = NullPointerException.class)
     public void createUserNullTest() {
-        offerService.create(item, null);
-    }
+        offerService.create(item, null, new Date(), new Date());
+    }*/
 
     @Test
     public void acceptOfferTest() {
@@ -86,11 +96,11 @@ public class OfferServiceTest {
         verify(contractService, times(1)).create(argument1.capture());
         verify(offerRepo, times(1)).save(argument2.capture());
 
-        Assert.assertEquals(offer, argument1.getValue());
-        Assert.assertEquals(offer, argument2.getValue());
+        assertEquals(offer, argument1.getValue());
+        assertEquals(offer, argument2.getValue());
 
-        Assert.assertTrue(offer.isAccept());
-        Assert.assertFalse(offer.isDecline());
+        assertTrue(offer.isAccept());
+        assertFalse(offer.isDecline());
     }
 
     @Test(expected = NullPointerException.class)
@@ -109,10 +119,10 @@ public class OfferServiceTest {
         verify(contractService, times(0)).create(any());
         verify(offerRepo, times(1)).save(argument.capture());
 
-        Assert.assertEquals(offer, argument.getValue());
+        assertEquals(offer, argument.getValue());
 
-        Assert.assertTrue(offer.isDecline());
-        Assert.assertFalse(offer.isAccept());
+        assertTrue(offer.isDecline());
+        assertFalse(offer.isAccept());
     }
 
     @Test(expected = NullPointerException.class)
@@ -121,4 +131,120 @@ public class OfferServiceTest {
 
         offerService.decline(anyLong());
     }
+
+    /* Validate functions tests for each return value */
+
+    @Test
+    public void startAfterEnd() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        User requester = mock(User.class);
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(1336 * millisecondsInDay);
+
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+
+        assertEquals(1, offerService.validate(item, requester, start, end));
+    }
+
+    @Test
+    public void sameStartAndEnd() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        User requester = mock(User.class);
+
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(1337 * millisecondsInDay);
+
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+
+        assertEquals(1, offerService.validate(item, requester, start, end));
+    }
+
+    @Test
+    public void itemUnavailable() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        when(item.isAvailable()).thenReturn(false);
+        User requester = mock(User.class);
+
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+
+        assertEquals(2, offerService.validate(item, requester, start, end));
+    }
+
+    @Test
+    public void notSolvent() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        when(item.isAvailable()).thenReturn(true);
+        User requester = mock(User.class);
+
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+        when(apiService.isSolvent(any(), anyDouble())).thenReturn(false);
+
+        assertEquals(3, offerService.validate(item, requester, start, end));
+    }
+
+    @Test
+    public void requesterBanned() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        when(item.isAvailable()).thenReturn(true);
+        when(item.getBail()).thenReturn(10.0);
+        User requester = mock(User.class);
+        when(requester.isBan()).thenReturn(true);
+
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+        when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);
+        when(apiService.isSolventFake(any(), anyDouble())).thenReturn(true);
+
+        assertEquals(4, offerService.validate(item, requester, start, end));
+    }
+
+    @Test
+    public void allGucci() {
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+
+        Item item = mock(Item.class);
+        when(item.isAvailable()).thenReturn(true);
+        User requester = mock(User.class);
+        when(requester.isBan()).thenReturn(false);
+
+        Date start = mock(Date.class);
+        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
+        Date end = mock(Date.class);
+        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+
+        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
+        when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);
+        when(apiService.isSolventFake(any(), anyDouble())).thenReturn(true);
+
+        assertEquals(0, offerService.validate(item, requester, start, end));
+    }
+
 }

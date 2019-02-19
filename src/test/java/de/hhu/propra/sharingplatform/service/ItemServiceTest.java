@@ -1,9 +1,9 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
-import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,36 +11,32 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 public class ItemServiceTest {
 
     @MockBean
-    private UserRepo userRepo;
+    private UserService userService;
     @MockBean
     private ItemRepo itemRepo;
 
     private Item item;
     private User user;
-    private User user2;
     private ItemService itemService;
 
     @Before
     public void init() {
-        itemService = new ItemService(itemRepo, userRepo);
+        itemService = new ItemService(itemRepo, userService);
 
         user = new User();
         user.setName("Test");
         user.setId((long) 1);
-        user2 = new User();
-        user2.setName("Test2");
-        user2.setId((long) 2);
 
-        item = new Item();
+        item = new Item(user);
         item.setId((long) 1);
         item.setName("TestItem");
         item.setBail(100.0);
@@ -52,7 +48,7 @@ public class ItemServiceTest {
     @Test
     public void persistOneValidItem() {
         ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
-        when(userRepo.findOneById(1)).thenReturn(user);
+        when(userService.fetchUserById(1L)).thenReturn(user);
 
         itemService.persistItem(item, 1);
 
@@ -63,7 +59,6 @@ public class ItemServiceTest {
 
     @Test
     public void removeOneItemValidUser() {
-        item.setOwner(user);
         when(itemRepo.findOneById(1)).thenReturn(item);
 
         itemService.removeItem(1, 1);
@@ -73,7 +68,6 @@ public class ItemServiceTest {
 
     @Test
     public void removeOneItemInvalidUser() {
-        item.setOwner(user);
         when(itemRepo.findOneById(1)).thenReturn(item);
 
         itemService.removeItem(1, 2);
@@ -84,35 +78,15 @@ public class ItemServiceTest {
     @Test
     public void dontPersistInvalidItem() {
         item.setLocation(null);
-        when(userRepo.findOneById(1)).thenReturn(user);
+        when(userService.fetchUserById(1L)).thenReturn(user);
 
         itemService.persistItem(item, 1);
         verify(itemRepo, times(0)).save(any());
     }
 
     @Test
-    public void getItemValidUser() {
-        item.setOwner(user);
-        when(itemRepo.findOneById(1)).thenReturn(item);
-
-        Item editItem = itemService.getItem(1, 1);
-
-        assert editItem.equals(item);
-    }
-
-    @Test
-    public void getItemInvalidUser() {
-        item.setOwner(user);
-        when(itemRepo.findOneById(1)).thenReturn(item);
-        Item editItem = itemService.getItem(1, 2);
-
-        assert editItem == null;
-    }
-
-    @Test
     public void editItemValidItemAndUser() {
-        item.setOwner(user);
-        Item editItem = new Item();
+        Item editItem = new Item(user);
         editItem.setDescription("This is edited");
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
@@ -130,8 +104,7 @@ public class ItemServiceTest {
 
     @Test
     public void editItemValidItemAndInvalidUser() {
-        item.setOwner(user);
-        Item editItem = new Item();
+        Item editItem = new Item(user);
         editItem.setDescription("This is edited");
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
@@ -147,8 +120,7 @@ public class ItemServiceTest {
 
     @Test
     public void editItemInvalidItemAndValidUser() {
-        item.setOwner(user);
-        Item editItem = new Item();
+        Item editItem = new Item(user);
         editItem.setDescription(null);
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
@@ -163,9 +135,8 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void setItemInvalidItemAndUser() {
-        item.setOwner(user);
-        Item editItem = new Item();
+    public void editItemInvalidItemAndInvalidUser() {
+        Item editItem = new Item(user);
         editItem.setDescription(null);
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
@@ -174,7 +145,7 @@ public class ItemServiceTest {
 
         when(itemRepo.findOneById(1)).thenReturn(item);
 
-        itemService.editItem(editItem, 1, 1);
+        itemService.editItem(editItem, 1, 2);
 
         verify(itemRepo, times(0)).save(any());
     }
@@ -184,5 +155,95 @@ public class ItemServiceTest {
         when(itemRepo.findOneById(1)).thenReturn(item);
         Item resultItem = itemService.findItem(1);
         assert resultItem.equals(item);
+    }
+
+    @Test
+    public void searchKeywordsEmptyString() {
+        String search = "";
+
+        List<String> keywords = itemService.searchKeywords(search);
+
+        Assert.assertEquals(0, keywords.size());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void searchKeywordsNullString() {
+        String search = null;
+        itemService.searchKeywords(search);
+    }
+
+    @Test
+    public void searchKeywordsOneSpace() {
+        String search = "key words are cool";
+
+        List<String> keywords = itemService.searchKeywords(search);
+
+        Assert.assertEquals(4, keywords.size());
+        Assert.assertEquals("key", keywords.get(0));
+        Assert.assertEquals("words", keywords.get(1));
+        Assert.assertEquals("are", keywords.get(2));
+        Assert.assertEquals("cool", keywords.get(3));
+    }
+
+    @Test
+    public void searchKeywordsMultipleSpaces() {
+        String search = "key     words    are     ";
+
+        List<String> keywords = itemService.searchKeywords(search);
+
+        Assert.assertEquals(3, keywords.size());
+        Assert.assertEquals("key", keywords.get(0));
+        Assert.assertEquals("words", keywords.get(1));
+        Assert.assertEquals("are", keywords.get(2));
+    }
+
+    @Test
+    public void searchKeywordsDifferentSeperators() {
+        String search = "__,key,,  - words-_are   __  ";
+
+        List<String> keywords = itemService.searchKeywords(search);
+
+        Assert.assertEquals(3, keywords.size());
+        Assert.assertEquals("key", keywords.get(0));
+        Assert.assertEquals("words", keywords.get(1));
+        Assert.assertEquals("are", keywords.get(2));
+    }
+
+    @Test
+    public void filterEmptyList() {
+        List<String> keywords = new ArrayList<>();
+        List<Item> dbNoItems = new ArrayList<>();
+        List<Item> dbAllItem = new ArrayList<>();
+        dbAllItem.add(item);
+
+        when(itemRepo.findAllByNameContainsIgnoreCase(any())).thenReturn(dbNoItems);
+        when(itemRepo.findAll()).thenReturn(dbAllItem);
+
+        List<Item> items = itemService.filter(keywords);
+
+        Assert.assertEquals(1, items.size());
+    }
+
+    @Test
+    public void filterKeyswordList() {
+        List<String> keywords = new ArrayList<>();
+        keywords.add("cool");
+        keywords.add("search");
+
+        List<Item> dbFilterParam1 = new ArrayList<>();
+        List<Item> dbFilterParam2 = new ArrayList<>();
+        dbFilterParam1.add(item);
+        dbFilterParam1.add(item);
+        dbFilterParam2.add(item);
+
+        List<Item> dbAllItem = new ArrayList<>();
+
+        when(itemRepo.findAllByNameContainsIgnoreCase("cool")).thenReturn(dbFilterParam1);
+        when(itemRepo.findAllByNameContainsIgnoreCase("search")).thenReturn(dbFilterParam2);
+        when(itemRepo.findAll()).thenReturn(dbAllItem);
+
+        List<Item> items = itemService.filter(keywords);
+
+        Assert.assertEquals(3, items.size());
     }
 }

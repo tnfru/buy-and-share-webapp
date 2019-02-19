@@ -1,11 +1,9 @@
 package de.hhu.propra.sharingplatform.model;
 
 
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.annotation.Transient;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,8 +12,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.annotation.Transient;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Data
 @Entity
@@ -38,24 +41,22 @@ public class User {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
-    private List<Contract> contracts;
+    private List<Contract> contracts = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "owner")
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
-    private List<Offer> offers;
+    private List<Offer> offers = new ArrayList<>();
 
     @Transient
     @Value("${passwords.pepper}")
     private String pepper;
 
     public User() {
-        contracts = new ArrayList<>();
-        items = new ArrayList<>();
-        offers = new ArrayList<>();
+        // used by jpa
     }
 
     // ToDo remove setPassword method (only used by Faker)
@@ -89,5 +90,18 @@ public class User {
 
     void addNegativeRating() {
         negativeRating++;
+    }
+
+    /**
+     * @return all items the user has. Items that are marked as removed are not returned
+     */
+    public Collection getItemsExcludeRemoved() {
+        ArrayList<Item> notRemovedItems = new ArrayList<>();
+        for (Item item : items) {
+            if (!item.isDeleted()) {
+                notRemovedItems.add(item);
+            }
+        }
+        return notRemovedItems;
     }
 }

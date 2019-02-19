@@ -34,6 +34,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation('org.springframework.boot:spring-boot-starter-jdbc')
     compile group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '2.3.0'
+    compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation('org.springframework.boot:spring-boot-starter-security')
 
