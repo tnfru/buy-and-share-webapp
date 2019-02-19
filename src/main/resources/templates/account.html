@@ -81,7 +81,7 @@
                 <span style="color: red;">&#10006;</span>
               </td>
               <td>
-                <a th:href="|/item/${item.getId()}/offers|" class="btn-primary">
+                <a th:href="|/offer/show/${item.getId()}|" class="btn-primary">
                   <button type="button" class="btn btn-primary btn-sm">
                     Offers
                     <span class="badge badge-light" th:text="${item.getOffers().size()}"></span>
