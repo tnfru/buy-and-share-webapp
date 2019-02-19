@@ -212,6 +212,16 @@ public class ItemServiceTest {
     }
 
     @Test
+    public void searchKeywordsSameWords() {
+        String search = "kEY key, Key-key";
+
+        List<String> keywords = itemService.searchKeywords(search);
+
+        Assert.assertEquals(1, keywords.size());
+        Assert.assertEquals("key", keywords.get(0));
+    }
+
+    @Test
     public void filterEmptyList() {
         List<String> keywords = new ArrayList<>();
         List<Item> dbNoItems = new ArrayList<>();
