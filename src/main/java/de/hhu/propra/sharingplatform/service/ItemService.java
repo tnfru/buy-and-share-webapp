@@ -32,7 +32,9 @@ public class ItemService {
 
     public void removeItem(long itemId, long userId) {
         Optional<Item> optional = itemRepo.findById(itemId);
-        if (!optional.isPresent()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (!optional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
 
         Item item = optional.get();
         if (userIsOwner(item, userId)) {
@@ -43,7 +45,9 @@ public class ItemService {
 
     public Item findItem(long itemId) {
         Optional<Item> optional = itemRepo.findById(itemId);
-        if (!optional.isPresent()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (!optional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
 
         Item item = optional.get();
         if (item.isDeleted()) {
