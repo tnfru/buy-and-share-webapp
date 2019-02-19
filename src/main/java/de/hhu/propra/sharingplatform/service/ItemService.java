@@ -73,6 +73,7 @@ public class ItemService {
         if (search.equals("")) {
             return new ArrayList<>();
         }
+        search = search.toLowerCase();
         search = search.replace(",", " ");
         search = search.replace("-", " ");
         search = search.replace("_", " ");
@@ -80,7 +81,9 @@ public class ItemService {
         String[] split = search.split(" ");
         List<String> keywords = new ArrayList<>();
         for (int i = 0; i < split.length; i++) {
-            keywords.add(split[i]);
+            if (!keywords.contains(split[i])) {
+                keywords.add(split[i]);
+            }
         }
         return keywords;
     }
