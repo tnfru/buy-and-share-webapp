@@ -2,10 +2,13 @@ package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.model.Contract;
+import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class PaymentService {
@@ -35,7 +38,6 @@ public class PaymentService {
     }
 
     double calculateTotalPrice(Contract contract) {
-        //TODO deal with start date behind end date -> not possible
         long startTime = contract.getStart().getTime();
         long endTime = contract.getRealEnd().getTime();
         long millisecondsInDay = 1000 * 60 * 60 * 24;
@@ -44,8 +46,17 @@ public class PaymentService {
         return timePassed * contract.getItem().getPrice();
     }
 
+    double calculateTotalPrice(Item item, Date start, Date end) {
+        long startTime = start.getTime();
+        long endTime = end.getTime();
+        long millisecondsInDay = 1000 * 60 * 60 * 24;
+        //time passed in full days
+        double timePassed = Math.ceil(((double) endTime - startTime) / millisecondsInDay);
+        return timePassed * item.getPrice();
+    }
+
     public boolean recipientSolvent(Contract contract) {
         double totalAmount = contract.getItem().getBail() + calculateTotalPrice(contract);
-        return apiService.checkSolvent(contract.getBorrower(), totalAmount);
+        return apiService.isSolvent(contract.getBorrower(), totalAmount);
     }
 }

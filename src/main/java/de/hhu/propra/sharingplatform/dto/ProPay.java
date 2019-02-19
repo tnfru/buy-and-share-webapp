@@ -9,7 +9,6 @@ import java.util.List;
 @Component
 public class ProPay {
 
-
     private String account;
     private double amount;
     List<ProPayReservation> reservations;
