@@ -1,6 +1,5 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
@@ -72,14 +71,17 @@ public class OfferService {
         }
     }
 
-    public List<Offer> getItemOffers(long itemId, User user) {
+    public List<Offer> getItemOffers(long itemId, User user, boolean onlyClosed) {
         if (itemService.userIsOwner(itemId, user.getId())) {
-            return offerRepo.findAllByItemId(itemId);
+            if (!onlyClosed) {
+                return offerRepo.findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
+            } else {
+                return offerRepo.findAllByItemIdAndAcceptIsTrueOrDeclineIsTrue(itemId);
+            }
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This item does not belong to you");
         }
-
     }
 
     public void acceptOffer(long offerId, User user) {
@@ -99,7 +101,7 @@ public class OfferService {
     private void removeOverlappingOffer(Offer offer) {
         Item item = offer.getItem();
         List<Offer> offersWithSameItem = offerRepo.findAllByItemId(item.getId());
-        for (Offer offerToTest : offersWithSameItem ) {
+        for (Offer offerToTest : offersWithSameItem) {
             if (offer.getId().equals(offerToTest.getId())) {
                 continue;
             }

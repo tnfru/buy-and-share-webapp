@@ -11,4 +11,6 @@ public interface OfferRepo extends CrudRepository<Offer, Long> {
     List<Offer> findAllByItemId(long itemId);
 
     List<Offer> findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(long itemId);
+
+    List<Offer> findAllByItemIdAndAcceptIsTrueOrDeclineIsTrue(long itemId);
 }
