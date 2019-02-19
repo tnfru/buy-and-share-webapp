@@ -82,7 +82,7 @@ public class UserService {
         return passwordEncoder.encode(plainPassword);
     }
 
-    private String generatePassword(String password, String confirm) {
+    String generatePassword(String password, String confirm) {
         if (!(password.equals(confirm))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                 "Passwords need to be the same.");
@@ -98,7 +98,7 @@ public class UserService {
         return matcher.find();
     }
 
-    private void validateUser(User user) {
+    void validateUser(User user) {
         validateMail(user);
         validateAdress(user);
         validateName(user);
@@ -108,16 +108,16 @@ public class UserService {
         Pattern pattern = Pattern.compile("^.+@.+\\..+$");
         Matcher matcher = pattern.matcher(user.getEmail());
         if (!matcher.matches()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not a valid E-Mail");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not a valid E-Mail.");
         }
     }
 
     private void validateName(User user) {
         if (user.getName() == null || user.getName().length() == 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name was empty");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name was empty.");
         }
         if (user.getName().length() > 255) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is too long");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is too long.");
         }
         if (hasSpecialChars(user.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is invalid.");
@@ -126,10 +126,10 @@ public class UserService {
 
     private void validateAdress(User user) {
         if (user.getAddress() == null || user.getAddress().length() == 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address was empty");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address was empty.");
         }
         if (user.getAddress().length() > 255) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is too long");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is too long.");
         }
         if (hasSpecialChars(user.getAddress())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is invalid.");
@@ -138,13 +138,13 @@ public class UserService {
 
     private void validatePasswords(String password) {
         if (password == null || password.length() == 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password was empty");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password was empty.");
         }
         if (password.length() > 255) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too long");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too long.");
         }
         if (password.length() < 2) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too short");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too short.");
         }
     }
 
