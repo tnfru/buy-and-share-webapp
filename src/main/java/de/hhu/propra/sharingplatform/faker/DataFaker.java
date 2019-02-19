@@ -65,13 +65,13 @@ public class DataFaker implements ServletContextInitializer {
 
         log.info("    Creating User...");
         List<User> users = new ArrayList<>();
-        userFaker.createUsers(users, 15);
+        userFaker.createUsers(users, 20);
 
         log.info("    Creating Items...");
         List<Item> items = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 13; i++) {
             User user = getRandomUser(users);
-            itemFaker.createItems(items, user, 4);
+            itemFaker.createItems(items, user, 5);
         }
 
         log.info("    Persist Items...");
@@ -80,7 +80,7 @@ public class DataFaker implements ServletContextInitializer {
         persistUser(users);
 
         log.info("    Creating Offers...");
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             User user = getRandomUser(users);
             Item item = getRandomItem(items);
 
@@ -107,10 +107,10 @@ public class DataFaker implements ServletContextInitializer {
     }
 
     private User getRandomUser(List<User> users) {
-        return users.get(faker.number().numberBetween(0, users.size()));
+        return users.get(faker.number().numberBetween(0, users.size() - 1));
     }
 
     private Item getRandomItem(List<Item> items) {
-        return items.get(faker.number().numberBetween(0, items.size()));
+        return items.get(faker.number().numberBetween(0, items.size() - 1));
     }
 }
