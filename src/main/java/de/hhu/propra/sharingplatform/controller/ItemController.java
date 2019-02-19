@@ -53,7 +53,7 @@ public class ItemController {
     @GetMapping("/item/remove/{itemId}")
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
                                     Principal principal) {
-        itemService.removeItem(userService.fetchUserIdByAccountName(principal.getName()), itemId);
+        itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
         return "redirect:/user/account/";
     }
 

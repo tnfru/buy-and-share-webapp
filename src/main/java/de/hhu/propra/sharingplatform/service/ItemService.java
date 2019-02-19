@@ -6,8 +6,10 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ItemService {
@@ -37,11 +39,15 @@ public class ItemService {
     }
 
     public Item findItem(long itemId) {
-        return itemRepo.findOneById(itemId);
+        Item item = itemRepo.findOneById(itemId);
+        if (item.isDeleted()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This Item was deleted");
+        }
+        return item;
     }
 
     public void editItem(Item newItem, long oldItemId, long userId) {
-        if (validateItem(newItem) && userIsOwner(itemRepo.findOneById(oldItemId), userId)) {
+        if (validateItem(newItem) && userIsOwner(findItem(oldItemId), userId)) {
             Item oldItem = itemRepo.findOneById(oldItemId);
             newItem.setOwner(oldItem.getOwner());
             newItem.setId(oldItem.getId());

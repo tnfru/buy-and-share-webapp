@@ -109,4 +109,8 @@ public class ApiService {
 
         return borrowerProPay.getAmount() - reservationAmount >= amountOwed;
     }
+
+    public boolean isSolventFake(User borrower, double amountOwed) {
+        return true;
+    }
 }

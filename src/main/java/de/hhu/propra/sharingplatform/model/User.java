@@ -11,6 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Transient;
@@ -86,5 +90,18 @@ public class User {
 
     void addNegativeRating() {
         negativeRating++;
+    }
+
+    /**
+     * @return all items the user has. Items that are marked as removed are not returned
+     */
+    public Collection getItemsExcludeRemoved() {
+        ArrayList<Item> notRemovedItems = new ArrayList<>();
+        for (Item item : items) {
+            if (!item.isDeleted()) {
+                notRemovedItems.add(item);
+            }
+        }
+        return notRemovedItems;
     }
 }

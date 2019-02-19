@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.service;
 
+import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
@@ -23,12 +24,25 @@ public class OfferService {
 
 
     @Autowired
+    private ItemRepo itemRepo;
+
+    @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
                         ApiService apiService, PaymentService paymentService) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
         this.apiService = apiService;
         this.paymentService = paymentService;
+    }
+
+    public void create(long itemId, User requester, Date start, Date end) {
+        Item item = itemRepo.findOneById(itemId);
+        validate(item, requester, start, end);
+
+        Offer offer = new Offer(item, requester, start, end);
+        item.getOffers().add(offer);
+        requester.getOffers().add(offer);
+        offerRepo.save(offer);
     }
 
     /* Return values:
@@ -46,20 +60,13 @@ public class OfferService {
             return 1;
         } else if (!item.isAvailable()) {
             return 2;
-        } else if (!(apiService.isSolvent(requester, totalCost))) {
+        } else if (!(apiService.isSolventFake(requester, totalCost))) {
             return 3;
         } else if (requester.isBan()) {
             return 4;
         } else {
             return 0;
         }
-    }
-
-    public void create(Item item, User requester, Date start, Date end) {
-        Offer offer = new Offer(item, requester, start, end);
-        item.getOffers().add(offer);
-        requester.getOffers().add(offer);
-        offerRepo.save(offer);
     }
 
     void accept(long id) {
