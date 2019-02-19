@@ -44,7 +44,7 @@
         <button class="btn btn-warning my-2 my-sm-0" type="submit">Search</button>
       </form>
 
-      <div th:switch="${user != null}">
+      <div th:switch="${#authorization.expression('isAuthenticated()')}">
         <div class="btn-group" role="group" th:case="${true}">
           <a href="/user/account" class="btn btn-success my-2 my-sm-0">Profile</a>
           <a href="/logout" class="btn btn-danger my-2 my-sm-0">Logout</a>
