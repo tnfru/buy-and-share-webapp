@@ -27,10 +27,6 @@ public class OfferService {
 
     private ItemService itemService;
 
-
-    @Autowired
-    private ItemRepo itemRepo;
-
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
                         ApiService apiService, PaymentService paymentService,
@@ -43,7 +39,7 @@ public class OfferService {
     }
 
     public void create(long itemId, User requester, Date start, Date end) {
-        Item item = itemRepo.findOneById(itemId);
+        Item item = itemService.findItem(itemId);
         validate(item, requester, start, end);
 
         Offer offer = new Offer(item, requester, start, end);
