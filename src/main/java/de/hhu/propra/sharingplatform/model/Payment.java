@@ -1,14 +1,13 @@
 package de.hhu.propra.sharingplatform.model;
 
-import lombok.Data;
-import lombok.ToString;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -29,7 +28,9 @@ public class Payment {
         mappedBy = "payment")
     private Contract contract;
 
-    public Payment() {
+    @SuppressWarnings("unused")
+    private Payment() {
+        // used for jpa
     }
 
     public Payment(User sender, User recipient, double amount, double bail) {
