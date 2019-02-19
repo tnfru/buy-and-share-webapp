@@ -11,6 +11,7 @@ import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
+import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
 import java.util.Optional;
 import org.junit.Test;
@@ -46,6 +47,8 @@ public class ItemControllerTest {
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private OfferService offerService;
     /*
     NOT LOGGED in
      */
@@ -120,15 +123,12 @@ public class ItemControllerTest {
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
-        //item.setOwner(user);
         item.setPrice(2.0);
         item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);
-        Optional<User> optU = Optional.of(user);
 
         when(itemRepo.findById(3)).thenReturn(optI);
-        //when(userRepo.findByAccountName("accountname")).thenReturn(optU);
         when(userService.fetchUserByAccountName("accountname")).thenReturn(user);
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
 
