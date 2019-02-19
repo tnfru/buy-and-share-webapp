@@ -39,10 +39,9 @@ public class UserService {
         if (user.getName().length() > 255) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is too long");
         }
-        /*
-        if (!isAlphanumeric(user.getName())) {
+        if (hasSpecialChars(user.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is invalid.");
-        }*/
+        }
     }
 
     private void validateAdress(User user) {
@@ -52,10 +51,9 @@ public class UserService {
         if (user.getAddress().length() > 255) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is too long");
         }
-        /*
-        if (!isAlphanumeric(user.getAddress())) {
+        if (hasSpecialChars(user.getAddress())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is invalid.");
-        } */
+        }
     }
 
     private String generatePassword(String password, String confirm) {
@@ -63,7 +61,6 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                 "Passwords need to be the same.");
         }
-
         validatePasswords(password);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
@@ -144,5 +141,12 @@ public class UserService {
         }
         return (search.get().getId());
     }
+
+    private boolean hasSpecialChars(String string) {
+        Pattern pattern = Pattern.compile("[^a-z0-9 -]", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(string);
+        return matcher.find();
+    }
+
 }
 
