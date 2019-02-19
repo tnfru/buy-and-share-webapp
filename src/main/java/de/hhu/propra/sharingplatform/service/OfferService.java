@@ -5,8 +5,6 @@ import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import java.util.Date;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +44,8 @@ public class OfferService {
         requester.getOffers().add(offer);
         offerRepo.save(offer);
     }
-     /* Return values:
+
+    /* Return values:
      *  0: all gucci
      *  1: start date >= end date
      *  2: item not available at given time
