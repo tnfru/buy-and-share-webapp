@@ -1,30 +1,29 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
-import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.http.HttpStatus;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ItemService {
 
+    final UserService userService;
     private final ItemRepo itemRepo;
-    private final UserRepo userRepo;
 
-    public ItemService(ItemRepo itemRepo, UserRepo userRepo) {
+    public ItemService(ItemRepo itemRepo, UserService userService) {
         this.itemRepo = itemRepo;
-        this.userRepo = userRepo;
+        this.userService = userService;
     }
 
     public void persistItem(Item item, long userId) {
         if (validateItem(item)) {
-            User owner = userRepo.findOneById(userId);
+            User owner = userService.fetchUserById(userId);
             item.setOwner(owner);
             itemRepo.save(item);
         }
@@ -69,15 +68,6 @@ public class ItemService {
     public boolean validateItem(Item item) {
         return (item.getDescription() != null && item.getBail() != null
             && item.getLocation() != null && item.getName() != null && item.getPrice() != null);
-    }
-
-    public long getUserIdFromAccountName(String accountName) {
-        Optional<User> user = userRepo.findByAccountName(accountName);
-        if (user.isPresent()) {
-            return user.get().getId();
-        } else {
-            return 0;
-        }
     }
 
     public List<String> searchKeywords(String search) {
