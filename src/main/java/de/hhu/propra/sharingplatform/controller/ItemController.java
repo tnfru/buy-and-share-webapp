@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ItemController {
 
     private final ItemService itemService;
-
+    private final OfferService offerService;
     private final UserService userService;
 
     @Autowired
-    public ItemController(ItemService itemService, UserService userService) {
+    public ItemController(ItemService itemService, OfferService offerService, UserService userService) {
         this.itemService = itemService;
+        this.offerService = offerService;
         this.userService = userService;
     }
 
@@ -55,7 +56,7 @@ public class ItemController {
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
                                     Principal principal) {
         itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
-
+        offerService.removeOffersFromDeletedItem(itemId);
         return "redirect:/user/account/";
     }
 

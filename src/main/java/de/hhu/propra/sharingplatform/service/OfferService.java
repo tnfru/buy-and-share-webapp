@@ -91,7 +91,7 @@ public class OfferService {
 
     public List<Offer> getItemOffers(long itemId, User user) {
         if (itemService.userIsOwner(itemId, user.getId())) {
-            return offerRepo.findAllByItemId(itemId);
+            return offerRepo.findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This item does not belong to you");
@@ -103,7 +103,9 @@ public class OfferService {
         Offer offer = offerRepo.findOneById(offerId);
         if (itemService.userIsOwner(offer.getItem().getId(), user.getId())) {
             offer.setAccept(true);
-            contractService.create(offer);
+            offerRepo.save(offer);
+            //TODO: create contract needs ProPay Api
+            // contractService.create(offer);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This item does not belong to you");
@@ -133,5 +135,14 @@ public class OfferService {
 
     private boolean userIsOfferOwner(Offer offer, long userId) {
         return offer.getBorrower().getId() == userId;
+    }
+
+    public void removeOffersFromDeletedItem(long itemId) {
+        List<Offer> toBeDeleted = offerRepo.findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
+        for (Offer offer :
+            toBeDeleted) {
+            offer.setDecline(true);
+            offerRepo.save(offer);
+        }
     }
 }
