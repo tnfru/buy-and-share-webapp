@@ -52,6 +52,15 @@ public class UserService {
         userRepo.save(oldUser);
     }
 
+    public void updatePassword(User oldUser, String oldPassword, String newPassword,
+                               String confirm) {
+        if (!encoder.matches(oldPassword, oldUser.getPasswordHash())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
+        }
+        oldUser.setPasswordHash(generatePassword(newPassword, confirm));
+        userRepo.save(oldUser);
+    }
+
     public User fetchUserByAccountName(String accountName) {
         Optional<User> search = userRepo.findByAccountName(accountName);
         if (!search.isPresent()) {
@@ -60,13 +69,12 @@ public class UserService {
         return search.get();
     }
 
-    public void updatePassword(User oldUser, String oldPassword, String newPassword,
-                               String confirm) {
-        if (!encoder.matches(oldPassword, oldUser.getPasswordHash())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
-        }
-        oldUser.setPasswordHash(generatePassword(newPassword, confirm));
-        userRepo.save(oldUser);
+    public User fetchUserById(Long userId) {
+        /*Optional<User> search = userRepo.findOneById(userId);
+        if (!search.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+        }*/
+        return userRepo.findOneById(userId);
     }
 
     public long fetchUserIdByAccountName(String accountName) {

@@ -20,7 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ItemServiceTest {
 
     @MockBean
-    private UserRepo userRepo;
+    private UserService userService;
     @MockBean
     private ItemRepo itemRepo;
 
@@ -30,7 +30,7 @@ public class ItemServiceTest {
 
     @Before
     public void init() {
-        itemService = new ItemService(itemRepo, userRepo);
+        itemService = new ItemService(itemRepo, userService);
 
         user = new User();
         user.setName("Test");
@@ -48,7 +48,7 @@ public class ItemServiceTest {
     @Test
     public void persistOneValidItem() {
         ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
-        when(userRepo.findOneById(1)).thenReturn(user);
+        when(userService.fetchUserById(1l)).thenReturn(user);
 
         itemService.persistItem(item, 1);
 
@@ -78,7 +78,7 @@ public class ItemServiceTest {
     @Test
     public void dontPersistInvalidItem() {
         item.setLocation(null);
-        when(userRepo.findOneById(1)).thenReturn(user);
+        when(userService.fetchUserById(1l)).thenReturn(user);
 
         itemService.persistItem(item, 1);
         verify(itemRepo, times(0)).save(any());

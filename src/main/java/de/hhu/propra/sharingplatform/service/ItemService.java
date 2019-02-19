@@ -13,16 +13,17 @@ import org.springframework.web.server.ResponseStatusException;
 public class ItemService {
 
     private final ItemRepo itemRepo;
-    private final UserRepo userRepo;
 
-    public ItemService(ItemRepo itemRepo, UserRepo userRepo) {
+    final UserService userService;
+
+    public ItemService(ItemRepo itemRepo, UserService userService) {
         this.itemRepo = itemRepo;
-        this.userRepo = userRepo;
+        this.userService = userService;
     }
 
     public void persistItem(Item item, long userId) {
         if (validateItem(item)) {
-            User owner = userRepo.findOneById(userId);
+            User owner = userService.fetchUserById(userId);
             item.setOwner(owner);
             itemRepo.save(item);
         }
@@ -61,14 +62,5 @@ public class ItemService {
     public boolean validateItem(Item item) {
         return (item.getDescription() != null && item.getBail() != null
             && item.getLocation() != null && item.getName() != null && item.getPrice() != null);
-    }
-
-    public long getUserIdFromAccountName(String accountName) {
-        Optional<User> user = userRepo.findByAccountName(accountName);
-        if (user.isPresent()) {
-            return user.get().getId();
-        } else {
-            return 0;
-        }
     }
 }
