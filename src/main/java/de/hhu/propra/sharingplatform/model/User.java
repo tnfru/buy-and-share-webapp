@@ -98,7 +98,7 @@ public class User {
     public Collection getItemsExcludeRemoved(){
         ArrayList<Item> notRemovedItems = new ArrayList<>();
         for (Item item: items) {
-            if(! item.isRemoved()){
+            if(! item.isDeleted()){
                 notRemovedItems.add(item);
             }
         }
