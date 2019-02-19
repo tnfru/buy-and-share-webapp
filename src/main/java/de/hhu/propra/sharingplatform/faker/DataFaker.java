@@ -6,12 +6,11 @@ import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.OfferService;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
+
+import java.util.*;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.env.Environment;
@@ -35,7 +34,7 @@ public class DataFaker implements ServletContextInitializer {
 
     @Autowired
     public DataFaker(Environment env, UserRepo userRepo, ItemRepo itemRepo,
-        OfferService offerService) {
+                     OfferService offerService) {
         this.env = env;
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;
@@ -46,7 +45,7 @@ public class DataFaker implements ServletContextInitializer {
     }
 
     public DataFaker(long seed, Environment env, UserRepo userRepo, ItemRepo itemRepo,
-        OfferService offerService) {
+                     OfferService offerService) {
         this.env = env;
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;
@@ -85,7 +84,7 @@ public class DataFaker implements ServletContextInitializer {
             Item item = getRandomItem(items);
 
             if (item.getOwner().getId() != user.getId()) {
-                offerService.create(item, user);
+                offerService.create(item, user, new Date(), new Date());
             } else {
                 i--;
             }
