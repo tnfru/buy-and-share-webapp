@@ -11,9 +11,12 @@
            role="tab" aria-controls="v-pills-home" aria-selected="true">Profile</a>
         <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-ownItems"
            role="tab" aria-controls="v-pills-messages" aria-selected="false">Own Items</a>
-        <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill"
+        <a class="nav-link" id="v-pills-borrowed-tab" data-toggle="pill"
            href="#v-pills-borrowedItems"
            role="tab" aria-controls="v-pills-settings" aria-selected="false">Borrowed Items</a>
+        <a class="nav-link" id="v-pills-requests-tab" data-toggle="pill"
+           href="#v-pills-requests"
+           role="tab" aria-controls="v-pills-settings" aria-selected="false">Requests</a>
         <a class="nav-link" id="v-pills-new-tab" data-toggle="pill"
            href="#v-pills-newItem"
            role="tab" aria-controls="v-pills-settings" aria-selected="false">Options</a>
@@ -126,6 +129,47 @@
                    class="btn btn-primary btn-sm">Return Item</a>
                 <a th:href="#"
                    class="btn btn-danger btn-sm">Item Owner</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="v-pills-requests" role="tabpanel"
+             aria-labelledby="v-pills-requests-tab">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">Item Name</th>
+              <th scope="col">Price</th>
+              <th scope="col">Bail</th>
+              <th scope="col">State</th>
+              <th scope="col">Item Owner</th>
+              <th scope="col" class="mx-auto">Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="offer : ${user.getOffers()}">
+              <td th:text="${offer.getItem().getName()}"> Test Name</td>
+              <td th:text="${offer.getItem().getPrice()}"> 33</td>
+              <td th:text="${offer.getItem().getBail()}"> 333</td>
+              <td th:if="${offer.isAccept()} == true">
+                <span class="badge badge-success">Accepted</span>
+              </td>
+              <td th:if="${offer.isDecline()} == true">
+                <span class="badge badge-danger">Declined</span>
+              </td>
+              <td th:if="${offer.isDecline()} == ${offer.isAccept()}">
+                <span class="badge badge-info">Pending</span>
+              </td>
+              <td>
+                <a th:href="|/user/visitor/${offer.getItem().getOwner().getId()}|"
+                   class="btn btn-sm btn-primary btn-block">
+                  <span th:text="${offer.getItem().getOwner().getAccountName()}"></span>
+                </a>
+              </td>
+              <td>
+                <a th:href="|/offer/remove/${offer.getId()}|"
+                   class="btn btn-danger btn-sm">Delete</a>
               </td>
             </tr>
             </tbody>
