@@ -216,6 +216,7 @@ public class OfferServiceTest {
 
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
         when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);
+        when(apiService.isSolventFake(any(), anyDouble())).thenReturn(true);
 
         assertEquals(4, offerService.validate(item, requester, start, end));
     }
@@ -236,6 +237,7 @@ public class OfferServiceTest {
 
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
         when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);
+        when(apiService.isSolventFake(any(), anyDouble())).thenReturn(true);
 
         assertEquals(0, offerService.validate(item, requester, start, end));
     }
