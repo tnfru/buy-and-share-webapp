@@ -22,7 +22,7 @@ import java.net.URL;
 @Service
 public class ApiService {
 
-    private PaymentRepo paymentRepo;
+    final PaymentRepo paymentRepo;
     String host = "localhost";
 
     @Autowired
@@ -99,8 +99,14 @@ public class ApiService {
         return null;
     }
 
-    public boolean checkSolvent(User borrower, double totalAmount) {
+    public boolean isSolvent(User borrower, double amountOwed) {
         ProPay borrowerProPay = mapJson(borrower.getPropayId());
-        return borrowerProPay.getAmount() >= totalAmount;
+
+        double reservationAmount = 0;
+        for (ProPayReservation reservation : borrowerProPay.getReservations()) {
+            reservationAmount += reservation.getAmount();
+        }
+
+        return borrowerProPay.getAmount() - reservationAmount >= amountOwed;
     }
 }
