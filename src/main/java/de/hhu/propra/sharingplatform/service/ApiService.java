@@ -99,7 +99,7 @@ public class ApiService {
         return null;
     }
 
-    public boolean isSolvent(User borrower, double totalAmount) {
+    public boolean isSolvent(User borrower, double amountOwed) {
         ProPay borrowerProPay = mapJson(borrower.getPropayId());
 
         double reservationAmount = 0;
@@ -107,6 +107,6 @@ public class ApiService {
             reservationAmount += reservation.getAmount();
         }
 
-        return borrowerProPay.getAmount() - reservationAmount >= totalAmount;
+        return borrowerProPay.getAmount() - reservationAmount >= amountOwed;
     }
 }
