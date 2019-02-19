@@ -1,0 +1,66 @@
+package de.hhu.propra.sharingplatform.service.validation;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Validator {
+
+    /**
+     * Valid mails are like foo.bar@mail.de
+     * @param mail
+     * @return
+     */
+    public static boolean isValidMail(String mail){
+        Pattern pattern = Pattern.compile("^.+@.+\\..+$");
+        Matcher matcher = pattern.matcher(mail);
+        return matcher.matches();
+    }
+
+    /**
+     * Allowed chars are: a-z, A-Z, 0-9, '-', ' ', '.', ','
+     * @param string
+     * @return
+     */
+    public static boolean freeOfSpecialChars(String string){
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9:blank:,._]", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(string);
+        return matcher.find();
+    }
+
+    /**
+     * Allowed chars are: a-z, A-Z, 0-9
+     * @param string
+     * @return
+     */
+    public static boolean isAlphanumeric(String string){
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(string);
+        return matcher.find();
+    }
+
+    /**
+     * Guidlines:
+     * String not null,
+     * String not empty,
+     * String length < 256
+     * @param string
+     * @return
+     */
+    public static boolean matchesDBGuidlines(String string){
+        return string != null && string.length() != 0 && string.length() < 256;
+    }
+
+    /**
+     * Allewed chars are printable chars
+     * @param string
+     * @return
+     */
+    public static boolean isPrintable(String string){
+        Pattern pattern = Pattern.compile("[:print:]*");
+        Matcher matcher = pattern.matcher(string);
+        return matcher.find();
+    }
+}
