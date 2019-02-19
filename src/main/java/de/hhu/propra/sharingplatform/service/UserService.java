@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -102,6 +103,7 @@ public class UserService {
         validateMail(user);
         validateAdress(user);
         validateName(user);
+        validateAccountName(user);
     }
 
     private void validateMail(User user) {
@@ -148,5 +150,20 @@ public class UserService {
         }
     }
 
+    private void validateAccountName(User user) {
+        ArrayList<User> users = userRepo.findAll();
+        for (User dbuser : users) {
+            if (dbuser.getAccountName().equals(user.getAccountName())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Name already " +
+                    "exists");
+            }
+        }
+        if (user.getAccountName().length() > 30) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Name is too long");
+        }
+        if (hasSpecialChars(user.getAccountName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Name is invalid.");
+        }
+    }
 }
 
