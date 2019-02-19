@@ -102,6 +102,7 @@ public class UserService {
         validateMail(user);
         validateAdress(user);
         validateName(user);
+        validateAccountName(user);
     }
 
     private void validateMail(User user) {
@@ -148,5 +149,17 @@ public class UserService {
         }
     }
 
+    private void validateAccountName(User user) {
+        if (userRepo.findByAccountName(user.getAccountName()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                "Account Name already exists");
+        }
+        if (user.getAccountName().length() > 30) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Name is too long");
+        }
+        if (hasSpecialChars(user.getAccountName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Name is invalid.");
+        }
+    }
 }
 
