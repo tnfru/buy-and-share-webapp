@@ -64,7 +64,7 @@
               <th scope="col">Price</th>
               <th scope="col">Bail</th>
               <th scope="col">Availability</th>
-              <th scope="col">Offers</th>
+              <th scope="col">Offers(Open)</th>
               <th scope="col">Conflict</th>
               <th scope="col" class="mx-auto">Options</th>
             </tr>
@@ -84,7 +84,7 @@
                 <a th:href="|/offer/show/${item.getId()}|" class="btn-primary">
                   <button type="button" class="btn btn-primary btn-sm">
                     Offers
-                    <span class="badge badge-light" th:text="${item.getOffers().size()}"></span>
+                    <span class="badge badge-light" th:text="${item.getActiveOffers()}"></span>
                   </button>
                 </a>
               </td>

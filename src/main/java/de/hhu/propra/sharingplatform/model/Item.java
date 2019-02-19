@@ -45,4 +45,14 @@ public class Item {
     public Item(User owner) {
         this.owner = owner;
     }
+
+    public long getActiveOffers() {
+        long counter = 0;
+        for (Offer offer : offers) {
+            if(!(offer.isAccept() || offer.isDecline())) {
+                counter++;
+            }
+        }
+        return counter;
+    }
 }
