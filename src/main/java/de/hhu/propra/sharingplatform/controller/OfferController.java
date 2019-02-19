@@ -60,6 +60,13 @@ public class OfferController {
         return "showOffers";
     }
 
+    @GetMapping("/offer/remove/{offerId}")
+    public String deleteOwnOffer(@PathVariable long offerId, Principal principal) {
+        User user = userService.fetchUserByAccountName(principal.getName());
+        offerService.deleteOffer(offerId, user);
+        return "redirect:/user/account";
+    }
+
     @GetMapping("/offer/show/{offerId}/accept")
     public String acceptOffer(@PathVariable long offerId, Principal principal) {
         User user = userService.fetchUserByAccountName(principal.getName());

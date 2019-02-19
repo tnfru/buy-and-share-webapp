@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class ItemService {
 
-    final UserService userService;
+    private final UserService userService;
     private final ItemRepo itemRepo;
 
     public ItemService(ItemRepo itemRepo, UserService userService) {

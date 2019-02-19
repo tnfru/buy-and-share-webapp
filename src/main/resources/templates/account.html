@@ -70,7 +70,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="item : ${user.getItems()}">
+            <tr th:each="item : ${user.getItemsExcludeRemoved()}">
               <td th:text="${item.getName()}"> Test Name</td>
               <td th:text="${item.getPrice()}"> 33</td>
               <td th:text="${item.getBail()}"> 333</td>
