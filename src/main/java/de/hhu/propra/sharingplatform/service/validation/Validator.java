@@ -10,10 +10,11 @@ public class Validator {
 
     /**
      * Valid mails are like foo.bar@mail.de
+     *
      * @param mail
-     * @return
+     * @return true if mail is valid
      */
-    public static boolean isValidMail(String mail){
+    public static boolean isValidMail(String mail) {
         Pattern pattern = Pattern.compile("^.+@.+\\..+$");
         Matcher matcher = pattern.matcher(mail);
         return matcher.matches();
@@ -21,10 +22,11 @@ public class Validator {
 
     /**
      * Allowed chars are: a-z, A-Z, 0-9, '-', ' ', '.', ','
+     *
      * @param string
-     * @return
+     * @return true for strings free of special chars
      */
-    public static boolean freeOfSpecialChars(String string){
+    public static boolean freeOfSpecialChars(String string) {
         Pattern pattern = Pattern.compile("[a-zA-Z0-9:blank:,._]", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(string);
         return matcher.find();
@@ -32,10 +34,11 @@ public class Validator {
 
     /**
      * Allowed chars are: a-z, A-Z, 0-9
+     *
      * @param string
-     * @return
+     * @return true for alphanumeric strings
      */
-    public static boolean isAlphanumeric(String string){
+    public static boolean isAlphanumeric(String string) {
         Pattern pattern = Pattern.compile("[a-zA-Z0-9]", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(string);
         return matcher.find();
@@ -46,19 +49,21 @@ public class Validator {
      * String not null,
      * String not empty,
      * String length < 256
+     *
      * @param string
-     * @return
+     * @return true for guidline matching strings
      */
-    public static boolean matchesDBGuidlines(String string){
+    public static boolean matchesDBGuidlines(String string) {
         return string != null && string.length() != 0 && string.length() < 256;
     }
 
     /**
      * Allewed chars are printable chars
+     *
      * @param string
-     * @return
+     * @return true for printable strings
      */
-    public static boolean isPrintable(String string){
+    public static boolean isPrintable(String string) {
         Pattern pattern = Pattern.compile("[:print:]*");
         Matcher matcher = pattern.matcher(string);
         return matcher.find();
