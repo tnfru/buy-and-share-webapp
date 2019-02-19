@@ -1,5 +1,10 @@
 package de.hhu.propra.sharingplatform.service;
 
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
@@ -11,11 +16,6 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @RunWith(SpringRunner.class)
 public class ItemServiceTest {
 
@@ -26,7 +26,6 @@ public class ItemServiceTest {
 
     private Item item;
     private User user;
-    private User user2;
     private ItemService itemService;
 
     @Before
@@ -36,11 +35,8 @@ public class ItemServiceTest {
         user = new User();
         user.setName("Test");
         user.setId((long) 1);
-        user2 = new User();
-        user2.setName("Test2");
-        user2.setId((long) 2);
 
-        item = new Item();
+        item = new Item(user);
         item.setId((long) 1);
         item.setName("TestItem");
         item.setBail(100.0);
@@ -63,7 +59,6 @@ public class ItemServiceTest {
 
     @Test
     public void removeOneItemValidUser() {
-        item.setOwner(user);
         when(itemRepo.findOneById(1)).thenReturn(item);
 
         itemService.removeItem(1, 1);
@@ -73,7 +68,6 @@ public class ItemServiceTest {
 
     @Test
     public void removeOneItemInvalidUser() {
-        item.setOwner(user);
         when(itemRepo.findOneById(1)).thenReturn(item);
 
         itemService.removeItem(1, 2);
@@ -91,28 +85,8 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void getItemValidUser() {
-        item.setOwner(user);
-        when(itemRepo.findOneById(1)).thenReturn(item);
-
-        Item editItem = itemService.getItem(1, 1);
-
-        assert editItem.equals(item);
-    }
-
-    @Test
-    public void getItemInvalidUser() {
-        item.setOwner(user);
-        when(itemRepo.findOneById(1)).thenReturn(item);
-        Item editItem = itemService.getItem(1, 2);
-
-        assert editItem == null;
-    }
-
-    @Test
     public void editItemValidItemAndUser() {
-        item.setOwner(user);
-        Item editItem = new Item();
+        Item editItem = new Item(user);
         editItem.setDescription("This is edited");
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
@@ -130,8 +104,7 @@ public class ItemServiceTest {
 
     @Test
     public void editItemValidItemAndInvalidUser() {
-        item.setOwner(user);
-        Item editItem = new Item();
+        Item editItem = new Item(user);
         editItem.setDescription("This is edited");
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
@@ -147,8 +120,7 @@ public class ItemServiceTest {
 
     @Test
     public void editItemInvalidItemAndValidUser() {
-        item.setOwner(user);
-        Item editItem = new Item();
+        Item editItem = new Item(user);
         editItem.setDescription(null);
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
@@ -163,9 +135,8 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void setItemInvalidItemAndUser() {
-        item.setOwner(user);
-        Item editItem = new Item();
+    public void editItemInvalidItemAndInvalidUser() {
+        Item editItem = new Item(user);
         editItem.setDescription(null);
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
@@ -174,7 +145,7 @@ public class ItemServiceTest {
 
         when(itemRepo.findOneById(1)).thenReturn(item);
 
-        itemService.editItem(editItem, 1, 1);
+        itemService.editItem(editItem, 1, 2);
 
         verify(itemRepo, times(0)).save(any());
     }
