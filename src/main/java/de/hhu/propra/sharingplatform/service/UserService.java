@@ -5,6 +5,7 @@ import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,6 +19,9 @@ import java.util.regex.Pattern;
 public class UserService {
 
     final UserRepo userRepo;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     @Autowired
     public UserService(UserRepo userRepo) {
@@ -56,11 +60,11 @@ public class UserService {
         return search.get();
     }
 
-    public void updatePassword(User oldUser, String newPassword, String confirm) {
-        /* ToDo comparison for salted Hash
-        if (!checkPassword(oldPassword, oldUser)) {
+    public void updatePassword(User oldUser, String oldPassword, String newPassword,
+                               String confirm) {
+        if (!encoder.matches(oldPassword, oldUser.getPasswordHash())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
-        }*/
+        }
         oldUser.setPasswordHash(generatePassword(newPassword, confirm));
         userRepo.save(oldUser);
     }
@@ -102,6 +106,7 @@ public class UserService {
         validateMail(user);
         validateAdress(user);
         validateName(user);
+        validateAccountName(user);
     }
 
     private void validateMail(User user) {
@@ -148,5 +153,17 @@ public class UserService {
         }
     }
 
+    private void validateAccountName(User user) {
+        if (userRepo.findByAccountName(user.getAccountName()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                "Account Name already exists");
+        }
+        if (user.getAccountName().length() > 30) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Name is too long");
+        }
+        if (hasSpecialChars(user.getAccountName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Name is invalid.");
+        }
+    }
 }
 
