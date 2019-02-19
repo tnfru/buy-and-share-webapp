@@ -60,7 +60,8 @@ public class UserService {
         return search.get();
     }
 
-    public void updatePassword(User oldUser,String oldPassword, String newPassword, String confirm) {
+    public void updatePassword(User oldUser, String oldPassword, String newPassword,
+                               String confirm) {
         if (!encoder.matches(oldPassword, oldUser.getPasswordHash())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
         }
