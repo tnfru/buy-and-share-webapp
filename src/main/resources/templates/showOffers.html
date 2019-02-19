@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{base}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>Item-Offers</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 th:text="${item?.name}"></h1>
+    <br>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Requester</th>
+            <th scope="col">Item Price</th>
+            <th scope="col">Item Bail</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Accept/Decline</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="offer : ${offers}">
+            <td th:text="${offer.getBorrower().getName()}"> Requester</td>
+            <td th:text="${offer.getItem().getPrice()}"> Item Price</td>
+            <td th:text="${offer.getItem().getBail()}"> Item Bail</td>
+            <td th:text="${offer.getStart()}"> Offer start date</td>
+            <td th:text="${offer.getEnd()}"> Offer end date</td>
+            <td>
+                <a th:href="|/offer/show/${offer.getId()}/accept|"
+                   class="btn btn-primary btn-sm">Accept request</a>
+                <a th:href="|/offer/show/${offer.getId()}/decline|"
+                   class="btn btn-danger btn-sm">Reject request</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -35,6 +36,9 @@ public class OfferServiceTest {
     @MockBean
     private ApiService apiService;
 
+    @MockBean
+    private ItemService itemService;
+
     private OfferService offerService;
 
     private User owner;
@@ -44,7 +48,8 @@ public class OfferServiceTest {
 
     @Before
     public void setUpTests() {
-        offerService = new OfferService(contractService, offerRepo, apiService, paymentService);
+        offerService = new OfferService(contractService, offerRepo, apiService,
+            paymentService, itemService);
         owner = new User();
         borrower = new User();
         item = new Item(owner);

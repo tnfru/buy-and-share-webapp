@@ -59,6 +59,11 @@ public class ItemService {
         return item.getOwner().getId() == userId;
     }
 
+    public boolean userIsOwner(long itemId, long userId) {
+        Item item = itemRepo.findOneById(itemId);
+        return userIsOwner(item, userId);
+    }
+
     public boolean validateItem(Item item) {
         return (item.getDescription() != null && item.getBail() != null
             && item.getLocation() != null && item.getName() != null && item.getPrice() != null);
