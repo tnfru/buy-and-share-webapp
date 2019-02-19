@@ -4,6 +4,12 @@
 
 <body>
 <div layout:fragment="content">
+
+  <div th:if="${keywords != null}">
+    <h4> Search Keywords</h4>
+    <span class="badge badge-info mr-1 mb-2" th:each="word : ${keywords}" th:text="${word}"></span>
+  </div>
+
   <div class="card-columns">
     <div class="card border-dark" th:each="item : ${items}">
       <img src="images/bike-dummy.png" class="card-img-top">

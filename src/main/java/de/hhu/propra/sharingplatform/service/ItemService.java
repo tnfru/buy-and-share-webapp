@@ -3,6 +3,8 @@ package de.hhu.propra.sharingplatform.service;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -59,5 +61,33 @@ public class ItemService {
     public boolean validateItem(Item item) {
         return (item.getDescription() != null && item.getBail() != null
             && item.getLocation() != null && item.getName() != null && item.getPrice() != null);
+    }
+
+    public List<String> searchKeywords(String search) {
+        if (search.equals("")) {
+            return new ArrayList<>();
+        }
+        search = search.replace(",", " ");
+        search = search.replace("-", " ");
+        search = search.replace("_", " ");
+        search = search.trim().replaceAll(" +", " ");
+        String[] split = search.split(" ");
+        List<String> keywords = new ArrayList<>();
+        for (int i = 0; i < split.length; i++) {
+            keywords.add(split[i]);
+        }
+        return keywords;
+    }
+
+    public List<Item> filter(List<String> keywords) {
+        if (keywords == null || keywords.size() == 0) {
+            return (List<Item>) itemRepo.findAll();
+        }
+        List<Item> items = new ArrayList<>();
+        for (String key : keywords) {
+            List<Item> searching = itemRepo.findAllByNameContainsIgnoreCase(key);
+            items.addAll(searching);
+        }
+        return items;
     }
 }

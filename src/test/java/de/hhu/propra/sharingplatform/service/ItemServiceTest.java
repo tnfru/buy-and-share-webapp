@@ -3,6 +3,9 @@ package de.hhu.propra.sharingplatform.service;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -151,5 +154,95 @@ public class ItemServiceTest {
         when(itemRepo.findOneById(1)).thenReturn(item);
         Item resultItem = itemService.findItem(1);
         assert resultItem.equals(item);
+    }
+
+    @Test
+    public void searchKeywordsEmptyString() {
+        String search = "";
+
+        List<String> keywords = itemService.searchKeywords(search);
+
+        Assert.assertEquals(0, keywords.size());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void searchKeywordsNullString() {
+        String search = null;
+        itemService.searchKeywords(search);
+    }
+
+    @Test
+    public void searchKeywordsOneSpace() {
+        String search = "key words are cool";
+
+        List<String> keywords = itemService.searchKeywords(search);
+
+        Assert.assertEquals(4, keywords.size());
+        Assert.assertEquals("key", keywords.get(0));
+        Assert.assertEquals("words", keywords.get(1));
+        Assert.assertEquals("are", keywords.get(2));
+        Assert.assertEquals("cool", keywords.get(3));
+    }
+
+    @Test
+    public void searchKeywordsMultipleSpaces() {
+        String search = "key     words    are     ";
+
+        List<String> keywords = itemService.searchKeywords(search);
+
+        Assert.assertEquals(3, keywords.size());
+        Assert.assertEquals("key", keywords.get(0));
+        Assert.assertEquals("words", keywords.get(1));
+        Assert.assertEquals("are", keywords.get(2));
+    }
+
+    @Test
+    public void searchKeywordsDifferentSeperators() {
+        String search = "__,key,,  - words-_are   __  ";
+
+        List<String> keywords = itemService.searchKeywords(search);
+
+        Assert.assertEquals(3, keywords.size());
+        Assert.assertEquals("key", keywords.get(0));
+        Assert.assertEquals("words", keywords.get(1));
+        Assert.assertEquals("are", keywords.get(2));
+    }
+
+    @Test
+    public void filterEmptyList() {
+        List<String> keywords = new ArrayList<>();
+        List<Item> dbNoItems = new ArrayList<>();
+        List<Item> dbAllItem = new ArrayList<>();
+        dbAllItem.add(item);
+
+        when(itemRepo.findAllByNameContainsIgnoreCase(any())).thenReturn(dbNoItems);
+        when(itemRepo.findAll()).thenReturn(dbAllItem);
+
+        List<Item> items = itemService.filter(keywords);
+
+        Assert.assertEquals(1, items.size());
+    }
+
+    @Test
+    public void filterKeyswordList() {
+        List<String> keywords = new ArrayList<>();
+        keywords.add("cool");
+        keywords.add("search");
+
+        List<Item> dbFilterParam1 = new ArrayList<>();
+        List<Item> dbFilterParam2 = new ArrayList<>();
+        dbFilterParam1.add(item);
+        dbFilterParam1.add(item);
+        dbFilterParam2.add(item);
+
+        List<Item> dbAllItem = new ArrayList<>();
+
+        when(itemRepo.findAllByNameContainsIgnoreCase("cool")).thenReturn(dbFilterParam1);
+        when(itemRepo.findAllByNameContainsIgnoreCase("search")).thenReturn(dbFilterParam2);
+        when(itemRepo.findAll()).thenReturn(dbAllItem);
+
+        List<Item> items = itemService.filter(keywords);
+
+        Assert.assertEquals(3, items.size());
     }
 }
