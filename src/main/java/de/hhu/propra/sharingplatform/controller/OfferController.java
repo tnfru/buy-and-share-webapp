@@ -46,9 +46,7 @@ public class OfferController {
                               @RequestParam(name = "daterange") String dateRange,
                               Principal principal) {
         User user = userRepo.findByAccountName(principal.getName()).get();
-        Date start = getStart(dateRange);
-        Date end = getEnd(dateRange);
-        //offerService.create(itemId, user, start, end);
+        offerService.create(itemId, user, getStart(dateRange), getEnd(dateRange));
         return "redirect:/";
     }
 
