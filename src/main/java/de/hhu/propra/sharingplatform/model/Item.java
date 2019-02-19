@@ -35,14 +35,14 @@ public class Item {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "item")
-    private List<Offer> offers;
+    private List<Offer> offers = new ArrayList<>();
 
-    public Item() {
-        offers = new ArrayList<>();
+    @SuppressWarnings("unused")
+    private Item() {
+        // used for jpa
     }
 
     public Item(User owner) {
-        offers = new ArrayList<>();
         this.owner = owner;
     }
 }

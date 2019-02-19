@@ -30,7 +30,9 @@ public class Offer {
     private boolean accept;
     private boolean decline;
 
-    public Offer() {
+    @SuppressWarnings("unused")
+    private Offer() {
+        // used for jpa
     }
 
     public Offer(Item item, User borrower, Date start, Date end) {
