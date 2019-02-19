@@ -3,8 +3,6 @@ package de.hhu.propra.sharingplatform.service;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +10,9 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -47,7 +48,7 @@ public class ItemServiceTest {
     @Test
     public void persistOneValidItem() {
         ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
-        when(userService.fetchUserById(1l)).thenReturn(user);
+        when(userService.fetchUserById(1L)).thenReturn(user);
 
         itemService.persistItem(item, 1);
 
@@ -77,7 +78,7 @@ public class ItemServiceTest {
     @Test
     public void dontPersistInvalidItem() {
         item.setLocation(null);
-        when(userService.fetchUserById(1l)).thenReturn(user);
+        when(userService.fetchUserById(1L)).thenReturn(user);
 
         itemService.persistItem(item, 1);
         verify(itemRepo, times(0)).save(any());
