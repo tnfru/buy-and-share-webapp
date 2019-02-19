@@ -100,7 +100,9 @@ public class OfferService {
         Item item = offer.getItem();
         List<Offer> offersWithSameItem = offerRepo.findAllByItemId(item.getId());
         for (Offer offerToTest : offersWithSameItem ) {
-            if (offer.getId().equals(offerToTest.getId())) continue;
+            if (offer.getId().equals(offerToTest.getId())) {
+                continue;
+            }
             if (offer.getStart().after(offerToTest.getStart())) {
                 if (offerToTest.getEnd().after(offer.getStart())) {
                     offerToTest.setDecline(true);
