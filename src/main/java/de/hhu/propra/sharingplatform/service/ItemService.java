@@ -69,6 +69,9 @@ public class ItemService {
     }
 
     public List<String> searchKeywords(String search) {
+        if (search.equals("")) {
+            return new ArrayList<>();
+        }
         search = search.replace(",", " ");
         search = search.replace("-", " ");
         search = search.replace("_", " ");
