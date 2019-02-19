@@ -1,20 +1,17 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
-import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.http.HttpStatus;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ItemService {
 
-    private final ItemRepo itemRepo;
-
     final UserService userService;
+    private final ItemRepo itemRepo;
 
     public ItemService(ItemRepo itemRepo, UserService userService) {
         this.itemRepo = itemRepo;
