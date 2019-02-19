@@ -159,7 +159,7 @@ public class ItemControllerTest {
         user2.setName("name2");
         user2.setBan(false);
         user2.setDeleted(false);
-        user2.setId(2l);
+        user2.setId(2L);
 
         Item item = new Item(user);
         item.setAvailable(true);
