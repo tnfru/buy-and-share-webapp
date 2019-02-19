@@ -130,11 +130,16 @@ public class ValidatorTest {
 
     @Test
     public void isPrintableTrue() {
-        assertTrue(Validator.isPrintable("!§$%&/()=äöüu"));
+        assertTrue(Validator.isPrintable("abx!. "));
     }
 
     @Test
-    public void isPrintableFalse() {
+    public void isPrintableFalse1() {
         assertFalse(Validator.isPrintable("\n"));
+    }
+
+    @Test
+    public void isPrintableFalse2() {
+        assertFalse(Validator.isPrintable("äüö"));
     }
 }
