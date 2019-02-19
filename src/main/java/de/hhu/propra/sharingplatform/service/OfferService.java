@@ -74,7 +74,7 @@ public class OfferService {
 
     public List<Offer> getItemOffers(long itemId, User user) {
         if (itemService.userIsOwner(itemId, user.getId())) {
-            return offerRepo.findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
+            return offerRepo.findAllByItemId(itemId);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This item does not belong to you");

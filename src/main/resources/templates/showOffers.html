@@ -18,7 +18,7 @@
             <th scope="col">Item Bail</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
-            <th scope="col">Accept/Decline</th>
+            <th scope="col">Options</th>
         </tr>
         </thead>
         <tbody>
@@ -28,11 +28,17 @@
             <td th:text="${offer.getItem().getBail()}"> Item Bail</td>
             <td th:text="${offer.getStart()}"> Offer start date</td>
             <td th:text="${offer.getEnd()}"> Offer end date</td>
-            <td>
+            <td th:if="${offer.isAccept()} == ${offer.isDecline()}">
                 <a th:href="|/offer/show/${offer.getId()}/accept|"
                    class="btn btn-primary btn-sm">Accept request</a>
                 <a th:href="|/offer/show/${offer.getId()}/decline|"
                    class="btn btn-danger btn-sm">Reject request</a>
+            </td>
+            <td th:if="${offer.isAccept()} == true">
+                <span class="badge badge-success">Accepted</span>
+            </td>
+            <td th:if="${offer.isDecline()} == true">
+                <span class="badge badge-danger">Declined</span>
             </td>
         </tr>
         </tbody>
