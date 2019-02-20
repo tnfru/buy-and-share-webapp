@@ -1,29 +1,29 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.OfferRepo;
-import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.Offer;
-import de.hhu.propra.sharingplatform.model.User;
-import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Date;
-
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyDouble;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@Ignore
+import de.hhu.propra.sharingplatform.dao.OfferRepo;
+import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.Offer;
+import de.hhu.propra.sharingplatform.model.User;
+import java.time.LocalDateTime;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
+
 @RunWith(SpringRunner.class)
 public class OfferServiceTest {
 
@@ -57,16 +57,16 @@ public class OfferServiceTest {
         borrower = new User();
         item = new Item(owner);
 
-        Date start = new Date();
-        Date end = new Date();
-        end.setTime(start.getTime() + 1337);
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now();
+        end = end.plusDays(3);
         offer = new Offer(item, borrower, start, end);
     }
 
     /*
     @Test
     public void createTest() {
-        offerService.create(item, borrower, new Date(), new Date());
+        offerService.create(item, borrower, new LocalDateTime(), new LocalDateTime());
 
         ArgumentCaptor<Offer> argument = ArgumentCaptor.forClass(Offer.class);
         verify(offerRepo, times(1)).save(argument.capture());
@@ -81,14 +81,15 @@ public class OfferServiceTest {
 
     @Test(expected = NullPointerException.class)
     public void createItemNullTest() {
-        offerService.create(null, borrower, new Date(), new Date());
+        offerService.create(null, borrower, new LocalDateTime(), new LocalDateTime());
     }
 
     @Test(expected = NullPointerException.class)
     public void createUserNullTest() {
-        offerService.create(item, null, new Date(), new Date());
+        offerService.create(item, null, new LocalDateTime(), new LocalDateTime());
     }*/
 
+    @Ignore
     @Test
     public void acceptOfferTest() {
         when(offerRepo.findOneById(anyLong())).thenReturn(offer);
@@ -106,6 +107,7 @@ public class OfferServiceTest {
         assertFalse(offer.isDecline());
     }
 
+    @Ignore
     @Test(expected = NullPointerException.class)
     public void acceptOfferNotInDbTest() {
         when(offerRepo.findOneById(anyLong())).thenReturn(null);
@@ -129,6 +131,7 @@ public class OfferServiceTest {
         assertFalse(offer.isAccept());
     }
 
+    @Ignore
     @Test(expected = NullPointerException.class)
     public void declineOfferNotInDbTest() {
         when(offerRepo.findOneById(anyLong())).thenReturn(null);
@@ -140,14 +143,10 @@ public class OfferServiceTest {
 
     /*@Test
     public void startAfterEnd() {
-        long millisecondsInDay = 1000 * 60 * 60 * 24;
-
         Item item = mock(Item.class);
         User requester = mock(User.class);
-        Date start = mock(Date.class);
-        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
-        Date end = mock(Date.class);
-        when(end.getTime()).thenReturn(1336 * millisecondsInDay);
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now().minusDays(1);
 
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
 
@@ -156,15 +155,11 @@ public class OfferServiceTest {
 
     @Test
     public void sameStartAndEnd() {
-        long millisecondsInDay = 1000 * 60 * 60 * 24;
-
         Item item = mock(Item.class);
         User requester = mock(User.class);
 
-        Date start = mock(Date.class);
-        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
-        Date end = mock(Date.class);
-        when(end.getTime()).thenReturn(1337 * millisecondsInDay);
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.from(start);
 
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
 
@@ -173,16 +168,12 @@ public class OfferServiceTest {
 
     @Test
     public void itemUnavailable() {
-        long millisecondsInDay = 1000 * 60 * 60 * 24;
-
         Item item = mock(Item.class);
         when(item.isAvailable()).thenReturn(false);
         User requester = mock(User.class);
 
-        Date start = mock(Date.class);
-        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
-        Date end = mock(Date.class);
-        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now().plusDays(360);
 
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
 
@@ -191,16 +182,12 @@ public class OfferServiceTest {
 
     @Test
     public void notSolvent() {
-        long millisecondsInDay = 1000 * 60 * 60 * 24;
-
         Item item = mock(Item.class);
         when(item.isAvailable()).thenReturn(true);
         User requester = mock(User.class);
 
-        Date start = mock(Date.class);
-        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
-        Date end = mock(Date.class);
-        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now().plusDays(360);
 
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
         when(apiService.isSolvent(any(), anyDouble())).thenReturn(false);
@@ -210,18 +197,14 @@ public class OfferServiceTest {
 
     @Test
     public void requesterBanned() {
-        long millisecondsInDay = 1000 * 60 * 60 * 24;
-
         Item item = mock(Item.class);
         when(item.isAvailable()).thenReturn(true);
         when(item.getBail()).thenReturn(10.0);
         User requester = mock(User.class);
         when(requester.isBan()).thenReturn(true);
 
-        Date start = mock(Date.class);
-        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
-        Date end = mock(Date.class);
-        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now().plusDays(360);
 
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
         when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);
@@ -232,17 +215,13 @@ public class OfferServiceTest {
 
     @Test
     public void allGucci() {
-        long millisecondsInDay = 1000 * 60 * 60 * 24;
-
         Item item = mock(Item.class);
         when(item.isAvailable()).thenReturn(true);
         User requester = mock(User.class);
         when(requester.isBan()).thenReturn(false);
 
-        Date start = mock(Date.class);
-        when(start.getTime()).thenReturn(1337 * millisecondsInDay);
-        Date end = mock(Date.class);
-        when(end.getTime()).thenReturn(7331 * millisecondsInDay);
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now().plusDays(360);
 
         when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
         when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);

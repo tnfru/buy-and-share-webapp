@@ -1,6 +1,6 @@
 package de.hhu.propra.sharingplatform.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,9 +26,9 @@ public class Contract {
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Item item;
-    private Date start;
-    private Date expectedEnd;
-    private Date realEnd;
+    private LocalDateTime start;
+    private LocalDateTime expectedEnd;
+    private LocalDateTime realEnd;
     private boolean isConflict;
 
     @SuppressWarnings("unused")

@@ -5,18 +5,19 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.validation.OfferValidator;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class OfferService {
 
     private OfferRepo offerRepo;
+
 
     private ContractService contractService;
 
@@ -37,7 +38,7 @@ public class OfferService {
         this.itemService = itemService;
     }
 
-    public void create(long itemId, User requester, Date start, Date end) {
+    public void create(long itemId, User requester, LocalDateTime start, LocalDateTime end) {
         Item item = itemService.findItem(itemId);
         validate(item, requester, start, end);
 
@@ -47,7 +48,7 @@ public class OfferService {
         offerRepo.save(offer);
     }
 
-    public void validate(Item item, User requester, Date start, Date end) {
+    public void validate(Item item, User requester, LocalDateTime start, LocalDateTime end) {
         OfferValidator.validate(item, requester, start, end, paymentService, apiService);
     }
 
@@ -85,13 +86,13 @@ public class OfferService {
             if (offer.getId().equals(offerToTest.getId())) {
                 continue;
             }
-            if (offer.getStart().after(offerToTest.getStart())) {
-                if (offerToTest.getEnd().after(offer.getStart())) {
+            if (offer.getStart().isAfter(offerToTest.getStart())) {
+                if (offerToTest.getEnd().isAfter(offer.getStart())) {
                     offerToTest.setDecline(true);
                     offerRepo.save(offerToTest);
                 }
             } else {
-                if (offer.getEnd().after(offerToTest.getStart())) {
+                if (offer.getEnd().isAfter(offerToTest.getStart())) {
                     offerToTest.setDecline(true);
                     offerRepo.save(offerToTest);
                 }
