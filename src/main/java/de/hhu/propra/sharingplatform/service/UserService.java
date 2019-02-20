@@ -84,12 +84,6 @@ public class UserService {
         return (search.get().getId());
     }
 
-    /*  //TODO necessary?
-    public boolean checkPassword(String password, User user) {
-        return user.getPasswordHash().equals(hashPassword(password));
-    }
-    */
-
     private String hashPassword(String plainPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(plainPassword);
