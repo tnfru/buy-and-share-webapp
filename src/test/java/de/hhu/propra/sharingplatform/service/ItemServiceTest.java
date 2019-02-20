@@ -27,10 +27,12 @@ public class ItemServiceTest {
     private Item item;
     private User user;
     private ItemService itemService;
+    private ImageService imageService;
 
     @Before
     public void init() {
-        itemService = new ItemService(itemRepo, userService);
+        imageService = mock(ImageService.class);
+        itemService = new ItemService(itemRepo, userService, imageService);
 
         user = new User();
         user.setName("Test");
