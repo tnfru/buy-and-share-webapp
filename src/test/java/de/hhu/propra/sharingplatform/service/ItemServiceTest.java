@@ -45,6 +45,7 @@ public class ItemServiceTest {
         item = new Item(user);
         item.setId((long) 1);
         item.setName("TestItem");
+        item.setOwner(user);
         item.setBail(100.0);
         item.setPrice(20.0);
         item.setDescription("This is a test");
@@ -75,12 +76,18 @@ public class ItemServiceTest {
 
     @Test
     public void removeOneItemInvalidUser() {
+        boolean thrown = false;
         Optional<Item> optional = Optional.ofNullable(item);
         when(itemRepo.findById(anyLong())).thenReturn(optional);
 
-        itemService.removeItem(1L, 2);
-
+        try {
+            itemService.removeItem(1L, 2);
+        } catch (ResponseStatusException rse) {
+            thrown = true;
+            assertEquals("403 FORBIDDEN \"Not your Item\"", rse.getMessage());
+        }
         assertFalse(itemRepo.findById(1L).get().isDeleted());
+        assertTrue(thrown);
     }
 
     @Test
@@ -106,6 +113,7 @@ public class ItemServiceTest {
         editItem.setPrice(item.getPrice());
         editItem.setBail(item.getBail());
         editItem.setName(item.getName());
+        editItem.setOwner(user);
         ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
         Optional<Item> optional = Optional.ofNullable(item);
 

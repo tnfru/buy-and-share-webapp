@@ -31,12 +31,7 @@ public class ItemService {
     }
 
     public void removeItem(long itemId, long userId) {
-        Optional<Item> optional = itemRepo.findById(itemId);
-        if (!optional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-
-        Item item = optional.get();
+        Item item = findIfPresent(itemId);
         allowOnlyOwner(item, userId);
 
         if (userIsOwner(item.getId(), userId)) {
@@ -45,13 +40,16 @@ public class ItemService {
         }
     }
 
-    public Item findItem(long itemId) {
+    private Item findIfPresent(long itemId) {
         Optional<Item> optional = itemRepo.findById(itemId);
         if (!optional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid Item");
         }
+        return optional.get();
+    }
 
-        Item item = optional.get();
+    public Item findItem(long itemId) {
+        Item item = findIfPresent(itemId);
         if (item.isDeleted()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This Item was deleted");
         }
@@ -60,8 +58,8 @@ public class ItemService {
 
     public void editItem(Item newItem, long oldItemId, long userId) {
         validateItem(newItem);
-        if (userIsOwner(findItem(oldItemId).getId(), userId)) {
-            Item oldItem = itemRepo.findOneById(oldItemId);
+        Item oldItem = findIfPresent(oldItemId);
+        if (userIsOwner(oldItem.getId(), userId)) {
             newItem.setOwner(oldItem.getOwner());
             newItem.setId(oldItem.getId());
             newItem.setAvailable(oldItem.isAvailable());
@@ -76,7 +74,7 @@ public class ItemService {
     }
 
     public boolean userIsOwner(long itemId, long userId) {
-        Item item = itemRepo.findOneById(itemId);
+        Item item = findIfPresent(itemId);
         return item.getOwner().getId() == userId;
     }
 
