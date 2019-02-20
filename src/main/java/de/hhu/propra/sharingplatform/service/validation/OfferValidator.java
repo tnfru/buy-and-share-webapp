@@ -7,17 +7,16 @@ import de.hhu.propra.sharingplatform.service.PaymentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class OfferValidator {
 
-    public static void validate(Item item, User requester, Date start, Date end,
+    public static void validate(Item item, User requester, LocalDateTime start, LocalDateTime end,
                                 PaymentService paymentService, ApiService apiService) {
-        //TODO dates valid?
-        long millisecondsInDay = 1000 * 60 * 60 * 24;
         double totalCost = paymentService.calculateTotalPrice(item, start, end) + item.getBail();
 
-        if ((end.getTime() - start.getTime()) / millisecondsInDay < 1) {
+        if (start.until(end, ChronoUnit.DAYS) < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End date needs to be after"
                 + " Start date");
         }
