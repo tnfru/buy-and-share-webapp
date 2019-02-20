@@ -3,11 +3,10 @@ package de.hhu.propra.sharingplatform.service;
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Offer;
+import java.time.LocalDateTime;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 @Service
 @Data
@@ -36,7 +35,7 @@ public class ContractService {
 
     public void endContract(long contractId) {
         Contract contract = contractRepo.findOneById(contractId);
-        Date current = new Date();
+        LocalDateTime current = LocalDateTime.now();
 
         contract.setRealEnd(current);
         contractRepo.save(contract);
