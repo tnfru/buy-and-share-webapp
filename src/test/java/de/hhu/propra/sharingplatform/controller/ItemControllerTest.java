@@ -4,6 +4,7 @@ import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.ImageService;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
@@ -47,6 +48,9 @@ public class ItemControllerTest {
 
     @MockBean
     private OfferService offerService;
+
+    @MockBean
+    private ImageService imageService;
     /*
     NOT LOGGED in
      */
