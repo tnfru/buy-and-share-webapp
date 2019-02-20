@@ -13,20 +13,18 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class UserService {
 
-    final UserRepo userRepo;
+    private final UserRepo userRepo;
+
+    private final PasswordEncoder encoder;
 
     @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
+        this.encoder = encoder;
     }
 
     public void persistUser(User user, String password, String confirm) {
@@ -71,10 +69,10 @@ public class UserService {
     }
 
     public User fetchUserById(Long userId) {
-        /*Optional<User> search = userRepo.findOneById(userId);
+        Optional<User> search = Optional.ofNullable(userRepo.findOneById(userId));
         if (!search.isPresent()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
-        }*/
+        }
         return userRepo.findOneById(userId);
     }
 
@@ -86,9 +84,11 @@ public class UserService {
         return (search.get().getId());
     }
 
+    /*  //TODO necessary?
     public boolean checkPassword(String password, User user) {
         return user.getPasswordHash().equals(hashPassword(password));
     }
+    */
 
     private String hashPassword(String plainPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -100,16 +100,15 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                 "Passwords need to be the same.");
         }
-        validatePasswords(password);
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
+        validatePassword(password);
+        return hashPassword(password);
     }
 
     private void validateUser(User user) {
         UserValidator.validateUser(user, userRepo);
     }
 
-    private void validatePasswords(String password) {
+    private void validatePassword(String password) {
         UserValidator.validatePassword(password);
     }
 
