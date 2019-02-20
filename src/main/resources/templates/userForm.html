@@ -3,35 +3,41 @@
       layout:decorate="~{base}">
 <body>
 
-<div layout:fragment="content">
-  <h1 th:if="${user?.Id} == NULL">New Profile</h1>
-  <h1 th:unless="${user?.Id} == NUll" th:text="|Edit Account: ${user?.accountName}|"></h1>
-  <br>
-  <form method="post">
-    <label>
-      <span>Name:(*)</span>
-      <p><input type="text" name="name" th:value="${user?.name}" required></p>
-      <span>Address:(*)</span>
-      <p><input type="text" name="address" th:value="${user?.address}" required></p>
-      <span th:if="${user?.Id} == NULL">AccountName:(*)</span>
-      <p th:if="${user?.Id} == NULL"><input type="text" name="accountName"
-                                            th:value="${user?.accountName}" required></p>
-      <span>Email:(*)</span>
-      <p><input type="text" name="email" th:value="${user?.email}" required></p>
-      <span>PropayID:</span>
-      <p><input type="text" name="propayId" th:value="${user?.propayId}"></p>
-      <span th:if="${user?.Id} == NULL">Password:(*)</span>
-      <p th:if="${user?.Id} == NULL"><input type="password" name="password" required></p>
-      <span th:if="${user?.Id} == NULL">Confirm Password:(*)</span>
-      <p th:if="${user?.Id} == NULL"><input type="password" name="confirm" required></p>
-      <br>
-      <p>All Fields marked with * are required!</p>
-      <br>
-      <button type="submit" class="btn btn-primary" action="POST">Send</button>
-    </label>
-  </form>
+<div layout:fragment="content" th:switch="${!#authorization.expression('isAuthenticated()')}">
+  <div th:case="${true}">
+    <h1 th:if="${user?.Id} == NULL">New Profile</h1>
+    <h1 th:unless="${user?.Id} == NUll" th:text="|Edit Account: ${user?.accountName}|"></h1>
+    <br>
+    <form method="post">
+      <label>
+        <span>Name:(*)</span>
+        <p><input type="text" name="name" th:value="${user?.name}" required></p>
+        <span>Address:(*)</span>
+        <p><input type="text" name="address" th:value="${user?.address}" required></p>
+        <span th:if="${user?.Id} == NULL">AccountName:(*)</span>
+        <p th:if="${user?.Id} == NULL"><input type="text" name="accountName"
+                                              th:value="${user?.accountName}" required></p>
+        <span>Email:(*)</span>
+        <p><input type="text" name="email" th:value="${user?.email}" required></p>
+        <span>PropayID:</span>
+        <p><input type="text" name="propayId" th:value="${user?.propayId}"></p>
+        <span th:if="${user?.Id} == NULL">Password:(*)</span>
+        <p th:if="${user?.Id} == NULL"><input type="password" name="password" required></p>
+        <span th:if="${user?.Id} == NULL">Confirm Password:(*)</span>
+        <p th:if="${user?.Id} == NULL"><input type="password" name="confirm" required></p>
+        <br>
+        <p>All Fields marked with * are required!</p>
+        <br>
+        <button type="submit" class="btn btn-primary" action="POST">Send</button>
+      </label>
+    </form>
+  </div>
 
+  <div th:case= "${false}">
+    <h1 style="align-content: center;">You are already logged in!</h1>
+  </div>
 </div>
+
 
 </body>
 
