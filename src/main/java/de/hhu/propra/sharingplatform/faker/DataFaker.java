@@ -8,15 +8,18 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.OfferService;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.ServletContext;
-import java.util.*;
-import java.util.logging.Logger;
 
 @Component
 public class DataFaker implements ServletContextInitializer {
@@ -92,8 +95,8 @@ public class DataFaker implements ServletContextInitializer {
 
             if (item.getOwner().getId() != user.getId()) {
                 offerService.create(item.getId(), user,
-                    new Date(29, 2, 30),
-                    new Date(30, 3, 10));
+                    LocalDateTime.of(30, 2, 12, 12, 56),
+                    LocalDateTime.of(30, 3, 10, 13, 43));
 
             } else {
                 i--;
