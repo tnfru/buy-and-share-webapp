@@ -4,13 +4,13 @@ import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
-import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ItemService {
@@ -37,7 +37,9 @@ public class ItemService {
         }
 
         Item item = optional.get();
-        if (userIsOwner(item, userId)) {
+        allowOnlyOwner(item, userId);
+
+        if (userIsOwner(item.getId(), userId)) {
             item.setDeleted(true);
             itemRepo.save(item);
         }
@@ -58,7 +60,7 @@ public class ItemService {
 
     public void editItem(Item newItem, long oldItemId, long userId) {
         validateItem(newItem);
-        if (userIsOwner(findItem(oldItemId), userId)) {
+        if (userIsOwner(findItem(oldItemId).getId(), userId)) {
             Item oldItem = itemRepo.findOneById(oldItemId);
             newItem.setOwner(oldItem.getOwner());
             newItem.setId(oldItem.getId());
@@ -67,13 +69,15 @@ public class ItemService {
         }
     }
 
-    public boolean userIsOwner(Item item, long userId) {
-        return item.getOwner().getId() == userId;
+    public void allowOnlyOwner(Item item, long userId) {
+        if (item.getOwner().getId() != userId) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your Item");
+        }
     }
 
     public boolean userIsOwner(long itemId, long userId) {
         Item item = itemRepo.findOneById(itemId);
-        return userIsOwner(item, userId);
+        return item.getOwner().getId() == userId;
     }
 
     public void validateItem(Item item) {
