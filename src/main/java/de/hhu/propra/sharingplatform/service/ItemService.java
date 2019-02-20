@@ -32,20 +32,20 @@ public class ItemService {
         itemRepo.save(item);
     }
 
-    public void removeItem(long itemId, long userId) {
-        Item item = findIfPresent(itemId);
-        if (userIsOwner(item, userId)) {
-            item.setDeleted(true);
-            itemRepo.save(item);
-        }
-    }
-
     private Item findIfPresent(long itemId) {
         Optional<Item> optional = itemRepo.findById(itemId);
         if (!optional.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid Item");
         }
         return optional.get();
+    }
+
+    public void removeItem(long itemId, long userId) {
+        Item item = findIfPresent(itemId);
+        if (userIsOwner(item, userId)) {
+            item.setDeleted(true);
+            itemRepo.save(item);
+        }
     }
 
     public Item findItem(long itemId) {
@@ -58,8 +58,8 @@ public class ItemService {
 
     public void editItem(Item newItem, long oldItemId, long userId) {
         validateItem(newItem);
-        if (userIsOwner(findItem(oldItemId), userId)) {
-            Item oldItem = itemRepo.findOneById(oldItemId);
+        Item oldItem = findIfPresent(oldItemId);
+        if (userIsOwner(oldItem, userId)) {
             newItem.setOwner(oldItem.getOwner());
             newItem.setId(oldItem.getId());
             newItem.setAvailable(oldItem.isAvailable());
