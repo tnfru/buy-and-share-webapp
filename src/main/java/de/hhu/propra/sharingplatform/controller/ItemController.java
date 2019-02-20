@@ -57,7 +57,10 @@ public class ItemController {
     public String inputItemData(Model model, Item item, Principal principal,
                                 @RequestParam("file") MultipartFile file) {
         itemService.persistItem(item, userService.fetchUserIdByAccountName(principal.getName()));
-        storageService.store(file, "item" + item.getId());
+        String imagefilename = "item-" + item.getId();
+        item.setImageFileName(imagefilename);
+        storageService.store(file, imagefilename);
+        itemService.persistItem(item, userService.fetchUserIdByAccountName(principal.getName()));
         return "redirect:/user/account/";
     }
 
