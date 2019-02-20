@@ -6,6 +6,7 @@ import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -86,7 +87,8 @@ public class OfferController {
         String[] dates = formattedDateRange.split(" - ");
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         try {
-            return LocalDateTime.parse(dates[0], format);
+            LocalDate date = LocalDate.parse(dates[0], format);
+            return date.atStartOfDay();
         } catch (DateTimeParseException parseException) {
             parseException.printStackTrace();
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong dateformat");
@@ -97,7 +99,8 @@ public class OfferController {
         String[] dates = formattedDateRange.split(" - ");
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         try {
-            LocalDateTime end = LocalDateTime.parse(dates[1], format);
+            LocalDate endDate = LocalDate.parse(dates[1], format);
+            LocalDateTime end = endDate.atStartOfDay();
             end = end.plusSeconds(59);
             end = end.plusMinutes(59);
             end = end.plusHours(23);
