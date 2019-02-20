@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.server.ResponseStatusException;
 
 @RunWith(SpringRunner.class)
 public class UserServiceTest {
@@ -51,7 +52,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void persistUser() {
+    public void persistUserTest() {
         User user = createUser("name", "accountname", "addresse", "e@mail.de");
         ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
 
@@ -62,12 +63,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void loginUsingSpring() {
-        //ToDo ?
-    }
-
-    @Test
-    public void updateUser() {
+    public void updateUserTest() {
         User oldUser = createUser("typ", "hobo", "foo", "e@mail.de");
         User newUser = createUser("typo", "hobo", "bar", "e@mail.de");
         ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
@@ -77,7 +73,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void updatePassword() {
+    public void updatePasswordTest() {
         ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
         User user = createUser("name", "dude", "wo", "e@mai.de");
         String password = "123";
@@ -95,16 +91,77 @@ public class UserServiceTest {
     }
 
     @Test
-    public void fetchUserByAccountName() {
+    public void updatePasswordIncorrectPassword() {
+        boolean thrown = false;
+        User user = createUser("name", "accName", "address", "e@mail.de");
+        try {
+            userService.updatePassword(user,"wrongOld", "new", "new");
+            when(encoder.matches(anyString(), anyString())).thenReturn(false);
+        } catch (ResponseStatusException rse) {
+            thrown = true;
+            assertEquals("400 BAD_REQUEST \"Incorrect Password\"",
+                rse.getMessage());
+        }
+        verify(userRepo, times(0)).save(any());
+        assertTrue(thrown);
     }
 
 
     @Test
-    public void fetchUserIdByAccountName() {
+    public void fetchUserByAccountNameUserNotFound() {
+        boolean thrown = false;
+        try {
+            userService.fetchUserByAccountName("accName");
+        } catch (ResponseStatusException rse) {
+            thrown = true;
+            assertEquals("500 INTERNAL_SERVER_ERROR \"Could not authenticate User.\"",
+                rse.getMessage());
+        }
+        verify(userRepo, times(0)).save(any());
+        assertTrue(thrown);
     }
 
     @Test
-    public void checkPassword() {
+    public void fetchUserIdByAccountNameUserNotFound() {
+        boolean thrown = false;
+        try {
+            userService.fetchUserIdByAccountName("accName");
+        } catch (ResponseStatusException rse) {
+            thrown = true;
+            assertEquals("500 INTERNAL_SERVER_ERROR \"Could not authenticate User.\"",
+                rse.getMessage());
+        }
+        verify(userRepo, times(0)).save(any());
+        assertTrue(thrown);
+    }
+
+    @Test
+    public void fetchUserByIdUserNotFound() {
+        boolean thrown = false;
+        try {
+            userService.fetchUserById((long) 1);
+        } catch (ResponseStatusException rse) {
+            thrown = true;
+            assertEquals("500 INTERNAL_SERVER_ERROR \"Could not authenticate User.\"",
+                rse.getMessage());
+        }
+        verify(userRepo, times(0)).save(any());
+        assertTrue(thrown);
+    }
+
+    @Test
+    public void generatePasswordPasswordNotEqual() {
+        boolean thrown = false;
+        User user = createUser("name", "accName", "address", "e@mail.de");
+        try {
+            userService.persistUser(user, "password", "passwort");
+        } catch (ResponseStatusException rse) {
+            thrown = true;
+            assertEquals("400 BAD_REQUEST \"Passwords need to be the same.\"",
+                rse.getMessage());
+        }
+        verify(userRepo, times(0)).save(any());
+        assertTrue(thrown);
     }
 
 }
