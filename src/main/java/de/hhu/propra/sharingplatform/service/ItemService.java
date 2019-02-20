@@ -6,6 +6,7 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -15,14 +16,17 @@ import java.util.Optional;
 @Service
 public class ItemService {
 
+    private ImageService itemImageSaver;
     private final UserService userService;
     private final ItemRepo itemRepo;
 
-    public ItemService(ItemRepo itemRepo, UserService userService) {
+    public ItemService(ItemRepo itemRepo, UserService userService, ImageService itemImageSaver) {
         this.itemRepo = itemRepo;
         this.userService = userService;
+        this.itemImageSaver = itemImageSaver;
     }
 
+    @Deprecated
     public void persistItem(Item item, long userId) {
         validateItem(item);
         User owner = userService.fetchUserById(userId);
@@ -30,13 +34,19 @@ public class ItemService {
         itemRepo.save(item);
     }
 
-    public void removeItem(long itemId, long userId) {
-        Optional<Item> optional = itemRepo.findById(itemId);
-        if (!optional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    public void persistItem(Item item, long userId, MultipartFile image) {
+        validateItem(item);
+        User owner = userService.fetchUserById(userId);
+        item.setOwner(owner);
+        itemRepo.save(item);
+        String imagefilename = "item-" + item.getId();
+        itemImageSaver.store(image, imagefilename);
+        item.setImageFileName(imagefilename);
+        itemRepo.save(item);
+    }
 
-        Item item = optional.get();
+    public void removeItem(long itemId, long userId) {
+        Item item = findIfPresent(itemId);
         allowOnlyOwner(item, userId);
 
         if (userIsOwner(item.getId(), userId)) {
@@ -45,13 +55,16 @@ public class ItemService {
         }
     }
 
-    public Item findItem(long itemId) {
+    private Item findIfPresent(long itemId) {
         Optional<Item> optional = itemRepo.findById(itemId);
         if (!optional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid Item");
         }
+        return optional.get();
+    }
 
-        Item item = optional.get();
+    public Item findItem(long itemId) {
+        Item item = findIfPresent(itemId);
         if (item.isDeleted()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This Item was deleted");
         }
@@ -76,7 +89,7 @@ public class ItemService {
     }
 
     public boolean userIsOwner(long itemId, long userId) {
-        Item item = itemRepo.findOneById(itemId);
+        Item item = findIfPresent(itemId);
         return item.getOwner().getId() == userId;
     }
 

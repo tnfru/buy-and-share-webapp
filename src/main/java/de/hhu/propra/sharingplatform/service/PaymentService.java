@@ -42,7 +42,7 @@ public class PaymentService {
         return timePassed * contract.getItem().getPrice();
     }
 
-    double calculateTotalPrice(Item item, LocalDateTime start, LocalDateTime end) {
+    public double calculateTotalPrice(Item item, LocalDateTime start, LocalDateTime end) {
         long timePassed = start.until(end, ChronoUnit.DAYS);
         return timePassed * item.getPrice();
     }

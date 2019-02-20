@@ -11,7 +11,7 @@
 	<h1 th:text="${item?.name}"></h1>
     <h5 th:text="|${item?.name}|"></h5>
     <br>
-    <p>Bild Platzhalter</p>
+    <img th:src="@{${'/images/' + item?.imageFileName}}"/>
     <p th:if="${item?.available} == true" style="color: forestgreen">Verfügbar</p>
     <p th:if="${item?.available} == false" style="color: crimson">Aktuell verliehen</p>
     <strong>Beschreibung:</strong>
