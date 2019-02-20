@@ -5,12 +5,15 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 
@@ -20,6 +23,7 @@ public class ItemController {
     private final ItemService itemService;
     private final OfferService offerService;
     private final UserService userService;
+
 
     @Autowired
     public ItemController(ItemService itemService, OfferService offerService,
@@ -49,8 +53,10 @@ public class ItemController {
     }
 
     @PostMapping("/item/new")
-    public String inputItemData(Model model, Item item, Principal principal) {
-        itemService.persistItem(item, userService.fetchUserIdByAccountName(principal.getName()));
+    public String inputItemData(Model model, Item item, Principal principal,
+                                @RequestParam("file") MultipartFile file) {
+        itemService
+            .persistItem(item, userService.fetchUserIdByAccountName(principal.getName()), file);
         return "redirect:/user/account/";
     }
 

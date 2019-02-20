@@ -6,6 +6,7 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -15,18 +16,32 @@ import java.util.Optional;
 @Service
 public class ItemService {
 
+    private ImageService itemImageSaver;
     private final UserService userService;
     private final ItemRepo itemRepo;
 
-    public ItemService(ItemRepo itemRepo, UserService userService) {
+    public ItemService(ItemRepo itemRepo, UserService userService, ImageService itemImageSaver) {
         this.itemRepo = itemRepo;
         this.userService = userService;
+        this.itemImageSaver = itemImageSaver;
     }
 
+    @Deprecated
     public void persistItem(Item item, long userId) {
         validateItem(item);
         User owner = userService.fetchUserById(userId);
         item.setOwner(owner);
+        itemRepo.save(item);
+    }
+
+    public void persistItem(Item item, long userId, MultipartFile image) {
+        validateItem(item);
+        User owner = userService.fetchUserById(userId);
+        item.setOwner(owner);
+        itemRepo.save(item);
+        String imagefilename = "item-" + item.getId();
+        itemImageSaver.store(image, imagefilename);
+        item.setImageFileName(imagefilename);
         itemRepo.save(item);
     }
 

@@ -14,39 +14,42 @@
 <div layout:fragment="content">
     <h1 th:if="${item?.Id} == NULL">Neuen Gegenstand anlegen</h1>
     <h1 th:unless="${item?.Id} == NULL" th:text="|${item?.name} editieren|"></h1>
-  <br>
-  <form method="post" style="margin-left: 1em;" th:object="${item}">
-    <label>
-      <br>
-      Bezeichnung:(*)<br>
-      <input type="text" name="name" th:value="${item?.name}" required></input>
-      <br>
-      <br>
-      Tagessatz:(*)<br>
-      <input type="number" name="price" min="0" th:value="${item?.price}" required></input>
-      <br>
-      <br>
-      Kaution:(*)<br>
-      <input type="number" name="bail" min="0" th:value="${item?.bail}" required></input>
-      <br>
-      <br>
-      Abholadresse:(*)<br>
-      <input type="text" name="location" th:value="${item?.location}" required></input>
-      <br>
-      <br>
-      Beschreibung:(*)<br>
-      <textarea cols="80" name="description" rows="20"
-                th:field="*{description}" required></textarea>
-    </label>
     <br>
+    <form method="post" style="margin-left: 1em;" th:object="${item}" enctype="multipart/form-data">
+        <label>
+            <br>
+            Upload image: (*)
+            <input type="file" name="file"/>
+            <br>
+            Bezeichnung:(*)<br>
+            <input type="text" name="name" th:value="${item?.name}" required></input>
+            <br>
+            <br>
+            Tagessatz:(*)<br>
+            <input type="number" name="price" min="0" th:value="${item?.price}" required></input>
+            <br>
+            <br>
+            Kaution:(*)<br>
+            <input type="number" name="bail" min="0" th:value="${item?.bail}" required></input>
+            <br>
+            <br>
+            Abholadresse:(*)<br>
+            <input type="text" name="location" th:value="${item?.location}" required></input>
+            <br>
+            <br>
+            Beschreibung:(*)<br>
+            <textarea cols="80" name="description" rows="20"
+                      th:field="*{description}" required></textarea>
+        </label>
+        <br>
+        <br>
+        Alle mit * versehenen Angaben sind Pflichtfelder!
+        <br>
+        <br>
+        <button type="submit" class="btn btn-primary" action="POST">Speichern</button>
+    </form>
     <br>
-    Alle mit * versehenen Angaben sind Pflichtfelder!
-    <br>
-    <br>
-    <button type="submit" class="btn btn-primary" action="POST">Speichern</button>
-  </form>
-  <br>
-  <!-- <a th:href="|/user/account/${user.id}| ">Ohne speichern zurück</a> -->
+    <!-- <a th:href="|/user/account/${user.id}| ">Ohne speichern zurück</a> -->
 </div>
 </body>
 </html>
