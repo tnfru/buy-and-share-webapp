@@ -41,8 +41,8 @@ public class OfferController {
 
     @PostMapping("/offer/request/{itemId}")
     public String createOffer(@PathVariable long itemId,
-                              @RequestParam(name = "daterange") String dateRange,
-                              Principal principal) {
+        @RequestParam(name = "daterange") String dateRange,
+        Principal principal) {
         User user = userService.fetchUserByAccountName(principal.getName());
         offerService.create(itemId, user, getStart(dateRange), getEnd(dateRange));
         return "redirect:/";

@@ -112,8 +112,7 @@ public class DataFaker implements ServletContextInitializer {
                 } else {
                     offerService.declineOffer(offer.getId(), offer.getItem().getOwner());
                 }
-            }
-            else{
+            } else {
                 i--;
             }
         }
