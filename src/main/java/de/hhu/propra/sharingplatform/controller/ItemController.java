@@ -5,13 +5,14 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
-import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.security.Principal;
 
 @Controller
 public class ItemController {
@@ -33,7 +34,7 @@ public class ItemController {
         Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
         model.addAttribute("user", userService.fetchUserByAccountName(principal.getName()));
-        boolean ownItem = itemService.userIsOwner(item,
+        boolean ownItem = itemService.userIsOwner(item.getId(),
             userService.fetchUserIdByAccountName(principal.getName()));
         model.addAttribute("ownItem", ownItem);
         return "itemDetails";
@@ -68,10 +69,8 @@ public class ItemController {
         model.addAttribute("itemId", itemId);
         long userId = userService.fetchUserIdByAccountName(principal.getName());
         model.addAttribute("userId", userId);
-        if (itemService.userIsOwner(item, userId)) {
-            return "itemForm";
-        }
-        return "error";
+        itemService.allowOnlyOwner(item, userId);
+        return "itemForm";
     }
 
     @PostMapping("/item/edit/{itemId}")
