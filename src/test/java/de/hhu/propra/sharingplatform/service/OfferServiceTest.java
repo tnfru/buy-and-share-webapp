@@ -138,7 +138,7 @@ public class OfferServiceTest {
 
     /* Validate functions tests for each return value */
 
-    @Test
+    /*@Test
     public void startAfterEnd() {
         long millisecondsInDay = 1000 * 60 * 60 * 24;
 
@@ -249,6 +249,6 @@ public class OfferServiceTest {
         when(apiService.isSolventFake(any(), anyDouble())).thenReturn(true);
 
         assertEquals(0, offerService.validate(item, requester, start, end));
-    }
+    }*/
 
 }

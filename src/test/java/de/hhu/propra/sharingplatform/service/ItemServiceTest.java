@@ -1,6 +1,7 @@
 package de.hhu.propra.sharingplatform.service;
 
 import static org.junit.Assert.*;
+
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
@@ -61,11 +62,11 @@ public class ItemServiceTest {
         assertEquals(1, (long) argument.getValue().getOwner().getId());
     }
 
-    //@Test
+    @Test
     public void removeOneItemValidUser() {
-        when(itemRepo.findOneById(1)).thenReturn(item);
+        when(itemRepo.findOneById(anyLong())).thenReturn(item);
 
-        itemService.removeItem(1, 1);
+        itemService.removeItem(1L, 1);
 
         assertTrue(itemRepo.findOneById(1).isDeleted());
     }
@@ -79,15 +80,16 @@ public class ItemServiceTest {
         assertTrue(!itemRepo.findOneById(1).isDeleted());
     }
 
-    //@Test
+    @Test
     public void dontPersistInvalidItem() {
         boolean thrown = false;
         item.setLocation(null);
         when(userService.fetchUserById(1L)).thenReturn(user);
         try {
             itemService.persistItem(item, 1);
-        } catch (ResponseStatusException ignored) {
+        } catch (ResponseStatusException rse) {
             thrown = true;
+            assertEquals("400 BAD_REQUEST \"Invalid Location\"", rse.getMessage());
         }
         verify(itemRepo, times(0)).save(any());
         assertTrue(thrown);
