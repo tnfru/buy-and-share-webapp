@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 public class ItemService {
-  
+
     private ImageService itemImageSaver;
     private final UserService userService;
     private final ItemRepo itemRepo;
@@ -35,15 +35,14 @@ public class ItemService {
     }
 
     public void persistItem(Item item, long userId, MultipartFile image) {
-        if (validateItem(item)) {
-            User owner = userService.fetchUserById(userId);
-            item.setOwner(owner);
-            itemRepo.save(item);
-            String imagefilename = "item-" + item.getId();
-            itemImageSaver.store(image, imagefilename);
-            item.setImageFileName(imagefilename);
-            itemRepo.save(item);
-        }
+        validateItem(item);
+        User owner = userService.fetchUserById(userId);
+        item.setOwner(owner);
+        itemRepo.save(item);
+        String imagefilename = "item-" + item.getId();
+        itemImageSaver.store(image, imagefilename);
+        item.setImageFileName(imagefilename);
+        itemRepo.save(item);
     }
 
     public void removeItem(long itemId, long userId) {
