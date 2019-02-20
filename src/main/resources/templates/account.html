@@ -82,7 +82,13 @@
               </td>
               <td>
                 <a th:href="|/offer/show/${item.getId()}|" class="btn-primary">
-                  <button type="button" class="btn btn-primary btn-sm">
+                  <button type="button" class="btn btn-primary btn-sm"
+                          th:if="${item.getActiveOffers()} > 0">
+                    Offers
+                    <span class="badge badge-light" th:text="${item.getActiveOffers()}"></span>
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm"
+                          th:if="${item.getActiveOffers()} == 0">
                     Offers
                     <span class="badge badge-light" th:text="${item.getActiveOffers()}"></span>
                   </button>
