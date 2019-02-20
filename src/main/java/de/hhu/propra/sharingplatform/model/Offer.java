@@ -1,6 +1,6 @@
 package de.hhu.propra.sharingplatform.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,8 +25,8 @@ public class Offer {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User borrower;
 
-    private Date start;
-    private Date end;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private boolean accept;
     private boolean decline;
 
@@ -35,7 +35,7 @@ public class Offer {
         // used for jpa
     }
 
-    public Offer(Item item, User borrower, Date start, Date end) {
+    public Offer(Item item, User borrower, LocalDateTime start, LocalDateTime end) {
         this.setStart(start);
         this.setEnd(end);
 
