@@ -12,7 +12,7 @@ public class TimeFaker {
     }
 
     public LocalDateTime rndTime() {
-        int year = faker.number().numberBetween(2000, 2030);
+        int year = faker.number().numberBetween(2001, 2030);
         int month = faker.number().numberBetween(1, 12);
         int day = faker.number().numberBetween(1, 28);
         int hours = faker.number().numberBetween(0, 23);

@@ -56,7 +56,7 @@ public class ItemControllerTest {
      */
 
     @Test
-    public void itemDetailsNotLoggedIn() throws Exception {
+    public void getItemDetailsNotLoggedIn() throws Exception {
         mvc.perform(get("/item/details/1000")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
@@ -78,16 +78,24 @@ public class ItemControllerTest {
     }
 
     @Test
-    public void removeItemNotLoggedIn() throws Exception {
+    public void getRemoveItemNotLoggedIn() throws Exception {
         mvc.perform(get("/item/remove/1000")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
     }
 
     @Test
-    public void editItemNotLoggedIn() throws Exception {
+    public void getEditItemNotLoggedIn() throws Exception {
         mvc.perform(get("/item/edit/1000")
             .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void postEditItemNotLoggedIn() throws Exception {
+        mvc.perform(post("/item/edit/1000")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("any", "any"))
             .andExpect(status().is3xxRedirection());
     }
 
@@ -451,5 +459,152 @@ public class ItemControllerTest {
         mvc.perform(get("/item/edit/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser("accountname")
+    public void postEditItemDontExistLoggedIn() throws Exception {
+        User user = new User();
+        user.setAccountName("accountname");
+        user.setPassword("password");
+        user.setEmail("mail");
+        user.setAddress("address");
+        user.setName("name");
+        user.setBan(false);
+        user.setDeleted(false);
+        user.setId(1L);
+
+        Optional<User> optU = Optional.of(user);
+
+        when(userRepo.findByAccountName("accountname")).thenReturn(optU);
+
+        mvc.perform(post("/item/edit/1000")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("any", "any"))
+            .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockUser("otheraccountname")
+    public void postEditItemExistLoggedInNotOwner() throws Exception {
+        User user = new User();
+        user.setAccountName("accountname");
+        user.setPassword("password");
+        user.setEmail("mail");
+        user.setAddress("address");
+        user.setName("name");
+        user.setBan(false);
+        user.setDeleted(false);
+        user.setId(1L);
+
+        User user2 = new User();
+        user2.setAccountName("otheraccountname");
+        user2.setPassword("password");
+        user2.setEmail("mail");
+        user2.setAddress("address");
+        user2.setName("name2");
+        user2.setBan(false);
+        user2.setDeleted(false);
+        user2.setId(2L);
+
+        Item item = new Item(user);
+        item.setAvailable(true);
+        item.setBail(1.0);
+        item.setDeleted(false);
+        item.setDescription("desc");
+        item.setLocation("loc");
+        item.setName("item");
+        item.setOwner(user);
+        item.setPrice(2.0);
+        item.setId(3L);
+
+        Optional<User> optU = Optional.of(user2);
+
+        when(userRepo.findByAccountName("otheraccountname")).thenReturn(optU);
+        when(itemRepo.findOneById(3L)).thenReturn(item);
+        when(itemRepo.findById(3L)).thenReturn(Optional.of(item));
+
+        mvc.perform(post("/item/edit/3")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("any", "any"))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser("accountname")
+    public void postEditItemExistLoggedInIsOwner() throws Exception {
+        User user = new User();
+        user.setAccountName("accountname");
+        user.setPassword("password");
+        user.setEmail("mail");
+        user.setAddress("address");
+        user.setName("name");
+        user.setBan(false);
+        user.setDeleted(false);
+        user.setId(1L);
+
+        Item item = new Item(user);
+        item.setAvailable(true);
+        item.setBail(1.0);
+        item.setDeleted(false);
+        item.setDescription("desc");
+        item.setLocation("loc");
+        item.setName("item");
+        item.setOwner(user);
+        item.setPrice(2.0);
+        item.setId(3L);
+
+        when(itemRepo.findOneById(3L)).thenReturn(item);
+        when(itemRepo.findById(3L)).thenReturn(Optional.of(item));
+        when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
+
+        mvc.perform(post("/item/edit/3")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("name", "name")
+            .param("price", "1")
+            .param("bail", "2")
+            .param("location", "loc")
+            .param("description", "desc"))
+            .andExpect(status().is3xxRedirection());
+
+        verify(itemRepo, times(1)).save(any());
+    }
+
+    @Test
+    @WithMockUser("accountname")
+    public void postEditItemExistLoggedInIsOwnerInvalidItem() throws Exception {
+        User user = new User();
+        user.setAccountName("accountname");
+        user.setPassword("password");
+        user.setEmail("mail");
+        user.setAddress("address");
+        user.setName("name");
+        user.setBan(false);
+        user.setDeleted(false);
+        user.setId(1L);
+
+        Item item = new Item(user);
+        item.setAvailable(true);
+        item.setBail(1.0);
+        item.setDeleted(false);
+        item.setDescription("desc");
+        item.setLocation("loc");
+        item.setName("item");
+        item.setOwner(user);
+        item.setPrice(2.0);
+        item.setId(3L);
+
+        when(itemRepo.findOneById(3L)).thenReturn(item);
+        when(itemRepo.findById(3L)).thenReturn(Optional.of(item));
+        when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
+
+        mvc.perform(post("/item/edit/3")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("name", "name")
+            .param("location", "loc")
+            .param("description", "desc"))
+            .andExpect(status().isBadRequest());
+
+        verify(itemRepo, times(0)).save(any());
     }
 }

@@ -38,7 +38,8 @@ public class UserService {
         try {
             request.login(accountName, password);
         } catch (ServletException except) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Auto login went wrong");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Auto login went wrong");
         }
     }
 
@@ -52,7 +53,7 @@ public class UserService {
     }
 
     public void updatePassword(User oldUser, String oldPassword, String newPassword,
-                               String confirm) {
+        String confirm) {
         if (!encoder.matches(oldPassword, oldUser.getPasswordHash())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
         }
@@ -61,27 +62,23 @@ public class UserService {
     }
 
     public User fetchUserByAccountName(String accountName) {
-        Optional<User> search = userRepo.findByAccountName(accountName);
-        if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
-        }
-        return search.get();
+        return isPresent(userRepo.findByAccountName(accountName));
     }
 
     public User fetchUserById(Long userId) {
-        Optional<User> search = Optional.ofNullable(userRepo.findOneById(userId));
-        if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
-        }
-        return userRepo.findOneById(userId);
+        return isPresent(userRepo.findById(userId));
     }
 
     public long fetchUserIdByAccountName(String accountName) {
-        Optional<User> search = userRepo.findByAccountName(accountName);
-        if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+        return isPresent(userRepo.findByAccountName(accountName)).getId();
+    }
+
+    private User isPresent(Optional<User> user) {
+        if (!user.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Something went wrong.");
         }
-        return (search.get().getId());
+        return user.get();
     }
 
     private String hashPassword(String plainPassword) {

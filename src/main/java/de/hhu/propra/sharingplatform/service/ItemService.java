@@ -58,7 +58,7 @@ public class ItemService {
     private Item findIfPresent(long itemId) {
         Optional<Item> optional = itemRepo.findById(itemId);
         if (!optional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid Item");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not Found");
         }
         return optional.get();
     }
@@ -72,14 +72,14 @@ public class ItemService {
     }
 
     public void editItem(Item newItem, long oldItemId, long userId) {
+        Item oldItem = findItem(oldItemId);
+        allowOnlyOwner(oldItem, userId);
         validateItem(newItem);
-        Item oldItem = findIfPresent(oldItemId);
-        if (userIsOwner(oldItem.getId(), userId)) {
-            newItem.setOwner(oldItem.getOwner());
-            newItem.setId(oldItem.getId());
-            newItem.setAvailable(oldItem.isAvailable());
-            itemRepo.save(newItem);
-        }
+
+        newItem.setOwner(oldItem.getOwner());
+        newItem.setId(oldItem.getId());
+        newItem.setAvailable(oldItem.isAvailable());
+        itemRepo.save(newItem);
     }
 
     public void allowOnlyOwner(Item item, long userId) {
