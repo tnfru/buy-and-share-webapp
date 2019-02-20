@@ -5,10 +5,10 @@ import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 @Service
 public class PaymentService {
@@ -38,20 +38,12 @@ public class PaymentService {
     }
 
     double calculateTotalPrice(Contract contract) {
-        long startTime = contract.getStart().getTime();
-        long endTime = contract.getRealEnd().getTime();
-        long millisecondsInDay = 1000 * 60 * 60 * 24;
-        //time passed in full days
-        double timePassed = Math.ceil(((double) endTime - startTime) / millisecondsInDay);
+        long timePassed = contract.getStart().until(contract.getRealEnd(), ChronoUnit.DAYS);
         return timePassed * contract.getItem().getPrice();
     }
 
-    double calculateTotalPrice(Item item, Date start, Date end) {
-        long startTime = start.getTime();
-        long endTime = end.getTime();
-        long millisecondsInDay = 1000 * 60 * 60 * 24;
-        //time passed in full days
-        double timePassed = Math.ceil(((double) endTime - startTime) / millisecondsInDay);
+    public double calculateTotalPrice(Item item, LocalDateTime start, LocalDateTime end) {
+        long timePassed = start.until(end, ChronoUnit.DAYS);
         return timePassed * item.getPrice();
     }
 
