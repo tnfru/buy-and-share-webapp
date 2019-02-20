@@ -56,8 +56,18 @@ public class OfferController {
     public String showAllOffers(@PathVariable long itemId, Principal principal, Model model) {
         User user = userService.fetchUserByAccountName(principal.getName());
         model.addAttribute("item", itemService.findItem(itemId));
-        model.addAttribute("offers", offerService.getItemOffers(itemId, user));
+        model.addAttribute("closedOffers",
+            offerService.getItemOffers(itemId, user, true));
+        model.addAttribute("openOffers",
+            offerService.getItemOffers(itemId, user, false));
         return "showOffers";
+    }
+
+    @GetMapping("/offer/remove/{offerId}")
+    public String deleteOwnOffer(@PathVariable long offerId, Principal principal) {
+        User user = userService.fetchUserByAccountName(principal.getName());
+        offerService.deleteOffer(offerId, user);
+        return "redirect:/user/account";
     }
 
     @GetMapping("/offer/show/{offerId}/accept")
