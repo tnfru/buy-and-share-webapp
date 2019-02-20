@@ -4,15 +4,13 @@ import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
-
-import java.util.Optional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ItemService {
@@ -32,24 +30,28 @@ public class ItemService {
         itemRepo.save(item);
     }
 
-    private Item findIfPresent(long itemId) {
+    public void removeItem(long itemId, long userId) {
         Optional<Item> optional = itemRepo.findById(itemId);
         if (!optional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid Item");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return optional.get();
-    }
 
-    public void removeItem(long itemId, long userId) {
-        Item item = findIfPresent(itemId);
-        if (userIsOwner(item, userId)) {
+        Item item = optional.get();
+        allowOnlyOwner(item, userId);
+
+        if (userIsOwner(item.getId(), userId)) {
             item.setDeleted(true);
             itemRepo.save(item);
         }
     }
 
     public Item findItem(long itemId) {
-        Item item = findIfPresent(itemId);
+        Optional<Item> optional = itemRepo.findById(itemId);
+        if (!optional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        Item item = optional.get();
         if (item.isDeleted()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This Item was deleted");
         }
@@ -58,8 +60,8 @@ public class ItemService {
 
     public void editItem(Item newItem, long oldItemId, long userId) {
         validateItem(newItem);
-        Item oldItem = findIfPresent(oldItemId);
-        if (userIsOwner(oldItem, userId)) {
+        if (userIsOwner(findItem(oldItemId).getId(), userId)) {
+            Item oldItem = itemRepo.findOneById(oldItemId);
             newItem.setOwner(oldItem.getOwner());
             newItem.setId(oldItem.getId());
             newItem.setAvailable(oldItem.isAvailable());
@@ -67,13 +69,15 @@ public class ItemService {
         }
     }
 
-    public boolean userIsOwner(Item item, long userId) {
-        return item.getOwner().getId() == userId;
+    public void allowOnlyOwner(Item item, long userId) {
+        if (item.getOwner().getId() != userId) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your Item");
+        }
     }
 
     public boolean userIsOwner(long itemId, long userId) {
         Item item = itemRepo.findOneById(itemId);
-        return userIsOwner(item, userId);
+        return item.getOwner().getId() == userId;
     }
 
     public void validateItem(Item item) {
