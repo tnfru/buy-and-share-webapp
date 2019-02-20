@@ -71,6 +71,7 @@ public class DataFaker implements ServletContextInitializer {
         log.info("Generating Database");
         UserFaker userFaker = new UserFaker(faker);
         ItemFaker itemFaker = new ItemFaker(faker);
+        TimeFaker timeFaker = new TimeFaker(faker);
 
         log.info("    Creating User...");
         List<User> users = new ArrayList<>();
@@ -93,11 +94,11 @@ public class DataFaker implements ServletContextInitializer {
             User user = getRandomUser(users);
             Item item = getRandomItem(items);
 
-            if (item.getOwner().getId() != user.getId()) {
-                offerService.create(item.getId(), user,
-                    LocalDateTime.of(30, 2, 12, 12, 56),
-                    LocalDateTime.of(30, 3, 10, 13, 43));
+            LocalDateTime start = timeFaker.rndTime();
+            LocalDateTime end = timeFaker.rndTimeAfter(start);
 
+            if (item.getOwner().getId() != user.getId()) {
+                offerService.create(item.getId(), user, start, end);
             } else {
                 i--;
             }
