@@ -64,13 +64,13 @@
               <th scope="col">Price</th>
               <th scope="col">Bail</th>
               <th scope="col">Availability</th>
-              <th scope="col">Offers</th>
+              <th scope="col">Offers(Open)</th>
               <th scope="col">Conflict</th>
               <th scope="col" class="mx-auto">Options</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="item : ${user.getItems()}">
+            <tr th:each="item : ${user.getItemsExcludeRemoved()}">
               <td th:text="${item.getName()}"> Test Name</td>
               <td th:text="${item.getPrice()}"> 33</td>
               <td th:text="${item.getBail()}"> 333</td>
@@ -82,9 +82,15 @@
               </td>
               <td>
                 <a th:href="|/offer/show/${item.getId()}|" class="btn-primary">
-                  <button type="button" class="btn btn-primary btn-sm">
+                  <button type="button" class="btn btn-primary btn-sm"
+                          th:if="${item.getActiveOffers()} > 0">
                     Offers
-                    <span class="badge badge-light" th:text="${item.getOffers().size()}"></span>
+                    <span class="badge badge-light" th:text="${item.getActiveOffers()}"></span>
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm"
+                          th:if="${item.getActiveOffers()} == 0">
+                    Offers
+                    <span class="badge badge-light" th:text="${item.getActiveOffers()}"></span>
                   </button>
                 </a>
               </td>
@@ -141,6 +147,8 @@
               <th scope="col">Item Name</th>
               <th scope="col">Price</th>
               <th scope="col">Bail</th>
+              <th scope="col">Start</th>
+              <th scope="col">End</th>
               <th scope="col">State</th>
               <th scope="col">Item Owner</th>
               <th scope="col" class="mx-auto">Options</th>
@@ -151,6 +159,8 @@
               <td th:text="${offer.getItem().getName()}"> Test Name</td>
               <td th:text="${offer.getItem().getPrice()}"> 33</td>
               <td th:text="${offer.getItem().getBail()}"> 333</td>
+              <td th:text="${#temporals.format(offer.getStart(), 'dd-MM-yyyy HH:mm')}"></td>
+              <td th:text="${#temporals.format(offer.getEnd(), 'dd-MM-yyyy HH:mm')}"></td>
               <td th:if="${offer.isAccept()} == true">
                 <span class="badge badge-success">Accepted</span>
               </td>

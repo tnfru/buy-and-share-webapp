@@ -1,6 +1,5 @@
 package de.hhu.propra.sharingplatform.model;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -10,9 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
 import lombok.Data;
 import lombok.ToString;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -46,5 +48,15 @@ public class Item {
 
     public Item(User owner) {
         this.owner = owner;
+    }
+
+    public long getActiveOffers() {
+        long counter = 0;
+        for (Offer offer : offers) {
+            if (!(offer.isAccept() || offer.isDecline())) {
+                counter++;
+            }
+        }
+        return counter;
     }
 }

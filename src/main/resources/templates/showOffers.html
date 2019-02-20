@@ -18,11 +18,11 @@
             <th scope="col">Item Bail</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
-            <th scope="col">Accept/Decline</th>
+            <th scope="col">Options</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="offer : ${offers}">
+        <tr th:each="offer : ${openOffers}">
             <td th:text="${offer.getBorrower().getName()}"> Requester</td>
             <td th:text="${offer.getItem().getPrice()}"> Item Price</td>
             <td th:text="${offer.getItem().getBail()}"> Item Bail</td>
@@ -37,6 +37,45 @@
         </tr>
         </tbody>
     </table>
+    <div>
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseTable" role="button" aria-expanded="false" aria-controls="collapseTable">
+            Show old offers
+        </a>
+    </div>
+    <div class="collapse" id="collapseTable">
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Requester</th>
+                    <th scope="col">Item Price</th>
+                    <th scope="col">Item Bail</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">Options</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="offer : ${closedOffers}">
+                    <td th:text="${offer.getBorrower().getName()}"> Requester</td>
+                    <td th:text="${offer.getItem().getPrice()}"> Item Price</td>
+                    <td th:text="${offer.getItem().getBail()}"> Item Bail</td>
+                    <td th:text="${offer.getStart()}"> Offer start date</td>
+                    <td th:text="${offer.getEnd()}"> Offer end date</td>
+                    <td th:if="${offer.isAccept()} == true">
+                        <span class="badge badge-success">Accepted</span>
+                    </td>
+                    <td th:if="${offer.isDecline()} == true">
+                        <span class="badge badge-danger">Declined</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 </div>
 </body>
 </html>

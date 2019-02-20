@@ -6,14 +6,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.dao.ContractRepo;
-
-import java.util.Date;
-
+import java.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,9 +47,9 @@ public class ContractServiceTest {
         borrower = new User();
         item = new Item(owner);
 
-        Date start = new Date();
-        Date end = new Date();
-        end.setTime(start.getTime() + 1337);
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now();
+        end = end.plusDays(3);
         offer = new Offer(item, borrower, start, end);
         contract = new Contract(offer);
     }
