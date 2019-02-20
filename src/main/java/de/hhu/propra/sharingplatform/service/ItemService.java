@@ -1,10 +1,12 @@
 package de.hhu.propra.sharingplatform.service;
 
+import de.hhu.propra.sharingplatform.dao.ImageService;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -14,17 +16,32 @@ import java.util.List;
 public class ItemService {
 
     final UserService userService;
+    private ImageService itemImageSaver;
     private final ItemRepo itemRepo;
 
-    public ItemService(ItemRepo itemRepo, UserService userService) {
+    public ItemService(ItemRepo itemRepo, UserService userService, ImageService ItemImageSaver) {
         this.itemRepo = itemRepo;
         this.userService = userService;
+        itemImageSaver = ItemImageSaver;
     }
 
+    @Deprecated
     public void persistItem(Item item, long userId) {
         if (validateItem(item)) {
             User owner = userService.fetchUserById(userId);
             item.setOwner(owner);
+            itemRepo.save(item);
+        }
+    }
+
+    public void persistItem(Item item, long userId, MultipartFile image) {
+        if (validateItem(item)) {
+            User owner = userService.fetchUserById(userId);
+            item.setOwner(owner);
+            itemRepo.save(item);
+            String imagefilename = "item-" + item.getId();
+            itemImageSaver.store(image, imagefilename);
+            item.setImageFileName(imagefilename);
             itemRepo.save(item);
         }
     }

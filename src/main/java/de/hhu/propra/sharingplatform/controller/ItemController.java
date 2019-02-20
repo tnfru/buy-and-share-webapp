@@ -24,14 +24,11 @@ public class ItemController {
 
     private final UserService userService;
 
-    private final ImageService storageService;
 
     @Autowired
-    public ItemController(ItemService itemService, UserService userService,
-                          ImageService storageService) {
+    public ItemController(ItemService itemService, UserService userService) {
         this.itemService = itemService;
         this.userService = userService;
-        this.storageService = storageService;
     }
 
     @GetMapping("/item/details/{itemId}")
@@ -56,11 +53,8 @@ public class ItemController {
     @PostMapping("/item/new")
     public String inputItemData(Model model, Item item, Principal principal,
                                 @RequestParam("file") MultipartFile file) {
-        itemService.persistItem(item, userService.fetchUserIdByAccountName(principal.getName()));
-        String imagefilename = "item-" + item.getId();
-        item.setImageFileName(imagefilename);
-        storageService.store(file, imagefilename);
-        itemService.persistItem(item, userService.fetchUserIdByAccountName(principal.getName()));
+        itemService
+            .persistItem(item, userService.fetchUserIdByAccountName(principal.getName()), file);
         return "redirect:/user/account/";
     }
 
