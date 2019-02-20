@@ -4,6 +4,7 @@ import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,7 +31,12 @@ public class ItemService {
     }
 
     public void removeItem(long itemId, long userId) {
-        Item item = itemRepo.findOneById(itemId);
+        Optional<Item> optional = itemRepo.findById(itemId);
+        if (!optional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        Item item = optional.get();
         if (userIsOwner(item, userId)) {
             item.setDeleted(true);
             itemRepo.save(item);
@@ -38,7 +44,12 @@ public class ItemService {
     }
 
     public Item findItem(long itemId) {
-        Item item = itemRepo.findOneById(itemId);
+        Optional<Item> optional = itemRepo.findById(itemId);
+        if (!optional.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        Item item = optional.get();
         if (item.isDeleted()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This Item was deleted");
         }

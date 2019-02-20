@@ -56,7 +56,10 @@ public class OfferController {
     public String showAllOffers(@PathVariable long itemId, Principal principal, Model model) {
         User user = userService.fetchUserByAccountName(principal.getName());
         model.addAttribute("item", itemService.findItem(itemId));
-        model.addAttribute("offers", offerService.getItemOffers(itemId, user));
+        model.addAttribute("closedOffers",
+            offerService.getItemOffers(itemId, user, true));
+        model.addAttribute("openOffers",
+            offerService.getItemOffers(itemId, user, false));
         return "showOffers";
     }
 
