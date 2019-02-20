@@ -2,6 +2,7 @@ package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.validation.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,20 +13,18 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class UserService {
 
-    final UserRepo userRepo;
+    private final UserRepo userRepo;
+
+    private final PasswordEncoder encoder;
 
     @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
+        this.encoder = encoder;
     }
 
     public void persistUser(User user, String password, String confirm) {
@@ -70,10 +69,10 @@ public class UserService {
     }
 
     public User fetchUserById(Long userId) {
-        /*Optional<User> search = userRepo.findOneById(userId);
+        Optional<User> search = Optional.ofNullable(userRepo.findOneById(userId));
         if (!search.isPresent()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
-        }*/
+        }
         return userRepo.findOneById(userId);
     }
 
@@ -83,10 +82,6 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
         }
         return (search.get().getId());
-    }
-
-    public boolean checkPassword(String password, User user) {
-        return user.getPasswordHash().equals(hashPassword(password));
     }
 
     private String hashPassword(String plainPassword) {
@@ -99,79 +94,17 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                 "Passwords need to be the same.");
         }
-        validatePasswords(password);
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
-    }
-
-    private boolean hasSpecialChars(String string) {
-        Pattern pattern = Pattern.compile("[^a-z0-9 -]", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(string);
-        return matcher.find();
+        validatePassword(password);
+        return hashPassword(password);
     }
 
     private void validateUser(User user) {
-        validateMail(user);
-        validateAdress(user);
-        validateName(user);
-        validateAccountName(user);
+        UserValidator.validateUser(user, userRepo);
     }
 
-    private void validateMail(User user) {
-        Pattern pattern = Pattern.compile("^.+@.+\\..+$");
-        Matcher matcher = pattern.matcher(user.getEmail());
-        if (!matcher.matches()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not a valid E-Mail");
-        }
+    private void validatePassword(String password) {
+        UserValidator.validatePassword(password);
     }
 
-    private void validateName(User user) {
-        if (user.getName() == null || user.getName().length() == 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name was empty");
-        }
-        if (user.getName().length() > 255) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is too long");
-        }
-        if (hasSpecialChars(user.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is invalid.");
-        }
-    }
-
-    private void validateAdress(User user) {
-        if (user.getAddress() == null || user.getAddress().length() == 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address was empty");
-        }
-        if (user.getAddress().length() > 255) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is too long");
-        }
-        if (hasSpecialChars(user.getAddress())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address is invalid.");
-        }
-    }
-
-    private void validatePasswords(String password) {
-        if (password == null || password.length() == 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password was empty");
-        }
-        if (password.length() > 255) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too long");
-        }
-        if (password.length() < 2) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is too short");
-        }
-    }
-
-    private void validateAccountName(User user) {
-        if (userRepo.findByAccountName(user.getAccountName()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                "Account Name already exists");
-        }
-        if (user.getAccountName().length() > 30) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Name is too long");
-        }
-        if (hasSpecialChars(user.getAccountName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account Name is invalid.");
-        }
-    }
 }
 

@@ -11,10 +11,12 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -79,11 +81,16 @@ public class ItemServiceTest {
 
     //@Test
     public void dontPersistInvalidItem() {
+        boolean thrown = false;
         item.setLocation(null);
         when(userService.fetchUserById(1L)).thenReturn(user);
-
-        itemService.persistItem(item, 1);
+        try {
+            itemService.persistItem(item, 1);
+        } catch (ResponseStatusException ignored) {
+            thrown = true;
+        }
         verify(itemRepo, times(0)).save(any());
+        assertTrue(thrown);
     }
 
     //@Test
@@ -122,6 +129,7 @@ public class ItemServiceTest {
 
     //@Test
     public void editItemInvalidItemAndValidUser() {
+        boolean thrown = false;
         Item editItem = new Item(user);
         editItem.setDescription(null);
         editItem.setLocation(item.getLocation());
@@ -130,26 +138,35 @@ public class ItemServiceTest {
         editItem.setName(item.getName());
 
         when(itemRepo.findOneById(1)).thenReturn(item);
-
-        itemService.editItem(editItem, 1, 1);
+        try {
+            itemService.editItem(editItem, 1, 1);
+        } catch (ResponseStatusException ignored) {
+            thrown = true;
+        }
 
         verify(itemRepo, times(0)).save(any());
+        assertTrue(thrown);
     }
 
     //@Test
     public void editItemInvalidItemAndInvalidUser() {
+        boolean thrown = false;
         Item editItem = new Item(user);
         editItem.setDescription(null);
         editItem.setLocation(item.getLocation());
         editItem.setPrice(item.getPrice());
         editItem.setBail(item.getBail());
         editItem.setName(item.getName());
-
         when(itemRepo.findOneById(1)).thenReturn(item);
 
-        itemService.editItem(editItem, 1, 2);
+        try {
+            itemService.editItem(editItem, 1, 2);
+        } catch (ResponseStatusException ignored) {
+            thrown = true;
+        }
 
         verify(itemRepo, times(0)).save(any());
+        assertTrue(thrown);
     }
 
     //@Test
