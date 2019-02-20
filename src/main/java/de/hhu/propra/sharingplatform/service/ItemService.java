@@ -18,10 +18,10 @@ public class ItemService {
     private ImageService itemImageSaver;
     private final ItemRepo itemRepo;
 
-    public ItemService(ItemRepo itemRepo, UserService userService, ImageService ItemImageSaver) {
+    public ItemService(ItemRepo itemRepo, UserService userService, ImageService itemImageSaver) {
         this.itemRepo = itemRepo;
         this.userService = userService;
-        itemImageSaver = ItemImageSaver;
+        this.itemImageSaver = itemImageSaver;
     }
 
     @Deprecated

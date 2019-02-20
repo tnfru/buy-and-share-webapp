@@ -23,7 +23,8 @@ public class ImageService {
     private HttpServletRequest request;
 
     public void store(MultipartFile file, String filename) {
-        if (file.getContentType().equals("image/png") || file.getContentType().equals("image/jpeg")) {
+        String contenttype = file.getContentType();
+        if (contenttype.equals("image/png") || contenttype.equals("image/jpeg")) {
             try {
                 File out = ResourceUtils.getFile("src/main/resources/static/images/" + filename);
                 out.createNewFile();
