@@ -142,7 +142,7 @@ public class ItemServiceTest {
             itemService.editItem(editItem, 1, 2);
         } catch (ResponseStatusException rse) {
             thrown = true;
-            assertEquals("404 NOT_FOUND \"Invalid Item\"", rse.getMessage());
+            assertEquals("404 NOT_FOUND \"Item not Found\"", rse.getMessage());
         }
 
         verify(itemRepo, times(0)).save(any());
@@ -159,7 +159,7 @@ public class ItemServiceTest {
         editItem.setBail(item.getBail());
         editItem.setName(item.getName());
 
-        when(itemRepo.findOneById(1)).thenReturn(item);
+        when(itemRepo.findById(1)).thenReturn(Optional.of(item));
         try {
             itemService.editItem(editItem, 1, 1);
         } catch (ResponseStatusException rse) {
@@ -180,13 +180,13 @@ public class ItemServiceTest {
         editItem.setPrice(item.getPrice());
         editItem.setBail(item.getBail());
         editItem.setName(item.getName());
-        when(itemRepo.findOneById(1)).thenReturn(item);
+        when(itemRepo.findById(1)).thenReturn(Optional.of(item));
 
         try {
             itemService.editItem(editItem, 1, 2);
         } catch (ResponseStatusException rse) {
             thrown = true;
-            assertEquals("400 BAD_REQUEST \"Invalid Description\"", rse.getMessage());
+            assertEquals("403 FORBIDDEN \"Not your Item\"", rse.getMessage());
         }
 
         verify(itemRepo, times(0)).save(any());
