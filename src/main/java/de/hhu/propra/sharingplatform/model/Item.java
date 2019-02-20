@@ -23,6 +23,7 @@ public class Item {
     private Long id;
 
     private String name;
+    private String imageFileName;
     private String description;
     private Double bail;
     private Double price; // each day
