@@ -4,25 +4,29 @@ import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
-import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ItemService {
 
+    private ImageService itemImageSaver;
     private final UserService userService;
     private final ItemRepo itemRepo;
 
-    public ItemService(ItemRepo itemRepo, UserService userService) {
+    public ItemService(ItemRepo itemRepo, UserService userService, ImageService itemImageSaver) {
         this.itemRepo = itemRepo;
         this.userService = userService;
+        this.itemImageSaver = itemImageSaver;
     }
 
+    @Deprecated
     public void persistItem(Item item, long userId) {
         validateItem(item);
         User owner = userService.fetchUserById(userId);
@@ -30,26 +34,37 @@ public class ItemService {
         itemRepo.save(item);
     }
 
-    public void removeItem(long itemId, long userId) {
-        Optional<Item> optional = itemRepo.findById(itemId);
-        if (!optional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    public void persistItem(Item item, long userId, MultipartFile image) {
+        validateItem(item);
+        User owner = userService.fetchUserById(userId);
+        item.setOwner(owner);
+        itemRepo.save(item);
+        String imagefilename = "item-" + item.getId();
+        itemImageSaver.store(image, imagefilename);
+        item.setImageFileName(imagefilename);
+        itemRepo.save(item);
+    }
 
-        Item item = optional.get();
-        if (userIsOwner(item, userId)) {
+    public void removeItem(long itemId, long userId) {
+        Item item = findIfPresent(itemId);
+        allowOnlyOwner(item, userId);
+
+        if (userIsOwner(item.getId(), userId)) {
             item.setDeleted(true);
             itemRepo.save(item);
         }
     }
 
-    public Item findItem(long itemId) {
+    private Item findIfPresent(long itemId) {
         Optional<Item> optional = itemRepo.findById(itemId);
         if (!optional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid Item");
         }
+        return optional.get();
+    }
 
-        Item item = optional.get();
+    public Item findItem(long itemId) {
+        Item item = findIfPresent(itemId);
         if (item.isDeleted()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This Item was deleted");
         }
@@ -58,8 +73,8 @@ public class ItemService {
 
     public void editItem(Item newItem, long oldItemId, long userId) {
         validateItem(newItem);
-        if (userIsOwner(findItem(oldItemId), userId)) {
-            Item oldItem = itemRepo.findOneById(oldItemId);
+        Item oldItem = findIfPresent(oldItemId);
+        if (userIsOwner(oldItem.getId(), userId)) {
             newItem.setOwner(oldItem.getOwner());
             newItem.setId(oldItem.getId());
             newItem.setAvailable(oldItem.isAvailable());
@@ -67,13 +82,15 @@ public class ItemService {
         }
     }
 
-    public boolean userIsOwner(Item item, long userId) {
-        return item.getOwner().getId() == userId;
+    public void allowOnlyOwner(Item item, long userId) {
+        if (item.getOwner().getId() != userId) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your Item");
+        }
     }
 
     public boolean userIsOwner(long itemId, long userId) {
-        Item item = itemRepo.findOneById(itemId);
-        return userIsOwner(item, userId);
+        Item item = findIfPresent(itemId);
+        return item.getOwner().getId() == userId;
     }
 
     public void validateItem(Item item) {
