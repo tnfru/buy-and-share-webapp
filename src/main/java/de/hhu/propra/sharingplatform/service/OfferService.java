@@ -4,6 +4,7 @@ import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.validation.OfferValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,6 @@ import java.util.List;
 public class OfferService {
 
     private OfferRepo offerRepo;
-
 
     private ContractService contractService;
 
@@ -47,28 +47,8 @@ public class OfferService {
         offerRepo.save(offer);
     }
 
-    /* Return values:
-     *  0: all gucci
-     *  1: start date >= end date
-     *  2: item not available at given time
-     *  3: not enough money
-     *  4: borrower account banned
-     */
-    public int validate(Item item, User requester, Date start, Date end) {
-        long millisecondsInDay = 1000 * 60 * 60 * 24;
-        double totalCost = paymentService.calculateTotalPrice(item, start, end) + item.getBail();
-
-        if ((end.getTime() - start.getTime()) / millisecondsInDay < 1) {
-            return 1;
-        } else if (!item.isAvailable()) {
-            return 2;
-        } else if (!(apiService.isSolventFake(requester, totalCost))) {
-            return 3;
-        } else if (requester.isBan()) {
-            return 4;
-        } else {
-            return 0;
-        }
+    public void validate(Item item, User requester, Date start, Date end) {
+        OfferValidator.validate(item, requester, start, end, paymentService, apiService);
     }
 
     public List<Offer> getItemOffers(long itemId, User user, boolean onlyClosed) {

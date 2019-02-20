@@ -46,7 +46,7 @@ public class PaymentService {
         return timePassed * contract.getItem().getPrice();
     }
 
-    double calculateTotalPrice(Item item, Date start, Date end) {
+    public double calculateTotalPrice(Item item, Date start, Date end) {
         long startTime = start.getTime();
         long endTime = end.getTime();
         long millisecondsInDay = 1000 * 60 * 60 * 24;
