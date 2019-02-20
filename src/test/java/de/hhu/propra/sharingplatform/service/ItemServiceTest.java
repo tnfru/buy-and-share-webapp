@@ -73,10 +73,10 @@ public class ItemServiceTest {
         assertTrue(itemRepo.findById(1L).get().isDeleted());
     }
 
-    //@Test
+    @Test
     public void removeOneItemInvalidUser() {
         Optional<Item> optional = Optional.ofNullable(item);
-        when(itemRepo.findById(any())).thenReturn(optional);
+        when(itemRepo.findById(anyLong())).thenReturn(optional);
 
         itemService.removeItem(1L, 2);
 
@@ -98,7 +98,7 @@ public class ItemServiceTest {
         assertTrue(thrown);
     }
 
-    //@Test
+    @Test
     public void editItemValidItemAndUser() {
         Item editItem = new Item(user);
         editItem.setDescription("This is edited");
@@ -107,8 +107,9 @@ public class ItemServiceTest {
         editItem.setBail(item.getBail());
         editItem.setName(item.getName());
         ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
+        Optional<Item> optional = Optional.ofNullable(item);
 
-        when(itemRepo.findOneById(1L)).thenReturn(item);
+        when(itemRepo.findById(1L)).thenReturn(optional);
 
         itemService.editItem(editItem, 1L, 1L);
 
@@ -116,8 +117,9 @@ public class ItemServiceTest {
         assertEquals(argument.getValue().getDescription(), editItem.getDescription());
     }
 
-    //@Test
+    @Test
     public void editItemValidItemAndInvalidUser() {
+        boolean thrown = false;
         Item editItem = new Item(user);
         editItem.setDescription("This is edited");
         editItem.setLocation(item.getLocation());
@@ -126,13 +128,18 @@ public class ItemServiceTest {
         editItem.setName(item.getName());
 
         when(itemRepo.findOneById(1)).thenReturn(item);
-
-        itemService.editItem(editItem, 1, 2);
+        try {
+            itemService.editItem(editItem, 1, 2);
+        } catch (ResponseStatusException rse) {
+            thrown = true;
+            assertEquals("404 NOT_FOUND \"Invalid Item\"", rse.getMessage());
+        }
 
         verify(itemRepo, times(0)).save(any());
+        assertTrue(thrown);
     }
 
-    //@Test
+    @Test
     public void editItemInvalidItemAndValidUser() {
         boolean thrown = false;
         Item editItem = new Item(user);
@@ -145,15 +152,16 @@ public class ItemServiceTest {
         when(itemRepo.findOneById(1)).thenReturn(item);
         try {
             itemService.editItem(editItem, 1, 1);
-        } catch (ResponseStatusException ignored) {
+        } catch (ResponseStatusException rse) {
             thrown = true;
+            assertEquals("400 BAD_REQUEST \"Invalid Description\"", rse.getMessage());
         }
 
         verify(itemRepo, times(0)).save(any());
         assertTrue(thrown);
     }
 
-    //@Test
+    @Test
     public void editItemInvalidItemAndInvalidUser() {
         boolean thrown = false;
         Item editItem = new Item(user);
@@ -166,19 +174,13 @@ public class ItemServiceTest {
 
         try {
             itemService.editItem(editItem, 1, 2);
-        } catch (ResponseStatusException ignored) {
+        } catch (ResponseStatusException rse) {
             thrown = true;
+            assertEquals("400 BAD_REQUEST \"Invalid Description\"", rse.getMessage());
         }
 
         verify(itemRepo, times(0)).save(any());
         assertTrue(thrown);
-    }
-
-    //@Test
-    public void findOneItem() {
-        when(itemRepo.findOneById(1)).thenReturn(item);
-        Item resultItem = itemService.findItem(1);
-        assertEquals(resultItem, item);
     }
 
     @Test
