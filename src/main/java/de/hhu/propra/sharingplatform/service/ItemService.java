@@ -59,14 +59,14 @@ public class ItemService {
     }
 
     public void editItem(Item newItem, long oldItemId, long userId) {
+        Item oldItem = findItem(oldItemId);
+        allowOnlyOwner(oldItem, userId);
         validateItem(newItem);
-        if (userIsOwner(findItem(oldItemId).getId(), userId)) {
-            Item oldItem = itemRepo.findOneById(oldItemId);
-            newItem.setOwner(oldItem.getOwner());
-            newItem.setId(oldItem.getId());
-            newItem.setAvailable(oldItem.isAvailable());
-            itemRepo.save(newItem);
-        }
+
+        newItem.setOwner(oldItem.getOwner());
+        newItem.setId(oldItem.getId());
+        newItem.setAvailable(oldItem.isAvailable());
+        itemRepo.save(newItem);
     }
 
     public void allowOnlyOwner(Item item, long userId) {
