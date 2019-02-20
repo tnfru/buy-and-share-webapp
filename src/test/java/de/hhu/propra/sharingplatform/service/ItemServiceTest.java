@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.*;
@@ -64,20 +65,22 @@ public class ItemServiceTest {
 
     @Test
     public void removeOneItemValidUser() {
-        when(itemRepo.findOneById(anyLong())).thenReturn(item);
+        Optional<Item> optional = Optional.ofNullable(item);
+        when(itemRepo.findById(anyLong())).thenReturn(optional);
 
         itemService.removeItem(1L, 1);
 
-        assertTrue(itemRepo.findOneById(1).isDeleted());
+        assertTrue(itemRepo.findById(1L).get().isDeleted());
     }
 
     //@Test
     public void removeOneItemInvalidUser() {
-        when(itemRepo.findOneById(1)).thenReturn(item);
+        Optional<Item> optional = Optional.ofNullable(item);
+        when(itemRepo.findById(any())).thenReturn(optional);
 
-        itemService.removeItem(1, 2);
+        itemService.removeItem(1L, 2);
 
-        assertTrue(!itemRepo.findOneById(1).isDeleted());
+        assertFalse(itemRepo.findById(1L).get().isDeleted());
     }
 
     @Test
@@ -105,9 +108,9 @@ public class ItemServiceTest {
         editItem.setName(item.getName());
         ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
 
-        when(itemRepo.findOneById(1)).thenReturn(item);
+        when(itemRepo.findOneById(1L)).thenReturn(item);
 
-        itemService.editItem(editItem, 1, 1);
+        itemService.editItem(editItem, 1L, 1L);
 
         verify(itemRepo, times(1)).save(argument.capture());
         assertEquals(argument.getValue().getDescription(), editItem.getDescription());

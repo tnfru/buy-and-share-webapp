@@ -43,9 +43,8 @@ public class ItemService {
     private Item findIfPresent(long itemId) {
         Optional<Item> optional = itemRepo.findById(itemId);
         if (!optional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid Item");
         }
-
         return optional.get();
     }
 
