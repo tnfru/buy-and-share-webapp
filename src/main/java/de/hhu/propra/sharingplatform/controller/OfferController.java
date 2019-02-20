@@ -37,7 +37,7 @@ public class OfferController {
         Item item = itemService.findItem(itemId);
         model.addAttribute(item);
         item.getOwner().getAccountName();
-        return "offerReguest";
+        return "offerRequest";
     }
 
     @PostMapping("/offer/request/{itemId}")
