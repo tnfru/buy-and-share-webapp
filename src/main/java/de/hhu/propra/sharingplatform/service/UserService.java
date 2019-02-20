@@ -38,7 +38,8 @@ public class UserService {
         try {
             request.login(accountName, password);
         } catch (ServletException except) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Auto login went wrong");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Auto login went wrong");
         }
     }
 
@@ -52,7 +53,7 @@ public class UserService {
     }
 
     public void updatePassword(User oldUser, String oldPassword, String newPassword,
-                               String confirm) {
+        String confirm) {
         if (!encoder.matches(oldPassword, oldUser.getPasswordHash())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
         }
@@ -63,7 +64,8 @@ public class UserService {
     public User fetchUserByAccountName(String accountName) {
         Optional<User> search = userRepo.findByAccountName(accountName);
         if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Could not authenticate User.");
         }
         return search.get();
     }
@@ -71,7 +73,8 @@ public class UserService {
     public User fetchUserById(Long userId) {
         Optional<User> search = Optional.ofNullable(userRepo.findOneById(userId));
         if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Could not authenticate User.");
         }
         return userRepo.findOneById(userId);
     }
@@ -79,7 +82,8 @@ public class UserService {
     public long fetchUserIdByAccountName(String accountName) {
         Optional<User> search = userRepo.findByAccountName(accountName);
         if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not Authenticated");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Could not authenticate User.");
         }
         return (search.get().getId());
     }

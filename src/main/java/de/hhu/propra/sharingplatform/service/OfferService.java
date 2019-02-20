@@ -4,18 +4,20 @@ import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.validation.OfferValidator;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+
 @Service
 public class OfferService {
 
     private OfferRepo offerRepo;
+
 
     private ContractService contractService;
 
@@ -46,27 +48,8 @@ public class OfferService {
         offerRepo.save(offer);
     }
 
-    /* Return values:
-     *  0: all gucci
-     *  1: start date >= end date
-     *  2: item not available at given time
-     *  3: not enough money
-     *  4: borrower account banned
-     */
-    public int validate(Item item, User requester, LocalDateTime start, LocalDateTime end) {
-        double totalCost = paymentService.calculateTotalPrice(item, start, end) + item.getBail();
-
-        if (start.until(end, ChronoUnit.DAYS) < 1) {
-            return 1;
-        } else if (!item.isAvailable()) {
-            return 2;
-        } else if (!(apiService.isSolventFake(requester, totalCost))) {
-            return 3;
-        } else if (requester.isBan()) {
-            return 4;
-        } else {
-            return 0;
-        }
+    public void validate(Item item, User requester, LocalDateTime start, LocalDateTime end) {
+        OfferValidator.validate(item, requester, start, end, paymentService, apiService);
     }
 
     public List<Offer> getItemOffers(long itemId, User user, boolean onlyClosed) {

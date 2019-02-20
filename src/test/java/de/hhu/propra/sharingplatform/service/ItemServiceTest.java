@@ -1,6 +1,7 @@
 package de.hhu.propra.sharingplatform.service;
 
 import static org.junit.Assert.*;
+
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
@@ -15,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.*;
@@ -31,10 +33,12 @@ public class ItemServiceTest {
     private Item item;
     private User user;
     private ItemService itemService;
+    private ImageService imageService;
 
     @Before
     public void init() {
-        itemService = new ItemService(itemRepo, userService);
+        imageService = mock(ImageService.class);
+        itemService = new ItemService(itemRepo, userService, imageService);
 
         user = new User();
         user.setName("Test");
@@ -43,6 +47,7 @@ public class ItemServiceTest {
         item = new Item(user);
         item.setId((long) 1);
         item.setName("TestItem");
+        item.setOwner(user);
         item.setBail(100.0);
         item.setPrice(20.0);
         item.setDescription("This is a test");
@@ -61,39 +66,48 @@ public class ItemServiceTest {
         assertEquals(1, (long) argument.getValue().getOwner().getId());
     }
 
-    //@Test
+    @Test
     public void removeOneItemValidUser() {
-        when(itemRepo.findOneById(1)).thenReturn(item);
+        Optional<Item> optional = Optional.ofNullable(item);
+        when(itemRepo.findById(anyLong())).thenReturn(optional);
 
-        itemService.removeItem(1, 1);
+        itemService.removeItem(1L, 1);
 
-        assertTrue(itemRepo.findOneById(1).isDeleted());
+        assertTrue(itemRepo.findById(1L).get().isDeleted());
     }
 
-    //@Test
+    @Test
     public void removeOneItemInvalidUser() {
-        when(itemRepo.findOneById(1)).thenReturn(item);
+        boolean thrown = false;
+        Optional<Item> optional = Optional.ofNullable(item);
+        when(itemRepo.findById(anyLong())).thenReturn(optional);
 
-        itemService.removeItem(1, 2);
-
-        assertTrue(!itemRepo.findOneById(1).isDeleted());
+        try {
+            itemService.removeItem(1L, 2);
+        } catch (ResponseStatusException rse) {
+            thrown = true;
+            assertEquals("403 FORBIDDEN \"Not your Item\"", rse.getMessage());
+        }
+        assertFalse(itemRepo.findById(1L).get().isDeleted());
+        assertTrue(thrown);
     }
 
-    //@Test
+    @Test
     public void dontPersistInvalidItem() {
         boolean thrown = false;
         item.setLocation(null);
         when(userService.fetchUserById(1L)).thenReturn(user);
         try {
             itemService.persistItem(item, 1);
-        } catch (ResponseStatusException ignored) {
+        } catch (ResponseStatusException rse) {
             thrown = true;
+            assertEquals("400 BAD_REQUEST \"Invalid Location\"", rse.getMessage());
         }
         verify(itemRepo, times(0)).save(any());
         assertTrue(thrown);
     }
 
-    //@Test
+    @Test
     public void editItemValidItemAndUser() {
         Item editItem = new Item(user);
         editItem.setDescription("This is edited");
@@ -101,18 +115,21 @@ public class ItemServiceTest {
         editItem.setPrice(item.getPrice());
         editItem.setBail(item.getBail());
         editItem.setName(item.getName());
+        editItem.setOwner(user);
         ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
+        Optional<Item> optional = Optional.ofNullable(item);
 
-        when(itemRepo.findOneById(1)).thenReturn(item);
+        when(itemRepo.findById(1L)).thenReturn(optional);
 
-        itemService.editItem(editItem, 1, 1);
+        itemService.editItem(editItem, 1L, 1L);
 
         verify(itemRepo, times(1)).save(argument.capture());
         assertEquals(argument.getValue().getDescription(), editItem.getDescription());
     }
 
-    //@Test
+    @Test
     public void editItemValidItemAndInvalidUser() {
+        boolean thrown = false;
         Item editItem = new Item(user);
         editItem.setDescription("This is edited");
         editItem.setLocation(item.getLocation());
@@ -121,13 +138,18 @@ public class ItemServiceTest {
         editItem.setName(item.getName());
 
         when(itemRepo.findOneById(1)).thenReturn(item);
-
-        itemService.editItem(editItem, 1, 2);
+        try {
+            itemService.editItem(editItem, 1, 2);
+        } catch (ResponseStatusException rse) {
+            thrown = true;
+            assertEquals("404 NOT_FOUND \"Item not Found\"", rse.getMessage());
+        }
 
         verify(itemRepo, times(0)).save(any());
+        assertTrue(thrown);
     }
 
-    //@Test
+    @Test
     public void editItemInvalidItemAndValidUser() {
         boolean thrown = false;
         Item editItem = new Item(user);
@@ -137,18 +159,19 @@ public class ItemServiceTest {
         editItem.setBail(item.getBail());
         editItem.setName(item.getName());
 
-        when(itemRepo.findOneById(1)).thenReturn(item);
+        when(itemRepo.findById(1)).thenReturn(Optional.of(item));
         try {
             itemService.editItem(editItem, 1, 1);
-        } catch (ResponseStatusException ignored) {
+        } catch (ResponseStatusException rse) {
             thrown = true;
+            assertEquals("400 BAD_REQUEST \"Invalid Description\"", rse.getMessage());
         }
 
         verify(itemRepo, times(0)).save(any());
         assertTrue(thrown);
     }
 
-    //@Test
+    @Test
     public void editItemInvalidItemAndInvalidUser() {
         boolean thrown = false;
         Item editItem = new Item(user);
@@ -157,23 +180,17 @@ public class ItemServiceTest {
         editItem.setPrice(item.getPrice());
         editItem.setBail(item.getBail());
         editItem.setName(item.getName());
-        when(itemRepo.findOneById(1)).thenReturn(item);
+        when(itemRepo.findById(1)).thenReturn(Optional.of(item));
 
         try {
             itemService.editItem(editItem, 1, 2);
-        } catch (ResponseStatusException ignored) {
+        } catch (ResponseStatusException rse) {
             thrown = true;
+            assertEquals("403 FORBIDDEN \"Not your Item\"", rse.getMessage());
         }
 
         verify(itemRepo, times(0)).save(any());
         assertTrue(thrown);
-    }
-
-    //@Test
-    public void findOneItem() {
-        when(itemRepo.findOneById(1)).thenReturn(item);
-        Item resultItem = itemService.findItem(1);
-        assertEquals(resultItem, item);
     }
 
     @Test

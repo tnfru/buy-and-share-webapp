@@ -34,7 +34,6 @@ public class UserValidator {
         }
     }
 
-    //TODO is this correct?
     private static void validateMail(User user) {
         if (!Validator.matchesDbGuidelines(user.getEmail())
             || !Validator.isValidMail(user.getEmail())
