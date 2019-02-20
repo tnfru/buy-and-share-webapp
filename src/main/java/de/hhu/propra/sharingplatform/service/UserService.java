@@ -20,12 +20,12 @@ public class UserService {
 
     final UserRepo userRepo;
 
-    @Autowired
-    PasswordEncoder encoder;
+    final PasswordEncoder encoder;
 
     @Autowired
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
+        this.encoder = encoder;
     }
 
     public void persistUser(User user, String password, String confirm) {
@@ -53,7 +53,7 @@ public class UserService {
     }
 
     public void updatePassword(User oldUser, String oldPassword, String newPassword,
-                               String confirm) {
+        String confirm) {
         if (!encoder.matches(oldPassword, oldUser.getPasswordHash())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
         }
@@ -89,7 +89,7 @@ public class UserService {
         return user.getPasswordHash().equals(hashPassword(password));
     }
 
-    private String hashPassword(String plainPassword) {
+    String hashPassword(String plainPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(plainPassword);
     }

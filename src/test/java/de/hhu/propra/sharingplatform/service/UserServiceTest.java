@@ -20,7 +20,9 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -29,14 +31,12 @@ public class UserServiceTest {
     @MockBean
     private UserRepo userRepo;
 
+    @MockBean
+    private PasswordEncoder encoder;
+
     private UserService userService;
 
-    public User createFakeUser() {
-
-        return new User();
-    }
-
-    public User createRealUser(String name, String accountName, String address, String email) {
+    public User createUser(String name, String accountName, String address, String email) {
         User user = new User();
         user.setName(name);
         user.setAccountName(accountName);
@@ -47,29 +47,12 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
-        userService = new UserService(userRepo);
-        //userService = mock(UserService.class);
-        //User user = createRealUser();
-        /*
-        when(user.getPasswordHash()).thenReturn("foo");
-        when(user.getName()).thenReturn("foo");
-        when(user.getEmail()).thenReturn("foo@bar.de");
-        when(user.getAddress()).thenReturn("foo");
-        userTwo = new User();
-        password = "123";
-        confirm = "123";
-        name = "testPerson";
-        String addresse = "testAddresse";
-        String email = "test@test.de";
-        user.setEmail(email);
-        user.setName(name);
-        user.setAddress(addresse);
-        */
+        userService = new UserService(userRepo, encoder);
     }
 
     @Test
     public void persistUser() {
-        User user = createRealUser("name", "accountname", "addresse", "e@mail.de");
+        User user = createUser("name", "accountname", "addresse", "e@mail.de");
         ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
 
         userService.persistUser(user, "foo", "foo");
@@ -85,6 +68,29 @@ public class UserServiceTest {
 
     @Test
     public void updateUser() {
+        User oldUser = createUser("typ", "hobo", "foo", "e@mail.de");
+        User newUser = createUser("typo", "hobo", "bar", "e@mail.de");
+        ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
+        userService.updateUser(oldUser, newUser);
+        verify(userRepo, times(1)).save(argument.capture());
+        assertEquals(newUser, oldUser);
+    }
+
+    @Test
+    public void updatePassword() {
+        ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
+        User user = createUser("name", "dude", "wo", "e@mai.de");
+        String password = "123";
+        String newPassword = "321";
+        String confirm = "321";
+
+        userService.persistUser(user, password, "123");
+
+        when(encoder.matches(anyString(), anyString())).thenReturn(true);
+
+        userService.updatePassword(user, "123", newPassword, confirm);
+
+        verify(userRepo, times(2)).save(argument.capture());
 
     }
 
@@ -92,9 +98,6 @@ public class UserServiceTest {
     public void fetchUserByAccountName() {
     }
 
-    @Test
-    public void updatePassword() {
-    }
 
     @Test
     public void fetchUserIdByAccountName() {
