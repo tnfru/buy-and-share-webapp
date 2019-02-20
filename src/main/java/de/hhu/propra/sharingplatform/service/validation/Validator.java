@@ -47,7 +47,7 @@ public class Validator {
     }
 
     /**
-     * Guidlines:
+     * Guidelines:
      * String not null.
      * String not empty.
      * String length < 256.
@@ -55,7 +55,7 @@ public class Validator {
      * @param string string to check
      * @return true for guidline matching strings
      */
-    public static boolean matchesDbGuidlines(String string) {
+    public static boolean matchesDbGuidelines(String string) {
         return string != null && string.length() != 0 && string.length() < 256;
     }
 
@@ -71,11 +71,11 @@ public class Validator {
         return matcher.find();
     }
 
-    public static void validateName(String accountName, String s) {
-        if (!Validator.matchesDbGuidlines(accountName) ||
-            !Validator.isPrintable(accountName) ||
-            !Validator.freeOfSpecialChars(accountName)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
+    public static void validateName(String accountName, String message) {
+        if (!Validator.matchesDbGuidelines(accountName)
+            || !Validator.isPrintable(accountName)
+            || !Validator.freeOfSpecialChars(accountName)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
         }
     }
 }

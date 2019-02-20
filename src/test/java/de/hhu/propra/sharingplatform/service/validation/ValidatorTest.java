@@ -103,27 +103,27 @@ public class ValidatorTest {
     //////////////////////////////
 
     @Test
-    public void matchesGuidlinesEmpty() {
-        assertFalse(Validator.matchesDbGuidlines(""));
+    public void matchesGuidelinesEmpty() {
+        assertFalse(Validator.matchesDbGuidelines(""));
     }
 
     @Test
-    public void matchesGuidlinesNull() {
-        assertFalse(Validator.matchesDbGuidlines(null));
+    public void matchesGuidelinesNull() {
+        assertFalse(Validator.matchesDbGuidelines(null));
     }
 
     @Test
-    public void matchesGuidlinesNormal() {
-        assertTrue(Validator.matchesDbGuidlines("!_llslfg$"));
+    public void matchesGuidelinesNormal() {
+        assertTrue(Validator.matchesDbGuidelines("!_llslfg$"));
     }
 
     @Test
-    public void matchesGuidlinesTooLong() {
-        String veryLongSTring = "A";
+    public void matchesGuidelinesTooLong() {
+        StringBuilder veryLongString = new StringBuilder("A");
         for (int i = 0; i < 256; i++) {
-            veryLongSTring += "B";
+            veryLongString.append("B");
         }
-        assertFalse(Validator.matchesDbGuidlines(veryLongSTring));
+        assertFalse(Validator.matchesDbGuidelines(veryLongString.toString()));
     }
 
     //////////////////////////////
