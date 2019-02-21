@@ -24,12 +24,15 @@ public class Contract {
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Payment payment;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Item item;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private Conflict conflict;
+
     private LocalDateTime start;
     private LocalDateTime expectedEnd;
     private LocalDateTime realEnd;
-    private boolean isConflict;
 
     @SuppressWarnings("unused")
     private Contract() {
@@ -40,7 +43,10 @@ public class Contract {
         this.borrower = offer.getBorrower();
         this.item = offer.getItem();
         this.expectedEnd = offer.getEnd();
-        this.realEnd = offer.getEnd();
         this.start = offer.getStart();
+    }
+
+    public boolean isConflict() {
+        return conflict != null;
     }
 }

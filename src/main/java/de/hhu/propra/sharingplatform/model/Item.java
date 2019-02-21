@@ -41,6 +41,10 @@ public class Item {
         CascadeType.REFRESH}, mappedBy = "item")
     private List<Offer> offers = new ArrayList<>();
 
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+        CascadeType.REFRESH}, mappedBy = "item")
+    private List<Contract> contracts = new ArrayList<>();
+
     @SuppressWarnings("unused")
     private Item() {
         // used for jpa
