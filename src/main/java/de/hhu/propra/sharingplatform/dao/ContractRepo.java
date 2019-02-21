@@ -14,6 +14,4 @@ public interface ContractRepo extends CrudRepository<Contract, Long> {
     Contract findOneById(long id);
 
     List<Contract> findAllByItem(Item item);
-
-    List<Contract> findAllByActiveIsTrue();
 }

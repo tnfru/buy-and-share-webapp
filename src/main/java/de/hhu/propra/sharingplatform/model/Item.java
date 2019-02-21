@@ -3,6 +3,10 @@ package de.hhu.propra.sharingplatform.model;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @ToString(exclude = "owner")

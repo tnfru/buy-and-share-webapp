@@ -14,6 +14,7 @@ import de.hhu.propra.sharingplatform.service.ApiService;
 import de.hhu.propra.sharingplatform.service.PaymentService;
 import java.time.LocalDateTime;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.server.ResponseStatusException;
@@ -61,6 +62,7 @@ public class OfferValidatorTest {
         assertTrue(thrown);
     }
 
+    @Ignore
     @Test
     public void validateEndSameAsStart() {
         boolean thrown = false;
