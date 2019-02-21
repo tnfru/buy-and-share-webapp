@@ -16,12 +16,12 @@ public class OfferValidator {
 
     public static void validate(Item item, User requester, LocalDateTime start, LocalDateTime end,
         PaymentService paymentService, ApiService apiService) {
-        double totalCost = paymentService.calculateTotalPrice(item, start, end) + item.getBail();
 
         if (start.until(end, ChronoUnit.DAYS) < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End date needs to be after"
                 + " Start date");
         }
+        double totalCost = paymentService.calculateTotalPrice(item, start, end) + item.getBail();
         if (!(apiService.isSolvent(requester, totalCost))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough money");
         }
