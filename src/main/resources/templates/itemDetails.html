@@ -11,8 +11,6 @@
   <h1 th:text="${item?.name}"></h1>
   <br>
   <img th:src="@{${'/images/' + item?.imageFileName}}"/>
-  <p th:if="${item?.available} == true" style="color: forestgreen">Available</p>
-  <p th:if="${item?.available} == false" style="color: crimson">Not Available</p>
   <dl>
     <dt>Description:</dt>
     <dd th:text="|${item?.description}|"></dd>

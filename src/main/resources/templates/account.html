@@ -69,7 +69,6 @@
               <th scope="col">Name</th>
               <th scope="col">Price</th>
               <th scope="col">Bail</th>
-              <th scope="col">Availability</th>
               <th scope="col">Offers(Open)</th>
               <th scope="col">Conflict</th>
               <th scope="col" class="mx-auto">Options</th>
@@ -80,12 +79,6 @@
               <td th:text="${item.getName()}"> Test Name</td>
               <td th:text="${item.getPrice()}"> 33</td>
               <td th:text="${item.getBail()}"> 333</td>
-              <td th:if="${item?.isAvailable()} == true">
-                <span style="color: green;">&#10004;</span>
-              </td>
-              <td th:if="${item?.isAvailable()} == false">
-                <span style="color: red;">&#10006;</span>
-              </td>
               <td>
                 <a th:href="|/offer/show/${item.getId()}|" class="btn-primary">
                   <button type="button" class="btn btn-primary btn-sm"
@@ -99,6 +92,7 @@
                     <span class="badge badge-light" th:text="${item.getActiveOffers()}"></span>
                   </button>
                 </a>
+              </td>
               </td>
               <td> Is Conflict?</td>
               <td>
@@ -138,7 +132,7 @@
               <td th:text="${con.isConflict()}"> Is Conflict</td>
               <td>
                 <form method="post" th:action="|/contract/${con.getId()}/returnItem|">
-                  <button type="submit" class="btn btn-primary btn-sm" >Return Item</button>
+                  <button type="submit" class="btn btn-primary btn-sm">Return Item</button>
                 </form>
                 <a href="#"
                    class="btn btn-danger btn-sm">Item Owner</a>
@@ -176,7 +170,7 @@
                 <td th:text="${con.isConflict()}"> Is Conflict</td>
                 <td>
                   <form method="post" th:action="|/contract/${con.getId()}/acceptReturn|">
-                    <button type="submit" class="btn btn-primary btn-sm" >Accept Return</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Accept Return</button>
                   </form>
                   <form method="post" th:action="|/contract/${con.getId()}/openConflict|">
                     <button type="submit" class="btn btn-danger btn-sm">Conflict</button>
@@ -290,12 +284,12 @@
       <!--Gets current Propay amount directly -->
       <script>
         var currentValueEle = $("#currentAmount");
-        $(document).ready(function(){
+        $(document).ready(function () {
           fetch('/user/propay')
-          .then(function(response) {
+          .then(function (response) {
             return response.json();
           })
-          .then(function(value) {
+          .then(function (value) {
             currentValueEle.val(value);
           });
         });
