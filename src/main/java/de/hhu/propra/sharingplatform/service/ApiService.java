@@ -6,7 +6,15 @@ import de.hhu.propra.sharingplatform.dto.ProPay;
 import de.hhu.propra.sharingplatform.dto.ProPayReservation;
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;
+import java.net.ConnectException;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -16,10 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
+
 
 @Data
 @Service
@@ -37,7 +43,14 @@ public class ApiService {
         String url = "http://" + host + ":8888/account/" + userName;
         RestTemplate jsonResponse = new RestTemplate();
 
-        return jsonResponse.getForObject(url, String.class);
+        String response;
+        try {
+            response = jsonResponse.getForObject(url, String.class);
+        } catch (Exception exception) {
+            throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
+                "Couldnt reach Propayserver.");
+        }
+        return response;
     }
 
     public ProPay mapJson(String userName) {
@@ -86,7 +99,7 @@ public class ApiService {
         }
     }
 
-    public void createAccount(String proPayId, double amount) {
+    public void createAccountOrAddMoney(String proPayId, double amount) {
         List<String> pathVariables = new ArrayList<>();
         pathVariables.add("account");
         pathVariables.add(proPayId);
@@ -163,14 +176,40 @@ public class ApiService {
     }
 
     public void freeReservation(long amountProPayId, String proPayIdSender) {
+        List<String> path = new ArrayList<>();
+        path.add("reservation");
+        path.add("release");
+        path.add(proPayIdSender);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("reservationId", Long.toString(amountProPayId));
 
+        buildRequest("POST", "http://" + host + ":8888/",
+            path, parameters);
     }
 
     public void transferMoney(Payment paymentInfo) {
+        List<String> path = new ArrayList<>();
+        path.add("account");
+        path.add(paymentInfo.getProPayIdSender());
+        path.add("transfer");
+        path.add(paymentInfo.getProPayIdRecipient());
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("amount", Double.toString(paymentInfo.getAmount()));
 
+        buildRequest("POST", "http://" + host + ":8888/",
+            path, parameters);
     }
 
     public void punishReservation(long bailProPayId, String proPayIdSender) {
+        List<String> path = new ArrayList<>();
+        path.add("reservation");
+        path.add("punish");
+        path.add(proPayIdSender);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("reservationId", Long.toString(bailProPayId));
+
+        buildRequest("POST", "http://" + host + ":8888/",
+            path, parameters);
 
     }
 }

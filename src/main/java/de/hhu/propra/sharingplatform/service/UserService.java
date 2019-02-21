@@ -21,10 +21,13 @@ public class UserService {
 
     private final PasswordEncoder encoder;
 
+    private final ApiService apiService;
+
     @Autowired
-    public UserService(UserRepo userRepo, PasswordEncoder encoder) {
+    public UserService(UserRepo userRepo, PasswordEncoder encoder, ApiService apiService) {
         this.userRepo = userRepo;
         this.encoder = encoder;
+        this.apiService = apiService;
     }
 
     public void persistUser(User user, String password, String confirm) {
@@ -105,5 +108,26 @@ public class UserService {
         UserValidator.validatePassword(password);
     }
 
+    public Double getCurrentPropayAmount(String accountName) {
+        return apiService.mapJson(accountName).getAmount();
+    }
+
+    public void updateProPay(User user, String account, String inputAmount) {
+        if (account.length() > 0) {
+            user.setPropayId(account);
+            //UserValidator.validateUser(user, userRepo);
+            userRepo.save(user);
+        }
+        if (inputAmount.length() > 0) {
+            Double amount;
+            try {
+                amount = Double.parseDouble(inputAmount);
+                apiService.createAccountOrAddMoney(user.getPropayId(), amount);
+            } catch (NumberFormatException nfException) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Propay amount have to be a number.");
+            }
+        }
+    }
 }
 
