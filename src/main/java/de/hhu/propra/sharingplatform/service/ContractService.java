@@ -46,8 +46,8 @@ public class ContractService {
                 "This contract does not involve you");
         }
         LocalDateTime current = LocalDateTime.now();
-        paymentService.transferPayment(contract);
         contract.setRealEnd(current);
+        paymentService.transferPayment(contract);
         contractRepo.save(contract);
     }
 
@@ -55,6 +55,8 @@ public class ContractService {
         Contract contract = contractRepo.findOneById(contractId);
         if (userIsContractOwner(contract, accountName)) {
             paymentService.freeBailReservation(contract);
+            contract.setFinished(true);
+            contractRepo.save(contract);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
