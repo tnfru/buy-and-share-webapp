@@ -1,24 +1,16 @@
 package de.hhu.propra.sharingplatform.model;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Transient;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
 
 @Data
 @Entity
@@ -108,7 +100,7 @@ public class User {
     public List<Contract> getChosenContracts(boolean finished) {
         List<Contract> chosenContracts = new ArrayList<>();
         for (Contract contract : contracts) {
-            if(contract.isFinished() == finished) {
+            if (contract.isFinished() == finished) {
                 chosenContracts.add(contract);
             }
         }
