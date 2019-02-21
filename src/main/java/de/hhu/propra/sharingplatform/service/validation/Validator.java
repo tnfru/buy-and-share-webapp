@@ -29,7 +29,7 @@ public class Validator {
      * @return true for strings free of special chars
      */
     public static boolean freeOfSpecialChars(String string) {
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9| |,|.|-]*$", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9| |'|ß|,|.|-]*$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(string);
         return matcher.find();
     }
@@ -56,7 +56,7 @@ public class Validator {
      * @return true for guidline matching strings
      */
     public static boolean matchesDbGuidelines(String string) {
-        return string != null && string.length() != 0 && string.length() < 256;
+        return string != null && string.length() != 0 && string.length() < 255;
     }
 
     /**
@@ -71,7 +71,24 @@ public class Validator {
         return matcher.find();
     }
 
-    public static void validateName(String accountName, String message) {
+    public static void validateName(String name, String message) {
+        if (!Validator.matchesDbGuidelines(name)
+            || !Validator.isPrintable(name)
+            || !Validator.freeOfSpecialChars(name)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+        }
+    }
+
+    public static void validateAccountName(String accountName, String message) {
+        if (!Validator.matchesDbGuidelines(accountName)
+            || !Validator.isPrintable(accountName)
+            || !Validator.freeOfSpecialChars(accountName)
+            || accountName.equals("anonymousUser")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+        }
+    }
+
+    public static void validateAdress(String accountName, String message) {
         if (!Validator.matchesDbGuidelines(accountName)
             || !Validator.isPrintable(accountName)
             || !Validator.freeOfSpecialChars(accountName)) {
