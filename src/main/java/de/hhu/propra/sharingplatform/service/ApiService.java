@@ -163,14 +163,40 @@ public class ApiService {
     }
 
     public void freeReservation(long amountProPayId, String proPayIdSender) {
+        List<String> path = new ArrayList<>();
+        path.add("reservation");
+        path.add("release");
+        path.add(proPayIdSender);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("reservationId", Long.toString(amountProPayId));
 
+        buildRequest("post", "http://" + host + ":8888/",
+            path, parameters);
     }
 
     public void transferMoney(Payment paymentInfo) {
+        List<String> path = new ArrayList<>();
+        path.add("account");
+        path.add(paymentInfo.getProPayIdSender());
+        path.add("transfer");
+        path.add(paymentInfo.getProPayIdRecipient());
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("amount", Double.toString(paymentInfo.getAmount()));
 
+        buildRequest("post", "https://" + host + ":8888/",
+            path, parameters);
     }
 
     public void punishReservation(long bailProPayId, String proPayIdSender) {
+        List<String> path = new ArrayList<>();
+        path.add("reservation");
+        path.add("punish");
+        path.add(proPayIdSender);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("reservationId", Long.toString(bailProPayId));
+
+        buildRequest("post", "https://" + host + ":8888/",
+            path, parameters);
 
     }
 }
