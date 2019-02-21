@@ -43,8 +43,12 @@ public class ContractService {
         }
     }
 
-    public void returnItem(long contractId) {
+    public void returnItem(long contractId, String accountName) {
         Contract contract = contractRepo.findOneById(contractId);
+        if (!userIsBorrower(contract, accountName)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "This contract does not involve you");
+        }
         LocalDateTime current = LocalDateTime.now();
         paymentService.transferPayment(contract);
         contract.setRealEnd(current);
@@ -84,6 +88,10 @@ public class ContractService {
     public void calcPrice(long contractId) {
         Contract contract = contractRepo.findOneById(contractId);
         paymentService.create(contract);
+    }
+
+    private boolean userIsBorrower(Contract contract, String accountName) {
+        return contract.getBorrower().getAccountName().equals(accountName);
     }
 
     public boolean userIsContractOwner(Contract contract, String userName) {

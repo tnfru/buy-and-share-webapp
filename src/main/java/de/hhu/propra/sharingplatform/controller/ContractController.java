@@ -25,4 +25,10 @@ public class ContractController {
         contractService.openConflict(contractId, principal.getName());
         return "redirect:/user/account";
     }
+
+    @PostMapping("/contract/{contractId}/returnItem")
+    public String returnItem(@PathVariable long contractId, Principal principal) {
+        contractService.returnItem(contractId, principal.getName());
+        return "redirect:/user/account";
+    }
 }
