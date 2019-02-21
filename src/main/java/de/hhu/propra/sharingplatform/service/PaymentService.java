@@ -39,7 +39,7 @@ public class PaymentService {
     }
 
     double calculateTotalPrice(Contract contract) {
-        long timePassed = contract.getStart().until(contract.getRealEnd(), ChronoUnit.DAYS);
+        long timePassed = contract.getStart().until(contract.getExpectedEnd(), ChronoUnit.DAYS);
         return timePassed * contract.getItem().getPrice();
     }
 
