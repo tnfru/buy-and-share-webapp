@@ -29,28 +29,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-/*
+
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
 @Import( {UserService.class})
 @ConditionalOnClass
 public class UserControllerTest {
 
-
+    @Autowired
     private MockMvc mvc;
 
     @MockBean
     private UserService userService;
 
-
-    @Autowired
+    @MockBean
     private SecConfig secConfig;
 
-    @Before
-    public void setup() {
-        mvc = MockMvcBuilders
-            .webAppContextSetup(context)
-    }
 
     @Test
     public void userRegisterGetNotLoggedIn() throws Exception {
@@ -61,7 +55,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(value="spring", roles = "Admin")
+    @WithMockUser(value = "spring", roles = "Admin")
     public void userRegisterGetLoggedIn() throws Exception {
         mvc.perform(get("/user/register")
             .contentType(MediaType.TEXT_HTML))
@@ -70,7 +64,7 @@ public class UserControllerTest {
 
 
     @Test
-    public  void userRegisterPostNotLoggedInPasswordCorrect() throws Exception {
+    public void userRegisterPostNotLoggedInPasswordCorrect() throws Exception {
         mvc.perform(post("/user/register")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("name", "name")
@@ -84,7 +78,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public  void userRegisterPostNotLoggedInPasswordNotCorrect() throws Exception {
+    public void userRegisterPostNotLoggedInPasswordNotCorrect() throws Exception {
         mvc.perform(post("/user/register")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("name", "name")
@@ -95,4 +89,4 @@ public class UserControllerTest {
             .param("confirm", "123"))
             .andExpect(status().is3xxRedirection());
     }
-*/
+}
