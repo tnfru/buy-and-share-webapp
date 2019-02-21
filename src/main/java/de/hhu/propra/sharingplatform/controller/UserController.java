@@ -3,6 +3,7 @@ package de.hhu.propra.sharingplatform.controller;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,11 +24,23 @@ public class UserController {
 
     @GetMapping("/user/register")
     public String registerPage(Model model) {
+        if (!SecurityContextHolder.getContext()
+            .getAuthentication()
+            .getName()
+            .equals("anonymousUser")) {
+            return "redirect:/";
+        }
         return "userForm";
     }
 
     @PostMapping("/user/register")
     public String registerNewUser(Model model, User user, String password, String confirm) {
+        if (!SecurityContextHolder.getContext()
+            .getAuthentication()
+            .getName()
+            .equals("anonymousUser")) {
+            return "redirect:/";
+        }
         userService.persistUser(user, password, confirm);
         userService.loginUsingSpring(request, user.getAccountName(), password);
         return "redirect:/";
