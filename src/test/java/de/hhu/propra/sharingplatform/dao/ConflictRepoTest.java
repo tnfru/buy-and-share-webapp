@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -22,7 +22,7 @@ public class ConflictRepoTest {
     ConflictRepo repo;
 
     @Test
-    public void statusPending(){
+    public void statusPending() {
         Conflict pending1 = new Conflict();
         pending1.setStatus(Status.PENDING);
         Conflict pending2 = new Conflict();
@@ -36,14 +36,14 @@ public class ConflictRepoTest {
 
         List<Conflict> conflicts = repo.findAllByStatus(Status.PENDING);
 
-        for (Conflict conflict: conflicts) {
-            assertEquals(conflict.getStatus(),Status.PENDING);
+        for (Conflict conflict : conflicts) {
+            assertEquals(conflict.getStatus(), Status.PENDING);
         }
         assertEquals(conflicts.size(), 2);
     }
 
     @Test
-    public void statusRejected(){
+    public void statusRejected() {
         Conflict pending1 = new Conflict();
         pending1.setStatus(Status.PENDING);
         Conflict pending2 = new Conflict();
@@ -57,8 +57,8 @@ public class ConflictRepoTest {
 
         List<Conflict> conflicts = repo.findAllByStatus(Status.REJECTED);
 
-        for (Conflict conflict: conflicts) {
-            assertEquals(conflict.getStatus(),Status.REJECTED);
+        for (Conflict conflict : conflicts) {
+            assertEquals(conflict.getStatus(), Status.REJECTED);
         }
         assertEquals(conflicts.size(), 1);
     }
