@@ -99,7 +99,7 @@ public class ApiService {
         }
     }
 
-    public void createAccount(String proPayId, double amount) {
+    public void createAccountOrAddMoney(String proPayId, double amount) {
         List<String> pathVariables = new ArrayList<>();
         pathVariables.add("account");
         pathVariables.add(proPayId);
@@ -176,34 +176,40 @@ public class ApiService {
     }
 
     public void freeReservation(long amountProPayId, String proPayIdSender) {
+        List<String> path = new ArrayList<>();
+        path.add("reservation");
+        path.add("release");
+        path.add(proPayIdSender);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("reservationId", Long.toString(amountProPayId));
 
+        buildRequest("POST", "http://" + host + ":8888/",
+            path, parameters);
     }
 
     public void transferMoney(Payment paymentInfo) {
+        List<String> path = new ArrayList<>();
+        path.add("account");
+        path.add(paymentInfo.getProPayIdSender());
+        path.add("transfer");
+        path.add(paymentInfo.getProPayIdRecipient());
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("amount", Double.toString(paymentInfo.getAmount()));
 
+        buildRequest("POST", "http://" + host + ":8888/",
+            path, parameters);
     }
 
     public void punishReservation(long bailProPayId, String proPayIdSender) {
+        List<String> path = new ArrayList<>();
+        path.add("reservation");
+        path.add("punish");
+        path.add(proPayIdSender);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("reservationId", Long.toString(bailProPayId));
 
-    }
+        buildRequest("POST", "http://" + host + ":8888/",
+            path, parameters);
 
-    public void addAmount(String proPayIdSender, double amount) {
-        try {
-            URL url =
-                new URL("http://" + host + ":8888/account/" + proPayIdSender);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-            out.writeBytes("amount=" + amount);
-            out.flush();
-            out.close();
-            convertHttpResponse(new InputStreamReader(conn.getInputStream()));
-        } catch (ConnectException connectException) {
-            throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
-                "Couldnt reach Propayserver.");
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
     }
 }
