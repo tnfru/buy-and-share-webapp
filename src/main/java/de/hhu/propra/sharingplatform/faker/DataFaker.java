@@ -98,7 +98,7 @@ public class DataFaker implements ServletContextInitializer {
 
         log.info("    Create ProPay...");
         for (User user : users) {
-            apiService.createAccount(user.getPropayId(), 10000000);
+            apiService.createAccountOrAddMoney(user.getPropayId(), 10000000);
         }
 
         log.info("    Creating Offers...");
