@@ -20,6 +20,9 @@
         <a class="nav-link" id="v-pills-new-tab" data-toggle="pill"
            href="#v-pills-newItem"
            role="tab" aria-controls="v-pills-new-tab" aria-selected="false">Options</a>
+        <a class="nav-link" id="v-pills-propay-tab" data-toggle="pill"
+           href="#v-pills-propay"
+           role="tab" aria-controls="v-pills-propay" aria-selected="false">Propay settings</a>
       </div>
     </div>
     <div class="col-9">
@@ -39,15 +42,15 @@
               <span th:text="${user.getAccountName()}">name</span>
             </li>
 
-                        <li class="list-group-item">
-                            <b>Mail:</b>
-                            <span th:text="${user.getEmail()}">name@abc.de</span>
-                        </li>
+            <li class="list-group-item">
+              <b>Mail:</b>
+              <span th:text="${user.getEmail()}">name@abc.de</span>
+            </li>
 
-                        <li class="list-group-item">
-                            <b>ProPayID:</b>
-                            <span th:text="${user.getPropayId()}">abc</span>
-                        </li>
+            <li class="list-group-item">
+              <b>ProPayID:</b>
+              <span th:text="${user.getPropayId()}">abc</span>
+            </li>
             <li class="list-group-item">
               <b>Rating:</b>
               <span th:text="|${user.totalRatings()}|"></span> Bewertungen:
@@ -193,19 +196,68 @@
           <a style="margin-top:1em; " class="btn btn-info" href="/user/changePassword">Change
             Password</a>
         </div>
+        <div class="tab-pane fade" id="v-pills-propay" role="tabpanel"
+             aria-labelledby="v-pills-propay">
+          <form action="/user/edit/propay" method="post">
+            <div class="form-group row">
+              <label for="currentPropayId" class="col-sm-4 col-form-label">Current PropayId</label>
+              <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="currentPropayId"
+                       th:value="${user.getPropayId()}">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="currentAmount" class="col-sm-4 col-form-label">Current amount</label>
+              <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="currentAmount"
+                       value="Couldnt reach Propayserver">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="propayId" class="col-sm-4 col-form-label">New PropayId</label>
+              <div class="col-sm-10">
+                <input name="propayAccount" type="text" class="form-control" id="propayId"
+                       placeholder="New PropayId">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="propayAmount" class="col-sm-4 col-form-label">Add Propay amount</label>
+              <div class="col-sm-10">
+                <input name="propayAmount" type="number" class="form-control" id="propayAmount"
+                       placeholder="New Propay amount">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </form>
+        </div>
+      </div>
+
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+              integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+              crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+              integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+              crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+              integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+              crossorigin="anonymous"></script>
+
+      <!--Gets current Propay amount directly -->
+      <script>
+        var currentValueEle = $("#currentAmount");
+        $(document).ready(function(){
+          fetch('/user/propay')
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(value) {
+            currentValueEle.val(value);
+          });
+        });
+      </script>
+
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"></script>
-
+  </div>
 </div>
-
 </body>
 </html>
