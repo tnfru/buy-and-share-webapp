@@ -55,7 +55,8 @@ public class PaymentService {
 
     public void transferPayment(Contract contract) {
         Payment paymentInfo = contract.getPayment();
-        apiService.freeReservation(paymentInfo.getAmountProPayId(), paymentInfo.getProPayIdSender());
+        apiService.freeReservation(paymentInfo.getAmountProPayId(),
+            paymentInfo.getProPayIdSender());
         paymentInfo.setAmount(calculateTotalPrice(contract));
         apiService.transferMoney(paymentInfo);
     }
@@ -67,6 +68,7 @@ public class PaymentService {
 
     public void punishBailReservation(Contract contract) {
         Payment paymentInfo = contract.getPayment();
-        apiService.punishReservation(paymentInfo.getBailProPayId(), paymentInfo.getProPayIdSender());
+        apiService.punishReservation(paymentInfo.getBailProPayId(),
+            paymentInfo.getProPayIdSender());
     }
 }
