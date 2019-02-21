@@ -34,9 +34,9 @@ public class ContractService {
 
     public void create(Offer offer) {
         Contract contract = new Contract(offer);
-        contractRepo.save(contract);
         // -> Payment
-        paymentService.create(contract);
+        contract.setPayment(paymentService.create(contract));
+        contractRepo.save(contract);
     }
 
     public void returnItem(long contractId, String accountName) {
