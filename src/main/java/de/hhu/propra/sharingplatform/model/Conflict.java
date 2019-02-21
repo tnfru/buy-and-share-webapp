@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 public class Conflict {
 
-
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
