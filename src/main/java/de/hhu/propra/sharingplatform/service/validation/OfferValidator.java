@@ -39,7 +39,7 @@ public class OfferValidator {
         LocalDateTime end) {
         List<Contract> contracts = contractRepo.findAllByItem(item);
         for (Contract contract : contracts) { // todo dont compare contracts already closed
-            if (!(contract.getStart().isAfter(end) || contract.getRealEnd().isBefore(start))) {
+            if (!(contract.getStart().isAfter(end) || contract.getExpectedEnd().isBefore(start))) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid period");
             }
         }
