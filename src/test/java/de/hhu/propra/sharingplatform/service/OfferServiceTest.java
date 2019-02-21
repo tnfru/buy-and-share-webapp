@@ -16,7 +16,6 @@ import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import java.time.LocalDateTime;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -171,7 +170,7 @@ public class OfferServiceTest {
     }
 
     @Test
-    public void acceptOfferNotInDbTest() {
+    public void acceptOfferNotInDb() {
         when(offerRepo.findOneById(anyLong())).thenReturn(null);
         boolean thrown = false;
 
@@ -186,11 +185,13 @@ public class OfferServiceTest {
         assertTrue(thrown);
     }
 
-    @Ignore
     @Test
-    public void declineOfferTest() {
+    public void declineOfferValid() {
         when(offerRepo.findOneById(anyLong())).thenReturn(offer);
-        //offerService.declineOffer(anyLong(), );
+        when(itemService.userIsOwner(anyLong(), anyLong())).thenReturn(true);
+
+        offerService.declineOffer(anyLong(), item.getOwner());
+
         ArgumentCaptor<Offer> argument = ArgumentCaptor.forClass(Offer.class);
 
         verify(contractService, times(0)).create(any());
@@ -202,103 +203,33 @@ public class OfferServiceTest {
         assertFalse(offer.isAccept());
     }
 
-    @Ignore
-    @Test(expected = NullPointerException.class)
-    public void declineOfferNotInDbTest() {
+    @Test
+    public void declineOfferNotInDb() {
         when(offerRepo.findOneById(anyLong())).thenReturn(null);
+        boolean thrown = false;
 
-        //offerService.decline(anyLong());
-    }
-
-    /* Validate functions tests for each return value */
-
-    /*@Test
-    public void startAfterEnd() {
-        Item item = mock(Item.class);
-        User requester = mock(User.class);
-        LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().minusDays(1);
-
-        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
-
-        assertEquals(1, offerService.validate(item, requester, start, end));
+        try {
+            offerService.acceptOffer(1L, item.getOwner());
+        } catch (NullPointerException nullException) {
+            thrown = true;
+        }
+        assertTrue(thrown);
     }
 
     @Test
-    public void sameStartAndEnd() {
-        Item item = mock(Item.class);
-        User requester = mock(User.class);
+    public void declineOfferInvalidUser() {
+        when(offerRepo.findOneById(anyLong())).thenReturn(offer);
+        when(itemService.userIsOwner(anyLong(), anyLong())).thenReturn(false);
 
-        LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.from(start);
+        boolean thrown = false;
 
-        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
-
-        assertEquals(1, offerService.validate(item, requester, start, end));
+        try {
+            offerService.declineOffer(1L, item.getOwner());
+        } catch (ResponseStatusException respException) {
+            assertEquals("403 FORBIDDEN \"This item does not belong to you\"",
+                respException.getMessage());
+            thrown = true;
+        }
+        assertTrue(thrown);
     }
-
-    @Test
-    public void itemUnavailable() {
-        Item item = mock(Item.class);
-        when(item.isAvailable()).thenReturn(false);
-        User requester = mock(User.class);
-
-        LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().plusDays(360);
-
-        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
-
-        assertEquals(2, offerService.validate(item, requester, start, end));
-    }
-
-    @Test
-    public void notSolvent() {
-        Item item = mock(Item.class);
-        when(item.isAvailable()).thenReturn(true);
-        User requester = mock(User.class);
-
-        LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().plusDays(360);
-
-        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
-        when(apiService.isSolvent(any(), anyDouble())).thenReturn(false);
-
-        assertEquals(3, offerService.validate(item, requester, start, end));
-    }
-
-    @Test
-    public void requesterBanned() {
-        Item item = mock(Item.class);
-        when(item.isAvailable()).thenReturn(true);
-        when(item.getBail()).thenReturn(10.0);
-        User requester = mock(User.class);
-        when(requester.isBan()).thenReturn(true);
-
-        LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().plusDays(360);
-
-        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
-        when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);
-        when(apiService.isSolventFake(any(), anyDouble())).thenReturn(true);
-
-        assertEquals(4, offerService.validate(item, requester, start, end));
-    }
-
-    @Test
-    public void allGucci() {
-        Item item = mock(Item.class);
-        when(item.isAvailable()).thenReturn(true);
-        User requester = mock(User.class);
-        when(requester.isBan()).thenReturn(false);
-
-        LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().plusDays(360);
-
-        when(paymentService.calculateTotalPrice(any(), any(), any())).thenReturn(100.0);
-        when(apiService.isSolvent(any(), anyDouble())).thenReturn(true);
-        when(apiService.isSolventFake(any(), anyDouble())).thenReturn(true);
-
-        assertEquals(0, offerService.validate(item, requester, start, end));
-    }*/
-
 }
