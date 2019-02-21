@@ -31,6 +31,7 @@ public class SecConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().permitAll();
         http.logout().permitAll();
 
+
         http.userDetailsService(userDetailsService);
 
         // to be able to use the faker we need these options.

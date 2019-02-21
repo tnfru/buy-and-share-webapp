@@ -6,7 +6,15 @@ import de.hhu.propra.sharingplatform.dto.ProPay;
 import de.hhu.propra.sharingplatform.dto.ProPayReservation;
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;
+import java.net.ConnectException;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -16,10 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
+
 
 @Data
 @Service
@@ -37,7 +43,14 @@ public class ApiService {
         String url = "http://" + host + ":8888/account/" + userName;
         RestTemplate jsonResponse = new RestTemplate();
 
-        return jsonResponse.getForObject(url, String.class);
+        String response;
+        try {
+            response = jsonResponse.getForObject(url, String.class);
+        } catch (Exception exception) {
+            throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
+                "Couldnt reach Propayserver.");
+        }
+        return response;
     }
 
     public ProPay mapJson(String userName) {
@@ -198,5 +211,25 @@ public class ApiService {
         buildRequest("post", "https://" + host + ":8888/",
             path, parameters);
 
+    }
+
+    public void addAmount(String proPayIdSender, double amount) {
+        try {
+            URL url =
+                new URL("http://" + host + ":8888/account/" + proPayIdSender);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+            out.writeBytes("amount=" + amount);
+            out.flush();
+            out.close();
+            convertHttpResponse(new InputStreamReader(conn.getInputStream()));
+        } catch (ConnectException connectException) {
+            throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
+                "Couldnt reach Propayserver.");
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
 }
