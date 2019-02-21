@@ -14,6 +14,9 @@
         <a class="nav-link" id="v-pills-borrowed-tab" data-toggle="pill"
            href="#v-pills-borrowedItems"
            role="tab" aria-controls="v-pills-settings" aria-selected="false">Borrowed Items</a>
+        <a class="nav-link" id="v-pills-lent-tab" data-toggle="pill"
+           href="#v-pills-lentItems"
+           role="tab" aria-controls="v-pills-settings" aria-selected="false">Lent Items</a>
         <a class="nav-link" id="v-pills-requests-tab" data-toggle="pill"
            href="#v-pills-requests"
            role="tab" aria-controls="v-pills-settings" aria-selected="false">Requests</a>
@@ -120,15 +123,56 @@
               <td th:text="${con.getItem().getBail()}"> Item Bail</td>
               <td th:text="${con.getStart()}"> Contract Start Date</td>
               <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date</td>
-              <td th:text="${con.getRealEnd()}"> Contract Real End Date</td>
+              <td th:text="${con?.getRealEnd()}"> Contract Real End Date</td>
               <td th:text="${con.isConflict()}"> Is Conflict</td>
               <td>
-                <a href="#"
-                   class="btn btn-primary btn-sm">Return Item</a>
+                <form method="post" th:action="|/contract/${con.getId()}/returnItem|">
+                  <button type="submit" class="btn btn-primary btn-sm" >Return Item</button>
+                </form>
                 <a href="#"
                    class="btn btn-danger btn-sm">Item Owner</a>
               </td>
             </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="v-pills-lentItems" role="tabpanel"
+             aria-labelledby="v-pills-messages-tab">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">Borrowed by</th>
+              <th scope="col">Item Name</th>
+              <th scope="col">Item Price</th>
+              <th scope="col">Item Bail</th>
+              <th scope="col">Start Date</th>
+              <th scope="col">Expected End Date</th>
+              <th scope="col">End Date</th>
+              <th scope="col">Conflict</th>
+              <th scope="col" class="mx-auto">Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            <div th:each="item : ${user.getItems()}">
+              <tr th:each="con : ${item.getContracts()}">
+                <td th:text="${con.getBorrower().getName()}">Borrowed by</td>
+                <td th:text="${con.getItem().getName()}">Item Name</td>
+                <td th:text="${con.getItem().getPrice()}"> Item Price</td>
+                <td th:text="${con.getItem().getBail()}"> Item Bail</td>
+                <td th:text="${con.getStart()}"> Contract Start Date</td>
+                <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date</td>
+                <td th:text="${con?.getRealEnd()}"> Contract Real End Date</td>
+                <td th:text="${con.isConflict()}"> Is Conflict</td>
+                <td>
+                  <form method="post" th:action="|/contract/${con.getId()}/acceptReturn|">
+                    <button type="submit" class="btn btn-primary btn-sm" >Accept Return</button>
+                  </form>
+                  <form method="post" th:action="|/contract/${con.getId()}/openConflict|">
+                    <button type="submit" class="btn btn-danger btn-sm">Conflict</button>
+                  </form>
+                </td>
+              </tr>
+            </div>
             </tbody>
           </table>
         </div>
