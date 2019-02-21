@@ -20,8 +20,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.server.ResponseStatusException;
 
 @RunWith(SpringRunner.class)
 public class OfferServiceTest {
@@ -50,52 +52,86 @@ public class OfferServiceTest {
     private User borrower;
     private Item item;
     private Offer offer;
+    private LocalDateTime start;
+    private LocalDateTime end;
 
     @Before
     public void setUpTests() {
-        offerService = new OfferService(contractService, offerRepo, apiService,
-            paymentService, itemService, contractRepo);
+        offerService = new OfferService(contractService, offerRepo, apiService, paymentService,
+            itemService, contractRepo);
         owner = new User();
+        owner.setId(1L);
         borrower = new User();
         item = new Item(owner);
+        item.setId(1L);
 
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now();
-        end = end.plusDays(3);
+        LocalDateTime end = start.plusDays(3);
         offer = new Offer(item, borrower, start, end);
     }
 
-    /*
+
     @Test
     public void createTest() {
-        offerService.create(item, borrower, new LocalDateTime(), new LocalDateTime());
+        when(itemService.findItem(anyLong())).thenReturn(item);
+
+        OfferService spyService = Mockito.spy(offerService);
+        Mockito.doNothing().when(spyService).validate(any(), any(), any(), any());
+
+        spyService.create(item.getId(), borrower, start, end);
 
         ArgumentCaptor<Offer> argument = ArgumentCaptor.forClass(Offer.class);
         verify(offerRepo, times(1)).save(argument.capture());
-        Offer saveOffer = argument.getValue();
+        Offer capturedOffer = argument.getValue();
 
-        assertTrue(borrower.getOffers().contains(saveOffer));
-        assertTrue(item.getOffers().contains(saveOffer));
+        assertEquals(item, capturedOffer.getItem());
+        assertEquals(borrower, capturedOffer.getBorrower());
+        assertEquals(start, capturedOffer.getStart());
+        assertEquals(end, capturedOffer.getEnd());
+
+        assertTrue(borrower.getOffers().contains(capturedOffer));
+        assertTrue(item.getOffers().contains(capturedOffer));
 
         assertFalse(offer.isAccept());
         assertFalse(offer.isDecline());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void createItemNullTest() {
-        offerService.create(null, borrower, new LocalDateTime(), new LocalDateTime());
+        boolean thrown = false;
+        when(itemService.findItem(anyLong())).thenReturn(null);
+
+        try {
+            offerService.create(0, borrower, start, end);
+        } catch (NullPointerException nullException) {
+            thrown = true;
+        }
+        assertTrue(thrown);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void createUserNullTest() {
-        offerService.create(item, null, new LocalDateTime(), new LocalDateTime());
-    }*/
-
-    @Ignore
     @Test
-    public void acceptOfferTest() {
+    public void createUserNullTest() {
+        boolean thrown = false;
+        when(itemService.findItem(anyLong())).thenReturn(item);
+
+        try {
+            offerService.create(1, null, start, end);
+        } catch (NullPointerException nullException) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+    }
+
+    @Test
+    public void acceptOfferTestValidUser() {
         when(offerRepo.findOneById(anyLong())).thenReturn(offer);
-        //offerService.accept(anyLong());
+        when(itemService.userIsOwner(anyLong(), anyLong())).thenReturn(true);
+
+        OfferService spyService = Mockito.spy(offerService);
+        Mockito.doNothing().when(spyService).validate(any(), any(), any(), any());
+
+        spyService.acceptOffer(1L, item.getOwner());
+
         ArgumentCaptor<Offer> argument1 = ArgumentCaptor.forClass(Offer.class);
         ArgumentCaptor<Offer> argument2 = ArgumentCaptor.forClass(Offer.class);
 
@@ -109,12 +145,45 @@ public class OfferServiceTest {
         assertFalse(offer.isDecline());
     }
 
-    @Ignore
-    @Test(expected = NullPointerException.class)
+    @Test
+    public void acceptOfferTestInvalidUser() {
+        boolean thrown = false;
+        when(offerRepo.findOneById(anyLong())).thenReturn(offer);
+        when(itemService.userIsOwner(anyLong(), anyLong())).thenReturn(false);
+
+        OfferService spyService = Mockito.spy(offerService);
+        Mockito.doNothing().when(spyService).validate(any(), any(), any(), any());
+
+        try {
+            spyService.acceptOffer(1L, item.getOwner());
+        } catch (ResponseStatusException respException) {
+            assertEquals("403 FORBIDDEN \"This item does not belong to you\"",
+                respException.getMessage());
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+        verify(contractService, times(0)).create(any());
+        verify(offerRepo, times(0)).save(any());
+
+        assertFalse(offer.isAccept());
+        assertFalse(offer.isDecline());
+    }
+
+    @Test
     public void acceptOfferNotInDbTest() {
         when(offerRepo.findOneById(anyLong())).thenReturn(null);
+        boolean thrown = false;
 
-        //offerService.accept(anyLong());
+        OfferService spyService = Mockito.spy(offerService);
+        Mockito.doNothing().when(spyService).validate(any(), any(), any(), any());
+
+        try {
+            spyService.acceptOffer(1L, item.getOwner());
+        } catch (NullPointerException nullException) {
+            thrown = true;
+        }
+        assertTrue(thrown);
     }
 
     @Ignore
