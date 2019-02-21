@@ -33,6 +33,7 @@ public class Contract {
     private LocalDateTime start;
     private LocalDateTime expectedEnd;
     private LocalDateTime realEnd;
+    private boolean active = true;
 
     @SuppressWarnings("unused")
     private Contract() {
