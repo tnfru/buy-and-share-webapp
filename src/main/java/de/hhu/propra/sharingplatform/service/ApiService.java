@@ -99,7 +99,7 @@ public class ApiService {
         }
     }
 
-    public void createAccount(String proPayId, double amount) {
+    public void createAccountOrAddMoney(String proPayId, double amount) {
         List<String> pathVariables = new ArrayList<>();
         pathVariables.add("account");
         pathVariables.add(proPayId);
@@ -183,7 +183,7 @@ public class ApiService {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("reservationId", Long.toString(amountProPayId));
 
-        buildRequest("post", "http://" + host + ":8888/",
+        buildRequest("POST", "http://" + host + ":8888/",
             path, parameters);
     }
 
@@ -196,7 +196,7 @@ public class ApiService {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("amount", Double.toString(paymentInfo.getAmount()));
 
-        buildRequest("post", "https://" + host + ":8888/",
+        buildRequest("POST", "http://" + host + ":8888/",
             path, parameters);
     }
 
@@ -208,28 +208,8 @@ public class ApiService {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("reservationId", Long.toString(bailProPayId));
 
-        buildRequest("post", "https://" + host + ":8888/",
+        buildRequest("POST", "http://" + host + ":8888/",
             path, parameters);
 
-    }
-
-    public void addAmount(String proPayIdSender, double amount) {
-        try {
-            URL url =
-                new URL("http://" + host + ":8888/account/" + proPayIdSender);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-            out.writeBytes("amount=" + amount);
-            out.flush();
-            out.close();
-            convertHttpResponse(new InputStreamReader(conn.getInputStream()));
-        } catch (ConnectException connectException) {
-            throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
-                "Couldnt reach Propayserver.");
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
     }
 }
