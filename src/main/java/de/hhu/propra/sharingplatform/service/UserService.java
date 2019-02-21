@@ -44,6 +44,8 @@ public class UserService {
     }
 
     public void updateUser(User oldUser, User newUser) {
+        newUser.setId(oldUser.getId());
+        newUser.setAccountName(oldUser.getAccountName());
         validateUser(newUser);
         oldUser.setName(newUser.getName());
         oldUser.setAddress(newUser.getAddress());
