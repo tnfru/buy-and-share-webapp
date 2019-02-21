@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+/*
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
 @Import( {UserService.class})
@@ -45,7 +45,7 @@ public class UserControllerTest {
 
     @Autowired
     private SecConfig secConfig;
-/*
+
     @Before
     public void setup() {
         mvc = MockMvcBuilders
@@ -95,10 +95,4 @@ public class UserControllerTest {
             .param("confirm", "123"))
             .andExpect(status().is3xxRedirection());
     }
-
-
-
 */
-
-
-}
