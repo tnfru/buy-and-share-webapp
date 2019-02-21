@@ -7,6 +7,7 @@ import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.ApiService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,30 +35,36 @@ public class DataFaker implements ServletContextInitializer {
 
     private final OfferService offerService;
 
+    private final ApiService apiService;
+
     private Logger log = Logger.getLogger(DataFaker.class.getName());
 
     private Faker faker;
 
     @Autowired
     public DataFaker(Environment env, UserRepo userRepo, ItemRepo itemRepo,
-        OfferRepo offerRepo, OfferService offerService) {
+        OfferRepo offerRepo, OfferService offerService,
+        ApiService apiService) {
         this.env = env;
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;
         this.offerRepo = offerRepo;
         this.offerService = offerService;
+        this.apiService = apiService;
         Random rnd = new Random();
         rnd.setSeed(1337);
         this.faker = new Faker(Locale.ENGLISH, rnd);
     }
 
     public DataFaker(long seed, Environment env, UserRepo userRepo, ItemRepo itemRepo,
-        OfferRepo offerRepo, OfferService offerService) {
+        OfferRepo offerRepo, OfferService offerService,
+        ApiService apiService) {
         this.env = env;
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;
         this.offerRepo = offerRepo;
         this.offerService = offerService;
+        this.apiService = apiService;
         Random rnd = new Random();
         rnd.setSeed(seed);
         this.faker = new Faker(Locale.ENGLISH, rnd);
@@ -88,6 +95,11 @@ public class DataFaker implements ServletContextInitializer {
         persistItem(items);
         log.info("    Persist Users...");
         persistUser(users);
+
+        log.info("    Create ProPay...");
+        for (User user : users) {
+            apiService.createAccount(user.getPropayId(), 10000000);
+        }
 
         log.info("    Creating Offers...");
         for (int i = 0; i < (dataSize / 3); i++) {

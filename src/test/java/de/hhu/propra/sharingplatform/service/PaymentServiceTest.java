@@ -46,7 +46,7 @@ public class PaymentServiceTest {
 
         Contract contract = mock(Contract.class);
         when(contract.getStart()).thenReturn(start);
-        when(contract.getRealEnd()).thenReturn(end);
+        when(contract.getExpectedEnd()).thenReturn(end);
         when(contract.getItem()).thenReturn(item);
 
         assertEquals(100, paymentService.calculateTotalPrice(contract), 0.01);
@@ -62,7 +62,7 @@ public class PaymentServiceTest {
 
         Contract contract = mock(Contract.class);
         when(contract.getStart()).thenReturn(start);
-        when(contract.getRealEnd()).thenReturn(end);
+        when(contract.getExpectedEnd()).thenReturn(end);
         when(contract.getItem()).thenReturn(item);
 
         assertEquals(1.0, paymentService.calculateTotalPrice(contract), 0.01);
@@ -79,7 +79,7 @@ public class PaymentServiceTest {
 
         Contract contract = mock(Contract.class);
         when(contract.getStart()).thenReturn(start);
-        when(contract.getRealEnd()).thenReturn(end);
+        when(contract.getExpectedEnd()).thenReturn(end);
         when(contract.getItem()).thenReturn(item);
         User fakeUser = new User();
         when(contract.getBorrower()).thenReturn(fakeUser);
@@ -100,7 +100,7 @@ public class PaymentServiceTest {
 
         Contract contract = mock(Contract.class);
         when(contract.getStart()).thenReturn(start);
-        when(contract.getRealEnd()).thenReturn(end);
+        when(contract.getExpectedEnd()).thenReturn(end);
         when(contract.getItem()).thenReturn(item);
         User fakeUser = new User();
         when(contract.getBorrower()).thenReturn(fakeUser);

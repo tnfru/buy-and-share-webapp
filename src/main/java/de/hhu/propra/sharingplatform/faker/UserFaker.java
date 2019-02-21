@@ -19,7 +19,7 @@ public class UserFaker {
         String username = faker.name().username();
         user.setAccountName(username);
         user.setEmail(username + "@example.com");
-        user.setPropayId(faker.funnyName().name());
+        user.setPropayId(faker.name().lastName());
         user.setPositiveRating(faker.number().numberBetween(0, 40));
         user.setNegativeRating(faker.number().numberBetween(0, 20));
         user.setPassword("123");

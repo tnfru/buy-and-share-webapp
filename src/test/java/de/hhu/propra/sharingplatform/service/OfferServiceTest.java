@@ -5,12 +5,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.anyDouble;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
@@ -42,6 +41,9 @@ public class OfferServiceTest {
     @MockBean
     private ItemService itemService;
 
+    @MockBean
+    private ContractRepo contractRepo;
+
     private OfferService offerService;
 
     private User owner;
@@ -52,7 +54,7 @@ public class OfferServiceTest {
     @Before
     public void setUpTests() {
         offerService = new OfferService(contractService, offerRepo, apiService,
-            paymentService, itemService);
+            paymentService, itemService, contractRepo);
         owner = new User();
         borrower = new User();
         item = new Item(owner);

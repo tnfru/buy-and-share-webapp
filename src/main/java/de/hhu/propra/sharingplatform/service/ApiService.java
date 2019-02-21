@@ -6,17 +6,20 @@ import de.hhu.propra.sharingplatform.dto.ProPay;
 import de.hhu.propra.sharingplatform.dto.ProPayReservation;
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 @Data
 @Service
@@ -60,26 +63,71 @@ public class ApiService {
     }
 
     private long reserveMoney(String proPayIdSender, String proPayIdRecipient, double amount) {
+        List<String> pathVariables = new ArrayList<>();
+        pathVariables.add("reservation");
+        pathVariables.add("reserve");
+        pathVariables.add(proPayIdSender);
+        pathVariables.add(proPayIdRecipient);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("amount", Double.toString(amount));
+
+        String response = buildRequest("POST", "http://" + host + ":8888/",
+            pathVariables, parameters);
+
+        ObjectMapper mapper = new ObjectMapper();
+        ProPayReservation proPayReservation = null;
         try {
-            URL url =
-                new URL("http://" + host + ":8888/reservation/reserve/" + proPayIdSender
-                    + "/" + proPayIdRecipient);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-            out.writeBytes("amount=" + amount);
-            out.flush();
-            out.close();
-            String response = convertHttpResponse(new InputStreamReader(conn.getInputStream()));
-            ObjectMapper mapper = new ObjectMapper();
-            ProPayReservation proPayReservation = mapper.readValue(response,
+            proPayReservation = mapper.readValue(response,
                 ProPayReservation.class);
             return proPayReservation.getId();
         } catch (IOException ioException) {
             ioException.printStackTrace();
+            return -1;
         }
-        return 0;
+    }
+
+    public void createAccount(String proPayId, double amount) {
+        List<String> pathVariables = new ArrayList<>();
+        pathVariables.add("account");
+        pathVariables.add(proPayId);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("amount", Double.toString(amount));
+
+        buildRequest("POST", "http://" + host + ":8888/",
+            pathVariables, parameters);
+    }
+
+
+    private String buildRequest(String requestType, String serverAddress, List<String> pathVars,
+        Map<String, String> parameters) {
+        StringBuilder urlBuilder = new StringBuilder(serverAddress);
+        // append path variables
+        for (String pathVar : pathVars) {
+            urlBuilder.append(pathVar + "/");
+        }
+        urlBuilder.deleteCharAt(urlBuilder.lastIndexOf("/"));
+        // append parameters
+        urlBuilder.append("?");
+        for (String parameter : parameters.keySet()) {
+            urlBuilder.append(parameter + "=" + parameters.get(parameter) + "&");
+        }
+        urlBuilder.deleteCharAt(urlBuilder.lastIndexOf("&"));
+        URL url;
+        try {
+            url = new URL(urlBuilder.toString());
+        } catch (MalformedURLException malFormedException) {
+            malFormedException.printStackTrace();
+            return "-1";
+        }
+        try {
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod(requestType);
+            conn.setDoOutput(true);
+            return convertHttpResponse(new InputStreamReader(conn.getInputStream()));
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            return "-1";
+        }
     }
 
     //converts any http response to String and return it
@@ -112,5 +160,17 @@ public class ApiService {
 
     public boolean isSolventFake(User borrower, double amountOwed) {
         return true;
+    }
+
+    public void freeReservation(long amountProPayId, String proPayIdSender) {
+
+    }
+
+    public void transferMoney(Payment paymentInfo) {
+
+    }
+
+    public void punishReservation(long bailProPayId, String proPayIdSender) {
+
     }
 }
