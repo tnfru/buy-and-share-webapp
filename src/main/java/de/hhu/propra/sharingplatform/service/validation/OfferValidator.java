@@ -18,7 +18,7 @@ public class OfferValidator {
         PaymentService paymentService, ApiService apiService) {
         double totalCost = paymentService.calculateTotalPrice(item, start, end) + item.getBail();
 
-        if (start.until(end, ChronoUnit.DAYS) < 1) {
+        if ((start.until(end, ChronoUnit.DAYS) + 1) < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End date needs to be after"
                 + " Start date");
         }
