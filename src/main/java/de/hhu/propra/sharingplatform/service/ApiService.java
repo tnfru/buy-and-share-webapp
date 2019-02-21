@@ -113,4 +113,16 @@ public class ApiService {
     public boolean isSolventFake(User borrower, double amountOwed) {
         return true;
     }
+
+    public void freeReservation(long amountProPayId, String proPayIdSender) {
+
+    }
+
+    public void transferMoney(Payment paymentInfo) {
+
+    }
+
+    public void punishReservation(long bailProPayId, String proPayIdSender) {
+
+    }
 }

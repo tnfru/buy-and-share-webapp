@@ -60,7 +60,7 @@ public class ContractServiceTest {
 
         Assert.assertEquals(contract.getExpectedEnd(), contract.getRealEnd());
 
-        contractService.endContract(anyLong());
+        contractService.returnItem(anyLong());
 
         ArgumentCaptor<Contract> argument = ArgumentCaptor.forClass(Contract.class);
 
@@ -75,7 +75,7 @@ public class ContractServiceTest {
     public void endContractNotInDbTest() {
         when(contractRepo.findOneById(anyLong())).thenReturn(null);
 
-        contractService.endContract(anyLong());
+        contractService.returnItem(anyLong());
     }
 
     @Test

@@ -26,10 +26,13 @@ public class Contract {
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Item item;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private Conflict conflict;
+
     private LocalDateTime start;
     private LocalDateTime expectedEnd;
     private LocalDateTime realEnd;
-    private boolean isConflict;
 
     @SuppressWarnings("unused")
     private Contract() {

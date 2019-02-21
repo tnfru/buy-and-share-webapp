@@ -5,10 +5,11 @@ import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class PaymentService {
@@ -50,5 +51,22 @@ public class PaymentService {
     public boolean recipientSolvent(Contract contract) {
         double totalAmount = contract.getItem().getBail() + calculateTotalPrice(contract);
         return apiService.isSolvent(contract.getBorrower(), totalAmount);
+    }
+
+    public void transferPayment(Contract contract) {
+        Payment paymentInfo = contract.getPayment();
+        apiService.freeReservation(paymentInfo.getAmountProPayId(), paymentInfo.getProPayIdSender());
+        paymentInfo.setAmount(calculateTotalPrice(contract));
+        apiService.transferMoney(paymentInfo);
+    }
+
+    public void freeBailReservation(Contract contract) {
+        Payment paymentInfo = contract.getPayment();
+        apiService.freeReservation(paymentInfo.getBailProPayId(), paymentInfo.getProPayIdSender());
+    }
+
+    public void punishBailReservation(Contract contract) {
+        Payment paymentInfo = contract.getPayment();
+        apiService.punishReservation(paymentInfo.getBailProPayId(), paymentInfo.getProPayIdSender());
     }
 }
