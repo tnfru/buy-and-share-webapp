@@ -33,6 +33,9 @@ public class UserServiceTest {
     private UserRepo userRepo;
 
     @MockBean
+    private ApiService apiService;
+
+    @MockBean
     private PasswordEncoder encoder;
 
     private UserService userService;
@@ -48,7 +51,7 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
-        userService = new UserService(userRepo, encoder);
+        userService = new UserService(userRepo, encoder, apiService);
     }
 
     @Test
