@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Service
 @Data
@@ -92,5 +94,18 @@ public class ContractService {
 
     public boolean userIsContractOwner(Contract contract, String userName) {
         return contract.getItem().getOwner().getAccountName().equals(userName);
+    }
+
+    public Collection<Contract> getContractsWithOpenConflicts() {
+        Collection<Conflict> conflictsPending = conflictRepo.findAllByStatus(Status.PENDING);
+        ArrayList<Contract> contracts = new ArrayList<>();
+        for (Conflict conflict : conflictsPending) {
+            contracts.add(conflict.getContract());
+        }
+        return contracts;
+    }
+
+    public Collection<Conflict> getOpenConflicts() {
+        return conflictRepo.findAllByStatus(Status.PENDING);
     }
 }
