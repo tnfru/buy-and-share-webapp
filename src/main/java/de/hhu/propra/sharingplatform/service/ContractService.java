@@ -34,13 +34,9 @@ public class ContractService {
 
     public void create(Offer offer) {
         Contract contract = new Contract(offer);
-        if (paymentService.recipientSolvent(contract)) {
-            contractRepo.save(contract);
-            // -> Payment
-            paymentService.create(contract);
-        } else {
-            //TODO
-        }
+        contractRepo.save(contract);
+        // -> Payment
+        paymentService.create(contract);
     }
 
     public void returnItem(long contractId, String accountName) {

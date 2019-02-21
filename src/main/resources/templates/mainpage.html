@@ -10,8 +10,8 @@
         <span class="badge badge-info mr-1 mb-2" th:each="word : ${keywords}" th:text="${word}"></span>
     </div>
 
-    <div class="card-columns">
-        <div class="card border-dark" th:each="item : ${items}">
+    <div class="card-deck" style="column-count: auto;">
+        <div class="card border-dark" th:each="item : ${items}" style="min-width: 15rem; max-width: 17rem;margin-bottom: 1rem;">
             <div th:if="${item?.imageFileName != null}"><img th:src="@{${'/images/' + item?.imageFileName}}"/></div>
             <div th:if="${item?.imageFileName == null}"><img src="images/bike-dummy.png" class="card-img-top"></div>
 

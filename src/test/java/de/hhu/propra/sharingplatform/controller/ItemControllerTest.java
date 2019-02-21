@@ -145,7 +145,7 @@ public class ItemControllerTest {
         mvc.perform(get("/item/details/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("Gegenstand bearbeiten")));
+            .andExpect(content().string(containsString("Edit Item")));
     }
 
     @Test
@@ -192,7 +192,7 @@ public class ItemControllerTest {
         mvc.perform(get("/item/details/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("Leihe anfragen")));
+            .andExpect(content().string(containsString("Request")));
     }
 
     @Test
@@ -201,7 +201,7 @@ public class ItemControllerTest {
         mvc.perform(get("/item/new")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("Neuen Gegenstand anlegen")));
+            .andExpect(content().string(containsString("New Item")));
     }
 
     //TODO: Add image upload

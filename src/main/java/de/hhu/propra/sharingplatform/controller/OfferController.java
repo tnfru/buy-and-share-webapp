@@ -37,7 +37,7 @@ public class OfferController {
         Item item = itemService.findItem(itemId);
         model.addAttribute(item);
         item.getOwner().getAccountName();
-        return "offerReguest";
+        return "offerRequest";
     }
 
     @PostMapping("/offer/request/{itemId}")
@@ -81,32 +81,29 @@ public class OfferController {
         return "redirect:/user/account";
     }
 
+    LocalDateTime getStart(String formattedDateRange) {
+        return readTime(formattedDateRange, 0);
+    }
 
-    //TODO: simplify/remove redundant code
-    private LocalDateTime getStart(String formattedDateRange) {
-        String[] dates = formattedDateRange.split(" - ");
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    LocalDateTime getEnd(String formattedDateRange) {
+        LocalDateTime end = readTime(formattedDateRange, 1);
+        end = end.plusHours(23);
+        end = end.plusMinutes(59);
+        return end.plusSeconds(59);
+    }
+
+    LocalDateTime readTime(String formattedDateRange, int index) {
         try {
-            LocalDate date = LocalDate.parse(dates[0], format);
-            return date.atStartOfDay();
+            String[] dates = formattedDateRange.split(" - ");
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate date = LocalDate.parse(dates[index], format);
+            LocalDateTime dateTime = date.atStartOfDay();
+            return dateTime;
         } catch (DateTimeParseException parseException) {
             parseException.printStackTrace();
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong dateformat");
-        }
-    }
-
-    private LocalDateTime getEnd(String formattedDateRange) {
-        String[] dates = formattedDateRange.split(" - ");
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        try {
-            LocalDate endDate = LocalDate.parse(dates[1], format);
-            LocalDateTime end = endDate.atStartOfDay();
-            end = end.plusSeconds(59);
-            end = end.plusMinutes(59);
-            end = end.plusHours(23);
-            return end;
-        } catch (DateTimeParseException parseException) {
-            parseException.printStackTrace();
+        } catch (ArrayIndexOutOfBoundsException arrayBoundException) {
+            arrayBoundException.printStackTrace();
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong dateformat");
         }
     }

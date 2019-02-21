@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.service;
 
+import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
@@ -18,7 +19,6 @@ public class OfferService {
 
     private OfferRepo offerRepo;
 
-
     private ContractService contractService;
 
     private ApiService apiService;
@@ -27,15 +27,18 @@ public class OfferService {
 
     private ItemService itemService;
 
+    private ContractRepo contractRepo;
+
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-                        ApiService apiService, PaymentService paymentService,
-                        ItemService itemService) {
+        ApiService apiService, PaymentService paymentService,
+        ItemService itemService, ContractRepo contractRepo) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
         this.apiService = apiService;
         this.paymentService = paymentService;
         this.itemService = itemService;
+        this.contractRepo = contractRepo;
     }
 
     public void create(long itemId, User requester, LocalDateTime start, LocalDateTime end) {
@@ -50,6 +53,7 @@ public class OfferService {
 
     public void validate(Item item, User requester, LocalDateTime start, LocalDateTime end) {
         OfferValidator.validate(item, requester, start, end, paymentService, apiService);
+        OfferValidator.periodIsAvailable(contractRepo, item, start, end);
     }
 
     public List<Offer> getItemOffers(long itemId, User user, boolean onlyClosed) {
@@ -65,14 +69,15 @@ public class OfferService {
         }
     }
 
-    public void acceptOffer(long offerId, User user) {
+    public void acceptOffer(long offerId, User owner) {
         Offer offer = offerRepo.findOneById(offerId);
-        if (itemService.userIsOwner(offer.getItem().getId(), user.getId())) {
+        validate(offer.getItem(), offer.getBorrower(), offer.getStart(), offer.getEnd());
+
+        if (itemService.userIsOwner(offer.getItem().getId(), owner.getId())) {
             offer.setAccept(true);
             removeOverlappingOffer(offer);
             offerRepo.save(offer);
-            //TODO: create contract needs ProPay Api
-            // contractService.create(offer);
+            contractService.create(offer); // todo using fakeSolvent
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This item does not belong to you");

@@ -7,29 +7,33 @@
   <h1 th:if="${user?.Id} == NULL">New Profile</h1>
   <h1 th:unless="${user?.Id} == NUll" th:text="|Edit Account: ${user?.accountName}|"></h1>
   <br>
-  <form method="post">
-    <label>
-      <span>Name:(*)</span>
-      <p><input type="text" name="name" th:value="${user?.name}" required></p>
-      <span>Address:(*)</span>
-      <p><input type="text" name="address" th:value="${user?.address}" required></p>
-      <span th:if="${user?.Id} == NULL">AccountName:(*)</span>
-      <p th:if="${user?.Id} == NULL"><input type="text" name="accountName"
-                                            th:value="${user?.accountName}" required></p>
-      <span>Email:(*)</span>
-      <p><input type="text" name="email" th:value="${user?.email}" required></p>
-      <span>PropayID:</span>
-      <p><input type="text" name="propayId" th:value="${user?.propayId}"></p>
-      <span th:if="${user?.Id} == NULL">Password:(*)</span>
-      <p th:if="${user?.Id} == NULL"><input type="password" name="password" required></p>
-      <span th:if="${user?.Id} == NULL">Confirm Password:(*)</span>
-      <p th:if="${user?.Id} == NULL"><input type="password" name="confirm" required></p>
-      <br>
+  <div class="container" style="margin-left: 1em;">
+    <form method="post">
+      <dl>
+        <dt>Name:(*)</dt>
+        <dd><input type="text" name="name" th:value="${user?.name}" required></dd>
+        <dt th:if="${user?.Id} == NULL">AccountName:(*)</dt>
+        <dd th:if="${user?.Id} == NULL"><input type="text" name="accountName"
+                                               th:value="${user?.accountName}" required></dd>
+        <dd th:if="${user?.Id} == NULL">
+          <small class="text-danger">ACCOUTNAME CANNOT BE CHANGED LATER!</small>
+        </dd>
+        <dt>Address:(*)</dt>
+        <dd><input type="text" name="address" th:value="${user?.address}" required></dd>
+        <dt>Email:(*)</dt>
+        <dd><input type="text" name="email" th:value="${user?.email}" required></dd>
+        <dt>PropayID:</dt>
+        <dd><input type="text" name="propayId" th:value="${user?.propayId}"></dd>
+        <dt th:if="${user?.Id} == NULL">Password:(*)</dt>
+        <dd th:if="${user?.Id} == NULL"><input type="password" name="password" required></dd>
+        <dt th:if="${user?.Id} == NULL">Confirm Password:(*)</dt>
+        <dd th:if="${user?.Id} == NULL"><input type="password" name="confirm" required></dd>
+      </dl>
       <p>All Fields marked with * are required!</p>
-      <br>
       <button type="submit" class="btn btn-primary" action="POST">Send</button>
-    </label>
-  </form>
+    </form>
+  </div>
+  <br>
 
 </div>
 
