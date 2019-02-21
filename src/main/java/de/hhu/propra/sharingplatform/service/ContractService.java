@@ -53,14 +53,13 @@ public class ContractService {
 
     public void acceptReturn(long contractId, String accountName) {
         Contract contract = contractRepo.findOneById(contractId);
-        if (userIsContractOwner(contract, accountName)) {
-            paymentService.freeBailReservation(contract);
-            contract.setActive(false);
-            contractRepo.save(contract);
-        } else {
+        if (!userIsContractOwner(contract, accountName)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
         }
+        paymentService.freeBailReservation(contract);
+        contract.setActive(false);
+        contractRepo.save(contract);
     }
 
     public void punishBail(long contractId) {
@@ -71,16 +70,15 @@ public class ContractService {
     public void openConflict(long contractId, String accountName) {
         Contract contract = contractRepo.findOneById(contractId);
         if (userIsContractOwner(contract, accountName)) {
-            contract.setRealEnd(LocalDateTime.now());
-            Conflict conflict = new Conflict();
-            conflict.setStatus(Status.PENDING);
-            conflictRepo.save(conflict);
-            contract.setConflict(conflict);
-            contractRepo.save(contract);
-        } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
         }
+        contract.setRealEnd(LocalDateTime.now());
+        Conflict conflict = new Conflict();
+        conflict.setStatus(Status.PENDING);
+        conflictRepo.save(conflict);
+        contract.setConflict(conflict);
+        contractRepo.save(contract);
     }
 
     public void calcPrice(long contractId) {
