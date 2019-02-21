@@ -117,7 +117,7 @@ public class UserServiceTest {
             userService.fetchUserByAccountName("accName");
         } catch (ResponseStatusException rse) {
             thrown = true;
-            assertEquals("500 INTERNAL_SERVER_ERROR \"Could not authenticate User.\"",
+            assertEquals("500 INTERNAL_SERVER_ERROR \"Something went wrong.\"",
                 rse.getMessage());
         }
         verify(userRepo, times(0)).save(any());
@@ -131,7 +131,7 @@ public class UserServiceTest {
             userService.fetchUserIdByAccountName("accName");
         } catch (ResponseStatusException rse) {
             thrown = true;
-            assertEquals("500 INTERNAL_SERVER_ERROR \"Could not authenticate User.\"",
+            assertEquals("500 INTERNAL_SERVER_ERROR \"Something went wrong.\"",
                 rse.getMessage());
         }
         verify(userRepo, times(0)).save(any());
@@ -145,7 +145,7 @@ public class UserServiceTest {
             userService.fetchUserById((long) 1);
         } catch (ResponseStatusException rse) {
             thrown = true;
-            assertEquals("500 INTERNAL_SERVER_ERROR \"Could not authenticate User.\"",
+            assertEquals("500 INTERNAL_SERVER_ERROR \"Something went wrong.\"",
                 rse.getMessage());
         }
         verify(userRepo, times(0)).save(any());

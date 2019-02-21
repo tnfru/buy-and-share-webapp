@@ -65,30 +65,23 @@ public class UserService {
     }
 
     public User fetchUserByAccountName(String accountName) {
-        Optional<User> search = userRepo.findByAccountName(accountName);
-        if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                "Could not authenticate User.");
-        }
-        return search.get();
+        return isPresent(userRepo.findByAccountName(accountName));
     }
 
     public User fetchUserById(Long userId) {
-        Optional<User> search = Optional.ofNullable(userRepo.findOneById(userId));
-        if (!search.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                "Could not authenticate User.");
-        }
-        return userRepo.findOneById(userId);
+        return isPresent(userRepo.findById(userId));
     }
 
     public long fetchUserIdByAccountName(String accountName) {
-        Optional<User> search = userRepo.findByAccountName(accountName);
-        if (!search.isPresent()) {
+        return isPresent(userRepo.findByAccountName(accountName)).getId();
+    }
+
+    private User isPresent(Optional<User> user) {
+        if (!user.isPresent()) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                "Could not authenticate User.");
+                "Something went wrong.");
         }
-        return (search.get().getId());
+        return user.get();
     }
 
     private String hashPassword(String plainPassword) {
