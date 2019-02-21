@@ -1,7 +1,6 @@
 package de.hhu.propra.sharingplatform.service;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -62,7 +61,7 @@ public class ContractServiceTest {
 
         Assert.assertEquals(contract.getExpectedEnd(), contract.getRealEnd());
 
-        contractService.returnItem(anyLong());
+        contractService.returnItem(anyLong(), anyString());
 
         ArgumentCaptor<Contract> argument = ArgumentCaptor.forClass(Contract.class);
 
@@ -77,7 +76,7 @@ public class ContractServiceTest {
     public void endContractNotInDbTest() {
         when(contractRepo.findOneById(anyLong())).thenReturn(null);
 
-        contractService.returnItem(anyLong());
+        contractService.returnItem(anyLong(), anyString());
     }
 
     @Test
