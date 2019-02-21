@@ -22,10 +22,6 @@ public class OfferValidator {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End date needs to be after"
                 + " Start date");
         }
-        if (!item.isAvailable()) { // todo available not required anymore
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Item unavailable at given "
-                + "time");
-        }
         if (!(apiService.isSolvent(requester, totalCost))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough money");
         }

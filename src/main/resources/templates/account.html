@@ -63,7 +63,6 @@
               <th scope="col">Name</th>
               <th scope="col">Price</th>
               <th scope="col">Bail</th>
-              <th scope="col">Availability</th>
               <th scope="col">Offers(Open)</th>
               <th scope="col">Conflict</th>
               <th scope="col" class="mx-auto">Options</th>
@@ -74,13 +73,6 @@
               <td th:text="${item.getName()}"> Test Name</td>
               <td th:text="${item.getPrice()}"> 33</td>
               <td th:text="${item.getBail()}"> 333</td>
-              <td th:if="${item?.isAvailable()} == true">
-                <span style="color: green;">&#10004;</span>
-              </td>
-              <td th:if="${item?.isAvailable()} == false">
-                <span style="color: red;">&#10006;</span>
-              </td>
-              <td>
                 <a th:href="|/offer/show/${item.getId()}|" class="btn-primary">
                   <button type="button" class="btn btn-primary btn-sm"
                           th:if="${item.getActiveOffers()} > 0">

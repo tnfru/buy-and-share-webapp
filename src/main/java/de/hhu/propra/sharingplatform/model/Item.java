@@ -12,10 +12,6 @@ import javax.persistence.OneToMany;
 import lombok.Data;
 import lombok.ToString;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Entity
 @ToString(exclude = "owner")
@@ -30,7 +26,6 @@ public class Item {
     private String description;
     private Double bail;
     private Double price; // each day
-    private boolean available = true;
     private String location; // maybe change to java location class
     private boolean deleted;
 
