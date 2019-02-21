@@ -28,7 +28,7 @@ public class PaymentService {
         paymentRepo.save(payment);
     }
 
-    public void create(Contract contract) {
+    public Payment create(Contract contract) {
         double totalPrice = calculateTotalPrice(contract);
         User sender = contract.getBorrower();
         User recipient = contract.getItem().getOwner();
@@ -36,6 +36,7 @@ public class PaymentService {
         payment.setContract(contract);
         paymentRepo.save(payment);
         apiService.enforcePayment(payment, calculateTotalPrice(contract));
+        return payment;
     }
 
     double calculateTotalPrice(Contract contract) {
