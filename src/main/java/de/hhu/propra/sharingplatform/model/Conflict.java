@@ -20,8 +20,5 @@ public class Conflict {
         mappedBy = "conflict")
     private Contract contract;
 
-    public String getStatus() {
-        return status.toString();
-    }
 
 }
