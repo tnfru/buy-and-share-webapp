@@ -3,12 +3,19 @@ package de.hhu.propra.sharingplatform.dao;
 import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ConflictRepoTest {
 
     @Autowired
@@ -30,9 +37,9 @@ public class ConflictRepoTest {
         List<Conflict> conflicts = repo.findAllByStatus(Status.PENDING);
 
         for (Conflict conflict: conflicts) {
-            assert conflict.getStatus().equals(Status.PENDING);
+            assertEquals(conflict.getStatus(),Status.PENDING);
         }
-        assert conflicts.size() == 2;
+        assertEquals(conflicts.size(), 2);
     }
 
     @Test
@@ -51,8 +58,8 @@ public class ConflictRepoTest {
         List<Conflict> conflicts = repo.findAllByStatus(Status.REJECTED);
 
         for (Conflict conflict: conflicts) {
-            assert conflict.getStatus().equals(Status.REJECTED);
+            assertEquals(conflict.getStatus(),Status.REJECTED);
         }
-        assert conflicts.size() == 1;
+        assertEquals(conflicts.size(), 1);
     }
 }
