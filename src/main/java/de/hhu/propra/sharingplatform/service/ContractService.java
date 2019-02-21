@@ -4,12 +4,12 @@ import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Offer;
-import java.time.LocalDateTime;
-
-import de.hhu.propra.sharingplatform.model.Status;
+import de.hhu.propra.sharingplatform.dto.Status;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @Data
