@@ -39,14 +39,17 @@ public class PaymentService {
         return payment;
     }
 
+    //plus 1 because the last day is not included in the until since it is still ongoing
     double calculateTotalPrice(Contract contract) {
-        long timePassed = contract.getStart().until(contract.getExpectedEnd(), ChronoUnit.DAYS);
+        long timePassed = contract.getStart().until(contract.getExpectedEnd(), ChronoUnit.DAYS) + 1;
         return timePassed * contract.getItem().getPrice();
     }
 
+    //See comment above
+    //TODO: Maybe calculate by hours and only count a day after 12 hours+
     public double calculateTotalPrice(Item item, LocalDateTime start, LocalDateTime end) {
-        long timePassed = start.until(end, ChronoUnit.DAYS);
-        return timePassed * item.getPrice();
+        long timePassed = start.until(end, ChronoUnit.DAYS) + 1;
+        return Math.max(timePassed * item.getPrice(), 0);
     }
 
     public boolean recipientSolvent(Contract contract) {
@@ -58,7 +61,8 @@ public class PaymentService {
         Payment paymentInfo = contract.getPayment();
         apiService.freeReservation(paymentInfo.getAmountProPayId(),
             paymentInfo.getProPayIdSender());
-        paymentInfo.setAmount(calculateTotalPrice(contract));
+        paymentInfo.setAmount(calculateTotalPrice(contract.getItem(), contract.getStart(),
+            contract.getRealEnd()));
         apiService.transferMoney(paymentInfo);
     }
 
