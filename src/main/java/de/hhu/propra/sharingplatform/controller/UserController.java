@@ -23,8 +23,10 @@ public class UserController {
 
     @GetMapping("/user/register")
     public String registerPage(Model model) {
-        if (!SecurityContextHolder.getContext().getAuthentication().getName().equals
-            ("anonymousUser")) {
+        if (!SecurityContextHolder.getContext()
+            .getAuthentication()
+            .getName()
+            .equals("anonymousUser")) {
             return "redirect:/";
         }
         return "userForm";
