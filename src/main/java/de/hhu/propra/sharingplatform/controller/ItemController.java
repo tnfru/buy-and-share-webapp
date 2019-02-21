@@ -12,6 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.security.Principal;
 
 @Controller
 public class ItemController {
@@ -19,6 +23,7 @@ public class ItemController {
     private final ItemService itemService;
     private final OfferService offerService;
     private final UserService userService;
+
 
     @Autowired
     public ItemController(ItemService itemService, OfferService offerService,
@@ -33,7 +38,7 @@ public class ItemController {
         Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
         model.addAttribute("user", userService.fetchUserByAccountName(principal.getName()));
-        boolean ownItem = itemService.userIsOwner(item,
+        boolean ownItem = itemService.userIsOwner(item.getId(),
             userService.fetchUserIdByAccountName(principal.getName()));
         model.addAttribute("ownItem", ownItem);
         return "itemDetails";
@@ -48,8 +53,10 @@ public class ItemController {
     }
 
     @PostMapping("/item/new")
-    public String inputItemData(Model model, Item item, Principal principal) {
-        itemService.persistItem(item, userService.fetchUserIdByAccountName(principal.getName()));
+    public String inputItemData(Model model, Item item, Principal principal,
+                                @RequestParam("file") MultipartFile file) {
+        itemService
+            .persistItem(item, userService.fetchUserIdByAccountName(principal.getName()), file);
         return "redirect:/user/account/";
     }
 
@@ -68,10 +75,8 @@ public class ItemController {
         model.addAttribute("itemId", itemId);
         long userId = userService.fetchUserIdByAccountName(principal.getName());
         model.addAttribute("userId", userId);
-        if (itemService.userIsOwner(item, userId)) {
-            return "itemForm";
-        }
-        return "error";
+        itemService.allowOnlyOwner(item, userId);
+        return "itemForm";
     }
 
     @PostMapping("/item/edit/{itemId}")

@@ -82,7 +82,13 @@
               </td>
               <td>
                 <a th:href="|/offer/show/${item.getId()}|" class="btn-primary">
-                  <button type="button" class="btn btn-primary btn-sm">
+                  <button type="button" class="btn btn-primary btn-sm"
+                          th:if="${item.getActiveOffers()} > 0">
+                    Offers
+                    <span class="badge badge-light" th:text="${item.getActiveOffers()}"></span>
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-sm"
+                          th:if="${item.getActiveOffers()} == 0">
                     Offers
                     <span class="badge badge-light" th:text="${item.getActiveOffers()}"></span>
                   </button>
@@ -98,6 +104,7 @@
             </tr>
             </tbody>
           </table>
+          <a class="btn btn-primary" href="/item/new">New Item</a>
         </div>
         <div class="tab-pane fade" id="v-pills-borrowedItems" role="tabpanel"
              aria-labelledby="v-pills-messages-tab">
@@ -153,8 +160,8 @@
               <td th:text="${offer.getItem().getName()}"> Test Name</td>
               <td th:text="${offer.getItem().getPrice()}"> 33</td>
               <td th:text="${offer.getItem().getBail()}"> 333</td>
-              <td th:text="${#dates.format(offer.getStart(), 'dd-MM-yyyy HH:mm')}"></td>
-              <td th:text="${#dates.format(offer.getEnd(), 'dd-MM-yyyy HH:mm')}"></td>
+              <td th:text="${#temporals.format(offer.getStart(), 'dd-MM-yyyy HH:mm')}"></td>
+              <td th:text="${#temporals.format(offer.getEnd(), 'dd-MM-yyyy HH:mm')}"></td>
               <td th:if="${offer.isAccept()} == true">
                 <span class="badge badge-success">Accepted</span>
               </td>

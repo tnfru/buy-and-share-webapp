@@ -4,47 +4,41 @@
       xmlns:th="http://www.thymeleaf.com">
 <head>
   <meta charset="UTF-8">
-  <title>Details</title>
+  <title>Item Details</title>
 </head>
 <body>
 <div layout:fragment="content">
-	<h1 th:text="${item?.name}"></h1>
-    <h5 th:text="|${item?.name}|"></h5>
-    <br>
-    <p>Bild Platzhalter</p>
-    <p th:if="${item?.available} == true" style="color: forestgreen">Verfügbar</p>
-    <p th:if="${item?.available} == false" style="color: crimson">Aktuell verliehen</p>
-    <strong>Beschreibung:</strong>
-    <span th:text="|${item?.description}|"></span>
-    <br>
-    <br>
-    <strong>Kosten:</strong>
-    <br>
-    Tagessatz:
-    <span th:text="${item?.price}"></span>
-    <br>
-    Kaution:
-    <span th:text="${item?.bail}"></span>
-    <br>
-    <br>
-    <strong>Abholort:</strong>
-    <span th:text="${item?.location}"></span>
-    <br>
-    <br>
-    <strong>Anbieter:</strong>
-    <span th:text="${item?.owner?.accountName}"></span>
-    (<span th:text="|${item?.owner?.totalRatings()}|"></span> Bewertungen:
-    <span th:text="|${item?.owner?.getRating()}|"></span> &#128077;)
-    <br>
-    <br>
-    <a th:if="${ownItem} == false " class="btn btn-success"
-       th:href="|/offer/request/${item?.id}|">Leihe anfragen</a>
-    <a th:unless="${ownItem} == false " class="btn btn-primary"
-       th:href="|/offer/request|">Anfragen anzeigen</a>
-    <a style="margin-left: 1em;" th:unless="${ownItem} == false " class="btn btn-warning"
-       th:href="|/item/edit/${item?.Id}|">Gegenstand bearbeiten</a>
-    <br>
-    <br>
+  <h1 th:text="${item?.name}"></h1>
+  <br>
+  <img th:src="@{${'/images/' + item?.imageFileName}}"/>
+  <p th:if="${item?.available} == true" style="color: forestgreen">Available</p>
+  <p th:if="${item?.available} == false" style="color: crimson">Not Available</p>
+  <dl>
+    <dt>Description:</dt>
+    <dd th:text="|${item?.description}|"></dd>
+    <dt>Cost</dt>
+    <dt>Daily Rate:</dt>
+    <dd th:text="${item?.price}"></dd>
+    <dt>Bail:</dt>
+    <dd th:text="${item?.bail}"></dd>
+    <dt>Location:</dt>
+    <dd th:text="${item?.location}"></dd>
+    <dt>Supplier:</dt>
+    <dd th:text="${item?.owner?.accountName}"></dd>
+  </dl>
+  <strong><p>Rating:</p></strong>
+  <span th:text="|${item?.owner?.totalRatings()}|"></span>
+  <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
+  <br>
+  <br>
+  <a th:if="${ownItem} == false " class="btn btn-success"
+     th:href="|/offer/request/${item?.id}|">Request loan</a>
+  <a th:unless="${ownItem} == false " class="btn btn-primary"
+     th:href="|/offer/request|">Show Requests</a>
+  <a style="margin-left: 1em;" th:unless="${ownItem} == false " class="btn btn-warning"
+     th:href="|/item/edit/${item?.Id}|">Edit Item</a>
+  <br>
+  <br>
 </div>
 </body>
 </html>
