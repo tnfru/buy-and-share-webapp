@@ -14,7 +14,7 @@ public class ConflictController {
 
 
     @GetMapping("/conflicts/show")
-    public String adminDashboard(Model model){
+    public String adminDashboard(Model model) {
         model.addAttribute("conflicts", contractService.getOpenConflicts());
         return "admin-dashboard";
     }
