@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class UserController {
@@ -79,5 +80,19 @@ public class UserController {
         User user = userService.fetchUserByAccountName(principal.getName());
         userService.updatePassword(user, oldPassword, newPassword, confirm);
         return "redirect:/user/account";
+    }
+
+    @PostMapping("/user/edit/propay")
+    public String editPropay(Principal principal, String propayAccount, String propayAmount) {
+        User user = userService.fetchUserByAccountName(principal.getName());
+        userService.updateProPay(user, propayAccount, propayAmount);
+        return "redirect:/user/account";
+    }
+
+    @GetMapping("/user/propay")
+    @ResponseBody
+    public String currentPropayInfo(Principal principal) {
+        User user = userService.fetchUserByAccountName(principal.getName());
+        return userService.getCurrentPropayAmount(user.getPropayId()) + "";
     }
 }
