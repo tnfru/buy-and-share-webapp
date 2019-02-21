@@ -1,19 +1,16 @@
 package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class UserController {
@@ -70,5 +67,19 @@ public class UserController {
         User user = userService.fetchUserByAccountName(principal.getName());
         userService.updatePassword(user, oldPassword, newPassword, confirm);
         return "redirect:/user/account";
+    }
+
+    @PostMapping("/user/edit/propay")
+    public String editPropay(Principal principal, String propayAccount, String propayAmount) {
+        User user = userService.fetchUserByAccountName(principal.getName());
+        userService.updateProPay(user, propayAccount, propayAmount);
+        return "redirect:/user/account";
+    }
+
+    @GetMapping("/user/propay")
+    @ResponseBody
+    public String currentPropayInfo(Principal principal) {
+        User user = userService.fetchUserByAccountName(principal.getName());
+        return userService.getCurrentPropayAmount(user.getPropayId()) + "";
     }
 }
