@@ -19,7 +19,6 @@ public class ItemFaker {
         item.setDescription(faker.lorem().paragraph(1));
         item.setBail((double)faker.number().numberBetween(20, 999));
         item.setPrice((double)faker.number().numberBetween(5, 50));
-        item.setAvailable(true);
         item.setLocation(faker.address().cityName());
         item.setDeleted(false);
         owner.getItems().add(item);

@@ -1,5 +1,15 @@
 package de.hhu.propra.sharingplatform.controller;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
@@ -8,6 +18,7 @@ import de.hhu.propra.sharingplatform.service.ImageService;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
+import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +29,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Optional;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ItemController.class)
@@ -127,7 +128,6 @@ public class ItemControllerTest {
         user.setId(1L);
 
         Item item = new Item(user);
-        item.setAvailable(true);
         item.setBail(1.0);
         item.setDeleted(false);
         item.setDescription("desc");
@@ -172,7 +172,6 @@ public class ItemControllerTest {
         user2.setId(2L);
 
         Item item = new Item(user);
-        item.setAvailable(true);
         item.setBail(1.0);
         item.setDeleted(false);
         item.setDescription("desc");
@@ -303,7 +302,6 @@ public class ItemControllerTest {
         user2.setId(2L);
 
         Item item = new Item(user);
-        item.setAvailable(true);
         item.setBail(1.0);
         item.setDeleted(false);
         item.setDescription("desc");
@@ -341,7 +339,6 @@ public class ItemControllerTest {
         user.setId(1L);
 
         Item item = new Item(user);
-        item.setAvailable(true);
         item.setBail(1.0);
         item.setDeleted(false);
         item.setDescription("desc");
@@ -406,7 +403,6 @@ public class ItemControllerTest {
         user2.setId(2L);
 
         Item item = new Item(user);
-        item.setAvailable(true);
         item.setBail(1.0);
         item.setDeleted(false);
         item.setDescription("desc");
@@ -441,7 +437,6 @@ public class ItemControllerTest {
         user.setId(1L);
 
         Item item = new Item(user);
-        item.setAvailable(true);
         item.setBail(1.0);
         item.setDeleted(false);
         item.setDescription("desc");
@@ -508,7 +503,6 @@ public class ItemControllerTest {
         user2.setId(2L);
 
         Item item = new Item(user);
-        item.setAvailable(true);
         item.setBail(1.0);
         item.setDeleted(false);
         item.setDescription("desc");
@@ -544,7 +538,6 @@ public class ItemControllerTest {
         user.setId(1L);
 
         Item item = new Item(user);
-        item.setAvailable(true);
         item.setBail(1.0);
         item.setDeleted(false);
         item.setDescription("desc");
@@ -584,7 +577,6 @@ public class ItemControllerTest {
         user.setId(1L);
 
         Item item = new Item(user);
-        item.setAvailable(true);
         item.setBail(1.0);
         item.setDeleted(false);
         item.setDescription("desc");

@@ -75,9 +75,9 @@ public class OfferService {
 
         if (itemService.userIsOwner(offer.getItem().getId(), owner.getId())) {
             offer.setAccept(true);
-            removeOverlappingOffer(offer);
+            removeOverlappingOffer(offer); // todo test this
             offerRepo.save(offer);
-            contractService.create(offer); // todo using fakeSolvent
+            contractService.create(offer);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This item does not belong to you");

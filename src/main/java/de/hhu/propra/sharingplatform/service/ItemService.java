@@ -4,14 +4,13 @@ import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ItemService {
@@ -78,7 +77,6 @@ public class ItemService {
 
         newItem.setOwner(oldItem.getOwner());
         newItem.setId(oldItem.getId());
-        newItem.setAvailable(oldItem.isAvailable());
         itemRepo.save(newItem);
     }
 

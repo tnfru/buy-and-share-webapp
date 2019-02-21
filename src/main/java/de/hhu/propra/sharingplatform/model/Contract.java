@@ -35,6 +35,7 @@ public class Contract {
     private LocalDateTime realEnd;
     private boolean finished = false;
 
+
     @SuppressWarnings("unused")
     private Contract() {
         // used by jpa
