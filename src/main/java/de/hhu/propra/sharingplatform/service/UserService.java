@@ -128,7 +128,7 @@ public class UserService {
             try {
                 amount = Double.parseDouble(inputAmount);
                 apiService.addAmount(user.getPropayId(), amount);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException nfException) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Propay amount have to be a number.");
             }

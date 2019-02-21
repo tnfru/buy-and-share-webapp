@@ -40,7 +40,7 @@ public class ApiService {
         String response;
         try {
             response = jsonResponse.getForObject(url, String.class);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
                 "Couldnt reach Propayserver.");
         }
@@ -136,7 +136,7 @@ public class ApiService {
             out.flush();
             out.close();
             convertHttpResponse(new InputStreamReader(conn.getInputStream()));
-        } catch (ConnectException e) {
+        } catch (ConnectException connectException) {
             throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
                 "Couldnt reach Propayserver.");
         } catch (IOException ioException) {
