@@ -47,10 +47,7 @@ public class Validator {
     }
 
     /**
-     * Guidelines:
-     * String not null.
-     * String not empty.
-     * String length < 256.
+     * Guidelines: String not null. String not empty. String length < 256.
      *
      * @param string string to check
      * @return true for guidline matching strings
@@ -91,7 +88,8 @@ public class Validator {
     public static void validateAdress(String accountName, String message) {
         if (!Validator.matchesDbGuidelines(accountName)
             || !Validator.isPrintable(accountName)
-            || !Validator.freeOfSpecialChars(accountName)) {
+            || !Validator.freeOfSpecialChars(accountName)
+            || accountName.equals("anonymousUser")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
         }
     }

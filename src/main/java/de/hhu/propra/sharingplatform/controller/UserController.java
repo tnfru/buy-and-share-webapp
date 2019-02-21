@@ -34,6 +34,12 @@ public class UserController {
 
     @PostMapping("/user/register")
     public String registerNewUser(Model model, User user, String password, String confirm) {
+        if (!SecurityContextHolder.getContext()
+            .getAuthentication()
+            .getName()
+            .equals("anonymousUser")) {
+            return "redirect:/";
+        }
         userService.persistUser(user, password, confirm);
         userService.loginUsingSpring(request, user.getAccountName(), password);
         return "redirect:/";
