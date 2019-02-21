@@ -1,14 +1,5 @@
 package de.hhu.propra.sharingplatform.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import lombok.Data;
 import lombok.ToString;
 
@@ -62,5 +53,15 @@ public class Item {
             }
         }
         return counter;
+    }
+
+    public List<Contract> getChosenContracts(boolean finished) {
+        List<Contract> chosenContracts = new ArrayList<>();
+        for (Contract contract : contracts) {
+            if (contract.isFinished() == finished) {
+                chosenContracts.add(contract);
+            }
+        }
+        return chosenContracts;
     }
 }

@@ -104,4 +104,14 @@ public class User {
         }
         return notRemovedItems;
     }
+
+    public List<Contract> getChosenContracts(boolean finished) {
+        List<Contract> chosenContracts = new ArrayList<>();
+        for (Contract contract : contracts) {
+            if(contract.isFinished() == finished) {
+                chosenContracts.add(contract);
+            }
+        }
+        return chosenContracts;
+    }
 }
