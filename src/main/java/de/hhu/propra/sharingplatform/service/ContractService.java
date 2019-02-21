@@ -55,6 +55,8 @@ public class ContractService {
         Contract contract = contractRepo.findOneById(contractId);
         if (userIsContractOwner(contract, accountName)) {
             paymentService.freeBailReservation(contract);
+            contract.setActive(false);
+            contractRepo.save(contract);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
