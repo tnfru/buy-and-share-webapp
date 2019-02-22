@@ -71,7 +71,7 @@ public class ContractService {
 
     public void openConflict(long contractId, String accountName) {
         Contract contract = contractRepo.findOneById(contractId);
-        if (userIsContractOwner(contract, accountName)) {
+        if (!userIsContractOwner(contract, accountName)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
         }
