@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.service;
+package de.hhu.propra.sharingplatform.service.Payment;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

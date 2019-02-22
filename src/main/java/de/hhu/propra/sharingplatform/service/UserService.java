@@ -2,6 +2,7 @@ package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.Payment.IBankAccountService;
 import de.hhu.propra.sharingplatform.service.validation.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

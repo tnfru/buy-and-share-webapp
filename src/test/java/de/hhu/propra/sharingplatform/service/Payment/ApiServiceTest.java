@@ -1,8 +1,9 @@
-package de.hhu.propra.sharingplatform.service;
+package de.hhu.propra.sharingplatform.service.Payment;
 
 import de.hhu.propra.sharingplatform.dto.ProPay;
 import de.hhu.propra.sharingplatform.dto.ProPayReservation;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.Payment.ApiService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;

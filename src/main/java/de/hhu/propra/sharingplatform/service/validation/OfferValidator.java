@@ -4,8 +4,8 @@ import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.IPaymentApi;
-import de.hhu.propra.sharingplatform.service.IPaymentService;
+import de.hhu.propra.sharingplatform.service.Payment.IPaymentApi;
+import de.hhu.propra.sharingplatform.service.Payment.IPaymentService;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

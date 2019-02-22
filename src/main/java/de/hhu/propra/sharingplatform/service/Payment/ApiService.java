@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.service;
+package de.hhu.propra.sharingplatform.service.Payment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.hhu.propra.sharingplatform.dao.PaymentRepo;

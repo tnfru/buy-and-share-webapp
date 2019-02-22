@@ -11,6 +11,8 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import java.time.LocalDateTime;
+
+import de.hhu.propra.sharingplatform.service.Payment.PaymentService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
