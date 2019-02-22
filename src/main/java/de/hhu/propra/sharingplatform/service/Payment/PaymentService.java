@@ -22,12 +22,6 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public void createPayment(User sender, User recipient, int amount, int bail) {
-        Payment payment = new Payment(sender, recipient, amount, bail);
-        paymentRepo.save(payment);
-    }
-
-    @Override
     public Payment createPayment(Contract contract) {
         int totalPrice = calculateTotalPrice(contract);
         User sender = contract.getBorrower();
