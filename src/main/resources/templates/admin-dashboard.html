@@ -13,6 +13,7 @@
                     <th scope="col">Owner</th>
                     <th scope="col">Owner mail</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Options</th>
                 </tr>
                 </thead>
                 <tr th:each="conflict : ${conflicts}">
@@ -25,6 +26,18 @@
                         mail
                     </td>
                     <td th:text="${conflict.getStatus()}">Status</td>
+                    <td>
+                        <form th:action="|/conflicts/${conflict.getId()}/accept|" method="post">
+                            <button class="btn btn-sm btn-primary btn-block" type="submit">
+                                Accept Conflict
+                            </button>
+                        </form>
+                        <form th:action="|/conflicts/${conflict.getId()}/reject|" method="post">
+                            <button class="btn btn-sm btn-primary btn-block" type="submit">
+                                Reject Conflict
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             </table>
         </div>
