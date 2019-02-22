@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -25,21 +24,18 @@ public class ItemService {
         this.itemImageSaver = itemImageSaver;
     }
 
-    @Deprecated
     public void persistItem(Item item, long userId) {
         validateItem(item);
         User owner = userService.fetchUserById(userId);
         item.setOwner(owner);
         itemRepo.save(item);
-    }
 
-    public void persistItem(Item item, long userId, MultipartFile image) {
-        validateItem(item);
-        User owner = userService.fetchUserById(userId);
-        item.setOwner(owner);
-        itemRepo.save(item);
-        String imagefilename = "item-" + item.getId();
-        itemImageSaver.store(image, imagefilename);
+        String imagefilename = "bike-dummy.png";
+        if (item.getImage() != null && item.getImage().getSize() > 0) {
+            imagefilename = "item-" + item.getId() + "." + item.getImageExtension();
+            itemImageSaver.store(item.getImage(), imagefilename);
+        }
+
         item.setImageFileName(imagefilename);
         itemRepo.save(item);
     }
