@@ -5,12 +5,14 @@ import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.Map.Entry;
 
+@Data
 @Service
 public class RecommendationService {
 
@@ -18,16 +20,17 @@ public class RecommendationService {
 
     private final ItemRepo itemRepo;
 
-    private final int numberOfItems = 4;
+    private int numberOfItems;
 
     @Autowired
     public RecommendationService(ContractRepo contractRepo, ItemRepo itemRepo) {
         this.contractRepo = contractRepo;
         this.itemRepo = itemRepo;
+        this.numberOfItems = 4;
     }
 
     /**
-     * uses the users who bought x also bought y schema
+     * uses the users who bought x also bought y schema.
      *
      * @param itemId item to find recommendations for
      * @return returns list of items
@@ -42,57 +45,44 @@ public class RecommendationService {
         return findBestItems(map);
     }
 
+    /**
+     * Looks for the best matches.
+     * If not enough are available by K-nearest neighbours random ones will be filled
+     *
+     * @param map to read items and values from
+     * @return array List of best suggestions
+     */
+
     List<Item> findBestItems(Map<Item, Integer> map) {
-        // Find the items which were most often borrowed. These are our recommendations
-
-
-        /*
-
-        for (int i = 0; !map.isEmpty() && i < numberOfItems; i++) {
-            max = Collections.max(map.values());
-            Set<Item> items = map.keySet();
-            //Bad Performance but necessary to get all Items with the max value not just one
-            for (Item item : items) {
-                if (map.get(item) == max && !bestMatches.contains(item)) {
-                    bestMatches.add(item);
-                }
-                if (bestMatches.size() == 3) {
-                    return bestMatches;
-                }
-            }
-        } */
-
-
-        List<Entry<Item, Integer>> entrys = findGreatest(map, numberOfItems);
+        List<Entry<Item, Integer>> entrys = findGreatest(map);
         List<Item> bestMatches = new ArrayList<>();
 
         for (Entry<Item, Integer> entry : entrys) {
             bestMatches.add(entry.getKey());
         }
 
-        if (bestMatches.size() < numberOfItems) {
-            List<Item> allItems = (List<Item>) itemRepo.findAll();
-            while (bestMatches.size() < numberOfItems) {
-                bestMatches.add(allItems.get((int) (Math.random() * allItems.size())));
-            }
-        }
+        return bestMatches.size() > numberOfItems ? bestMatches : fillList(bestMatches);
+    }
 
+    List<Item> fillList(List<Item> bestMatches) {
+        List<Item> allItems = (List<Item>) itemRepo.findAll();
+        while (bestMatches.size() < numberOfItems) {
+            bestMatches.add(allItems.get((int) (Math.random() * allItems.size())));
+        }
         return bestMatches;
     }
 
     Map<Item, Integer> fillMap(List<User> otherBorrowers) {
-        // Count how often the other items were borrowed
+        // Maps the items with the values of their frequency
         Map<Item, Integer> map = new HashMap<>();
         for (User otherBorrower : otherBorrowers) {
-            List<Item> borrowedItems = findAllBorrowedItems(otherBorrower.getId());
-            for (Item borrowedItem : borrowedItems) {
-                map.put(borrowedItem, map.getOrDefault(borrowedItem, 1));
-            }
+            List<Item> borrowedItems = findBorrowedItems(otherBorrower.getId());
+            putBorrowedItems(map, borrowedItems);
         }
         return map;
     }
 
-    List<Item> findAllBorrowedItems(long userId) {
+    List<Item> findBorrowedItems(long userId) {
         List<Contract> allContracts = (List<Contract>) contractRepo.findAll();
         List<Item> items = new ArrayList<>();
 
@@ -104,24 +94,36 @@ public class RecommendationService {
         return items;
     }
 
+    void putBorrowedItems(Map<Item, Integer> map, List<Item> borrowedItems) {
+        for (Item borrowedItem : borrowedItems) {
+            map.put(borrowedItem, map.getOrDefault(borrowedItem, 1));
+        }
+    }
+
     List<User> findOtherBorrowers(List<Contract> contracts) {
         List<User> otherBorrowers = new ArrayList<>();
-        for (Contract contract : contracts) { // Find all other borrowers of the same item
+        for (Contract contract : contracts) {
             otherBorrowers.add(contract.getBorrower());
         }
         return otherBorrowers;
     }
 
-    private static <K, V extends Comparable<? super V>> List<Entry<K, V>> findGreatest(Map<K, V> map, int n) {
+    /**
+     * Thank you stackoverflow.
+     *
+     * @param map map to find highest values of
+     * @return numberOfItem recommendations
+     */
+    <K, V extends Comparable<? super V>> List<Entry<K, V>> findGreatest(Map<K, V> map) {
         Comparator<? super Entry<K, V>> comparator = (Comparator<Entry<K, V>>) (e0, e1) -> {
             V v0 = e0.getValue();
             V v1 = e1.getValue();
             return v0.compareTo(v1);
         };
-        PriorityQueue<Entry<K, V>> highest = new PriorityQueue<>(n, comparator);
+        PriorityQueue<Entry<K, V>> highest = new PriorityQueue<>(numberOfItems, comparator);
         for (Entry<K, V> entry : map.entrySet()) {
             highest.offer(entry);
-            while (highest.size() > n) {
+            while (highest.size() > numberOfItems) {
                 highest.poll();
             }
         }
