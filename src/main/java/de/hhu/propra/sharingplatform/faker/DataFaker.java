@@ -84,6 +84,8 @@ public class DataFaker implements ServletContextInitializer {
         List<User> users = new ArrayList<>();
         userFaker.createUsers(users, dataSize / 5);
 
+        users.add(userFaker.createAdmin());
+
         log.info("    Creating Items...");
         List<Item> items = new ArrayList<>();
         for (int i = 0; i < (dataSize / 8); i++) {
