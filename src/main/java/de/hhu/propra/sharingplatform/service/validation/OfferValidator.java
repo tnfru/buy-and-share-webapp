@@ -34,7 +34,10 @@ public class OfferValidator {
     public static void periodIsAvailable(ContractRepo contractRepo, Item item, LocalDateTime start,
         LocalDateTime end) {
         List<Contract> contracts = contractRepo.findAllByItem(item);
-        for (Contract contract : contracts) { // todo dont compare contracts already closed
+        for (Contract contract : contracts) {
+            if(contract.isFinished()) {
+                continue;
+            }
             if (!(contract.getStart().isAfter(end) || contract.getExpectedEnd().isBefore(start))) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid period");
             }
