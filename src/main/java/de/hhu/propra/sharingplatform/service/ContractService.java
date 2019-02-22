@@ -48,8 +48,8 @@ public class ContractService {
                 "This contract does not involve you");
         }
         LocalDateTime current = LocalDateTime.now();
-        paymentService.transferPayment(contract);
         contract.setRealEnd(current);
+        paymentService.transferPayment(contract);
         contractRepo.save(contract);
     }
 
@@ -60,7 +60,7 @@ public class ContractService {
                 "This contract does not involve you");
         }
         paymentService.freeBailReservation(contract);
-        contract.setActive(false);
+        contract.setFinished(true);
         contractRepo.save(contract);
     }
 

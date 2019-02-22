@@ -32,7 +32,7 @@
   <a th:if="${ownItem} == false " class="btn btn-success"
      th:href="|/offer/request/${item?.id}|">Request loan</a>
   <a th:unless="${ownItem} == false " class="btn btn-primary"
-     th:href="|/offer/request|">Show Requests</a>
+     th:href="|/offer/show/${item.getId()}|">Show Requests</a>
   <a style="margin-left: 1em;" th:unless="${ownItem} == false " class="btn btn-warning"
      th:href="|/item/edit/${item?.Id}|">Edit Item</a>
   <br>

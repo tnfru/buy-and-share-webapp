@@ -17,7 +17,7 @@ public class OfferValidator {
     public static void validate(Item item, User requester, LocalDateTime start, LocalDateTime end,
         PaymentService paymentService, ApiService apiService) {
 
-        if (start.until(end, ChronoUnit.DAYS) < 1) {
+        if ((start.until(end, ChronoUnit.DAYS) + 1) < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End date needs to be after"
                 + " Start date");
         }

@@ -39,7 +39,7 @@ public class PaymentServiceTest {
     @Test
     public void correctPrice() {
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().plusDays(10);
+        LocalDateTime end = LocalDateTime.now().plusDays(9);
 
         Item item = mock(Item.class);
         when(item.getPrice()).thenReturn(10.0);
@@ -65,7 +65,7 @@ public class PaymentServiceTest {
         when(contract.getExpectedEnd()).thenReturn(end);
         when(contract.getItem()).thenReturn(item);
 
-        assertEquals(1.0, paymentService.calculateTotalPrice(contract), 0.01);
+        assertEquals(2.0, paymentService.calculateTotalPrice(contract), 0.01);
     }
 
     @Test
