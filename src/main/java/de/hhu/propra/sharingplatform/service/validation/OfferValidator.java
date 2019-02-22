@@ -4,10 +4,6 @@ import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.IPaymentApi;
-import de.hhu.propra.sharingplatform.service.IPaymentService;
-import de.hhu.propra.sharingplatform.service.ApiService;
-import de.hhu.propra.sharingplatform.service.PaymentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import de.hhu.propra.sharingplatform.service.Payment.IPaymentApi;
@@ -16,14 +12,7 @@ import de.hhu.propra.sharingplatform.service.Payment.IPaymentService;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-  @Override
-    public void createAccount(String proPayId, int amount) {
-        createAccountOrAddMoney(proPayId, amount);
-    }  @Override
-    public void createPayment(User sender, User recipient, int amount, int bail) {
-        Payment payment = new Payment(sender, recipient, amount, bail);
-        paymentRepo.save(payment);
-    }
+
 public class OfferValidator {
 
     public static void validate(Item item, User requester, LocalDateTime start, LocalDateTime end,
