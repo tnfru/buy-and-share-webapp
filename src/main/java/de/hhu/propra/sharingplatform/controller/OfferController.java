@@ -30,7 +30,7 @@ public class OfferController {
     private UserService userService;
 
     @Autowired
-    OfferService offerService;
+    private OfferService offerService;
 
     @GetMapping("/offer/request/{itemId}")
     public String gotOfferForm(@PathVariable long itemId, Model model) {

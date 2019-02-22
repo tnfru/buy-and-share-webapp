@@ -1,17 +1,26 @@
 package de.hhu.propra.sharingplatform.controller;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
+import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.ImageService;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
 import java.time.LocalDateTime;
+import java.util.Optional;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +28,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,9 +45,6 @@ public class OfferControllerTest {
     private UserService userService;
 
     @MockBean
-    private ItemService itemService;
-
-    @MockBean
     private UserRepo userRepo;
 
     @MockBean
@@ -46,8 +53,30 @@ public class OfferControllerTest {
     @MockBean
     private OfferService offerService;
 
+    @MockBean
+    private ImageService imageService;
+
     @Autowired
     private OfferController offerController;
+
+    private User user;
+    private Item item;
+
+    @Before
+    public void init() {
+        user = new User();
+        user.setName("Test");
+        user.setId((long) 1);
+
+        item = new Item(user);
+        item.setId((long) 1);
+        item.setName("TestItem");
+        item.setOwner(user);
+        item.setBail(100.0);
+        item.setPrice(20.0);
+        item.setDescription("This is a test");
+        item.setLocation("Test-Location");
+    }
 
     @Test
     public void getStartValidInput() {
@@ -171,5 +200,39 @@ public class OfferControllerTest {
         mvc.perform(get("/offer/show/10000/decline")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
+    }
+
+    // User Logged In
+
+    @Test
+    @WithMockUser
+    public void offerRequestLoggedInItemNotInDB() throws Exception {
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.empty());
+
+        mvc.perform(get("/offer/request/10000")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser
+    public void offerRequestLoggedInItemDeleted() throws Exception {
+        item.setDeleted(true);
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(item));
+
+        mvc.perform(get("/offer/request/10000")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser
+    public void offerRequestLoggedInValid() throws Exception {
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(item));
+
+        mvc.perform(get("/offer/request/10000")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("Borrow∆")));
     }
 }
