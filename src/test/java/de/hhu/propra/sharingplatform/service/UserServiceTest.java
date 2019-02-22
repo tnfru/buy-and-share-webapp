@@ -33,7 +33,7 @@ public class UserServiceTest {
     private UserRepo userRepo;
 
     @MockBean
-    private ApiService apiService;
+    private IBankAccountService bankAccountService;
 
     @MockBean
     private PasswordEncoder encoder;
@@ -51,7 +51,7 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
-        userService = new UserService(userRepo, encoder, apiService);
+        userService = new UserService(userRepo, encoder, bankAccountService);
     }
 
     @Test

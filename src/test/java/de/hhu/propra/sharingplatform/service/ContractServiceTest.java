@@ -65,7 +65,7 @@ public class ContractServiceTest {
 
         ArgumentCaptor<Contract> argument = ArgumentCaptor.forClass(Contract.class);
 
-        verify(paymentService, times(0)).create(any());
+        verify(paymentService, times(0)).createPayment(any());
         verify(contractRepo, times(1)).save(argument.capture());
 
         Assert.assertEquals(contract, argument.getValue());
@@ -87,7 +87,7 @@ public class ContractServiceTest {
 
         contractService.calcPrice(anyLong());
 
-        verify(paymentService, times(1)).create(argument.capture());
+        verify(paymentService, times(1)).createPayment(argument.capture());
 
         Assert.assertEquals(contract, argument.getValue());
     }
@@ -100,7 +100,7 @@ public class ContractServiceTest {
 
         contractService.calcPrice(anyLong());
 
-        verify(paymentService, times(1)).create(argument.capture());
+        verify(paymentService, times(1)).createPayment(argument.capture());
 
         Assert.assertNull(argument.getValue());
 

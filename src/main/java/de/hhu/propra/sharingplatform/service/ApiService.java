@@ -40,7 +40,7 @@ public class ApiService implements IPaymentAPI{
         this.paymentRepo = paymentRepo;
     }
 
-    private String fetchJson(String userName) {
+    String fetchJson(String userName) {
         String url = "http://" + host + ":8888/account/" + userName;
         RestTemplate jsonResponse = new RestTemplate();
 
@@ -54,7 +54,7 @@ public class ApiService implements IPaymentAPI{
         return response;
     }
 
-    private ProPay mapJson(String userName) {
+    ProPay mapJson(String userName) {
         String jsonResponse = fetchJson(userName);
         ObjectMapper mapper = new ObjectMapper();
 
