@@ -151,7 +151,7 @@
                                    class="btn btn-danger btn-sm">Item Owner</a>
                             </td>
                             <td th:if="${con.isConflict()} == true">
-                                <span class="badge badge-info"
+                                <span class="badge badge-danger"
                                       th:text="${con.getConflict().getStatus()}"></span>
                             </td>
                         </tr>
@@ -201,7 +201,7 @@
                                     </td>
                                     <td th:if="${con.isConflict()} == true">
                                         <span class="badge badge-info">Finished</span>
-                                        <span class="badge badge-info"
+                                        <span class="badge badge-danger"
                                               th:text="${con.getConflict().getStatus()}"></span>
                                     </td>
                                 </tr>
