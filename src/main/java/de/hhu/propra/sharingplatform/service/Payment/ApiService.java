@@ -68,6 +68,7 @@ public class ApiService implements IPaymentApi {
         }
     }
 
+    @Override
     public void enforcePayment(Payment payment, int totalPrice) {
         long id = reserveMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
             payment.getBail());
@@ -151,7 +152,6 @@ public class ApiService implements IPaymentApi {
         }
     }
 
-    //converts any http response to String and return it
     private String convertHttpResponse(InputStreamReader inStream) {
         try {
             BufferedReader in = new BufferedReader(inStream);
@@ -168,6 +168,7 @@ public class ApiService implements IPaymentApi {
         return null;
     }
 
+    @Override
     public boolean isSolvent(User borrower, int amountOwed) {
         ProPay borrowerProPay = mapJson(borrower.getPropayId());
 
@@ -179,6 +180,7 @@ public class ApiService implements IPaymentApi {
         return borrowerProPay.getAmount() - reservationAmount >= amountOwed;
     }
 
+    @Override
     public void freeReservation(long amountProPayId, String proPayIdSender) {
         List<String> path = new ArrayList<>();
         path.add("reservation");
@@ -191,6 +193,7 @@ public class ApiService implements IPaymentApi {
             path, parameters);
     }
 
+    @Override
     public void transferMoney(Payment paymentInfo) {
         List<String> path = new ArrayList<>();
         path.add("account");
@@ -204,6 +207,7 @@ public class ApiService implements IPaymentApi {
             path, parameters);
     }
 
+    @Override
     public void punishReservation(long bailProPayId, String proPayIdSender) {
         List<String> path = new ArrayList<>();
         path.add("reservation");
