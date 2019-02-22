@@ -23,13 +23,13 @@ public class PaymentService {
         this.apiService = apiService;
     }
 
-    public void create(User sender, User recipient, long amount, long bail) {
+    public void create(User sender, User recipient, int amount, int bail) {
         Payment payment = new Payment(sender, recipient, amount, bail);
         paymentRepo.save(payment);
     }
 
     public Payment create(Contract contract) {
-        double totalPrice = calculateTotalPrice(contract);
+        int totalPrice = calculateTotalPrice(contract);
         User sender = contract.getBorrower();
         User recipient = contract.getItem().getOwner();
         Payment payment = new Payment(sender, recipient, totalPrice, contract.getItem().getBail());
@@ -40,20 +40,20 @@ public class PaymentService {
     }
 
     //plus 1 because the last day is not included in the until since it is still ongoing
-    double calculateTotalPrice(Contract contract) {
+    int calculateTotalPrice(Contract contract) {
         long timePassed = contract.getStart().until(contract.getExpectedEnd(), ChronoUnit.DAYS) + 1;
-        return timePassed * contract.getItem().getPrice();
+        return (int)Math.ceil(timePassed * contract.getItem().getPrice());
     }
 
     //See comment above
     //TODO: Maybe calculate by hours and only count a day after 12 hours+
-    public double calculateTotalPrice(Item item, LocalDateTime start, LocalDateTime end) {
+    public int calculateTotalPrice(Item item, LocalDateTime start, LocalDateTime end) {
         long timePassed = start.until(end, ChronoUnit.DAYS) + 1;
-        return Math.max(timePassed * item.getPrice(), 0);
+        return (int)Math.ceil(Math.max(timePassed * item.getPrice(), 0));
     }
 
     public boolean recipientSolvent(Contract contract) {
-        double totalAmount = contract.getItem().getBail() + calculateTotalPrice(contract);
+        int totalAmount = contract.getItem().getBail() + calculateTotalPrice(contract);
         return apiService.isSolvent(contract.getBorrower(), totalAmount);
     }
 

@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -48,8 +49,8 @@ public class ItemServiceTest {
         item.setId((long) 1);
         item.setName("TestItem");
         item.setOwner(user);
-        item.setBail(100.0);
-        item.setPrice(20.0);
+        item.setBail(100);
+        item.setPrice(20);
         item.setDescription("This is a test");
         item.setLocation("Test-Location");
     }
@@ -61,7 +62,7 @@ public class ItemServiceTest {
 
         itemService.persistItem(item, 1);
 
-        verify(itemRepo, times(1)).save(argument.capture());
+        verify(itemRepo, times(2)).save(argument.capture());
         assertEquals(item, argument.getValue());
         assertEquals(1, (long) argument.getValue().getOwner().getId());
     }

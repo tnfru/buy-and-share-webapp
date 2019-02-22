@@ -120,7 +120,7 @@ public class UserControllerTest {
     // GET
 
     @Test
-    @WithMockUser(roles = "Admin")
+    @WithMockUser(roles = "user")
     public void getUserRegisterLoggedIn() throws Exception {
         mvc.perform(get("/user/register")
             .contentType(MediaType.TEXT_HTML))
@@ -136,6 +136,30 @@ public class UserControllerTest {
         user.setEmail("mail");
         user.setAddress("address");
         user.setName("name");
+        user.setRole("user");
+        user.setBan(false);
+        user.setDeleted(false);
+        user.setId(1L);
+
+        when(userService.fetchUserByAccountName("accountName")).thenReturn(user);
+
+        mvc.perform(get("/user/account")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("Own Items")));
+    }
+
+
+    @Test
+    @WithMockUser("accountName")
+    public void getAdminAccountLoggedIn() throws Exception {
+        User user = new User();
+        user.setAccountName("accountName");
+        user.setPassword("password");
+        user.setEmail("mail");
+        user.setAddress("address");
+        user.setName("name");
+        user.setRole("admin");
         user.setBan(false);
         user.setDeleted(false);
         user.setId(1L);

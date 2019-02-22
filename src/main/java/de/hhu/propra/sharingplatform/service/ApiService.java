@@ -65,7 +65,7 @@ public class ApiService {
         }
     }
 
-    public void enforcePayment(Payment payment, double totalPrice) {
+    public void enforcePayment(Payment payment, int totalPrice) {
         long id = reserveMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
             payment.getBail());
         payment.setBailProPayId(id);
@@ -75,14 +75,14 @@ public class ApiService {
         paymentRepo.save(payment);
     }
 
-    private long reserveMoney(String proPayIdSender, String proPayIdRecipient, double amount) {
+    private long reserveMoney(String proPayIdSender, String proPayIdRecipient, int amount) {
         List<String> pathVariables = new ArrayList<>();
         pathVariables.add("reservation");
         pathVariables.add("reserve");
         pathVariables.add(proPayIdSender);
         pathVariables.add(proPayIdRecipient);
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("amount", Double.toString(amount));
+        parameters.put("amount", Integer.toString(amount));
 
         String response = buildRequest("POST", "http://" + host + ":8888/",
             pathVariables, parameters);
@@ -99,12 +99,12 @@ public class ApiService {
         }
     }
 
-    public void createAccountOrAddMoney(String proPayId, double amount) {
+    public void createAccountOrAddMoney(String proPayId, int amount) {
         List<String> pathVariables = new ArrayList<>();
         pathVariables.add("account");
         pathVariables.add(proPayId);
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("amount", Double.toString(amount));
+        parameters.put("amount", Integer.toString(amount));
 
         buildRequest("POST", "http://" + host + ":8888/",
             pathVariables, parameters);
@@ -160,10 +160,10 @@ public class ApiService {
         return null;
     }
 
-    public boolean isSolvent(User borrower, double amountOwed) {
+    public boolean isSolvent(User borrower, int amountOwed) {
         ProPay borrowerProPay = mapJson(borrower.getPropayId());
 
-        double reservationAmount = 0;
+        int reservationAmount = 0;
         for (ProPayReservation reservation : borrowerProPay.getReservations()) {
             reservationAmount += reservation.getAmount();
         }
@@ -171,7 +171,7 @@ public class ApiService {
         return borrowerProPay.getAmount() - reservationAmount >= amountOwed;
     }
 
-    public boolean isSolventFake(User borrower, double amountOwed) {
+    public boolean isSolventFake(User borrower, int amountOwed) {
         return true;
     }
 
@@ -194,7 +194,7 @@ public class ApiService {
         path.add("transfer");
         path.add(paymentInfo.getProPayIdRecipient());
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("amount", Double.toString(paymentInfo.getAmount()));
+        parameters.put("amount", Integer.toString(paymentInfo.getAmount()));
 
         buildRequest("POST", "http://" + host + ":8888/",
             path, parameters);

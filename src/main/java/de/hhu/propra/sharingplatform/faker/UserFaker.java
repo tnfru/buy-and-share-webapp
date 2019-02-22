@@ -20,6 +20,7 @@ public class UserFaker {
         user.setAccountName(username);
         user.setEmail(username + "@example.com");
         user.setPropayId(faker.name().lastName());
+        user.setRole("user");
         user.setPositiveRating(faker.number().numberBetween(0, 40));
         user.setNegativeRating(faker.number().numberBetween(0, 20));
         user.setPassword("123");
@@ -33,5 +34,23 @@ public class UserFaker {
         for (int i = 0; i < count; i++) {
             users.add(create());
         }
+    }
+
+    public User createAdmin() {
+        User user = new User();
+        user.setName(faker.name().fullName());
+        user.setAddress(faker.address().fullAddress());
+        String username = faker.name().username();
+        user.setAccountName(username);
+        user.setEmail(username + "@example.com");
+        user.setPropayId(faker.name().lastName());
+        user.setRole("admin");
+        user.setPositiveRating(faker.number().numberBetween(0, 40));
+        user.setNegativeRating(faker.number().numberBetween(0, 20));
+        user.setPassword("123");
+        user.setBan(false);
+        user.setDeleted(false);
+
+        return user;
     }
 }

@@ -69,13 +69,13 @@ public class ItemControllerTest {
 
     private Item testItem(User user) {
         Item item = new Item(user);
-        item.setBail(1.0);
+        item.setBail(1);
         item.setDeleted(false);
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
         item.setOwner(user);
-        item.setPrice(2.0);
+        item.setPrice(2);
         item.setId(3L);
 
         return item;
@@ -149,12 +149,12 @@ public class ItemControllerTest {
         User user = testUser();
 
         Item item = new Item(user);
-        item.setBail(1.0);
+        item.setBail(1);
         item.setDeleted(false);
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
-        item.setPrice(2.0);
+        item.setPrice(2);
         item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);

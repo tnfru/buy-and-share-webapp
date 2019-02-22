@@ -17,11 +17,11 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private double amount;
+    private int amount;
     private long amountProPayId;
     private String proPayIdSender;
     private String proPayIdRecipient;
-    private double bail;
+    private int bail;
     private long bailProPayId;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
@@ -33,7 +33,7 @@ public class Payment {
         // used for jpa
     }
 
-    public Payment(User sender, User recipient, double amount, double bail) {
+    public Payment(User sender, User recipient, int amount, int bail) {
         this.proPayIdSender = sender.getPropayId();
         this.proPayIdRecipient = recipient.getPropayId();
         this.amount = amount;

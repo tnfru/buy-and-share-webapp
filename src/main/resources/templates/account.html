@@ -3,400 +3,460 @@
       xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <body>
 <div layout:fragment="content">
-  <div class="row">
-    <div class="col-3">
-      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
-           aria-orientation="vertical">
-        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-profile"
-           role="tab" aria-controls="v-pills-home" aria-selected="true">Profile</a>
-        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-ownItems"
-           role="tab" aria-controls="v-pills-messages" aria-selected="false">Own Items</a>
-        <a class="nav-link" id="v-pills-borrowed-tab" data-toggle="pill"
-           href="#v-pills-borrowedItems"
-           role="tab" aria-controls="v-borrowed-tab" aria-selected="false">Borrowed Items</a>
-        <a class="nav-link" id="v-pills-lent-tab" data-toggle="pill"
-           href="#v-pills-lentItems"
-           role="tab" aria-controls="v-pills-lent-tab" aria-selected="false">Lent Items</a>
-        <a class="nav-link" id="v-pills-requests-tab" data-toggle="pill"
-           href="#v-pills-requests"
-           role="tab" aria-controls="v-pills-requests-tab" aria-selected="false">Requests</a>
-        <a class="nav-link" id="v-pills-new-tab" data-toggle="pill"
-           href="#v-pills-newItem"
-           role="tab" aria-controls="v-pills-new-tab" aria-selected="false">Options</a>
-        <a class="nav-link" id="v-pills-propay-tab" data-toggle="pill"
-           href="#v-pills-propay"
-           role="tab" aria-controls="v-pills-propay" aria-selected="false">Propay settings</a>
-      </div>
-    </div>
-    <div class="col-9">
-      <div class="tab-content" id="v-pills-tabContent">
-        <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
-             aria-labelledby="v-pills-home-tab">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <h4 th:text="${user.getName()}">User Name</h4>
-            </li>
-            <li class="list-group-item">
-              <img src="/images/bike-dummy.png" class="card-img-top"
-                   style="max-height: 20em; max-width: 70em">
-            </li>
-            <li class="list-group-item">
-              <b>Username:</b>
-              <span th:text="${user.getAccountName()}">name</span>
-            </li>
-
-            <li class="list-group-item">
-              <b>Mail:</b>
-              <span th:text="${user.getEmail()}">name@abc.de</span>
-            </li>
-
-            <li class="list-group-item">
-              <b>ProPayID:</b>
-              <span th:text="${user.getPropayId()}">abc</span>
-            </li>
-            <li class="list-group-item">
-              <b>Rating:</b>
-              <span th:text="|${user.totalRatings()}|"></span> Bewertungen:
-              <span th:text="|${user.getRating()}|"></span> &#128077;
-            </li>
-          </ul>
-        </div>
-        <div class="tab-pane fade" id="v-pills-ownItems" role="tabpanel"
-             aria-labelledby="v-pills-ownItems-tab">
-          <table class="table table-striped">
-            <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Price</th>
-              <th scope="col">Bail</th>
-              <th scope="col">Offers(Open)</th>
-              <th scope="col">Conflict</th>
-              <th scope="col" class="mx-auto">Options</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="item : ${user.getItemsExcludeRemoved()}">
-              <td th:text="${item.getName()}"> Test Name</td>
-              <td th:text="${item.getPrice()}"> 33</td>
-              <td th:text="${item.getBail()}"> 333</td>
-              <td>
-                <a th:href="|/offer/show/${item.getId()}|" class="btn-primary">
-                  <button type="button" class="btn btn-primary btn-sm"
-                          th:if="${item.getActiveOffers()} > 0">
-                    Offers
-                    <span class="badge badge-light" th:text="${item.getActiveOffers()}"></span>
-                  </button>
-                  <button type="button" class="btn btn-secondary btn-sm"
-                          th:if="${item.getActiveOffers()} == 0">
-                    Offers
-                    <span class="badge badge-light" th:text="${item.getActiveOffers()}"></span>
-                  </button>
-                </a>
-              </td>
-              </td>
-              <td> Is Conflict?</td>
-              <td>
-                <a th:href="|/item/details/${item.getId()}|"
-                   class="btn btn-primary btn-sm">Details</a>
-                <a th:href="|/item/remove/${item.getId()}|"
-                   class="btn btn-danger btn-sm">Remove</a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          <a class="btn btn-primary" href="/item/new">New Item</a>
-        </div>
-        <div class="tab-pane fade" id="v-pills-borrowedItems" role="tabpanel"
-             aria-labelledby="v-pills-messages-tab">
-          <table class="table table-striped">
-            <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Item Price</th>
-              <th scope="col">Item Bail</th>
-              <th scope="col">Start Date</th>
-              <th scope="col">Expected End Date</th>
-              <th scope="col">Conflict</th>
-              <th scope="col" class="mx-auto">Options</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="con : ${user.getChosenContracts(false)}">
-              <td th:text="${con.getItem().getName()}"> Item Name</td>
-              <td th:text="${con.getItem().getPrice()}"> Item Price</td>
-              <td th:text="${con.getItem().getBail()}"> Item Bail</td>
-              <td th:text="${con.getStart()}"> Start Date</td>
-              <td th:text="${con.getExpectedEnd()}"> Expected End Date</td>
-              <td th:if="${con.isConflict()} == true">
-                <span style="color: red;">&#33;</span>
-              </td>
-              <td th:if="${con.isConflict()} == false">
-                <span style="color: green;">&#45;</span>
-              </td>
-              <td>
-                <form method="post" th:action="|/contract/${con.getId()}/returnItem|">
-                  <button type="submit" class="btn btn-primary btn-sm">Return Item</button>
-                </form>
-                <a href="#"
-                   class="btn btn-danger btn-sm">Item Owner</a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          <div>
-            <a class="btn btn-primary" data-toggle="collapse" href="#collapseTableBorrow" role="button" aria-expanded="false" aria-controls="collapseTable">
-              Show finished contracts
-            </a>
-          </div>
-          <div class="collapse" id="collapseTableBorrow">
-            <div class="card-body">
-              <table class="table table-striped">
-                <thead>
-                <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Item Price</th>
-                  <th scope="col">Item Bail</th>
-                  <th scope="col">Start Date</th>
-                  <th scope="col">Expected End Date</th>
-                  <th scope="col">Conflict</th>
-                  <th scope="col" class="mx-auto">Options</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="con : ${user.getChosenContracts(true)}">
-                  <td th:text="${con.getItem().getName()}"> Item Name</td>
-                  <td th:text="${con.getItem().getPrice()}"> Item Price</td>
-                  <td th:text="${con.getItem().getBail()}"> Item Bail</td>
-                  <td th:text="${con.getStart()}"> Contract Start Date</td>
-                  <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date</td>
-                  <td th:text="${con?.getRealEnd()}"> Contract Real End Date</td>
-                  <td th:if="${con.isConflict()} == true">
-                    <span style="color: red;">&#33;</span>
-                  </td>
-                  <td th:if="${con.isConflict()} == false">
-                    <span style="color: green;">&#45;</span>
-                  </td>
-                  <td>
-                    <span class="badge badge-info">Finished</span>
-                    <a href="#"
-                       class="btn btn-danger btn-sm">Item Owner</a>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
+    <div class="row">
+        <div class="col-3">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                 aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill"
+                   href="#v-pills-profile"
+                   role="tab" aria-controls="v-pills-home" aria-selected="true">Profile</a>
+                <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill"
+                   href="#v-pills-ownItems"
+                   role="tab" aria-controls="v-pills-messages" aria-selected="false">Own Items</a>
+                <a class="nav-link" id="v-pills-borrowed-tab" data-toggle="pill"
+                   href="#v-pills-borrowedItems"
+                   role="tab" aria-controls="v-borrowed-tab" aria-selected="false">Borrowed
+                    Items</a>
+                <a class="nav-link" id="v-pills-lent-tab" data-toggle="pill"
+                   href="#v-pills-lentItems"
+                   role="tab" aria-controls="v-pills-lent-tab" aria-selected="false">Lent Items</a>
+                <a class="nav-link" id="v-pills-requests-tab" data-toggle="pill"
+                   href="#v-pills-requests"
+                   role="tab" aria-controls="v-pills-requests-tab"
+                   aria-selected="false">Requests</a>
+                <a th:if="${user.getRole().equals('admin')}" class="nav-link" id="v-pills-admin-tab" data-toggle="pill"
+                   href="#v-pills-admin"
+                   role="tab" aria-controls="v-pills-admin-tab" aria-selected="false">Admin</a>
+                <a class="nav-link" id="v-pills-userService-tab" data-toggle="pill"
+                   href="#v-pills-userServices"
+                   role="tab" aria-controls="v-pills-new-tab" aria-selected="false">Options</a>
+                <a class="nav-link" id="v-pills-propay-tab" data-toggle="pill"
+                   href="#v-pills-propay"
+                   role="tab" aria-controls="v-pills-propay" aria-selected="false">Propay
+                    settings</a>
             </div>
-          </div>
         </div>
-        <div class="tab-pane fade" id="v-pills-lentItems" role="tabpanel"
-             aria-labelledby="v-pills-messages-tab">
-          <table class="table table-striped">
-            <thead>
-            <tr>
-              <th scope="col">Borrowed by</th>
-              <th scope="col">Item Name</th>
-              <th scope="col">Item Price</th>
-              <th scope="col">Item Bail</th>
-              <th scope="col">Start Date</th>
-              <th scope="col">Expected End Date</th>
-              <th scope="col">End Date</th>
-              <th scope="col">Conflict</th>
-              <th scope="col" class="mx-auto">Options</th>
-            </tr>
-            </thead>
-            <tbody>
-            <div th:each="item : ${user.getItems()}">
-              <tr th:each="con : ${item.getChosenContracts(false)}">
-                <td th:text="${con.getBorrower().getName()}">Borrowed by</td>
-                <td th:text="${con.getItem().getName()}">Item Name</td>
-                <td th:text="${con.getItem().getPrice()}"> Item Price</td>
-                <td th:text="${con.getItem().getBail()}"> Item Bail</td>
-                <td th:text="${con.getStart()}"> Contract Start Date</td>
-                <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date</td>
-                <td th:text="${con?.getRealEnd()}"> Contract Real End Date</td>
-                <td th:if="${con.isConflict()} == true">
-                  <span style="color: red;">&#33;</span>
-                </td>
-                <td th:if="${con.isConflict()} == false">
-                  <span style="color: green;">&#45;</span>
-                </td>
-                <td th:if="${con.getRealEnd()} != null">
-                  <form method="post" th:action="|/contract/${con.getId()}/acceptReturn|">
-                    <button type="submit" class="btn btn-primary btn-sm">Accept Return</button>
-                  </form>
-                  <form method="post" th:action="|/contract/${con.getId()}/openConflict|">
-                    <button type="submit" class="btn btn-danger btn-sm">Conflict</button>
-                  </form>
-                </td>
-                <td th:if="${con.getRealEnd()} == null">
-                  <span class="badge badge-info">In Progress</span>
-                </td>
-              </tr>
-            </div>
-            </tbody>
-          </table>
-          <div>
-            <a class="btn btn-primary" data-toggle="collapse" href="#collapseTable" role="button" aria-expanded="false" aria-controls="collapseTable">
-              Show finished contracts
-            </a>
-          </div>
-          <div class="collapse" id="collapseTable">
-            <div class="card-body">
-              <table class="table table-striped">
-                <thead>
-                <tr>
-                  <th scope="col">Borrowed by</th>
-                  <th scope="col">Item Name</th>
-                  <th scope="col">Item Price</th>
-                  <th scope="col">Item Bail</th>
-                  <th scope="col">Start Date</th>
-                  <th scope="col">Expected End Date</th>
-                  <th scope="col">End Date</th>
-                  <th scope="col">Conflict</th>
-                  <th scope="col" class="mx-auto">Options</th>
-                </tr>
-                </thead>
-                <tbody>
-                <div th:each="item : ${user.getItems()}">
-                  <tr th:each="con : ${item.getChosenContracts(true)}">
-                    <td th:text="${con.getBorrower().getName()}">Borrowed by</td>
-                    <td th:text="${con.getItem().getName()}">Item Name</td>
-                    <td th:text="${con.getItem().getPrice()}"> Item Price</td>
-                    <td th:text="${con.getItem().getBail()}"> Item Bail</td>
-                    <td th:text="${con.getStart()}"> Contract Start Date</td>
-                    <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date</td>
-                    <td th:text="${con?.getRealEnd()}"> Contract Real End Date</td>
-                    <td th:if="${con.isConflict()} == true">
-                      <span style="color: red;">&#33;</span>
-                    </td>
-                    <td th:if="${con.isConflict()} == false">
-                      <span style="color: green;">&#45;</span>
-                    </td>
-                    <td>
-                      <span class="badge badge-info">Finished</span>
-                    </td>
-                  </tr>
+        <div class="col-9">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
+                     aria-labelledby="v-pills-home-tab">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <h4 th:text="${user.getName()}">User Name</h4>
+                        </li>
+                        <li class="list-group-item">
+                            <img src="/images/bike-dummy.png" class="card-img-top"
+                                 style="max-height: 20em; max-width: 70em">
+                        </li>
+                        <li class="list-group-item">
+                            <b>Username:</b>
+                            <span th:text="${user.getAccountName()}">name</span>
+                        </li>
+
+                        <li class="list-group-item">
+                            <b>Mail:</b>
+                            <span th:text="${user.getEmail()}">name@abc.de</span>
+                        </li>
+
+                        <li class="list-group-item">
+                            <b>ProPayID:</b>
+                            <span th:text="${user.getPropayId()}">abc</span>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Rating:</b>
+                            <span th:text="|${user.totalRatings()}|"></span> Bewertungen:
+                            <span th:text="|${user.getRating()}|"></span> &#128077;
+                        </li>
+                    </ul>
                 </div>
-                </tbody>
-              </table>
+                <div class="tab-pane fade" id="v-pills-ownItems" role="tabpanel"
+                     aria-labelledby="v-pills-ownItems-tab">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Bail</th>
+                            <th scope="col">Offers(Open)</th>
+                            <th scope="col">Conflict</th>
+                            <th scope="col" class="mx-auto">Options</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${user.getItemsExcludeRemoved()}">
+                            <td th:text="${item.getName()}"> Test Name</td>
+                            <td th:text="${item.getPrice()}"> 33</td>
+                            <td th:text="${item.getBail()}"> 333</td>
+                            <td>
+                                <a th:href="|/offer/show/${item.getId()}|" class="btn-primary">
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            th:if="${item.getActiveOffers()} > 0">
+                                        Offers
+                                        <span class="badge badge-light"
+                                              th:text="${item.getActiveOffers()}"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-sm"
+                                            th:if="${item.getActiveOffers()} == 0">
+                                        Offers
+                                        <span class="badge badge-light"
+                                              th:text="${item.getActiveOffers()}"></span>
+                                    </button>
+                                </a>
+                            </td>
+                            </td>
+                            <td> Is Conflict?</td>
+                            <td>
+                                <a th:href="|/item/details/${item.getId()}|"
+                                   class="btn btn-primary btn-sm">Details</a>
+                                <a th:href="|/item/remove/${item.getId()}|"
+                                   class="btn btn-danger btn-sm">Remove</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <a class="btn btn-primary" href="/item/new">New Item</a>
+                </div>
+                <div class="tab-pane fade" id="v-pills-borrowedItems" role="tabpanel"
+                     aria-labelledby="v-pills-messages-tab">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Item Price</th>
+                            <th scope="col">Item Bail</th>
+                            <th scope="col">Start Date</th>
+                            <th scope="col">Expected End Date</th>
+                            <th scope="col">Conflict</th>
+                            <th scope="col" class="mx-auto">Options</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="con : ${user.getChosenContracts(false)}">
+                            <td th:text="${con.getItem().getName()}"> Item Name</td>
+                            <td th:text="${con.getItem().getPrice()}"> Item Price</td>
+                            <td th:text="${con.getItem().getBail()}"> Item Bail</td>
+                            <td th:text="${con.getStart()}"> Start Date</td>
+                            <td th:text="${con.getExpectedEnd()}"> Expected End Date</td>
+                            <td th:if="${con.isConflict()} == true">
+                                <span style="color: red;">&#33;</span>
+                            </td>
+                            <td th:if="${con.isConflict()} == false">
+                                <span style="color: green;">&#45;</span>
+                            </td>
+                            <td th:if="${con.isConflict()} == false">
+                                <form method="post"
+                                      th:action="|/contract/${con.getId()}/returnItem|">
+                                    <button type="submit" class="btn btn-primary btn-sm">Return
+                                        Item
+                                    </button>
+                                </form>
+                                <a href="#"
+                                   class="btn btn-danger btn-sm">Item Owner</a>
+                            </td>
+                            <td th:if="${con.isConflict()} == true">
+                                <span class="badge badge-danger"
+                                      th:text="${con.getConflict().getStatus()}"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <a class="btn btn-primary" data-toggle="collapse"
+                           href="#collapseTableBorrow" role="button" aria-expanded="false"
+                           aria-controls="collapseTable">
+                            Show finished contracts
+                        </a>
+                    </div>
+                    <div class="collapse" id="collapseTableBorrow">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Item Price</th>
+                                    <th scope="col">Item Bail</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">Expected End Date</th>
+                                    <th scope="col">Conflict</th>
+                                    <th scope="col" class="mx-auto">Options</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="con : ${user.getChosenContracts(true)}">
+                                    <td th:text="${con.getItem().getName()}"> Item Name</td>
+                                    <td th:text="${con.getItem().getPrice()}"> Item Price</td>
+                                    <td th:text="${con.getItem().getBail()}"> Item Bail</td>
+                                    <td th:text="${con.getStart()}"> Contract Start Date</td>
+                                    <td th:text="${con.getExpectedEnd()}"> Contract Expected End
+                                        Date
+                                    </td>
+                                    <td th:text="${con?.getRealEnd()}"> Contract Real End Date</td>
+                                    <td th:if="${con.isConflict()} == true">
+                                        <span style="color: red;">&#33;</span>
+                                    </td>
+                                    <td th:if="${con.isConflict()} == false">
+                                        <span style="color: green;">&#45;</span>
+                                    </td>
+                                    <td th:if="${con.getConflict()} == false">
+                                        <span class="badge badge-info">Finished</span>
+                                        <a href="#"
+                                           class="btn btn-danger btn-sm">Item Owner</a>
+                                    </td>
+                                    <td th:if="${con.isConflict()} == true">
+                                        <span class="badge badge-info">Finished</span>
+                                        <span class="badge badge-danger"
+                                              th:text="${con.getConflict().getStatus()}"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-lentItems" role="tabpanel"
+                     aria-labelledby="v-pills-messages-tab">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Borrowed by</th>
+                            <th scope="col">Item Name</th>
+                            <th scope="col">Item Price</th>
+                            <th scope="col">Item Bail</th>
+                            <th scope="col">Start Date</th>
+                            <th scope="col">Expected End Date</th>
+                            <th scope="col">End Date</th>
+                            <th scope="col">Conflict</th>
+                            <th scope="col" class="mx-auto">Options</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <div th:each="item : ${user.getItems()}">
+                            <tr th:each="con : ${item.getChosenContracts(false)}">
+                                <td th:text="${con.getBorrower().getName()}">Borrowed by</td>
+                                <td th:text="${con.getItem().getName()}">Item Name</td>
+                                <td th:text="${con.getItem().getPrice()}"> Item Price</td>
+                                <td th:text="${con.getItem().getBail()}"> Item Bail</td>
+                                <td th:text="${con.getStart()}"> Contract Start Date</td>
+                                <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date
+                                </td>
+                                <td th:text="${con?.getRealEnd()}"> Contract Real End Date</td>
+                                <td th:if="${con.isConflict()} == true">
+                                    <span style="color: red;">&#33;</span>
+                                </td>
+                                <td th:if="${con.isConflict()} == false">
+                                    <span style="color: green;">&#45;</span>
+                                </td>
+                                <td th:if="${con.getRealEnd()} != null and ${con.isConflict() == false}">
+                                    <form method="post"
+                                          th:action="|/contract/${con.getId()}/acceptReturn|">
+                                        <button type="submit" class="btn btn-primary btn-sm">Accept
+                                            Return
+                                        </button>
+                                    </form>
+                                    <form method="post"
+                                          th:action="|/contract/${con.getId()}/openConflict|">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            Conflict
+                                        </button>
+                                    </form>
+                                </td>
+                                <td th:if="${con.getRealEnd()} == null">
+                                    <span class="badge badge-info">In Progress</span>
+                                </td>
+                                <td th:if="${con.getRealEnd()} != null and ${con.isConflict() == true}">
+                                    <span class="badge badge-danger"
+                                          th:text="${con.getConflict().getStatus()}"></span>
+                                </td>
+                            </tr>
+                        </div>
+                        </tbody>
+                    </table>
+                    <div>
+                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseTable"
+                           role="button" aria-expanded="false" aria-controls="collapseTable">
+                            Show finished contracts
+                        </a>
+                    </div>
+                    <div class="collapse" id="collapseTable">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Borrowed by</th>
+                                    <th scope="col">Item Name</th>
+                                    <th scope="col">Item Price</th>
+                                    <th scope="col">Item Bail</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">Expected End Date</th>
+                                    <th scope="col">End Date</th>
+                                    <th scope="col">Conflict</th>
+                                    <th scope="col" class="mx-auto">Options</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <div th:each="item : ${user.getItems()}">
+                                    <tr th:each="con : ${item.getChosenContracts(true)}">
+                                        <td th:text="${con.getBorrower().getName()}">Borrowed by
+                                        </td>
+                                        <td th:text="${con.getItem().getName()}">Item Name</td>
+                                        <td th:text="${con.getItem().getPrice()}"> Item Price</td>
+                                        <td th:text="${con.getItem().getBail()}"> Item Bail</td>
+                                        <td th:text="${con.getStart()}"> Contract Start Date</td>
+                                        <td th:text="${con.getExpectedEnd()}"> Contract Expected End
+                                            Date
+                                        </td>
+                                        <td th:text="${con?.getRealEnd()}"> Contract Real End Date
+                                        </td>
+                                        <td th:if="${con.isConflict()} == true">
+                                            <span style="color: red;">&#33;</span>
+                                        </td>
+                                        <td th:if="${con.isConflict()} == false">
+                                            <span style="color: green;">&#45;</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-info">Finished</span>
+                                            <span th:if="${con.isConflict()}"
+                                                  th:text="${con.getConflict().getStatus()}"
+                                                  class="badge badge-danger"></span>
+                                        </td>
+                                    </tr>
+                                </div>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-requests" role="tabpanel"
+                     aria-labelledby="v-pills-requests-tab">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Item Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Bail</th>
+                            <th scope="col">Start</th>
+                            <th scope="col">End</th>
+                            <th scope="col">State</th>
+                            <th scope="col">Item Owner</th>
+                            <th scope="col" class="mx-auto">Options</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="offer : ${user.getOffers()}">
+                            <td th:text="${offer.getItem().getName()}"> Test Name</td>
+                            <td th:text="${offer.getItem().getPrice()}"> 33</td>
+                            <td th:text="${offer.getItem().getBail()}"> 333</td>
+                            <td th:text="${#temporals.format(offer.getStart(), 'dd-MM-yyyy HH:mm')}"></td>
+                            <td th:text="${#temporals.format(offer.getEnd(), 'dd-MM-yyyy HH:mm')}"></td>
+                            <td th:if="${offer.isAccept()} == true">
+                                <span class="badge badge-success">Accepted</span>
+                            </td>
+                            <td th:if="${offer.isDecline()} == true">
+                                <span class="badge badge-danger">Declined</span>
+                            </td>
+                            <td th:if="${offer.isDecline()} == ${offer.isAccept()}">
+                                <span class="badge badge-info">Pending</span>
+                            </td>
+                            <td>
+                                <a th:href="|/user/visitor/${offer.getItem().getOwner().getId()}|"
+                                   class="btn btn-sm btn-primary btn-block">
+                                    <span th:text="${offer.getItem().getOwner().getAccountName()}"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a th:href="|/offer/remove/${offer.getId()}|"
+                                   class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="v-pills-userServices" role="tabpanel"
+                     aria-labelledby="v-pills-newItem-tab">
+                    <a class="btn btn-primary" href="/item/new">New Item</a>
+                    <br>
+                    <a style="margin-top:1em; " class="btn btn-info" href="/user/edit">Edit
+                        Profile</a>
+                    <br>
+                    <a style="margin-top:1em; " class="btn btn-info" href="/user/changePassword">Change
+                        Password</a>
+                </div>
+                <div th:if="${user.getRole().equals('admin')}" class="tab-pane fade" id="v-pills-admin" role="tabpanel"
+                     aria-labelledby="v-pills-newItem-tab">
+                    <a class="btn btn-primary" href="/conflicts/show">View conflicts</a>
+                    <br>
+                </div>
+                <div class="tab-pane fade" id="v-pills-propay" role="tabpanel"
+                     aria-labelledby="v-pills-propay">
+                    <form action="/user/edit/propay" method="post">
+                        <div class="form-group row">
+                            <label for="currentPropayId" class="col-sm-4 col-form-label">Current
+                                PropayId</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext"
+                                       id="currentPropayId"
+                                       th:value="${user.getPropayId()}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="currentAmount" class="col-sm-4 col-form-label">Current
+                                amount</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext"
+                                       id="currentAmount"
+                                       value="Couldnt reach Propayserver">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="propayId" class="col-sm-4 col-form-label">New
+                                PropayId</label>
+                            <div class="col-sm-10">
+                                <input name="propayAccount" type="text" class="form-control"
+                                       id="propayId"
+                                       placeholder="New PropayId">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="propayAmount" class="col-sm-4 col-form-label">Add Propay
+                                amount</label>
+                            <div class="col-sm-10">
+                                <input name="propayAmount" type="number" class="form-control"
+                                       id="propayAmount"
+                                       placeholder="New Propay amount">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="tab-pane fade" id="v-pills-requests" role="tabpanel"
-             aria-labelledby="v-pills-requests-tab">
-          <table class="table table-striped">
-            <thead>
-            <tr>
-              <th scope="col">Item Name</th>
-              <th scope="col">Price</th>
-              <th scope="col">Bail</th>
-              <th scope="col">Start</th>
-              <th scope="col">End</th>
-              <th scope="col">State</th>
-              <th scope="col">Item Owner</th>
-              <th scope="col" class="mx-auto">Options</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="offer : ${user.getOffers()}">
-              <td th:text="${offer.getItem().getName()}"> Test Name</td>
-              <td th:text="${offer.getItem().getPrice()}"> 33</td>
-              <td th:text="${offer.getItem().getBail()}"> 333</td>
-              <td th:text="${#temporals.format(offer.getStart(), 'dd-MM-yyyy HH:mm')}"></td>
-              <td th:text="${#temporals.format(offer.getEnd(), 'dd-MM-yyyy HH:mm')}"></td>
-              <td th:if="${offer.isAccept()} == true">
-                <span class="badge badge-success">Accepted</span>
-              </td>
-              <td th:if="${offer.isDecline()} == true">
-                <span class="badge badge-danger">Declined</span>
-              </td>
-              <td th:if="${offer.isDecline()} == ${offer.isAccept()}">
-                <span class="badge badge-info">Pending</span>
-              </td>
-              <td>
-                <a th:href="|/user/visitor/${offer.getItem().getOwner().getId()}|"
-                   class="btn btn-sm btn-primary btn-block">
-                  <span th:text="${offer.getItem().getOwner().getAccountName()}"></span>
-                </a>
-              </td>
-              <td>
-                <a th:href="|/offer/remove/${offer.getId()}|"
-                   class="btn btn-danger btn-sm">Delete</a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="tab-pane fade" id="v-pills-newItem" role="tabpanel"
-             aria-labelledby="v-pills-newItem-tab">
-          <a class="btn btn-primary" href="/item/new">New Item</a>
-          <br>
-          <a style="margin-top:1em; " class="btn btn-info" href="/user/edit">Edit Profile</a>
-          <br>
-          <a style="margin-top:1em; " class="btn btn-info" href="/user/changePassword">Change
-            Password</a>
-        </div>
-        <div class="tab-pane fade" id="v-pills-propay" role="tabpanel"
-             aria-labelledby="v-pills-propay">
-          <form action="/user/edit/propay" method="post">
-            <div class="form-group row">
-              <label for="currentPropayId" class="col-sm-4 col-form-label">Current PropayId</label>
-              <div class="col-sm-10">
-                <input type="text" readonly class="form-control-plaintext" id="currentPropayId"
-                       th:value="${user.getPropayId()}">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="currentAmount" class="col-sm-4 col-form-label">Current amount</label>
-              <div class="col-sm-10">
-                <input type="text" readonly class="form-control-plaintext" id="currentAmount"
-                       value="Couldnt reach Propayserver">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="propayId" class="col-sm-4 col-form-label">New PropayId</label>
-              <div class="col-sm-10">
-                <input name="propayAccount" type="text" class="form-control" id="propayId"
-                       placeholder="New PropayId">
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="propayAmount" class="col-sm-4 col-form-label">Add Propay amount</label>
-              <div class="col-sm-10">
-                <input name="propayAmount" type="number" class="form-control" id="propayAmount"
-                       placeholder="New Propay amount">
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Save</button>
-          </form>
-        </div>
-      </div>
 
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-              integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-              crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-              integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-              crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-              integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-              crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+                    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+                    crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+                    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+                    crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+                    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+                    crossorigin="anonymous"></script>
 
-      <!--Gets current Propay amount directly -->
-      <script>
-        var currentValueEle = $("#currentAmount");
-        $(document).ready(function () {
-          fetch('/user/propay')
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (value) {
-            currentValueEle.val(value);
-          });
-        });
-      </script>
+            <!--Gets current Propay amount directly -->
+            <script>
+                var currentValueEle = $("#currentAmount");
+                $(document).ready(function () {
+                    fetch('/user/propay')
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (value) {
+                            currentValueEle.val(value);
+                        });
+                });
 
+            </script>
+
+        </div>
     </div>
-  </div>
 </div>
 </body>
 </html>

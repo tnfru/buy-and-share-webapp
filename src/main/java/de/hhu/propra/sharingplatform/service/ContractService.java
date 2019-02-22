@@ -71,7 +71,7 @@ public class ContractService {
 
     public void openConflict(long contractId, String accountName) {
         Contract contract = contractRepo.findOneById(contractId);
-        if (userIsContractOwner(contract, accountName)) {
+        if (!userIsContractOwner(contract, accountName)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
         }
@@ -107,5 +107,26 @@ public class ContractService {
 
     public Collection<Conflict> getOpenConflicts() {
         return conflictRepo.findAllByStatus(Status.PENDING);
+    }
+
+    /**
+     * Resolves the conflict and gives the bail to borrower or item owner.
+     *
+     * @param accepted if accepted: item owner gets bail,
+     *                 otherwise the conflict is rejected and borrower keeps bail.
+     */
+    public void resolveConflict(boolean accepted, long conflictId) {
+        Conflict conflict = conflictRepo.findOneById(conflictId);
+        Contract contract = conflict.getContract();
+        contract.setFinished(true);
+        if (accepted) {
+            conflict.setStatus(Status.ACCEPTED);
+            punishBail(conflictId);
+        } else {
+            conflict.setStatus(Status.REJECTED);
+            paymentService.freeBailReservation(contract);
+        }
+        conflictRepo.save(conflict);
+        contractRepo.save(contract);
     }
 }

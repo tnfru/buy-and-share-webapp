@@ -1,11 +1,13 @@
 package de.hhu.propra.sharingplatform.model;
 
+import com.google.common.io.Files;
 import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Entity
@@ -19,10 +21,13 @@ public class Item {
     private String name;
     private String imageFileName;
     private String description;
-    private Double bail;
-    private Double price; // each day
+    private Integer bail;
+    private Integer price; // each day
     private String location; // maybe change to java location class
     private boolean deleted;
+
+    @Transient
+    private MultipartFile image;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User owner;
@@ -62,5 +67,9 @@ public class Item {
             }
         }
         return chosenContracts;
+    }
+
+    public String getImageExtension() {
+        return Files.getFileExtension(image.getOriginalFilename());
     }
 }
