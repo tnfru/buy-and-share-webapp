@@ -12,10 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.security.Principal;
 
 @Controller
 public class ItemController {
@@ -27,7 +23,7 @@ public class ItemController {
 
     @Autowired
     public ItemController(ItemService itemService, OfferService offerService,
-                          UserService userService) {
+        UserService userService) {
         this.itemService = itemService;
         this.offerService = offerService;
         this.userService = userService;
@@ -53,16 +49,15 @@ public class ItemController {
     }
 
     @PostMapping("/item/new")
-    public String inputItemData(Model model, Item item, Principal principal,
-                                @RequestParam("file") MultipartFile file) {
+    public String inputItemData(Model model, Item item, Principal principal) {
         itemService
-            .persistItem(item, userService.fetchUserIdByAccountName(principal.getName()), file);
+            .persistItem(item, userService.fetchUserIdByAccountName(principal.getName()));
         return "redirect:/user/account/";
     }
 
     @GetMapping("/item/remove/{itemId}")
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
-                                    Principal principal) {
+        Principal principal) {
         itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
         offerService.removeOffersFromDeletedItem(itemId);
         return "redirect:/user/account/";
@@ -81,8 +76,8 @@ public class ItemController {
 
     @PostMapping("/item/edit/{itemId}")
     public String editItemData(Model model, Item item,
-                               @PathVariable long itemId,
-                               Principal principal) {
+        @PathVariable long itemId,
+        Principal principal) {
         long userId = userService.fetchUserIdByAccountName(principal.getName());
         itemService.editItem(item, itemId, userId);
         return "redirect:/user/account";
