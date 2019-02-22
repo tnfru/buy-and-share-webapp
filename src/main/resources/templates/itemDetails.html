@@ -9,26 +9,49 @@
 <body>
 <div layout:fragment="content">
   <h1 th:text="${item?.name}"></h1>
-  <br>
-  <img th:src="@{${'/images/' + item?.imageFileName}}"/>
-  <dl>
-    <dt>Description:</dt>
-    <dd th:text="|${item?.description}|"></dd>
-    <dt>Cost</dt>
-    <dt>Daily Rate:</dt>
-    <dd th:text="${item?.price}"></dd>
-    <dt>Bail:</dt>
-    <dd th:text="${item?.bail}"></dd>
-    <dt>Location:</dt>
-    <dd th:text="${item?.location}"></dd>
-    <dt>Supplier:</dt>
-    <dd th:text="${item?.owner?.accountName}"></dd>
-  </dl>
-  <strong><p>Rating:</p></strong>
-  <span th:text="|${item?.owner?.totalRatings()}|"></span>
-  <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
-  <br>
-  <br>
+  <div class="card border-dark" style="min-width: 23rem; max-width:23rem; margin: 1rem;">
+    <div th:if="${item?.imageFileName != null}"><img th:src="@{${'/images/' + item?.imageFileName}}"/></div>
+    <div th:if="${item?.imageFileName == null}"><img src="images/bike-dummy.png" class="card-img-top"></div>
+
+    <div class="card-body">
+      <h4 class="card-title" th:text="${item.getName()}">Item Name</h4>
+      <p class="card-text" th:text="${item.getDescription()}">Some quick example text to build on
+        the card title and make up the bulk of the card's content.</p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <b>Price:</b>
+        <span th:text="|${item.getPrice()}€|">5€</span>
+      </li>
+
+      <li class="list-group-item">
+        <b>Bail:</b>
+        <span th:text="${item.getBail()}">50€</span>
+      </li>
+
+      <li class="list-group-item">
+        <b>Location:</b>
+        <span th:text="${item?.location}"></span>
+      </li>
+
+      <li class="list-group-item">
+        <b>Supplier:</b>
+        <span th:text="${item?.owner?.accountName}"></span>
+      </li>
+
+      <li class="list-group-item">
+        <b>Rating:</b>
+        <span th:text="|${item?.owner?.totalRatings()}|"></span>
+        <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
+      </li>
+
+    </ul>
+    <div class="card-body">
+      <a th:href="|/item/details/${item.getId()}|"
+         class="btn btn-outline-info btn-block">Details</a>
+      <a href="#" class="btn btn-outline-secondary btn-block">User Details</a>
+    </div>
+  </div>
   <a th:if="${ownItem} == false " class="btn btn-success"
      th:href="|/offer/request/${item?.id}|">Request loan</a>
   <a th:unless="${ownItem} == false " class="btn btn-primary"
