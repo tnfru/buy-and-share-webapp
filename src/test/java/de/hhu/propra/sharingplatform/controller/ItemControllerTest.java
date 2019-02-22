@@ -128,12 +128,12 @@ public class ItemControllerTest {
         user.setId(1L);
 
         Item item = new Item(user);
-        item.setBail(1.0);
+        item.setBail(1);
         item.setDeleted(false);
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
-        item.setPrice(2.0);
+        item.setPrice(2);
         item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);
@@ -172,13 +172,13 @@ public class ItemControllerTest {
         user2.setId(2L);
 
         Item item = new Item(user);
-        item.setBail(1.0);
+        item.setBail(1);
         item.setDeleted(false);
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
         item.setOwner(user);
-        item.setPrice(2.0);
+        item.setPrice(2);
         item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);
@@ -302,13 +302,13 @@ public class ItemControllerTest {
         user2.setId(2L);
 
         Item item = new Item(user);
-        item.setBail(1.0);
+        item.setBail(1);
         item.setDeleted(false);
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
         item.setOwner(user);
-        item.setPrice(2.0);
+        item.setPrice(2);
         item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);
@@ -339,13 +339,13 @@ public class ItemControllerTest {
         user.setId(1L);
 
         Item item = new Item(user);
-        item.setBail(1.0);
+        item.setBail(1);
         item.setDeleted(false);
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
         item.setOwner(user);
-        item.setPrice(2.0);
+        item.setPrice(2);
         item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);
@@ -403,13 +403,13 @@ public class ItemControllerTest {
         user2.setId(2L);
 
         Item item = new Item(user);
-        item.setBail(1.0);
+        item.setBail(1);
         item.setDeleted(false);
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
         item.setOwner(user);
-        item.setPrice(2.0);
+        item.setPrice(2);
         item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);
@@ -437,13 +437,13 @@ public class ItemControllerTest {
         user.setId(1L);
 
         Item item = new Item(user);
-        item.setBail(1.0);
+        item.setBail(1);
         item.setDeleted(false);
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
         item.setOwner(user);
-        item.setPrice(2.0);
+        item.setPrice(2);
         item.setId(3L);
 
         Optional<Item> optI = Optional.of(item);
@@ -503,13 +503,13 @@ public class ItemControllerTest {
         user2.setId(2L);
 
         Item item = new Item(user);
-        item.setBail(1.0);
+        item.setBail(1);
         item.setDeleted(false);
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
         item.setOwner(user);
-        item.setPrice(2.0);
+        item.setPrice(2);
         item.setId(3L);
 
         Optional<User> optU = Optional.of(user2);
@@ -538,13 +538,13 @@ public class ItemControllerTest {
         user.setId(1L);
 
         Item item = new Item(user);
-        item.setBail(1.0);
+        item.setBail(1);
         item.setDeleted(false);
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
         item.setOwner(user);
-        item.setPrice(2.0);
+        item.setPrice(2);
         item.setId(3L);
 
         when(itemRepo.findOneById(3L)).thenReturn(item);
@@ -577,13 +577,13 @@ public class ItemControllerTest {
         user.setId(1L);
 
         Item item = new Item(user);
-        item.setBail(1.0);
+        item.setBail(1);
         item.setDeleted(false);
         item.setDescription("desc");
         item.setLocation("loc");
         item.setName("item");
         item.setOwner(user);
-        item.setPrice(2.0);
+        item.setPrice(2);
         item.setId(3L);
 
         when(itemRepo.findOneById(3L)).thenReturn(item);

@@ -19,8 +19,8 @@ public class Item {
     private String name;
     private String imageFileName;
     private String description;
-    private Double bail;
-    private Double price; // each day
+    private Integer bail;
+    private Integer price; // each day
     private String location; // maybe change to java location class
     private boolean deleted;
 

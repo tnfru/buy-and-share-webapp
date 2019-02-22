@@ -48,8 +48,8 @@ public class ItemServiceTest {
         item.setId((long) 1);
         item.setName("TestItem");
         item.setOwner(user);
-        item.setBail(100.0);
-        item.setPrice(20.0);
+        item.setBail(100);
+        item.setPrice(20);
         item.setDescription("This is a test");
         item.setLocation("Test-Location");
     }
