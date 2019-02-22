@@ -24,7 +24,8 @@ public class UserService {
     private final IBankAccountService bank;
 
     @Autowired
-    public UserService(UserRepo userRepo, PasswordEncoder encoder, IBankAccountService bankAccountService) {
+    public UserService(UserRepo userRepo, PasswordEncoder encoder,
+                       IBankAccountService bankAccountService) {
         this.userRepo = userRepo;
         this.encoder = encoder;
         this.bank = bankAccountService;
@@ -58,7 +59,7 @@ public class UserService {
     }
 
     public void updatePassword(User oldUser, String oldPassword, String newPassword,
-        String confirm) {
+                               String confirm) {
         if (!encoder.matches(oldPassword, oldUser.getPasswordHash())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
         }

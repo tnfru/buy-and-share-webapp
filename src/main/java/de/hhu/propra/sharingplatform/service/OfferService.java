@@ -21,7 +21,7 @@ public class OfferService {
 
     private ContractService contractService;
 
-    private IPaymentAPI apiService;
+    private IPaymentApi apiService;
 
     private IPaymentService paymentService;
 

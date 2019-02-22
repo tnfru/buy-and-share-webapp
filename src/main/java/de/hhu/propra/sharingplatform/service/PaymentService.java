@@ -5,7 +5,6 @@ import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,9 +14,9 @@ import java.time.temporal.ChronoUnit;
 public class PaymentService implements IPaymentService {
 
     private final PaymentRepo paymentRepo;
-    private final IPaymentAPI apiService;
+    private final IPaymentApi apiService;
 
-    public PaymentService(PaymentRepo paymentRepo, IPaymentAPI apiService) {
+    public PaymentService(PaymentRepo paymentRepo, IPaymentApi apiService) {
         this.paymentRepo = paymentRepo;
         this.apiService = apiService;
     }

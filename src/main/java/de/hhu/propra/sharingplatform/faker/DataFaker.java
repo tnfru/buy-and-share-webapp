@@ -8,7 +8,7 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ApiService;
-import de.hhu.propra.sharingplatform.service.IPaymentAPI;
+import de.hhu.propra.sharingplatform.service.IPaymentApi;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class DataFaker implements ServletContextInitializer {
 
     private final OfferService offerService;
 
-    private final IPaymentAPI apiService;
+    private final IPaymentApi apiService;
 
     private Logger log = Logger.getLogger(DataFaker.class.getName());
 
@@ -45,7 +45,7 @@ public class DataFaker implements ServletContextInitializer {
     @Autowired
     public DataFaker(Environment env, UserRepo userRepo, ItemRepo itemRepo,
         OfferRepo offerRepo, OfferService offerService,
-        IPaymentAPI apiService) {
+        IPaymentApi apiService) {
         this.env = env;
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;

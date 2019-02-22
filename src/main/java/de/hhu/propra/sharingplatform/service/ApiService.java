@@ -6,7 +6,7 @@ import de.hhu.propra.sharingplatform.dto.ProPay;
 import de.hhu.propra.sharingplatform.dto.ProPayReservation;
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;
-import java.net.ConnectException;
+
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -25,12 +24,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Data
 @Service
-public class ApiService implements IPaymentAPI{
+public class ApiService implements IPaymentApi {
 
     final PaymentRepo paymentRepo;
     String host = "localhost";
@@ -123,7 +123,7 @@ public class ApiService implements IPaymentAPI{
 
 
     private String buildRequest(String requestType, String serverAddress, List<String> pathVars,
-        Map<String, String> parameters) {
+                                Map<String, String> parameters) {
         StringBuilder urlBuilder = new StringBuilder(serverAddress);
         // append path variables
         for (String pathVar : pathVars) {
@@ -221,7 +221,7 @@ public class ApiService implements IPaymentAPI{
     }
 
     @Override
-    public int getAccountBalance(String proPayID) {
-        return mapJson(proPayID).getAmount();
+    public int getAccountBalance(String proPayId) {
+        return mapJson(proPayId).getAmount();
     }
 }
