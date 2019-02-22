@@ -23,7 +23,7 @@ public class OfferService {
 
     private IPaymentAPI apiService;
 
-    private PaymentService paymentService;
+    private IPaymentService paymentService;
 
     private ItemService itemService;
 
@@ -31,7 +31,7 @@ public class OfferService {
 
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-        ApiService apiService, PaymentService paymentService,
+        ApiService apiService, IPaymentService paymentService,
         ItemService itemService, ContractRepo contractRepo) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
