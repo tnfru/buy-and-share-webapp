@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.security.Principal;
 
 @Controller
 public class ConflictController {
@@ -17,6 +21,30 @@ public class ConflictController {
     public String adminDashboard(Model model) {
         model.addAttribute("conflicts", contractService.getOpenConflicts());
         return "admin-dashboard";
+    }
+
+    /**
+     * Called when admin thinks the bail should go to item owner.
+     * Important: This method can only be called by an administrator.
+     *
+     * @return admin page.
+     */
+    @PostMapping("/conflicts/{conflictId}/accept")
+    public String acceptConflict(@PathVariable long conflictId, Principal principal) {
+        contractService.resolveConflict(true, conflictId);
+        return "redirect:/conflicts/show";
+    }
+
+    /**
+     * Called when admin thinks the conflict is not justified.
+     * Important: This method can only be called by an administrator.
+     *
+     * @return admin page.
+     */
+    @PostMapping("/conflicts/{conflictId}/reject")
+    public String rejectConflict(@PathVariable long conflictId, Principal principal) {
+        contractService.resolveConflict(false, conflictId);
+        return "redirect:/conflicts/show";
     }
 
 }
