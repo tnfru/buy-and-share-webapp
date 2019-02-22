@@ -94,13 +94,13 @@ public class RecommendationService {
         return items;
     }
 
-    void putBorrowedItems(Map<Item, Integer> map, List<Item> borrowedItems) {
+    private void putBorrowedItems(Map<Item, Integer> map, List<Item> borrowedItems) {
         for (Item borrowedItem : borrowedItems) {
             map.put(borrowedItem, map.getOrDefault(borrowedItem, 1));
         }
     }
 
-    List<User> findOtherBorrowers(List<Contract> contracts) {
+    private List<User> findOtherBorrowers(List<Contract> contracts) {
         List<User> otherBorrowers = new ArrayList<>();
         for (Contract contract : contracts) {
             otherBorrowers.add(contract.getBorrower());
