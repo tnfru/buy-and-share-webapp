@@ -3,7 +3,10 @@ package de.hhu.propra.sharingplatform.controller;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -11,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
@@ -23,6 +27,7 @@ import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -49,6 +54,9 @@ public class OfferControllerTest {
 
     @MockBean
     private ItemRepo itemRepo;
+
+    @MockBean
+    private OfferRepo offerRepo;
 
     @MockBean
     private OfferService offerService;
@@ -202,7 +210,8 @@ public class OfferControllerTest {
             .andExpect(status().is3xxRedirection());
     }
 
-    // User Logged In
+    //// User Logged In
+    // get offer/request
 
     @Test
     @WithMockUser
@@ -233,6 +242,42 @@ public class OfferControllerTest {
         mvc.perform(get("/offer/request/10000")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("Borrow∆")));
+            .andExpect(content().string(containsString("Borrow")));
+    }
+
+    // post offer/request
+
+    @Test
+    @WithMockUser
+    public void offerRequestPostLoggedInValid() throws Exception {
+        when(userService.fetchUserByAccountName(any())).thenReturn(user);
+        ArgumentCaptor<Long> a1 = ArgumentCaptor.forClass(Long.class);
+        ArgumentCaptor<User> a2 = ArgumentCaptor.forClass(User.class);
+        ArgumentCaptor<LocalDateTime> a3 = ArgumentCaptor.forClass(LocalDateTime.class);
+        ArgumentCaptor<LocalDateTime> a4 = ArgumentCaptor.forClass(LocalDateTime.class);
+
+        mvc.perform(post("/offer/request/1337")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("daterange", "23.02.2019 - 27.02.2019"))
+            .andExpect(status().is3xxRedirection());
+
+        verify(offerService, times(1))
+            .create(a1.capture(), a2.capture(), a3.capture(), a4.capture());
+
+        assertEquals(a1.getValue().longValue(), 1337);
+        assertEquals(a2.getValue(), user);
+        assertTrue(a3.getValue().equals(LocalDateTime.of(2019, 2, 23, 0, 0, 0)));
+        assertTrue(a4.getValue().equals(LocalDateTime.of(2019, 2, 27, 23, 59, 59)));
+    }
+
+    @Test
+    @WithMockUser
+    public void offerRequestPostLoggedInInvalid() throws Exception {
+        when(userService.fetchUserByAccountName(any())).thenReturn(user);
+
+        mvc.perform(post("/offer/request/1337")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("daterange", "23.02.2wer019 - 27.02.2019"))
+            .andExpect(status().isForbidden());
     }
 }
