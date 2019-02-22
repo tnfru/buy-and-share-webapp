@@ -25,12 +25,12 @@ public class SecConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/", "/css/**", "/images/**", "/h2/**", "/user/register")
+            .antMatchers("/", "/css/**", "/images/**", "/public/images/*", "/h2/**",
+                "/user/register")
             .permitAll() // h2 has to be removed in production
             .anyRequest().authenticated();
         http.formLogin().permitAll();
         http.logout().permitAll();
-
 
         http.userDetailsService(userDetailsService);
 
