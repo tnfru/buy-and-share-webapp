@@ -337,5 +337,55 @@ public class OfferControllerTest {
             .andExpect(status().is3xxRedirection());
     }
 
+    // offer/accept
 
+    @Test
+    @WithMockUser
+    public void offeAcceptOfferNotInDB() throws Exception {
+        when(userService.fetchUserByAccountName(any())).thenReturn(user);
+        when(offerRepo.findOneById(anyLong())).thenReturn(null);
+
+        mvc.perform(get("/offer/show/1000/accept")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser
+    public void offeAcceptOfferValid() throws Exception {
+        when(userService.fetchUserByAccountName(any())).thenReturn(user);
+        Mockito.doNothing().when(offerService).acceptOffer(anyLong(), eq(user));
+
+        mvc.perform(get("/offer/show/1000/accept")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().is3xxRedirection());
+
+        verify(offerService, times(1)).acceptOffer(anyLong(), eq(user));
+    }
+
+    // offer/decline
+
+    @Test
+    @WithMockUser
+    public void offeDeclineOfferNotInDB() throws Exception {
+        when(userService.fetchUserByAccountName(any())).thenReturn(user);
+        when(offerRepo.findOneById(anyLong())).thenReturn(null);
+
+        mvc.perform(get("/offer/show/1000/decline")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser
+    public void offeDeclineOfferValid() throws Exception {
+        when(userService.fetchUserByAccountName(any())).thenReturn(user);
+        Mockito.doNothing().when(offerService).declineOffer(anyLong(), eq(user));
+
+        mvc.perform(get("/offer/show/1000/decline")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().is3xxRedirection());
+
+        verify(offerService, times(1)).declineOffer(anyLong(), eq(user));
+    }
 }
