@@ -219,7 +219,7 @@ public class OfferControllerTest {
 
     @Test
     @WithMockUser
-    public void offerRequestLoggedInItemNotInDB() throws Exception {
+    public void offerRequestLoggedInItemNotInDb() throws Exception {
         when(itemRepo.findById(anyLong())).thenReturn(Optional.empty());
 
         mvc.perform(get("/offer/request/10000")
@@ -328,7 +328,7 @@ public class OfferControllerTest {
 
     @Test
     @WithMockUser
-    public void offerRemoveOfferNotInDB() throws Exception {
+    public void offerRemoveOfferNotInDb() throws Exception {
         when(userService.fetchUserByAccountName(any())).thenReturn(user);
         when(offerRepo.findOneById(anyLong())).thenReturn(null);
 
@@ -341,7 +341,7 @@ public class OfferControllerTest {
 
     @Test
     @WithMockUser
-    public void offeAcceptOfferNotInDB() throws Exception {
+    public void offeAcceptOfferNotInDb() throws Exception {
         when(userService.fetchUserByAccountName(any())).thenReturn(user);
         when(offerRepo.findOneById(anyLong())).thenReturn(null);
 
@@ -367,7 +367,7 @@ public class OfferControllerTest {
 
     @Test
     @WithMockUser
-    public void offeDeclineOfferNotInDB() throws Exception {
+    public void offeDeclineOfferNotInDb() throws Exception {
         when(userService.fetchUserByAccountName(any())).thenReturn(user);
         when(offerRepo.findOneById(anyLong())).thenReturn(null);
 
