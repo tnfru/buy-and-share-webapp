@@ -77,11 +77,6 @@ public class ApiService implements IPaymentApi {
     }
 
     @Override
-    public void createAccount(String proPayId, int amount) {
-        createAccountOrAddMoney(proPayId, amount);
-    }
-
-    @Override
     public void addMoney(String proPayId, int amount) {
         createAccountOrAddMoney(proPayId, amount);
     }

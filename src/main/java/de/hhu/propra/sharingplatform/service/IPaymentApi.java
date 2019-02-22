@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 public interface IPaymentApi {
     void enforcePayment(Payment payment, int totalPrice);
 
-    void createAccount(String proPayId, int amount);
-
     void addMoney(String proPayId, int amount);
 
     boolean isSolvent(User borrower, int amountOwed);
