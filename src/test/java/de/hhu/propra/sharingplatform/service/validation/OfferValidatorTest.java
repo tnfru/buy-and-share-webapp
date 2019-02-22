@@ -50,11 +50,11 @@ public class OfferValidatorTest {
 
         start = LocalDateTime.now().plusDays(3);
         end = start.plusDays(1);
-
-        start = end.plusDays(3);
-        end = start.plusDays(4);
         Contract contractOne = new Contract(new Offer(item, borrower, start, end));
-        Contract contractTwo = new Contract(new Offer(item, borrower, start, end));
+
+        LocalDateTime newStart = end.plusDays(3);
+        LocalDateTime newEnd = start.plusDays(4);
+        Contract contractTwo = new Contract(new Offer(item, borrower, newStart, newEnd));
 
         List<Contract> contractList = new ArrayList<>();
         contractList.add(contractOne);
@@ -75,18 +75,17 @@ public class OfferValidatorTest {
         start = LocalDateTime.now();
         end = LocalDateTime.now().plusDays(3);
     }
-
-    @Ignore
+    
     @Test
     public void periodIsNotAvailable() {
         alternativeSetUpTests();
         boolean thrown = false;
 
-        start = LocalDateTime.now().plusDays(3);
-        end = start.plusDays(2);
+        LocalDateTime testStart = LocalDateTime.now().plusDays(6);
+        LocalDateTime testEnd = start.plusDays(9);
 
         try {
-            OfferValidator.periodIsAvailable(contractRepo, item, start, end);
+            OfferValidator.periodIsAvailable(contractRepo, item, testStart, testEnd);
         } catch (ResponseStatusException responseException) {
             thrown = true;
             assertEquals("400 BAD_REQUEST \"Invalid period\"",
