@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -308,4 +310,32 @@ public class OfferControllerTest {
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk());
     }
+
+    // offer/remove
+
+    @Test
+    @WithMockUser
+    public void offerRemoveValidOffer() throws Exception {
+        when(userService.fetchUserByAccountName(any())).thenReturn(user);
+        Mockito.doNothing().when(offerService).deleteOffer(anyLong(), eq(user));
+
+        mvc.perform(get("/offer/remove/1000")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().is3xxRedirection());
+
+        verify(offerService, times(1)).deleteOffer(anyLong(), eq(user));
+    }
+
+    @Test
+    @WithMockUser
+    public void offerRemoveOfferNotInDB() throws Exception {
+        when(userService.fetchUserByAccountName(any())).thenReturn(user);
+        when(offerRepo.findOneById(anyLong())).thenReturn(null);
+
+        mvc.perform(get("/offer/remove/1000")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().is3xxRedirection());
+    }
+
+
 }
