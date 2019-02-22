@@ -3,14 +3,11 @@ package de.hhu.propra.sharingplatform.model;
 import com.google.common.io.Files;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.boot.convert.DataSizeUnit;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Entity
