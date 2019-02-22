@@ -10,6 +10,7 @@ import java.net.ConnectException;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.web.server.ResponseStatusException;
 
-
+@Component
 @Data
 @Service
 public class ApiService implements IPaymentAPI{
@@ -217,5 +218,10 @@ public class ApiService implements IPaymentAPI{
         buildRequest("POST", "http://" + host + ":8888/",
             path, parameters);
 
+    }
+
+    @Override
+    public int getAccountBalance(String proPayID) {
+        return mapJson(proPayID).getAmount();
     }
 }
