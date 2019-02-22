@@ -3,11 +3,11 @@ package de.hhu.propra.sharingplatform.model;
 import com.google.common.io.Files;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Entity
@@ -20,6 +20,8 @@ public class Item {
 
     private String name;
     private String imageFileName;
+
+    @Column(length = 2000)
     private String description;
     private Integer bail;
     private Integer price; // each day
