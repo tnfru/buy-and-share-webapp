@@ -29,7 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Data
 @Service
-public class ApiService {
+public class ApiService implements IPaymentAPI{
 
     final PaymentRepo paymentRepo;
     String host = "localhost";
@@ -39,7 +39,7 @@ public class ApiService {
         this.paymentRepo = paymentRepo;
     }
 
-    String fetchJson(String userName) {
+    private String fetchJson(String userName) {
         String url = "http://" + host + ":8888/account/" + userName;
         RestTemplate jsonResponse = new RestTemplate();
 
@@ -53,7 +53,7 @@ public class ApiService {
         return response;
     }
 
-    public ProPay mapJson(String userName) {
+    private ProPay mapJson(String userName) {
         String jsonResponse = fetchJson(userName);
         ObjectMapper mapper = new ObjectMapper();
 
@@ -73,6 +73,16 @@ public class ApiService {
             totalPrice);
         payment.setAmountProPayId(id);
         paymentRepo.save(payment);
+    }
+
+    @Override
+    public void createAccount(String proPayId, int amount) {
+        createAccountOrAddMoney(proPayId, amount);
+    }
+
+    @Override
+    public void addMoney(String proPayId, int amount) {
+        createAccountOrAddMoney(proPayId, amount);
     }
 
     private long reserveMoney(String proPayIdSender, String proPayIdRecipient, int amount) {
@@ -99,7 +109,7 @@ public class ApiService {
         }
     }
 
-    public void createAccountOrAddMoney(String proPayId, int amount) {
+    private void createAccountOrAddMoney(String proPayId, int amount) {
         List<String> pathVariables = new ArrayList<>();
         pathVariables.add("account");
         pathVariables.add(proPayId);
@@ -169,10 +179,6 @@ public class ApiService {
         }
 
         return borrowerProPay.getAmount() - reservationAmount >= amountOwed;
-    }
-
-    public boolean isSolventFake(User borrower, int amountOwed) {
-        return true;
     }
 
     public void freeReservation(long amountProPayId, String proPayIdSender) {
