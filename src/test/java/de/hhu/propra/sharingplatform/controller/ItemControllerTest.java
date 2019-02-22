@@ -32,7 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ItemController.class)
-@Import( {ItemService.class})
+@Import({ItemService.class})
 public class ItemControllerTest {
 
     @Autowired
