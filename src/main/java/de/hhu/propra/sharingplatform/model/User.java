@@ -25,6 +25,7 @@ public class User {
     private String address;
     private String email;
     private String propayId;
+    private String role;
     private boolean ban;
     private boolean deleted;
     private String passwordHash;

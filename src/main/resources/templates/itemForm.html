@@ -19,7 +19,7 @@
   <form method="post" style="margin-left: 1em;" th:object="${item}" enctype="multipart/form-data">
     <dl>
       <dt>Upload image:(*)</dt>
-      <dd><input type="file" name="file"/></dd>
+      <dd><input type="file" name="image"/></dd>
       <dt>Designation:(*)</dt>
       <dd><input type="text" name="name" th:value="${item?.name}" required></input></dd>
       <dt>Daily Rate:(*)</dt>
