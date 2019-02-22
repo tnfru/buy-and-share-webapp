@@ -12,4 +12,6 @@ public interface ConflictRepo extends CrudRepository<Conflict, Long> {
 
     @Query("SELECT c FROM Conflict as c WHERE c.status = :status")
     List<Conflict> findAllByStatus(@Param("status") Status status);
+
+    Conflict findOneById(long id);
 }
