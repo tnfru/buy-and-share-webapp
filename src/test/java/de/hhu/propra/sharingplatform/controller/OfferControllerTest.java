@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -23,6 +24,7 @@ import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -279,5 +281,31 @@ public class OfferControllerTest {
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("daterange", "23.02.2wer019 - 27.02.2019"))
             .andExpect(status().isForbidden());
+    }
+
+    // offer/show
+
+    @Test
+    @WithMockUser
+    public void offerShowInvalidItem() throws Exception {
+        when(userService.fetchUserByAccountName(any())).thenReturn(user);
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.empty());
+
+        mvc.perform(get("/offer/show/10000")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser
+    public void offerShowValidItem() throws Exception {
+        when(userService.fetchUserByAccountName(any())).thenReturn(user);
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(item));
+        when(offerService.getItemOffers(anyLong(), any(), anyBoolean()))
+            .thenReturn(new ArrayList<>());
+
+        mvc.perform(get("/offer/show/10000")
+            .contentType(MediaType.TEXT_HTML))
+            .andExpect(status().isOk());
     }
 }
