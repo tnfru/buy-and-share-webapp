@@ -20,15 +20,15 @@ public class SecurityService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String accountName) throws UsernameNotFoundException {
-        Optional<User> user = users.findByAccountName(accountName);
-        if (user.isPresent()) {
-            User user1 = user.get();
+        Optional<User> userOptional = users.findByAccountName(accountName);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
 
 
             UserDetails userdetails = org.springframework.security.core.userdetails.User.builder()
-                .username(user1.getAccountName())
-                .password(user1.getPasswordHash())
-                .roles(user1.getRole())
+                .username(user.getAccountName())
+                .password(user.getPasswordHash())
+                .roles(user.getRole())
                 .build();
             return userdetails;
         }
