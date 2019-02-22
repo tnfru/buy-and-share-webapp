@@ -42,7 +42,7 @@ public class PaymentServiceTest {
         LocalDateTime end = LocalDateTime.now().plusDays(9);
 
         Item item = mock(Item.class);
-        when(item.getPrice()).thenReturn(10.0);
+        when(item.getPrice()).thenReturn(10);
 
         Contract contract = mock(Contract.class);
         when(contract.getStart()).thenReturn(start);
@@ -58,7 +58,7 @@ public class PaymentServiceTest {
         LocalDateTime end = LocalDateTime.now().plusDays(1);
 
         Item item = mock(Item.class);
-        when(item.getPrice()).thenReturn(1.0);
+        when(item.getPrice()).thenReturn(1);
 
         Contract contract = mock(Contract.class);
         when(contract.getStart()).thenReturn(start);
@@ -74,8 +74,8 @@ public class PaymentServiceTest {
         LocalDateTime end = LocalDateTime.now().plusDays(1);
 
         Item item = mock(Item.class);
-        when(item.getPrice()).thenReturn(2.0);
-        when(item.getBail()).thenReturn(1000.0);
+        when(item.getPrice()).thenReturn(2);
+        when(item.getBail()).thenReturn(1000);
 
         Contract contract = mock(Contract.class);
         when(contract.getStart()).thenReturn(start);
@@ -83,7 +83,7 @@ public class PaymentServiceTest {
         when(contract.getItem()).thenReturn(item);
         User fakeUser = new User();
         when(contract.getBorrower()).thenReturn(fakeUser);
-        double totalAmount = 1000.0 + paymentService.calculateTotalPrice(contract);
+        int totalAmount = 1000 + paymentService.calculateTotalPrice(contract);
         when(apiService.isSolvent(fakeUser, totalAmount)).thenReturn(true);
 
         assertTrue(paymentService.recipientSolvent(contract));
@@ -95,8 +95,8 @@ public class PaymentServiceTest {
         LocalDateTime end = LocalDateTime.now().plusDays(1);
 
         Item item = mock(Item.class);
-        when(item.getPrice()).thenReturn(2.0);
-        when(item.getBail()).thenReturn(1000.0);
+        when(item.getPrice()).thenReturn(2);
+        when(item.getBail()).thenReturn(1000);
 
         Contract contract = mock(Contract.class);
         when(contract.getStart()).thenReturn(start);
@@ -105,7 +105,7 @@ public class PaymentServiceTest {
         User fakeUser = new User();
         when(contract.getBorrower()).thenReturn(fakeUser);
 
-        double totalAmount = 1000.0 + paymentService.calculateTotalPrice(contract);
+        int totalAmount = 1000 + paymentService.calculateTotalPrice(contract);
         when(apiService.isSolvent(fakeUser, totalAmount)).thenReturn(false);
 
         assertFalse(paymentService.recipientSolvent(contract));
