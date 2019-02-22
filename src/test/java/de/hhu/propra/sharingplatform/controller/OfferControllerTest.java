@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.controller;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -59,18 +60,34 @@ public class OfferControllerTest {
 
     }
 
-    @Test(expected = ResponseStatusException.class)
+    @Test
     public void readTimeStartWrongInput() {
+        boolean thrown = false;
         String stringTime = "- 23.01.2019";
 
-        offerController.readTime(stringTime, 0);
+        try {
+            offerController.readTime(stringTime, 0);
+        } catch (ResponseStatusException responseException) {
+            thrown = true;
+            assertEquals("403 FORBIDDEN \"Wrong dateformat\"", responseException.getMessage());
+        }
+
+        assertTrue(thrown);
     }
 
-    @Test(expected = ResponseStatusException.class)
+    @Test
     public void readTimeStartInvalidInput() {
+        boolean thrown = false;
         String stringTime = "2345 - 23.01.2019";
 
-        offerController.readTime(stringTime, 0);
+        try {
+            offerController.readTime(stringTime, 0);
+        } catch (ResponseStatusException responseException) {
+            thrown = true;
+            assertEquals("403 FORBIDDEN \"Wrong dateformat\"", responseException.getMessage());
+        }
+
+        assertTrue(thrown);
     }
 
     @Test
@@ -82,18 +99,34 @@ public class OfferControllerTest {
         assertTrue(time.isEqual(LocalDateTime.of(2019, 1, 23, 23, 59, 59)));
     }
 
-    @Test(expected = ResponseStatusException.class)
+    @Test
     public void readTimeEndWrongInput() {
+        boolean thrown = false;
         String stringTime = "23.01.2019 - ";
 
-        offerController.readTime(stringTime, 1);
+        try {
+            offerController.readTime(stringTime, 1);
+        } catch (ResponseStatusException responseException) {
+            thrown = true;
+            assertEquals("403 FORBIDDEN \"Wrong dateformat\"", responseException.getMessage());
+        }
+
+        assertTrue(thrown);
     }
 
-    @Test(expected = ResponseStatusException.class)
+    @Test
     public void readTimeEndInvalidInput() {
+        boolean thrown = false;
         String stringTime = "23.01.2019 - 234";
 
-        offerController.readTime(stringTime, 1);
+        try {
+            offerController.readTime(stringTime, 1);
+        } catch (ResponseStatusException responseException) {
+            thrown = true;
+            assertEquals("403 FORBIDDEN \"Wrong dateformat\"", responseException.getMessage());
+        }
+
+        assertTrue(thrown);
     }
 
     @Ignore
