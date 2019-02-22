@@ -15,10 +15,10 @@ import java.time.temporal.ChronoUnit;
 public class PaymentService {
 
     private final PaymentRepo paymentRepo;
-    private final ApiService apiService;
+    private final IPaymentAPI apiService;
 
     @Autowired
-    public PaymentService(PaymentRepo paymentRepo, ApiService apiService) {
+    public PaymentService(PaymentRepo paymentRepo, IPaymentAPI apiService) {
         this.paymentRepo = paymentRepo;
         this.apiService = apiService;
     }
