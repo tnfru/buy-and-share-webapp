@@ -27,7 +27,7 @@ public class RecommendationService {
     }
 
     /**
-     * uses the users who bought x also bought y schema
+     * . uses the users who bought x also bought y schema.
      *
      * @param itemId item to find recommendations for
      * @return returns list of items
@@ -61,7 +61,6 @@ public class RecommendationService {
                 }
             }
         } */
-
 
         List<Entry<Item, Integer>> entrys = findGreatest(map, numberOfItems);
         List<Item> bestMatches = new ArrayList<>();
@@ -112,7 +111,8 @@ public class RecommendationService {
         return otherBorrowers;
     }
 
-    private static <K, V extends Comparable<? super V>> List<Entry<K, V>> findGreatest(Map<K, V> map, int n) {
+    private static <K, V extends Comparable<? super V>> List<Entry<K, V>> findGreatest(
+        Map<K, V> map, int n) {
         Comparator<? super Entry<K, V>> comparator = (Comparator<Entry<K, V>>) (e0, e1) -> {
             V v0 = e0.getValue();
             V v1 = e1.getValue();
