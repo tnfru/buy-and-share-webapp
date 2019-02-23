@@ -4,6 +4,7 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
+import de.hhu.propra.sharingplatform.service.RecommendationService;
 import de.hhu.propra.sharingplatform.service.UserService;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,16 @@ public class ItemController {
     private final ItemService itemService;
     private final OfferService offerService;
     private final UserService userService;
+    private final RecommendationService recommendationService;
 
 
     @Autowired
     public ItemController(ItemService itemService, OfferService offerService,
-                          UserService userService) {
+        UserService userService, RecommendationService recommendationService) {
         this.itemService = itemService;
         this.offerService = offerService;
         this.userService = userService;
+        this.recommendationService = recommendationService;
     }
 
     @GetMapping("/item/details/{itemId}")
@@ -41,6 +44,7 @@ public class ItemController {
         boolean ownItem = itemService.userIsOwner(item.getId(),
             userService.fetchUserIdByAccountName(principal.getName()));
         model.addAttribute("ownItem", ownItem);
+        model.addAttribute("recItems", recommendationService.findRecommendations(itemId));
         return "itemDetails";
     }
 
@@ -54,7 +58,7 @@ public class ItemController {
 
     @PostMapping("/item/new")
     public String inputItemData(Model model, Item item, Principal principal,
-                                @RequestParam("file") MultipartFile file) {
+        @RequestParam("file") MultipartFile file) {
         itemService
             .persistItem(item, userService.fetchUserIdByAccountName(principal.getName()), file);
         return "redirect:/user/account/";
@@ -62,7 +66,7 @@ public class ItemController {
 
     @GetMapping("/item/remove/{itemId}")
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
-                                    Principal principal) {
+        Principal principal) {
         itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
         offerService.removeOffersFromDeletedItem(itemId);
         return "redirect:/user/account/";
@@ -81,8 +85,8 @@ public class ItemController {
 
     @PostMapping("/item/edit/{itemId}")
     public String editItemData(Model model, Item item,
-                               @PathVariable long itemId,
-                               Principal principal) {
+        @PathVariable long itemId,
+        Principal principal) {
         long userId = userService.fetchUserIdByAccountName(principal.getName());
         itemService.editItem(item, itemId, userId);
         return "redirect:/user/account";
