@@ -33,7 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ItemController.class)
-@Import( {ItemService.class})
+@Import({ItemService.class})
 public class ItemControllerTest {
 
     @Autowired
@@ -56,6 +56,35 @@ public class ItemControllerTest {
 
     @MockBean
     private RecommendationService recommendationService;
+
+    private User testUser() {
+        User user = new User();
+        user.setAccountName("accountname");
+        user.setPassword("password");
+        user.setEmail("mail");
+        user.setAddress("address");
+        user.setName("name");
+        user.setBan(false);
+        user.setDeleted(false);
+        user.setId(1L);
+
+        return user;
+    }
+
+    private Item testItem(User user) {
+        Item item = new Item(user);
+        item.setBail(1);
+        item.setDeleted(false);
+        item.setDescription("desc");
+        item.setLocation("loc");
+        item.setName("item");
+        item.setOwner(user);
+        item.setPrice(2);
+        item.setId(3L);
+
+        return item;
+    }
+
     /*
     NOT LOGGED in
      */
@@ -121,15 +150,7 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("accountname")
     public void itemDetailsExistLoggedInAndOwner() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
         Item item = new Item(user);
         item.setBail(1);
@@ -155,15 +176,7 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("otheraccountname")
     public void itemDetailsExistLoggedInNotOwner() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
         User user2 = new User();
         user2.setAccountName("otheraccountname");
@@ -175,15 +188,7 @@ public class ItemControllerTest {
         user2.setDeleted(false);
         user2.setId(2L);
 
-        Item item = new Item(user);
-        item.setBail(1);
-        item.setDeleted(false);
-        item.setDescription("desc");
-        item.setLocation("loc");
-        item.setName("item");
-        item.setOwner(user);
-        item.setPrice(2);
-        item.setId(3L);
+        Item item = testItem(user);
 
         Optional<Item> optI = Optional.of(item);
         Optional<User> optU2 = Optional.of(user2);
@@ -211,15 +216,7 @@ public class ItemControllerTest {
     //@Test
     @WithMockUser("accountname")
     public void postNewItemWrongLoggedIn() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
         Optional<User> optU = Optional.of(user);
 
@@ -236,15 +233,7 @@ public class ItemControllerTest {
     //@Test
     @WithMockUser("accountname")
     public void postNewItemCorrectLoggedIn() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
         Optional<User> optU = Optional.of(user);
 
@@ -263,15 +252,7 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("accountname")
     public void removeItemDontExistsLoggedIn() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
         Optional<User> optU = Optional.of(user);
 
@@ -285,15 +266,7 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("otheraccountname")
     public void removeItemExistsLoggedInNotOwner() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
         User user2 = new User();
         user2.setAccountName("otheraccountname");
@@ -305,15 +278,7 @@ public class ItemControllerTest {
         user2.setDeleted(false);
         user2.setId(2L);
 
-        Item item = new Item(user);
-        item.setBail(1);
-        item.setDeleted(false);
-        item.setDescription("desc");
-        item.setLocation("loc");
-        item.setName("item");
-        item.setOwner(user);
-        item.setPrice(2);
-        item.setId(3L);
+        Item item = testItem(user);
 
         Optional<Item> optI = Optional.of(item);
         Optional<User> optU2 = Optional.of(user2);
@@ -332,25 +297,9 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("accountname")
     public void removeItemExistsLoggedInIsOwner() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
-        Item item = new Item(user);
-        item.setBail(1);
-        item.setDeleted(false);
-        item.setDescription("desc");
-        item.setLocation("loc");
-        item.setName("item");
-        item.setOwner(user);
-        item.setPrice(2);
-        item.setId(3L);
+        Item item = testItem(user);
 
         Optional<Item> optI = Optional.of(item);
 
@@ -368,15 +317,7 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("accountname")
     public void editItemDontExistsLoggedIn() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
         mvc.perform(get("/item/edit/3")
             .contentType(MediaType.TEXT_HTML))
@@ -386,15 +327,7 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("otheraccountname")
     public void editItemExistsLoggedInNotOwner() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
         User user2 = new User();
         user2.setAccountName("otheraccountname");
@@ -406,15 +339,7 @@ public class ItemControllerTest {
         user2.setDeleted(false);
         user2.setId(2L);
 
-        Item item = new Item(user);
-        item.setBail(1);
-        item.setDeleted(false);
-        item.setDescription("desc");
-        item.setLocation("loc");
-        item.setName("item");
-        item.setOwner(user);
-        item.setPrice(2);
-        item.setId(3L);
+        Item item = testItem(user);
 
         Optional<Item> optI = Optional.of(item);
         Optional<User> optU2 = Optional.of(user2);
@@ -430,25 +355,9 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("accountname")
     public void editItemExistsLoggedInIsOwner() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
-        Item item = new Item(user);
-        item.setBail(1);
-        item.setDeleted(false);
-        item.setDescription("desc");
-        item.setLocation("loc");
-        item.setName("item");
-        item.setOwner(user);
-        item.setPrice(2);
-        item.setId(3L);
+        Item item = testItem(user);
 
         Optional<Item> optI = Optional.of(item);
 
@@ -463,15 +372,7 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("accountname")
     public void postEditItemDontExistLoggedIn() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
         Optional<User> optU = Optional.of(user);
 
@@ -486,15 +387,7 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("otheraccountname")
     public void postEditItemExistLoggedInNotOwner() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
         User user2 = new User();
         user2.setAccountName("otheraccountname");
@@ -506,15 +399,7 @@ public class ItemControllerTest {
         user2.setDeleted(false);
         user2.setId(2L);
 
-        Item item = new Item(user);
-        item.setBail(1);
-        item.setDeleted(false);
-        item.setDescription("desc");
-        item.setLocation("loc");
-        item.setName("item");
-        item.setOwner(user);
-        item.setPrice(2);
-        item.setId(3L);
+        Item item = testItem(user);
 
         Optional<User> optU = Optional.of(user2);
 
@@ -531,25 +416,9 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("accountname")
     public void postEditItemExistLoggedInIsOwner() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
-        Item item = new Item(user);
-        item.setBail(1);
-        item.setDeleted(false);
-        item.setDescription("desc");
-        item.setLocation("loc");
-        item.setName("item");
-        item.setOwner(user);
-        item.setPrice(2);
-        item.setId(3L);
+        Item item = testItem(user);
 
         when(itemRepo.findOneById(3L)).thenReturn(item);
         when(itemRepo.findById(3L)).thenReturn(Optional.of(item));
@@ -570,25 +439,9 @@ public class ItemControllerTest {
     @Test
     @WithMockUser("accountname")
     public void postEditItemExistLoggedInIsOwnerInvalidItem() throws Exception {
-        User user = new User();
-        user.setAccountName("accountname");
-        user.setPassword("password");
-        user.setEmail("mail");
-        user.setAddress("address");
-        user.setName("name");
-        user.setBan(false);
-        user.setDeleted(false);
-        user.setId(1L);
+        User user = testUser();
 
-        Item item = new Item(user);
-        item.setBail(1);
-        item.setDeleted(false);
-        item.setDescription("desc");
-        item.setLocation("loc");
-        item.setName("item");
-        item.setOwner(user);
-        item.setPrice(2);
-        item.setId(3L);
+        Item item = testItem(user);
 
         when(itemRepo.findOneById(3L)).thenReturn(item);
         when(itemRepo.findById(3L)).thenReturn(Optional.of(item));

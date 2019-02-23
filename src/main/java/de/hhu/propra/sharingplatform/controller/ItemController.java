@@ -13,10 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.security.Principal;
 
 @Controller
 public class ItemController {
@@ -57,10 +53,9 @@ public class ItemController {
     }
 
     @PostMapping("/item/new")
-    public String inputItemData(Model model, Item item, Principal principal,
-        @RequestParam("file") MultipartFile file) {
+    public String inputItemData(Model model, Item item, Principal principal) {
         itemService
-            .persistItem(item, userService.fetchUserIdByAccountName(principal.getName()), file);
+            .persistItem(item, userService.fetchUserIdByAccountName(principal.getName()));
         return "redirect:/user/account/";
     }
 
