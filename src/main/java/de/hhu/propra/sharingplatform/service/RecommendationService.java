@@ -112,16 +112,16 @@ public class RecommendationService {
     }
 
     private static <K, V extends Comparable<? super V>> List<Entry<K, V>> findGreatest(
-        Map<K, V> map, int number) {
+        Map<K, V> map, int numberOfItems) {
         Comparator<? super Entry<K, V>> comparator = (Comparator<Entry<K, V>>) (e0, e1) -> {
             V v0 = e0.getValue();
             V v1 = e1.getValue();
             return v0.compareTo(v1);
         };
-        PriorityQueue<Entry<K, V>> highest = new PriorityQueue<>(number, comparator);
+        PriorityQueue<Entry<K, V>> highest = new PriorityQueue<>(numberOfItems, comparator);
         for (Entry<K, V> entry : map.entrySet()) {
             highest.offer(entry);
-            while (highest.size() > number) {
+            while (highest.size() > numberOfItems) {
                 highest.poll();
             }
         }
