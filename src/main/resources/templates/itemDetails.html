@@ -50,6 +50,38 @@
         <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
       </li>
 
+      <li class="list-group-item">
+        <b>Availability:</b>
+        <br>
+        <div id="my-calendar"></div>
+
+        <script th:inline="javascript">
+          var calendar = document.getElementById("my-calendar");
+          var myCalendar = jsCalendar.new({
+            target: calendar,
+            monthFormat: "month YYYY"
+          });
+        </script>
+
+        <div th:each="contract : ${item.getChosenContracts(false)}">
+
+          <script th:inline="javascript"
+                  th:with=
+                      "start=${#temporals.format(contract.getStart(),'yyyy-MM-dd')},
+                      end=${#temporals.format(contract.getExpectedEnd(),'yyyy-MM-dd')}">
+            var start = new Date([[${start}]]);
+            var end = new Date([[${end}]]);
+
+            for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
+              myCalendar.select([
+                date
+              ]);
+            }
+
+          </script>
+        </div>
+      </li>
+
     </ul>
     <div class="card-body">
       <a th:href="|/item/details/${item.getId()}|"
@@ -63,38 +95,8 @@
      th:href="|/offer/show/${item.getId()}|">Show Requests</a>
   <a style="margin-left: 1em;" th:unless="${ownItem} == false " class="btn btn-warning"
      th:href="|/item/edit/${item?.Id}|">Edit Item</a>
-  <br>
-  <br>
-    <h1 th:text="${item?.name}"></h1>
-    <br>
-    <img th:src="@{${'/images/' + item?.imageFileName}}"/>
-    <dl>
-        <dt>Description:</dt>
-        <dd th:text="|${item?.description}|"></dd>
-        <dt>Cost</dt>
-        <dt>Daily Rate:</dt>
-        <dd th:text="${item?.price}"></dd>
-        <dt>Bail:</dt>
-        <dd th:text="${item?.bail}"></dd>
-        <dt>Location:</dt>
-        <dd th:text="${item?.location}"></dd>
-        <dt>Supplier:</dt>
-        <dd th:text="${item?.owner?.accountName}"></dd>
-    </dl>
-    <strong><p>Rating:</p></strong>
-    <span th:text="|${item?.owner?.totalRatings()}|"></span>
-    <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
-    <br>
-    <br>
-    <a th:if="${ownItem} == false " class="btn btn-success"
-       th:href="|/offer/request/${item?.id}|">Request loan</a>
-    <a th:unless="${ownItem} == false " class="btn btn-primary"
-       th:href="|/offer/show/${item.getId()}|">Show Requests</a>
-    <a style="margin-left: 1em;" th:unless="${ownItem} == false " class="btn btn-warning"
-       th:href="|/item/edit/${item?.Id}|">Edit Item</a>
-    <br>
-    <br>
 
+  <!--
     <div id="my-calendar"></div>
 
     <script th:inline="javascript">
@@ -121,7 +123,7 @@
             }
 
         </script>
-    </div>
+    </div> -->
 </div>
 
 </body>
