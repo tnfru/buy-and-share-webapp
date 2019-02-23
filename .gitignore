@@ -21,4 +21,4 @@ data/*
 *.iml
 *.ipr
 /out/
-
+/public/images/*

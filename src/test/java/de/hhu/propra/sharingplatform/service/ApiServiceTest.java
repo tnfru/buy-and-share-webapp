@@ -66,7 +66,7 @@ public class ApiServiceTest {
         ApiService apiService = mock(ApiService.class);
         when(apiService.fetchJson(anyString())).thenReturn(fakeJson);
         when(apiService.mapJson(anyString())).thenCallRealMethod();
-        when(apiService.isSolvent(any(), anyDouble())).thenCallRealMethod();
+        when(apiService.isSolvent(any(), anyInt())).thenCallRealMethod();
 
         assertTrue(apiService.isSolvent(fakeUser, 1000));
     }
@@ -82,7 +82,7 @@ public class ApiServiceTest {
         ApiService apiService = mock(ApiService.class);
         when(apiService.fetchJson(anyString())).thenReturn(fakeJson);
         when(apiService.mapJson(anyString())).thenCallRealMethod();
-        when(apiService.isSolvent(any(), anyDouble())).thenCallRealMethod();
+        when(apiService.isSolvent(any(), anyInt())).thenCallRealMethod();
 
         assertFalse(apiService.isSolvent(fakeUser, 10000));
     }
@@ -98,7 +98,7 @@ public class ApiServiceTest {
         ApiService apiService = mock(ApiService.class);
         when(apiService.fetchJson(anyString())).thenReturn(fakeJson);
         when(apiService.mapJson(anyString())).thenCallRealMethod();
-        when(apiService.isSolvent(any(), anyDouble())).thenCallRealMethod();
+        when(apiService.isSolvent(any(), anyInt())).thenCallRealMethod();
 
         assertFalse(apiService.isSolvent(fakeUser, 600));
     }

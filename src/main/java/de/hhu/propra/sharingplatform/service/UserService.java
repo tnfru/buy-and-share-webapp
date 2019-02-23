@@ -108,7 +108,7 @@ public class UserService {
         UserValidator.validatePassword(password);
     }
 
-    public Double getCurrentPropayAmount(String accountName) {
+    public Integer getCurrentPropayAmount(String accountName) {
         return apiService.mapJson(accountName).getAmount();
     }
 
@@ -119,9 +119,9 @@ public class UserService {
             userRepo.save(user);
         }
         if (inputAmount.length() > 0) {
-            Double amount;
+            Integer amount;
             try {
-                amount = Double.parseDouble(inputAmount);
+                amount = Integer.parseInt(inputAmount);
                 apiService.createAccountOrAddMoney(user.getPropayId(), amount);
             } catch (NumberFormatException nfException) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
