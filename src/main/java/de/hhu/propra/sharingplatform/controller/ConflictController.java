@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.controller;
 
+import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.service.ConflictService;
 import de.hhu.propra.sharingplatform.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,14 @@ public class ConflictController {
         return "redirect:/user/account";
     }
 
+    @GetMapping("/showConflicts/{contractId}")
+    public String showUserConflicts(@PathVariable long contractId, Principal principal, Model model) {
+        contractService.validateOwner(contractId, principal.getName());
+        model.addAttribute("conflicts", contractService.fetchContractById(contractId).getConflicts());
+        model.addAttribute("contractId", contractId);
+        return "showConflicts";
+    }
+
     @GetMapping("/conflicts/{conflictId}/details")
     public String conflictDetails(@PathVariable long conflictId, Model model) {
         model.addAttribute("conflict", conflictService.fetchConflictById(conflictId));
@@ -56,23 +65,23 @@ public class ConflictController {
     }
 
     @PostMapping("/conflicts/{conflictId}/punishBail")
-    public String punishBail(@PathVariable long conflictId,
-                             @RequestParam(name = "punishPercent") long percent) {
-        conflictService.punish(conflictId, percent);
-        conflictService.close(conflictId);
+    public String punishBail(@PathVariable long conflictId) {
+        conflictService.punish(conflictId);
+        contractService.cancelContract(conflictId);
         return "redirect:/conflicts/show";
     }
 
     @PostMapping("/conflicts/{conflictId}/cancel")
     public String cancelContract(@PathVariable long conflictId) {
         contractService.cancelContract(conflictId);
-        conflictService.close(conflictId);
+        conflictService.setStatus(Status.CANCELED, conflictId);
         return "redirect:/conflicts/show";
     }
 
     @PostMapping("/conflicts/{conflictId}/continue")
     public String continueContract(@PathVariable long conflictId) {
-        conflictService.close(conflictId);
+        conflictService.setStatus(Status.CONTINUED, conflictId);
+        contractService.continueContract(conflictId);
         return "redirect:/conflicts/show";
     }
 
