@@ -143,7 +143,7 @@
                             <td th:if="${con.isConflict()} == false">
                                 <span style="color: green;">&#45;</span>
                             </td>
-                            <td th:if="${con.isConflict()} == false">
+                            <td th:if="${con.getRealEnd()} == null and ${con.isConflict()} == false">
                                 <form method="post"
                                       th:action="|/contract/${con.getId()}/returnItem|">
                                     <button type="submit" class="btn btn-primary btn-sm">Return
@@ -153,8 +153,9 @@
                                 <a href="#"
                                    class="btn btn-danger btn-sm">Item Owner</a>
                             </td>
-                            <td th:if="${con.isConflict()} == true">
-                                <span class="badge badge-danger"
+                            <td th:if="${con.getRealEnd()} != null">
+                                <span class="badge badge-info">PENDING</span>
+                                <span th:if="${con.isConflict()} == true" class="badge badge-danger"
                                       th:text="${con.getConflict().getStatus()}"></span>
                             </td>
                         </tr>
@@ -190,14 +191,13 @@
                                     <td th:text="${con.getExpectedEnd()}"> Contract Expected End
                                         Date
                                     </td>
-                                    <td th:text="${con?.getRealEnd()}"> Contract Real End Date</td>
                                     <td th:if="${con.isConflict()} == true">
                                         <span style="color: red;">&#33;</span>
                                     </td>
                                     <td th:if="${con.isConflict()} == false">
                                         <span style="color: green;">&#45;</span>
                                     </td>
-                                    <td th:if="${con.getConflict()} == false">
+                                    <td th:if="${con.isConflict()} == false">
                                         <span class="badge badge-info">Finished</span>
                                         <a href="#"
                                            class="btn btn-danger btn-sm">Item Owner</a>

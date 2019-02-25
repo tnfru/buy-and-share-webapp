@@ -3,7 +3,6 @@ package de.hhu.propra.sharingplatform.service.validation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -14,8 +13,8 @@ import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.ApiService;
-import de.hhu.propra.sharingplatform.service.PaymentService;
+import de.hhu.propra.sharingplatform.service.payment.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.PaymentService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +61,7 @@ public class OfferValidatorTest {
 
         contractRepo = mock(ContractRepo.class);
         when(contractRepo.findAllByItem(item)).thenReturn(contractList);
+        when(contractRepo.findAllByItemAndFinishedIsFalse(item)).thenReturn(contractList);
     }
 
 

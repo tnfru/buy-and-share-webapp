@@ -15,6 +15,11 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import java.time.LocalDateTime;
+
+import de.hhu.propra.sharingplatform.service.payment.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.PaymentService;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -231,5 +236,40 @@ public class OfferServiceTest {
             thrown = true;
         }
         assertTrue(thrown);
+    }
+
+    @Test
+    public void removeOverlappingOffers() {
+        List<Offer> dbOffers = new ArrayList<>();
+
+        Offer overlapping1 = new Offer(new Item(new User()), new User(), offer.getStart(),
+            offer.getStart().plusDays(3));
+        Offer overlapping2 = new Offer(new Item(new User()), new User(),
+            offer.getStart().minusDays(3), offer.getStart().plusDays(5));
+        Offer overlapping3 = new Offer(new Item(new User()), new User(),
+            offer.getStart().plusDays(2), offer.getStart().plusDays(4));
+        Offer validPeriod1 = new Offer(new Item(new User()), new User(),
+            offer.getStart().plusDays(5), offer.getStart().plusDays(8));
+        Offer validPeriod2 = new Offer(new Item(new User()), new User(),
+            offer.getStart().minusDays(10), offer.getStart().minusDays(3));
+
+        dbOffers.add(overlapping1);
+        dbOffers.add(overlapping2);
+        dbOffers.add(overlapping3);
+        dbOffers.add(validPeriod1);
+        dbOffers.add(validPeriod2);
+
+        when(offerRepo.findAllByItemIdAndDeclineIsFalseAndAcceptIsFalse(anyLong()))
+            .thenReturn(dbOffers);
+
+        offerService.removeOverlappingOffer(offer);
+
+        verify(offerRepo, times(3)).save(any());
+
+        assertTrue(overlapping1.isDecline());
+        assertTrue(overlapping2.isDecline());
+        assertTrue(overlapping3.isDecline());
+        assertFalse(validPeriod1.isDecline());
+        assertFalse(validPeriod2.isDecline());
     }
 }

@@ -3,9 +3,6 @@ package de.hhu.propra.sharingplatform.service;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -13,14 +10,11 @@ import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
-import org.junit.Assert;
+import de.hhu.propra.sharingplatform.service.payment.IBankAccountService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -33,7 +27,7 @@ public class UserServiceTest {
     private UserRepo userRepo;
 
     @MockBean
-    private ApiService apiService;
+    private IBankAccountService bankAccountService;
 
     @MockBean
     private PasswordEncoder encoder;
@@ -54,7 +48,7 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
-        userService = new UserService(userRepo, encoder, apiService, imageSaver);
+        userService = new UserService(userRepo, encoder, bankAccountService, imageSaver);
     }
 
     @Test

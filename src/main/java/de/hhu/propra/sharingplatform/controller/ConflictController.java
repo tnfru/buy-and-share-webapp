@@ -17,6 +17,11 @@ public class ConflictController {
     private ContractService contractService;
 
 
+    /**
+     * Page for admins to see open conflicts.
+     * @param model the model.
+     * @return admin-dashboard.html
+     */
     @GetMapping("/conflicts/show")
     public String adminDashboard(Model model) {
         model.addAttribute("conflicts", contractService.getOpenConflicts());
