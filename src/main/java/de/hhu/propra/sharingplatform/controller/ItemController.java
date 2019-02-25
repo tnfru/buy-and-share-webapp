@@ -4,6 +4,7 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
+import de.hhu.propra.sharingplatform.service.RecommendationService;
 import de.hhu.propra.sharingplatform.service.UserService;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,16 @@ public class ItemController {
     private final ItemService itemService;
     private final OfferService offerService;
     private final UserService userService;
+    private final RecommendationService recommendationService;
 
 
     @Autowired
     public ItemController(ItemService itemService, OfferService offerService,
-        UserService userService) {
+        UserService userService, RecommendationService recommendationService) {
         this.itemService = itemService;
         this.offerService = offerService;
         this.userService = userService;
+        this.recommendationService = recommendationService;
     }
 
     @GetMapping("/item/details/{itemId}")
@@ -37,6 +40,7 @@ public class ItemController {
         boolean ownItem = itemService.userIsOwner(item.getId(),
             userService.fetchUserIdByAccountName(principal.getName()));
         model.addAttribute("ownItem", ownItem);
+        model.addAttribute("recItems", recommendationService.findRecommendations(itemId));
         return "itemDetails";
     }
 

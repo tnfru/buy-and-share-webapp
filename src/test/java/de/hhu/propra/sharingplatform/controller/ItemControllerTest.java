@@ -17,6 +17,7 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ImageService;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
+import de.hhu.propra.sharingplatform.service.RecommendationService;
 import de.hhu.propra.sharingplatform.service.UserService;
 import java.util.Optional;
 import org.junit.Test;
@@ -53,6 +54,9 @@ public class ItemControllerTest {
     @MockBean
     private ImageService imageService;
 
+    @MockBean
+    private RecommendationService recommendationService;
+
     private User testUser() {
         User user = new User();
         user.setAccountName("accountname");
@@ -80,7 +84,7 @@ public class ItemControllerTest {
 
         return item;
     }
-    
+
     /*
     NOT LOGGED in
      */
