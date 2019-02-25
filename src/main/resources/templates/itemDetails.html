@@ -50,6 +50,16 @@
           <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
         </li>
 
+        <li class="list-group-item">
+          <b>Availability:</b>
+          <!-- Insert Calendar
+
+
+
+          -->
+        </li>
+
+
       </ul>
       <div class="card-footer bg-white text-center">
         <a th:if="${ownItem} == false " href="#" class="btn btn-outline-secondary btn-block">User
@@ -63,8 +73,6 @@
            th:href="|/item/edit/${item?.Id}|">Edit Item</a>
       </div>
     </div>
-
-    <div></div>
 
     <div>
       <b style="margin-left: 5rem;">Other Users who borrowed this were also intressted in:</b>
