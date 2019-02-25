@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Service
 public class ConflictService {
@@ -55,7 +54,7 @@ public class ConflictService {
 
     public void punish(long conflictId, long percent) {
         Conflict conflict = conflictRepo.findOneById(conflictId);
-        if(percent == 100) {
+        if (percent == 100) {
             paymentService.punishBailReservation(conflict.getContract());
         } else {
             paymentService.freeBailReservation(conflict.getContract());

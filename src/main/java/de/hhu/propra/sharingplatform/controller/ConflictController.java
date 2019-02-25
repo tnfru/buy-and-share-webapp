@@ -46,7 +46,7 @@ public class ConflictController {
                                Principal principal, @PathVariable long contractId) {
         contractService.validateOwner(contractId, principal.getName());
         contractService.openConflict(description, principal.getName(), contractId);
-        return"redirect:/user/account";
+        return "redirect:/user/account";
     }
 
     @GetMapping("/conflicts/{conflictId}/details")
@@ -56,7 +56,8 @@ public class ConflictController {
     }
 
     @PostMapping("/conflicts/{conflictId}/punishBail")
-    public String punishBail(@PathVariable long conflictId, @RequestParam(name = "punishPercent") long percent) {
+    public String punishBail(@PathVariable long conflictId,
+                             @RequestParam(name = "punishPercent") long percent) {
         conflictService.punish(conflictId, percent);
         conflictService.close(conflictId);
         return "redirect:/conflicts/show";
