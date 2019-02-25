@@ -1,13 +1,11 @@
 package de.hhu.propra.sharingplatform.model;
 
 import java.time.LocalDateTime;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
+
+import de.hhu.propra.sharingplatform.dto.Status;
 import lombok.Data;
 
 @Data
@@ -27,8 +25,9 @@ public class Contract {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Item item;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private Conflict conflict;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+        mappedBy = "contract")
+    private List<Conflict> conflicts;
 
     private LocalDateTime start;
     private LocalDateTime expectedEnd;
@@ -48,7 +47,13 @@ public class Contract {
         this.start = offer.getStart();
     }
 
-    public boolean isConflict() {
-        return conflict != null;
+    public List<Conflict> getOpenConflicts() {
+        List<Conflict> openConflicts = new ArrayList<>();
+        for (Conflict conflict : conflicts) {
+            if(conflict.getStatus().equals(Status.PENDING)) {
+                openConflicts.add(conflict);
+            }
+        }
+        return openConflicts;
     }
 }
