@@ -55,21 +55,24 @@ public class RecommendationService {
 
     List<Item> findBestItems(Map<Item, Integer> map) {
         List<Entry<Item, Integer>> entrys = findGreatest(map);
-        List<Item> bestMatches = new ArrayList<>();
+        List<Item> suggestions = new ArrayList<>();
 
         for (Entry<Item, Integer> entry : entrys) {
-            bestMatches.add(entry.getKey());
+            suggestions.add(entry.getKey());
         }
 
-        return bestMatches.size() > numberOfItems ? bestMatches : fillList(bestMatches);
+        return suggestions.size() > numberOfItems ? suggestions : fillList(suggestions);
     }
 
-    List<Item> fillList(List<Item> bestMatches) {
+    List<Item> fillList(List<Item> suggestions) {
         List<Item> allItems = (List<Item>) itemRepo.findAll();
-        while (bestMatches.size() < numberOfItems) {
-            bestMatches.add(allItems.get((int) (Math.random() * allItems.size())));
+        while (suggestions.size() < numberOfItems) {
+            Item randomSuggestion = allItems.get((int) (Math.random() * allItems.size()));
+            if (!suggestions.contains(randomSuggestion)) {
+                suggestions.add(randomSuggestion);
+            }
         }
-        return bestMatches;
+        return suggestions;
     }
 
     Map<Item, Integer> fillMap(List<User> otherBorrowers) {
