@@ -74,7 +74,7 @@ public class DataFaker implements ServletContextInitializer {
     @Override
     @Transactional
     public void onStartup(ServletContext servletContext) {
-        int dataSize = 100;
+        int dataSize = 75;
 
         log.info("Generating Database");
         UserFaker userFaker = new UserFaker(faker);
@@ -119,6 +119,7 @@ public class DataFaker implements ServletContextInitializer {
             }
         }
 
+        log.info("    Interact with Offers...");
         List<Offer> offers = (List<Offer>) offerRepo.findAll();
         for (int i = 0; i < (dataSize / 6); i++) {
             Offer offer = getRandomOffer(offers);
