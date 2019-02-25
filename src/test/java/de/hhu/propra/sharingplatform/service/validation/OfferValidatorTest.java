@@ -61,6 +61,7 @@ public class OfferValidatorTest {
 
         contractRepo = mock(ContractRepo.class);
         when(contractRepo.findAllByItem(item)).thenReturn(contractList);
+        when(contractRepo.findAllByItemAndFinishedIsFalse(item)).thenReturn(contractList);
     }
 
 
