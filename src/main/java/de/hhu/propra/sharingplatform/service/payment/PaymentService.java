@@ -38,16 +38,6 @@ public class PaymentService implements IPaymentService {
         return payment;
     }
 
-    private int calculateTotalExpectedPrice(Contract contract) {
-        long timePassed = contract.getStart().until(contract.getExpectedEnd(), ChronoUnit.DAYS) + 1;
-        return (int)Math.ceil(timePassed * contract.getItem().getPrice());
-    }
-
-    private int calculateTotalActualPrice(Contract contract) {
-        long timePassed = contract.getStart().until(contract.getRealEnd(), ChronoUnit.DAYS) + 1;
-        return (int)Math.ceil(timePassed * contract.getItem().getPrice());
-    }
-
     @Override
     public boolean recipientSolvent(Contract contract) {
         int totalAmount = contract.getItem().getBail() + calculateTotalExpectedPrice(contract);
@@ -76,5 +66,15 @@ public class PaymentService implements IPaymentService {
         Payment paymentInfo = contract.getPayment();
         apiService.punishReservation(paymentInfo.getBailProPayId(),
             paymentInfo.getProPayIdSender());
+    }
+
+    private int calculateTotalExpectedPrice(Contract contract) {
+        long timePassed = contract.getStart().until(contract.getExpectedEnd(), ChronoUnit.DAYS) + 1;
+        return (int) Math.ceil(timePassed * contract.getItem().getPrice());
+    }
+
+    private int calculateTotalActualPrice(Contract contract) {
+        long timePassed = contract.getStart().until(contract.getRealEnd(), ChronoUnit.DAYS) + 1;
+        return (int) Math.ceil(timePassed * contract.getItem().getPrice());
     }
 }
