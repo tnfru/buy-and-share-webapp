@@ -100,6 +100,16 @@ public class ApiService implements IPaymentApi {
     }
 
     @Override
+    public int getAccountReservations(String account) {
+        ProPay borrowerProPay = mapJson(account);
+        int reservationAmount = 0;
+        for (ProPayReservation reservation : borrowerProPay.getReservations()) {
+            reservationAmount += reservation.getAmount();
+        }
+        return reservationAmount;
+    }
+
+    @Override
     public long reserveMoney(String proPayIdSender, String proPayIdRecipient, int amount) {
         List<String> pathVariables = new ArrayList<>();
         pathVariables.add("reservation");
