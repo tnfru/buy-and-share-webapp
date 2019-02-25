@@ -20,7 +20,7 @@ public class SellContract extends Contract {
     public void pay(IPaymentApi paymentApi) {
         String from = super.payment.getProPayIdSender();
         String to = super.payment.getProPayIdRecipient();
-        int amount = super.payment.calculatePrice();
+        int amount = super.payment.getAmount();
 
         if (paymentApi.getAccountBalanceLiquid(from) >= amount) {
             paymentApi.transferMoney(amount, from, to);

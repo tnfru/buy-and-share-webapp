@@ -18,9 +18,9 @@ public class BorrowPayment extends Payment {
     }
 
     public BorrowPayment(String sender, String recipient, int amount, int bail) {
-        super(amount, sender.getPropayId(), recipient.getPropayId());
-        this.proPayIdSender = sender.getPropayId();
-        this.proPayIdRecipient = recipient.getPropayId();
+        super(amount, sender, recipient);
+        this.proPayIdSender = sender;
+        this.proPayIdRecipient = recipient;
         this.bail = bail;
     }
 
