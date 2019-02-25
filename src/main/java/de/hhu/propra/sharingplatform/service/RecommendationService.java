@@ -42,7 +42,7 @@ public class RecommendationService {
         List<User> otherBorrowers = findOtherBorrowers(contracts);
         Map<Item, Integer> map = fillMap(otherBorrowers);
 
-        return findBestItems(map);
+        return findBestItems(map, itemId);
     }
 
     /**
@@ -53,15 +53,21 @@ public class RecommendationService {
      * @return array List of best suggestions
      */
 
-    List<Item> findBestItems(Map<Item, Integer> map) {
+    List<Item> findBestItems(Map<Item, Integer> map, long itemId) {
         List<Entry<Item, Integer>> entrys = findGreatest(map);
         List<Item> suggestions = new ArrayList<>();
 
         for (Entry<Item, Integer> entry : entrys) {
-            suggestions.add(entry.getKey());
+            if (entry.getKey().getId() != itemId) {
+                suggestions.add(entry.getKey());
+            }
         }
 
-        return suggestions.size() > numberOfItems ? suggestions : fillList(suggestions);
+        while (suggestions.size() > numberOfItems) {
+            suggestions.remove(0);
+        }
+
+        return suggestions.size() < numberOfItems ? fillList(suggestions) : suggestions;
     }
 
     List<Item> fillList(List<Item> suggestions) {
@@ -118,15 +124,16 @@ public class RecommendationService {
      * @return numberOfItem recommendations
      */
     <K, V extends Comparable<? super V>> List<Entry<K, V>> findGreatest(Map<K, V> map) {
+        int suggestionCount = numberOfItems + 1;
         Comparator<? super Entry<K, V>> comparator = (Comparator<Entry<K, V>>) (e0, e1) -> {
             V v0 = e0.getValue();
             V v1 = e1.getValue();
             return v0.compareTo(v1);
         };
-        PriorityQueue<Entry<K, V>> highest = new PriorityQueue<>(numberOfItems, comparator);
+        PriorityQueue<Entry<K, V>> highest = new PriorityQueue<>(suggestionCount, comparator);
         for (Entry<K, V> entry : map.entrySet()) {
             highest.offer(entry);
-            while (highest.size() > numberOfItems) {
+            while (highest.size() > suggestionCount) {
                 highest.poll();
             }
         }
