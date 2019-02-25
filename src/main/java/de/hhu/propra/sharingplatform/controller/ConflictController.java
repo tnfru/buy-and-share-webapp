@@ -51,9 +51,11 @@ public class ConflictController {
     }
 
     @GetMapping("/showConflicts/{contractId}")
-    public String showUserConflicts(@PathVariable long contractId, Principal principal, Model model) {
+    public String showUserConflicts(@PathVariable long contractId,
+                                    Principal principal, Model model) {
         contractService.validateOwner(contractId, principal.getName());
-        model.addAttribute("conflicts", contractService.fetchContractById(contractId).getConflicts());
+        model.addAttribute("conflicts",
+            contractService.fetchContractById(contractId).getConflicts());
         model.addAttribute("contractId", contractId);
         return "showConflicts";
     }

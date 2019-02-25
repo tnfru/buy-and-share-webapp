@@ -1,12 +1,12 @@
 package de.hhu.propra.sharingplatform.model;
 
+import de.hhu.propra.sharingplatform.dto.Status;
+import lombok.Data;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
-
-import de.hhu.propra.sharingplatform.dto.Status;
-import lombok.Data;
 
 @Data
 @Entity
@@ -50,7 +50,7 @@ public class Contract {
     public List<Conflict> getOpenConflicts() {
         List<Conflict> openConflicts = new ArrayList<>();
         for (Conflict conflict : conflicts) {
-            if(conflict.getStatus().equals(Status.PENDING)) {
+            if (conflict.getStatus().equals(Status.PENDING)) {
                 openConflicts.add(conflict);
             }
         }

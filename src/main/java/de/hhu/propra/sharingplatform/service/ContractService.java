@@ -69,7 +69,7 @@ public class ContractService {
         Contract contract = contractRepo.findOneById(contractId);
         List<Conflict> conflicts = contract.getConflicts();
         for (Conflict conflict : conflicts) {
-            if(conflict.getStatus().equals(Status.PENDING)) {
+            if (conflict.getStatus().equals(Status.PENDING)) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "There can only be one open conflict at a time");
             }
