@@ -62,14 +62,9 @@ public class ContractService {
     }
 
 
-    public void openConflict(long contractId, String accountName) {
+    public void openConflict(String description, String accountName, long contractId) {
         Contract contract = contractRepo.findOneById(contractId);
-        if (!userIsContractOwner(contract, accountName)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-                "This contract does not involve you");
-        }
-        contract.setRealEnd(LocalDateTime.now());
-        contract.setConflict(conflictService.createConflict(contract));
+        contract.setConflict(conflictService.createConflict(contract, accountName, description));
         contractRepo.save(contract);
     }
 
@@ -82,20 +77,25 @@ public class ContractService {
         return contract.getBorrower().getAccountName().equals(accountName);
     }
 
-    boolean userIsContractOwner(Contract contract, String userName) {
-        return contract.getItem().getOwner().getAccountName().equals(userName);
+    private boolean userIsContractOwner(Contract contract, String userName) {
+        return contract.getItem().getOwner().getAccountName().equals(userName)
+            || contract.getBorrower().getAccountName().equals(userName);
     }
 
     public Collection<Contract> getContractsWithOpenConflicts() {
         return conflictService.getAllContractsWithOpenConflict();
     }
 
-    public void resolveOwnerConflict(boolean accepted, long conflictId) {
-        Contract contract = conflictService.resolveOwnerConflict(accepted, conflictId);
-        finishContract(contract);
+    public void validateOwner(long contractId, String accountName) {
+        Contract contract = contractRepo.findOneById(contractId);
+        if(!userIsContractOwner(contract, accountName)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "This contract does not involve you");
+        }
     }
 
-    private void finishContract(Contract contract) {
+    public void cancelContract(long conflictId) {
+        Contract contract = conflictService.fetchConflictById(conflictId).getContract();
         contract.setFinished(true);
         contractRepo.save(contract);
     }

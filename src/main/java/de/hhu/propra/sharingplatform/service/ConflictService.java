@@ -9,33 +9,24 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class ConflictService {
 
     private ConflictRepo conflictRepo;
     private IPaymentService paymentService;
+    private UserService userService;
 
-    public ConflictService(ConflictRepo conflictRepo, IPaymentService paymentService) {
+    public ConflictService(ConflictRepo conflictRepo, IPaymentService paymentService,
+                           UserService userService) {
         this.conflictRepo = conflictRepo;
         this.paymentService = paymentService;
+        this.userService = userService;
     }
 
     public Collection<Conflict> getOpenConflicts() {
         return conflictRepo.findAllByStatus(Status.PENDING);
-    }
-
-    public Contract resolveOwnerConflict(boolean accepted, long conflictId) {
-        Conflict conflict = conflictRepo.findOneById(conflictId);
-        if (accepted) {
-            conflict.setStatus(Status.ACCEPTED);
-            paymentService.punishBailReservation(conflict.getContract());
-        } else {
-            conflict.setStatus(Status.REJECTED);
-            paymentService.freeBailReservation(conflict.getContract());
-        }
-        conflictRepo.save(conflict);
-        return conflict.getContract();
     }
 
     public ArrayList<Contract> getAllContractsWithOpenConflict() {
@@ -48,11 +39,32 @@ public class ConflictService {
     }
 
 
-    public Conflict createConflict(Contract contract) {
+    public Conflict createConflict(Contract contract, String accountName, String description) {
         Conflict conflict = new Conflict();
         conflict.setStatus(Status.PENDING);
         conflict.setContract(contract);
+        conflict.setRequester(userService.fetchUserByAccountName(accountName));
+        conflict.setDescription(description);
         conflictRepo.save(conflict);
         return conflict;
+    }
+
+    public Conflict fetchConflictById(long conflictId) {
+        return conflictRepo.findOneById(conflictId);
+    }
+
+    public void punish(long conflictId, long percent) {
+        Conflict conflict = conflictRepo.findOneById(conflictId);
+        if(percent == 100) {
+            paymentService.punishBailReservation(conflict.getContract());
+        } else {
+            paymentService.freeBailReservation(conflict.getContract());
+            // TODO: punish only a percentage
+        }
+    }
+
+    public void close(long conflictId) {
+        Conflict conflict = conflictRepo.findOneById(conflictId);
+        conflict.setStatus(Status.RESOLVED);
     }
 }
