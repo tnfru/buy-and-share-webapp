@@ -21,10 +21,12 @@
 
     <div class="card border-dark">
       <div th:if="${item?.imageFileName != null}">
-        <img style="max-width: border-box" th:src="@{${'/images/' + item?.imageFileName}}"/></div>
+        <img th:src="@{${'/images/' + item?.imageFileName}}" style="width: content-box;"
+        class="img-fluid"></div>
+
       <div th:if="${item?.imageFileName == null}">
-        <img style="max-width: border-box" src="images/bike-dummy.png"
-             class="card-img-top"></div>
+        <img src="images/bike-dummy.png" style="width: content-box;"
+             class="img-fluid"/></div>
 
       <div class="card-body">
         <h4 class="card-title" th:text="${item.getName()}">Item Name</h4>
@@ -145,7 +147,7 @@
 
 
   </div>
- 
+
 </div>
 </body>
 </html>
