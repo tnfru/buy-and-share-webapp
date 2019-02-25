@@ -11,17 +11,18 @@
     <h1>Detail View</h1>
 
     <div class="card border-dark">
-        <!--
+
         <div th:if="${user?.imageFileName != null}">
-            <img th:src="@{${'/images/' + user?.imageFileName}}" style="width: content-box;"
+            <img th:src="@{${'/images/' + user?.imageFileName}}"
+                 style="width: content-box; padding:2rem;"
                  class="img-fluid"></div>
 
         <div th:if="${user?.imageFileName == null}">
-            <img src="/images/bike-dummy.png" style="width: content-box;"
-                 class="img-fluid"/></div> -->
+            <img src="/images/dummy.png" style="width: content-box; padding:2rem;"
+                 class="img-fluid"/></div>
 
         <div class="card-body">
-            <h4 class="card-title" th:text="${user.getAccountName()}"></h4>
+            <h4 class="card-title" th:text="|AccountName: ${user.getAccountName()}|"></h4>
         </div>
         <ul class="list-group list-group-flush">
 
@@ -32,8 +33,8 @@
 
             <li class="list-group-item">
                 <b>Ratings:</b>
-                <span th:text="|${item?.owner?.totalRatings()}|"></span>
-                <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
+                <span th:text="|${user?.totalRatings()}|"></span>
+                <span th:text="|(${user?.getRating()}|"></span> &#128077;)
             </li>
 
             <li class="list-group-item">

@@ -66,38 +66,34 @@
                     <div id="my-calendar"></div>
 
                     <script th:inline="javascript">
-                        var calendar = document.getElementById("my-calendar");
-                        var myCalendar = jsCalendar.new({
-                            target: calendar,
-                            monthFormat: "month YYYY"
-                        });
+                      var calendar = document.getElementById("my-calendar");
+                      var myCalendar = jsCalendar.new({
+                        target: calendar,
+                        monthFormat: "month YYYY"
+                      });
                     </script>
 
                     <div th:each="contract : ${item.getChosenContracts(false)}">
 
                         <script th:inline="javascript"
                                 th:with=
-                                        "start=${#temporals.format(contract.getStart(),'yyyy-MM-dd')},
+                                    "start=${#temporals.format(contract.getStart(),'yyyy-MM-dd')},
                       end=${#temporals.format(contract.getExpectedEnd(),'yyyy-MM-dd')}">
-                            var start = new Date([[${start}]]);
-                            var end = new Date([[${end}]]);
+                          var start = new Date([[${start}]]);
+                          var end = new Date([[${end}]]);
 
-                            for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
-                                myCalendar.select([
-                                    date
-                                ]);
-                            }
+                          for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
+                            myCalendar.select([
+                              date
+                            ]);
+                          }
 
                         </script>
                     </div>
-
-
                 </li>
-
-
             </ul>
             <div class="card-footer bg-white text-center">
-                <a th:if="${ownItem} == false " href="#"
+                <a th:if="${ownItem} == false " th:href="|/user/${item.getOwner().getId()}|"
                    class="btn btn-outline-secondary btn-block">User
                     Details</a>
                 <a th:if="${ownItem} == false " class="btn btn-outline-success btn-block"
@@ -145,7 +141,8 @@
                         <div class="card-body">
                             <a th:href="|/item/details/${item.getId()}|"
                                class="btn btn-outline-info btn-block">Details</a>
-                            <a href="#" class="btn btn-outline-secondary btn-block">User Details</a>
+                            <a th:href="|/user/${item.getOwner().getId()}|"
+                               class="btn btn-outline-secondary btn-block">User Details</a>
                         </div>
                     </div>
                 </div>
