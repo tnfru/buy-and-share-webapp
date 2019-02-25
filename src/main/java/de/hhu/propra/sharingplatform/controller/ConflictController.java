@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.controller;
 
+import de.hhu.propra.sharingplatform.service.ConflictService;
 import de.hhu.propra.sharingplatform.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,9 @@ public class ConflictController {
     @Autowired
     private ContractService contractService;
 
+    @Autowired
+    private ConflictService conflictService;
+
 
     /**
      * Page for admins to see open conflicts.
@@ -24,7 +28,7 @@ public class ConflictController {
      */
     @GetMapping("/conflicts/show")
     public String adminDashboard(Model model) {
-        model.addAttribute("conflicts", contractService.getOpenConflicts());
+        model.addAttribute("conflicts", conflictService.getOpenConflicts());
         return "admin-dashboard";
     }
 
@@ -36,7 +40,7 @@ public class ConflictController {
      */
     @PostMapping("/conflicts/{conflictId}/accept")
     public String acceptConflict(@PathVariable long conflictId, Principal principal) {
-        contractService.resolveOwnerConflict(true, conflictId);
+        conflictService.resolveOwnerConflict(true, conflictId);
         return "redirect:/conflicts/show";
     }
 
