@@ -60,7 +60,15 @@
         <li class="list-group-item">
           <b>Availability:</b>
 
-          <div id="my-calendar"></div>
+          <style type="text/css">
+
+            .jsCalendar tbody td.jsCalendar-selected {
+              background-color: rgba(148, 0, 29, 0.71);
+              border:unset;
+            }
+          </style>
+
+          <div id="my-calendar", class = "jsCalendar"></div>
 
           <script th:inline="javascript">
             var calendar = document.getElementById("my-calendar");
@@ -80,9 +88,8 @@
               var end = new Date([[${end}]]);
 
               for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
-                myCalendar.select([
-                  date
-                ]);
+                myCalendar.select(
+                        [date]);
               }
 
             </script>
