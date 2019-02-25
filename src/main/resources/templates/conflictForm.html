@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{base}">
+<body>
+
+<div layout:fragment="content">
+    <h1>New Conflict</h1>
+    <br>
+    <div class="container" style="margin-left: 1em;">
+        <form method="post">
+            <dl>
+                <dt>Description:(*)</dt>
+                <dd><input type="text" name="description"></dd>
+            </dl>
+            <p>All Fields marked with * are required!</p>
+            <button type="submit" class="btn btn-primary" action="POST">Open Conflict</button>
+        </form>
+    </div>
+    <br>
+
+</div>
+
+</body>
+
+</html>
