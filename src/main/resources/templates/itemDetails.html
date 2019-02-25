@@ -21,11 +21,12 @@
 
         <div class="card border-dark">
             <div th:if="${item?.imageFileName != null}">
-                <img th:src="@{${'/images/' + item?.imageFileName}}" style="width: content-box;"
+                <img th:src="@{${'/images/' + item?.imageFileName}}" style="width: content-box;
+                     padding: 2rem;"
                      class="img-fluid"></div>
 
             <div th:if="${item?.imageFileName == null}">
-                <img src="/images/bike-dummy.png" style="width: content-box;"
+                <img src="/images/bike-dummy.png" style="width: content-box; padding: 2rem;"
                      class="img-fluid"/></div>
 
             <div class="card-body">
@@ -65,27 +66,27 @@
                     <div id="my-calendar"></div>
 
                     <script th:inline="javascript">
-                      var calendar = document.getElementById("my-calendar");
-                      var myCalendar = jsCalendar.new({
-                        target: calendar,
-                        monthFormat: "month YYYY"
-                      });
+                        var calendar = document.getElementById("my-calendar");
+                        var myCalendar = jsCalendar.new({
+                            target: calendar,
+                            monthFormat: "month YYYY"
+                        });
                     </script>
 
                     <div th:each="contract : ${item.getChosenContracts(false)}">
 
                         <script th:inline="javascript"
                                 th:with=
-                                    "start=${#temporals.format(contract.getStart(),'yyyy-MM-dd')},
+                                        "start=${#temporals.format(contract.getStart(),'yyyy-MM-dd')},
                       end=${#temporals.format(contract.getExpectedEnd(),'yyyy-MM-dd')}">
-                          var start = new Date([[${start}]]);
-                          var end = new Date([[${end}]]);
+                            var start = new Date([[${start}]]);
+                            var end = new Date([[${end}]]);
 
-                          for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
-                            myCalendar.select([
-                              date
-                            ]);
-                          }
+                            for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
+                                myCalendar.select([
+                                    date
+                                ]);
+                            }
 
                         </script>
                     </div>
@@ -110,19 +111,21 @@
         </div>
 
         <div>
-            <b style="margin-left: 5rem;">Other Users who borrowed this were also interested in:</b>
+            <b style="margin-left: 5rem;">Other Users who looked at this were also interested
+                in:</b>
             <div class="column">
+                <br>
                 <div class="col" th:each="item : ${recItems}">
                     <div class="card border-dark" style="margin-left: 6rem;">
 
                         <article class="photo">
                             <div style="text-align: center">
                                 <div th:if="${item?.imageFileName != null}">
-                                    <img style="width: 200px;"
+                                    <img style="width: 200px; padding-top: 1rem;"
                                          th:src="@{${'/images/' + item?.imageFileName}}"/></div>
                                 <div th:if="${item?.imageFileName == null}">
                                     <img class="img-fluid" src="/images/bike-dummy.png"
-                                         style="width: 200px;"/>
+                                         style="width: 200px; padding-top: 1rem;"/>
                                 </div>
                             </div>
                         </article>
@@ -133,8 +136,6 @@
                         <ul class="list-group list-group-flush">
 
                             <li class="list-group-item">
-                                <b>Supplier:</b>
-                                <p th:text="|${item?.owner?.name}|"></p>
                                 <b>Rating:</b>
                                 <span th:text="|${item?.owner?.totalRatings()}|"></span>
                                 <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
