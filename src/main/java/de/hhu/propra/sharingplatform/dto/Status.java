@@ -6,6 +6,6 @@ public enum Status {
      * Rejected: Borrower keeps bail.
      * Pending: Waiting for admin to resolve.
      */
-    PENDING, ACCEPTED, REJECTED, RESOLVED
+    PENDING, PUNISHED_BAIL, CONTINUED, CANCELED
 }
 
