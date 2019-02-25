@@ -5,6 +5,9 @@ import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.payment.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import de.hhu.propra.sharingplatform.service.validation.OfferValidator;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,9 +24,9 @@ public class OfferService {
 
     private ContractService contractService;
 
-    private ApiService apiService;
+    private IPaymentApi apiService;
 
-    private PaymentService paymentService;
+    private IPaymentService paymentService;
 
     private ItemService itemService;
 
@@ -31,7 +34,7 @@ public class OfferService {
 
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-        ApiService apiService, PaymentService paymentService,
+        ApiService apiService, IPaymentService paymentService,
         ItemService itemService, ContractRepo contractRepo) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
@@ -75,8 +78,8 @@ public class OfferService {
 
         if (itemService.userIsOwner(offer.getItem().getId(), owner.getId())) {
             offer.setAccept(true);
-            removeOverlappingOffer(offer); // todo test this
             offerRepo.save(offer);
+            removeOverlappingOffer(offer); // todo test this
             contractService.create(offer);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
@@ -84,23 +87,15 @@ public class OfferService {
         }
     }
 
-    private void removeOverlappingOffer(Offer offer) {
-        Item item = offer.getItem();
-        List<Offer> offersWithSameItem = offerRepo.findAllByItemId(item.getId());
-        for (Offer offerToTest : offersWithSameItem) {
-            if (offer.getId().equals(offerToTest.getId())) {
-                continue;
-            }
-            if (offer.getStart().isAfter(offerToTest.getStart())) {
-                if (offerToTest.getEnd().isAfter(offer.getStart())) {
-                    offerToTest.setDecline(true);
-                    offerRepo.save(offerToTest);
-                }
-            } else {
-                if (offer.getEnd().isAfter(offerToTest.getStart())) {
-                    offerToTest.setDecline(true);
-                    offerRepo.save(offerToTest);
-                }
+    void removeOverlappingOffer(Offer acceptedOffer) {
+        Item item = acceptedOffer.getItem();
+        List<Offer> itemOffers = offerRepo
+            .findAllByItemIdAndDeclineIsFalseAndAcceptIsFalse(item.getId());
+        for (Offer offer : itemOffers) {
+            if (!(acceptedOffer.getStart().isAfter(offer.getEnd()) || acceptedOffer.getEnd()
+                .isBefore(offer.getStart()))) {
+                offer.setDecline(true);
+                offerRepo.save(offer);
             }
         }
     }

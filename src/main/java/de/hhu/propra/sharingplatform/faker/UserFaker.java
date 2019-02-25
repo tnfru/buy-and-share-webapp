@@ -23,7 +23,8 @@ public class UserFaker {
         user.setRole("user");
         user.setPositiveRating(faker.number().numberBetween(0, 40));
         user.setNegativeRating(faker.number().numberBetween(0, 20));
-        user.setPassword("123");
+        //user.setPassword("123");
+        user.setPasswordHash("$2a$10$k3tiDNBzPrEZpem.kabN8u2L5u3jutsoEehrojVB/BgwpRMxNBy..");
         user.setBan(false);
         user.setDeleted(false);
 
