@@ -5,7 +5,7 @@ import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.payment.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import de.hhu.propra.sharingplatform.service.validation.OfferValidator;
@@ -34,11 +34,11 @@ public class OfferService {
 
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-        ApiService apiService, IPaymentService paymentService,
+        ProPayApi proPayApi, IPaymentService paymentService,
         ItemService itemService, ContractRepo contractRepo) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
-        this.apiService = apiService;
+        this.apiService = proPayApi;
         this.paymentService = paymentService;
         this.itemService = itemService;
         this.contractRepo = contractRepo;

@@ -12,7 +12,7 @@ import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.payment.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
 import de.hhu.propra.sharingplatform.service.payment.PaymentService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class OfferValidatorTest {
     private LocalDateTime end;
 
     @MockBean
-    private ApiService apiService;
+    private ProPayApi proPayApi;
 
     @MockBean
     private PaymentService paymentService;

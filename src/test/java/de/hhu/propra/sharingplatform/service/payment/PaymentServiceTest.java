@@ -19,13 +19,13 @@ public class PaymentServiceTest {
     private PaymentRepo paymentRepo;
 
     @MockBean
-    private ApiService apiService;
+    private ProPayApi proPayApi;
 
     private PaymentService paymentService;
 
     @Before
     public void setUp() {
-        this.paymentService = new PaymentService(paymentRepo, apiService);
+        this.paymentService = new PaymentService(paymentRepo, proPayApi);
         this.millisecondsInDay = 1000 * 60 * 60 * 24;
     }
 
