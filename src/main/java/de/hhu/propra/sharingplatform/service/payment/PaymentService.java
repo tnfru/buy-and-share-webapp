@@ -47,7 +47,9 @@ public class PaymentService implements IPaymentService {
     @Override
     public boolean recipientSolvent(Contract contract) {
         int totalAmount = contract.getItem().getBail() + calculateTotalPrice(contract);
-        return apiService.isSolvent(contract.getBorrower(), totalAmount);
+        int available = apiService.getAccountBalance(contract.getBorrower()) -
+            apiService.getAccountReservations(contract.getBorrower());
+        return available >= totalAmount;
     }
 
     @Override

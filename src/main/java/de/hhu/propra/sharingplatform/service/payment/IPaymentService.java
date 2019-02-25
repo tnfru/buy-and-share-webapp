@@ -28,6 +28,7 @@ public interface IPaymentService {
      * @param end   Date of end.
      * @return price in euro.
      */
+    @Deprecated
     int calculateTotalPrice(Item item, LocalDateTime start, LocalDateTime end);
 
 

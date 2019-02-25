@@ -26,4 +26,6 @@ public interface IPaymentApi {
     void addMoney(String account, int amount);
 
     void transferMoney(int amount, String fromAccount, String toAccount) throws PaymentException;
+
+    int getAccountReservations(String account);
 }
