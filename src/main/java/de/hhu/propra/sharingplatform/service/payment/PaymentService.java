@@ -23,31 +23,26 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Payment createPayment(Contract contract) {
-        int totalPrice = calculateTotalPrice(contract);
+        int totalPrice = calculateTotalExpectedPrice(contract);
         User sender = contract.getBorrower();
         User recipient = contract.getItem().getOwner();
         Payment payment = new Payment(sender, recipient, totalPrice, contract.getItem().getBail());
-        payment.setContract(contract);
+
+        long id = apiService.reserveMoney(payment.getProPayIdSender(),
+            payment.getProPayIdRecipient(), payment.getBail());
+        payment.setBailProPayId(id);
+        id = apiService.reserveMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
+            totalPrice);
+        payment.setAmountProPayId(id);
         paymentRepo.save(payment);
-        apiService.enforcePayment(payment, calculateTotalPrice(contract));
         return payment;
-    }
-
-    int calculateTotalPrice(Contract contract) {
-        long timePassed = contract.getStart().until(contract.getExpectedEnd(), ChronoUnit.DAYS) + 1;
-        return (int)Math.ceil(timePassed * contract.getItem().getPrice());
-    }
-
-    @Override
-    public int calculateTotalPrice(Item item, LocalDateTime start, LocalDateTime end) {
-        long timePassed = start.until(end, ChronoUnit.DAYS) + 1;
-        return (int)Math.ceil(Math.max(timePassed * item.getPrice(), 0));
     }
 
     @Override
     public boolean recipientSolvent(Contract contract) {
-        int totalAmount = contract.getItem().getBail() + calculateTotalPrice(contract);
-        return apiService.isSolvent(contract.getBorrower(), totalAmount);
+        int totalAmount = contract.getItem().getBail() + calculateTotalExpectedPrice(contract);
+        int available = apiService.getAccountBalanceLiquid(contract.getBorrower().getPropayId());
+        return available >= totalAmount;
     }
 
     @Override
@@ -55,9 +50,9 @@ public class PaymentService implements IPaymentService {
         Payment paymentInfo = contract.getPayment();
         apiService.freeReservation(paymentInfo.getAmountProPayId(),
             paymentInfo.getProPayIdSender());
-        paymentInfo.setAmount(calculateTotalPrice(contract.getItem(), contract.getStart(),
-            contract.getRealEnd()));
-        apiService.transferMoney(paymentInfo);
+        int amount = calculateTotalActualPrice(contract);
+        apiService.transferMoney(amount, paymentInfo.getProPayIdSender(),
+            paymentInfo.getProPayIdRecipient());
     }
 
     @Override
@@ -71,5 +66,15 @@ public class PaymentService implements IPaymentService {
         Payment paymentInfo = contract.getPayment();
         apiService.punishReservation(paymentInfo.getBailProPayId(),
             paymentInfo.getProPayIdSender());
+    }
+
+    private int calculateTotalExpectedPrice(Contract contract) {
+        long timePassed = contract.getStart().until(contract.getExpectedEnd(), ChronoUnit.DAYS) + 1;
+        return (int) Math.ceil(timePassed * contract.getItem().getPrice());
+    }
+
+    private int calculateTotalActualPrice(Contract contract) {
+        long timePassed = contract.getStart().until(contract.getRealEnd(), ChronoUnit.DAYS) + 1;
+        return (int) Math.ceil(timePassed * contract.getItem().getPrice());
     }
 }
