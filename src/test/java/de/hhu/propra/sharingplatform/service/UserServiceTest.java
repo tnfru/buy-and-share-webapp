@@ -38,6 +38,9 @@ public class UserServiceTest {
     @MockBean
     private PasswordEncoder encoder;
 
+    @MockBean
+    private ImageService imageSaver;
+
     private UserService userService;
 
     public User createUser(String name, String accountName, String address, String email) {
@@ -51,7 +54,7 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
-        userService = new UserService(userRepo, encoder, apiService);
+        userService = new UserService(userRepo, encoder, apiService, imageSaver);
     }
 
     @Test
@@ -61,7 +64,7 @@ public class UserServiceTest {
 
         userService.persistUser(user, "foo", "foo");
 
-        verify(userRepo, times(1)).save(argument.capture());
+        verify(userRepo, times(2)).save(argument.capture());
         assertEquals(user, argument.getValue());
     }
 
@@ -89,7 +92,7 @@ public class UserServiceTest {
 
         userService.updatePassword(user, "123", newPassword, confirm);
 
-        verify(userRepo, times(2)).save(argument.capture());
+        verify(userRepo, times(3)).save(argument.capture());
 
     }
 
