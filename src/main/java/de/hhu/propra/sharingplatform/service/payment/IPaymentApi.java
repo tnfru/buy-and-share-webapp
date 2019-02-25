@@ -6,17 +6,24 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface IPaymentApi {
+    @Deprecated
     void enforcePayment(Payment payment, int totalPrice);
 
-    void addMoney(String proPayId, int amount);
-
+    @Deprecated
     boolean isSolvent(User borrower, int amountOwed);
 
-    void freeReservation(long amountProPayId, String proPayIdSender);
-
+    @Deprecated
     void transferMoney(Payment paymentInfo);
 
-    void punishReservation(long bailProPayId, String proPayIdSender);
+    long reserveMoney(String fromAccount, String toAccount, int amount);
 
-    int getAccountBalance(String proPayId);
+    void freeReservation(long reservationID, String accountSender);
+
+    void punishReservation(long reservation, String accountSender);
+
+    int getAccountBalance(String account);
+
+    void addMoney(String account, int amount);
+
+    void transferMoney(int amount, String fromAccount, String toAccount) throws PaymentException;
 }
