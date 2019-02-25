@@ -33,7 +33,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class ApiService implements IPaymentApi {
 
     final PaymentRepo paymentRepo;
-    String host = "192.168.99.101";
+    String host = "localhost";
 
     @Autowired
     public ApiService(PaymentRepo paymentRepo) {
