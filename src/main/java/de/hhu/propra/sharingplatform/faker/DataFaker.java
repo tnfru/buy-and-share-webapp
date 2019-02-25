@@ -74,7 +74,7 @@ public class DataFaker implements ServletContextInitializer {
     @Override
     @Transactional
     public void onStartup(ServletContext servletContext) {
-        int dataSize = 100;
+        int dataSize = 75;
 
         log.info("Generating Database");
         UserFaker userFaker = new UserFaker(faker);
@@ -95,9 +95,9 @@ public class DataFaker implements ServletContextInitializer {
         }
 
         log.info("    Persist Items...");
-        persistItem(items);
+        itemRepo.saveAll(items);
         log.info("    Persist Users...");
-        persistUser(users);
+        userRepo.saveAll(users);
 
         log.info("    Create ProPay...");
         for (User user : users) {
@@ -119,6 +119,7 @@ public class DataFaker implements ServletContextInitializer {
             }
         }
 
+        log.info("    Interact with Offers...");
         List<Offer> offers = (List<Offer>) offerRepo.findAll();
         for (int i = 0; i < (dataSize / 6); i++) {
             Offer offer = getRandomOffer(offers);
@@ -134,18 +135,6 @@ public class DataFaker implements ServletContextInitializer {
         }
 
         log.info("Done!");
-    }
-
-    private void persistUser(List<User> users) {
-        for (User user : users) {
-            userRepo.save(user);
-        }
-    }
-
-    private void persistItem(List<Item> items) {
-        for (Item item : items) {
-            itemRepo.save(item);
-        }
     }
 
     private User getRandomUser(List<User> users) {

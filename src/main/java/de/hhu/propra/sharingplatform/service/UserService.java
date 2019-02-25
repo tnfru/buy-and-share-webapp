@@ -24,18 +24,32 @@ public class UserService {
 
     private final IBankAccountService bank;
 
+    private ImageService imageSaver;
+
     @Autowired
     public UserService(UserRepo userRepo, PasswordEncoder encoder,
-                       IBankAccountService bankAccountService) {
+                       IBankAccountService bankAccountService, ImageService imageSaver) {
         this.userRepo = userRepo;
         this.encoder = encoder;
         this.bank = bankAccountService;
+        this.imageSaver = imageSaver;
     }
 
     public void persistUser(User user, String password, String confirm) {
         validateUser(user);
         String hashPassword = generatePassword(password, confirm);
         user.setPasswordHash(hashPassword);
+        userRepo.save(user);
+
+        String imagefilename = "dummy.png";
+        if (user.getImage() != null && user.getImage().getSize() > 0) {
+            imagefilename = "user-" + user.getId() + "." + user.getImageExtension();
+            imageSaver.store(user.getImage(), imagefilename);
+        } else if (user.getImage() != null && user.getImage().getOriginalFilename().equals("")) {
+            imagefilename = user.getImageFileName();
+        }
+        user.setImageFileName(imagefilename);
+
         userRepo.save(user);
     }
 
@@ -56,6 +70,16 @@ public class UserService {
         oldUser.setAddress(newUser.getAddress());
         oldUser.setEmail(newUser.getEmail());
         oldUser.setPropayId(newUser.getPropayId());
+
+        String imagefilename = "dummy.png";
+        if (newUser.getImage() != null && newUser.getImage().getSize() > 0) {
+            imagefilename = "user-" + newUser.getId() + "." + newUser.getImageExtension();
+            imageSaver.store(newUser.getImage(), imagefilename);
+        } else if (newUser.getImage() != null && newUser.getImage().getOriginalFilename().equals("")
+            && oldUser.getImageFileName() != null) {
+            imagefilename = oldUser.getImageFileName();
+        }
+        oldUser.setImageFileName(imagefilename);
         userRepo.save(oldUser);
     }
 

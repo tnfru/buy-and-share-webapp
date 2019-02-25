@@ -18,19 +18,6 @@ public interface IPaymentService {
      */
     Payment createPayment(Contract contract);
 
-
-    /**
-     * Calculates the total price by calculating the days between start and end
-     * and multiplying it by the price per day of the Item.
-     *
-     * @param item  Item including price per day.
-     * @param start Date of start.
-     * @param end   Date of end.
-     * @return price in euro.
-     */
-    int calculateTotalPrice(Item item, LocalDateTime start, LocalDateTime end);
-
-
     /**
      * Checks if the borrower in the contract is able to pay.
      * This is done by getting the account balance and subtracting
