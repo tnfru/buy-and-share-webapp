@@ -1,9 +1,9 @@
 package de.hhu.propra.sharingplatform.model;
 
 
+import com.google.common.io.Files;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.annotation.Transient;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Entity
@@ -31,6 +32,10 @@ public class User {
     private String passwordHash;
     private int positiveRating;
     private int negativeRating;
+    private String imageFileName = "dummy.png";
+
+    @Transient
+    private MultipartFile image;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
@@ -106,5 +111,9 @@ public class User {
             }
         }
         return chosenContracts;
+    }
+
+    public String getImageExtension() {
+        return Files.getFileExtension(image.getOriginalFilename());
     }
 }
