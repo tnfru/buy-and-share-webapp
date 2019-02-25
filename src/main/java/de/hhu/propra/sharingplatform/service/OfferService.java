@@ -34,8 +34,8 @@ public class OfferService {
 
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-                        ApiService apiService, IPaymentService paymentService,
-                        ItemService itemService, ContractRepo contractRepo) {
+        ApiService apiService, IPaymentService paymentService,
+        ItemService itemService, ContractRepo contractRepo) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
         this.apiService = apiService;
@@ -78,8 +78,8 @@ public class OfferService {
 
         if (itemService.userIsOwner(offer.getItem().getId(), owner.getId())) {
             offer.setAccept(true);
-            removeOverlappingOffer(offer); // todo test this
             offerRepo.save(offer);
+            removeOverlappingOffer(offer); // todo test this
             contractService.create(offer);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
@@ -87,19 +87,19 @@ public class OfferService {
         }
     }
 
-    private void removeOverlappingOffer(Offer acceptedOffer) {
+    void removeOverlappingOffer(Offer acceptedOffer) {
         Item item = acceptedOffer.getItem();
-        List<Offer> itemOffers = offerRepo.findAllByItemId(item.getId());
-        itemOffers.remove(acceptedOffer);
+        List<Offer> itemOffers = offerRepo
+            .findAllByItemIdAndDeclineIsFalseAndAcceptIsFalse(item.getId());
         for (Offer offer : itemOffers) {
             if (acceptedOffer.getStart().isAfter(offer.getEnd()) || acceptedOffer.getEnd()
                 .isBefore(offer.getStart())) {
                 offer.setDecline(true);
                 offerRepo.save(offer);
             }
+            System.out.println(offer.isDecline());
         }
     }
-
 
     public void declineOffer(long offerId, User user) {
         Offer offer = offerRepo.findOneById(offerId);
