@@ -85,8 +85,7 @@ public class ApiService implements IPaymentApi {
     }
 
     @Override
-    public void transferMoney(int amount, String fromAccount, String toAccount)
-                throws PaymentException {
+    public void transferMoney(int amount, String fromAccount, String toAccount) {
         List<String> path = new ArrayList<>();
         path.add("account");
         path.add(fromAccount);

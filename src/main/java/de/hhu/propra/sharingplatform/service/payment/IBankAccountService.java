@@ -8,5 +8,5 @@ public interface IBankAccountService {
 
     void transferMoney(int amount, String recipient);
 
-    void transferMoney(int amount, String recipient, String sender) throws PaymentException;
+    void transferMoney(int amount, String recipient, String sender);
 }
