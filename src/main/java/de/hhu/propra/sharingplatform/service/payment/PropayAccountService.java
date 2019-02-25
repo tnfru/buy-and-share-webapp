@@ -21,6 +21,6 @@ public class PropayAccountService implements IBankAccountService {
 
     @Override
     public void transferMoney(int amount, String recipient, String sender) {
-        //TODO
+        api.transferMoney(amount, sender, recipient);
     }
 }
