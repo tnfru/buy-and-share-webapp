@@ -152,7 +152,7 @@
                                         Item
                                     </button>
                                 </form>
-                                <a href="#"
+                                <a th:href="|/user/${con.getItem().getOwner().getId()}|"
                                    class="btn btn-danger btn-sm">Item Owner</a>
                             </td>
                             <td th:if="${con.getRealEnd()} != null">
@@ -360,7 +360,7 @@
                                 <span class="badge badge-info">Pending</span>
                             </td>
                             <td>
-                                <a th:href="|/user/visitor/${offer.getItem().getOwner().getId()}|"
+                                <a th:href="|/user/${offer.getItem().getOwner().getId()}|"
                                    class="btn btn-sm btn-primary btn-block">
                                     <span th:text="${offer.getItem().getOwner().getAccountName()}"></span>
                                 </a>
