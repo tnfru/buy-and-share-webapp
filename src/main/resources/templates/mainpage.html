@@ -13,7 +13,7 @@
     <div class="card-deck" style="column-count: auto;">
         <div class="card border-dark" th:each="item : ${items}" style="min-width: 15rem; max-width: 17rem;margin-bottom: 1rem;">
             <div th:if="${item?.imageFileName != null}"><img th:src="@{${'/images/' + item?.imageFileName}}"/></div>
-            <div th:if="${item?.imageFileName == null}"><img src="images/bike-dummy.png" class="card-img-top"></div>
+            <div th:if="${item?.imageFileName == null}"><img src="/images/bike-dummy.png" class="card-img-top"></div>
 
             <div class="card-body">
                 <h4 class="card-title" th:text="${item.getName()}">Item Name</h4>
