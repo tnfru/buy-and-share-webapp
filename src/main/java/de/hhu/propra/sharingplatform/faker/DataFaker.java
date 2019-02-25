@@ -7,7 +7,7 @@ import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.payment.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import java.time.LocalDateTime;
@@ -59,13 +59,13 @@ public class DataFaker implements ServletContextInitializer {
 
     public DataFaker(long seed, Environment env, UserRepo userRepo, ItemRepo itemRepo,
         OfferRepo offerRepo, OfferService offerService,
-        ApiService apiService) {
+        ProPayApi proPayApi) {
         this.env = env;
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;
         this.offerRepo = offerRepo;
         this.offerService = offerService;
-        this.apiService = apiService;
+        this.apiService = proPayApi;
         Random rnd = new Random();
         rnd.setSeed(seed);
         this.faker = new Faker(Locale.ENGLISH, rnd);

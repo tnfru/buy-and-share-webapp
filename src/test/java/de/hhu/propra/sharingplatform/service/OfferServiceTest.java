@@ -16,7 +16,7 @@ import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import java.time.LocalDateTime;
 
-import de.hhu.propra.sharingplatform.service.payment.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
 import de.hhu.propra.sharingplatform.service.payment.PaymentService;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class OfferServiceTest {
     private PaymentService paymentService;
 
     @MockBean
-    private ApiService apiService;
+    private ProPayApi proPayApi;
 
     @MockBean
     private ItemService itemService;
@@ -61,7 +61,7 @@ public class OfferServiceTest {
 
     @Before
     public void setUpTests() {
-        offerService = new OfferService(contractService, offerRepo, apiService, paymentService,
+        offerService = new OfferService(contractService, offerRepo, proPayApi, paymentService,
             itemService, contractRepo);
         owner = new User();
         owner.setId(1L);
