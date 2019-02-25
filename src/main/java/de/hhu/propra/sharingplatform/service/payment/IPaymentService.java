@@ -59,7 +59,7 @@ public interface IPaymentService {
     /**
      * Transfers the bail to the item owner.
      *
-     * @param contract
+     * @param contract contract
      */
     void punishBailReservation(Contract contract);
 }
