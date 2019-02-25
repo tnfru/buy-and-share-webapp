@@ -41,7 +41,6 @@
         </ul>
         <div class="card-body">
             <form method="post" th:action="|/conflicts/${conflict.getId()}/punishBail|">
-                <input type="number" name="punishPercent">
                 <button type="submit" class="btn btn-sm btn-primary">Punish Bail</button>
             </form>
             <form method="post" th:action="|/conflicts/${conflict.getId()}/cancel|">
