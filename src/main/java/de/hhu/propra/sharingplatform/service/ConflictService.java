@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class ConflictService {
@@ -52,18 +53,15 @@ public class ConflictService {
         return conflictRepo.findOneById(conflictId);
     }
 
-    public void punish(long conflictId, long percent) {
+    public void punish(long conflictId) {
+        setStatus(Status.PUNISHED_BAIL, conflictId);
         Conflict conflict = conflictRepo.findOneById(conflictId);
-        if (percent == 100) {
-            paymentService.punishBailReservation(conflict.getContract());
-        } else {
-            paymentService.freeBailReservation(conflict.getContract());
-            // TODO: punish only a percentage
-        }
+        paymentService.punishBailReservation(conflict.getContract());
     }
 
-    public void close(long conflictId) {
+    public void setStatus(Status canceled, long conflictId) {
         Conflict conflict = conflictRepo.findOneById(conflictId);
-        conflict.setStatus(Status.RESOLVED);
+        conflict.setStatus(canceled);
+        conflictRepo.save(conflict);
     }
 }
