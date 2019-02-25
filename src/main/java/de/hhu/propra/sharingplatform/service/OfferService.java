@@ -84,26 +84,19 @@ public class OfferService {
         }
     }
 
-    private void removeOverlappingOffer(Offer offer) {
-        Item item = offer.getItem();
-        List<Offer> offersWithSameItem = offerRepo.findAllByItemId(item.getId());
-        for (Offer offerToTest : offersWithSameItem) {
-            if (offer.getId().equals(offerToTest.getId())) {
-                continue;
-            }
-            if (offer.getStart().isAfter(offerToTest.getStart())) {
-                if (offerToTest.getEnd().isAfter(offer.getStart())) {
-                    offerToTest.setDecline(true);
-                    offerRepo.save(offerToTest);
-                }
-            } else {
-                if (offer.getEnd().isAfter(offerToTest.getStart())) {
-                    offerToTest.setDecline(true);
-                    offerRepo.save(offerToTest);
-                }
+    private void removeOverlappingOffer(Offer acceptedOffer) {
+        Item item = acceptedOffer.getItem();
+        List<Offer> itemOffers = offerRepo.findAllByItemId(item.getId());
+        itemOffers.remove(acceptedOffer);
+        for (Offer offer : itemOffers) {
+            if (acceptedOffer.getStart().isAfter(offer.getEnd()) || acceptedOffer.getEnd()
+                .isBefore(offer.getStart())) {
+                offer.setDecline(true);
+                offerRepo.save(offer);
             }
         }
     }
+
 
     public void declineOffer(long offerId, User user) {
         Offer offer = offerRepo.findOneById(offerId);
