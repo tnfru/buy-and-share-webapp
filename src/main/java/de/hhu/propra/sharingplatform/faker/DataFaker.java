@@ -95,9 +95,9 @@ public class DataFaker implements ServletContextInitializer {
         }
 
         log.info("    Persist Items...");
-        persistItem(items);
+        itemRepo.saveAll(items);
         log.info("    Persist Users...");
-        persistUser(users);
+        userRepo.saveAll(users);
 
         log.info("    Create ProPay...");
         for (User user : users) {
@@ -134,18 +134,6 @@ public class DataFaker implements ServletContextInitializer {
         }
 
         log.info("Done!");
-    }
-
-    private void persistUser(List<User> users) {
-        for (User user : users) {
-            userRepo.save(user);
-        }
-    }
-
-    private void persistItem(List<Item> items) {
-        for (Item item : items) {
-            itemRepo.save(item);
-        }
     }
 
     private User getRandomUser(List<User> users) {
