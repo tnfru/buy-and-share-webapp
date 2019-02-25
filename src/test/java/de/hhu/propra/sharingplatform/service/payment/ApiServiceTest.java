@@ -20,7 +20,8 @@ public class ApiServiceTest {
 
     private String fakeJson;
 
-    /*
+/*
+
     @Test
     public void jsonMapped() {
         this.fakeJson = "{\"account\":\"foo\"," + "\"amount\":5000.0,\"reservations\":[{\"id\":4,"

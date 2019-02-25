@@ -28,8 +28,8 @@ public class PaymentService implements IPaymentService {
         User recipient = contract.getItem().getOwner();
         Payment payment = new Payment(sender, recipient, totalPrice, contract.getItem().getBail());
 
-        long id = apiService.reserveMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
-            payment.getBail());
+        long id = apiService.reserveMoney(payment.getProPayIdSender(),
+            payment.getProPayIdRecipient(), payment.getBail());
         payment.setBailProPayId(id);
         id = apiService.reserveMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
             totalPrice);

@@ -2,11 +2,11 @@ package de.hhu.propra.sharingplatform.service.payment;
 
 public class PaymentException extends Exception {
 
-    public final int UNKNOWN = 0;
-    public final int NETWORK_ERR = 1;
-    public final int NOT_ENOUGH_MONEY = 2;
-    public final int SENDER_NOT_EXISTS = 3;
-    public final int RECIPIENT_NOT_EXISTS = 4;
+    public static final int UNKNOWN = 0;
+    public static final int NETWORKERR = 1;
+    public static final int NOTENOUGHMONEY = 2;
+    public static final int SENDERNOTEXISTS = 3;
+    public static final int RECIPIENTNOTEXISTS = 4;
 
     public int errorCode = UNKNOWN;
 
