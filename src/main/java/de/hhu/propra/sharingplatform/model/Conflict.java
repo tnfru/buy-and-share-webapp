@@ -20,5 +20,10 @@ public class Conflict {
         mappedBy = "conflict")
     private Contract contract;
 
-    private boolean ownerConflict;
+    @Column(length = 1000)
+    private String description;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private User requester;
+
 }
