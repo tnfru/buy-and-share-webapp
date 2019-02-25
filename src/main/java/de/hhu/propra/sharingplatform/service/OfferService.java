@@ -92,12 +92,11 @@ public class OfferService {
         List<Offer> itemOffers = offerRepo
             .findAllByItemIdAndDeclineIsFalseAndAcceptIsFalse(item.getId());
         for (Offer offer : itemOffers) {
-            if (acceptedOffer.getStart().isAfter(offer.getEnd()) || acceptedOffer.getEnd()
-                .isBefore(offer.getStart())) {
+            if (!(acceptedOffer.getStart().isAfter(offer.getEnd()) || acceptedOffer.getEnd()
+                .isBefore(offer.getStart()))) {
                 offer.setDecline(true);
                 offerRepo.save(offer);
             }
-            System.out.println(offer.isDecline());
         }
     }
 
