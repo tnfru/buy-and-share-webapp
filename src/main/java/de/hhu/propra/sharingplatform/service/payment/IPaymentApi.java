@@ -6,14 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface IPaymentApi {
-    @Deprecated
-    void enforcePayment(Payment payment, int totalPrice);
-
-    @Deprecated
-    boolean isSolvent(User borrower, int amountOwed);
-
-    @Deprecated
-    void transferMoney(Payment paymentInfo);
 
     long reserveMoney(String fromAccount, String toAccount, int amount);
 

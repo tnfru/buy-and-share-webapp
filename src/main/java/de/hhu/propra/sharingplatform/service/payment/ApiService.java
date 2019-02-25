@@ -40,8 +40,7 @@ public class ApiService implements IPaymentApi {
         this.paymentRepo = paymentRepo;
     }
 
-    @Deprecated
-    String fetchJson(String userName) {
+    private String fetchJson(String userName) {
         String url = "http://" + host + ":8888/account/" + userName;
         RestTemplate jsonResponse = new RestTemplate();
 
@@ -55,8 +54,7 @@ public class ApiService implements IPaymentApi {
         return response;
     }
 
-    @Deprecated
-    ProPay mapJson(String userName) {
+    private ProPay mapJson(String userName) {
         String jsonResponse = fetchJson(userName);
         ObjectMapper mapper = new ObjectMapper();
 
@@ -66,17 +64,6 @@ public class ApiService implements IPaymentApi {
             ioException.printStackTrace();
             return null;
         }
-    }
-
-    @Override
-    public void enforcePayment(Payment payment, int totalPrice) {
-        long id = reserveMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
-            payment.getBail());
-        payment.setBailProPayId(id);
-        id = reserveMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
-            totalPrice);
-        payment.setAmountProPayId(id);
-        paymentRepo.save(payment);
     }
 
     @Override
@@ -194,18 +181,6 @@ public class ApiService implements IPaymentApi {
     }
 
     @Override
-    public boolean isSolvent(User borrower, int amountOwed) {
-        ProPay borrowerProPay = mapJson(borrower.getPropayId());
-
-        int reservationAmount = 0;
-        for (ProPayReservation reservation : borrowerProPay.getReservations()) {
-            reservationAmount += reservation.getAmount();
-        }
-
-        return borrowerProPay.getAmount() - reservationAmount >= amountOwed;
-    }
-
-    @Override
     public void freeReservation(long amountProPayId, String proPayIdSender) {
         List<String> path = new ArrayList<>();
         path.add("reservation");
@@ -218,19 +193,6 @@ public class ApiService implements IPaymentApi {
             path, parameters);
     }
 
-    @Override
-    public void transferMoney(Payment paymentInfo) {
-        List<String> path = new ArrayList<>();
-        path.add("account");
-        path.add(paymentInfo.getProPayIdSender());
-        path.add("transfer");
-        path.add(paymentInfo.getProPayIdRecipient());
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("amount", Integer.toString(paymentInfo.getAmount()));
-
-        buildRequest("POST", "http://" + host + ":8888/",
-            path, parameters);
-    }
 
     @Override
     public void punishReservation(long bailProPayId, String proPayIdSender) {
