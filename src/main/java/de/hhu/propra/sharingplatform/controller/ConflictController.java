@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
@@ -23,36 +24,54 @@ public class ConflictController {
 
     /**
      * Page for admins to see open conflicts.
+     *
      * @param model the model.
      * @return admin-dashboard.html
      */
     @GetMapping("/conflicts/show")
     public String adminDashboard(Model model) {
-        model.addAttribute("conflicts", conflictService.getOpenConflicts());
+        model.addAttribute("openConflicts",
+            conflictService.getOpenConflicts());
         return "admin-dashboard";
     }
 
-    /**
-     * Called when admin thinks the bail should go to item owner.
-     * Important: This method can only be called by an administrator.
-     *
-     * @return admin page.
-     */
-    @PostMapping("/conflicts/{conflictId}/accept")
-    public String acceptConflict(@PathVariable long conflictId, Principal principal) {
-        conflictService.resolveOwnerConflict(true, conflictId);
+    @GetMapping("/openConflict/{contractId}")
+    public String getConflictForm(@PathVariable long contractId, Principal principal) {
+        contractService.validateOwner(contractId, principal.getName());
+        return "conflictForm";
+    }
+
+    @PostMapping("/openConflict/{contractId}")
+    public String openConflict(@RequestParam(value = "description") String description,
+                               Principal principal, @PathVariable long contractId) {
+        contractService.validateOwner(contractId, principal.getName());
+        contractService.openConflict(description, principal.getName(), contractId);
+        return"redirect:/user/account";
+    }
+
+    @GetMapping("/conflicts/{conflictId}/details")
+    public String conflictDetails(@PathVariable long conflictId, Model model) {
+        model.addAttribute("conflict", conflictService.fetchConflictById(conflictId));
+        return "conflictDetails";
+    }
+
+    @PostMapping("/conflicts/{conflictId}/punishBail")
+    public String punishBail(@PathVariable long conflictId, @RequestParam(name = "punishPercent") long percent) {
+        conflictService.punish(conflictId, percent);
+        conflictService.close(conflictId);
         return "redirect:/conflicts/show";
     }
 
-    /**
-     * Called when admin thinks the conflict is not justified.
-     * Important: This method can only be called by an administrator.
-     *
-     * @return admin page.
-     */
-    @PostMapping("/conflicts/{conflictId}/reject")
-    public String rejectConflict(@PathVariable long conflictId, Principal principal) {
-        contractService.resolveOwnerConflict(false, conflictId);
+    @PostMapping("/conflicts/{conflictId}/cancel")
+    public String cancelContract(@PathVariable long conflictId) {
+        contractService.cancelContract(conflictId);
+        conflictService.close(conflictId);
+        return "redirect:/conflicts/show";
+    }
+
+    @PostMapping("/conflicts/{conflictId}/continue")
+    public String continueContract(@PathVariable long conflictId) {
+        conflictService.close(conflictId);
         return "redirect:/conflicts/show";
     }
 
