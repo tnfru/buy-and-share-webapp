@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.service.Payment;
+package de.hhu.propra.sharingplatform.service.payment;
 
 import org.springframework.stereotype.Component;
 

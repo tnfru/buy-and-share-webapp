@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.service.Payment;
+package de.hhu.propra.sharingplatform.service.payment;
 
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;

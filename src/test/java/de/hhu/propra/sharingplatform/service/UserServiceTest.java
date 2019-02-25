@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.Payment.IBankAccountService;
+import de.hhu.propra.sharingplatform.service.payment.IBankAccountService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

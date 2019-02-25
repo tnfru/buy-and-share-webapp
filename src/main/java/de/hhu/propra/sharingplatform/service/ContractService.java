@@ -6,7 +6,7 @@ import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Offer;
-import de.hhu.propra.sharingplatform.service.Payment.IPaymentService;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +37,7 @@ public class ContractService {
 
     public void create(Offer offer) {
         Contract contract = new Contract(offer);
-        // -> Payment
+        // -> payment
         contract.setPayment(paymentService.createPayment(contract));
         contractRepo.save(contract);
     }

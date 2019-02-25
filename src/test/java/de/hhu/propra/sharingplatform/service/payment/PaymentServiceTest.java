@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.service.Payment;
+package de.hhu.propra.sharingplatform.service.payment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,8 +12,6 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import java.time.LocalDateTime;
 
-import de.hhu.propra.sharingplatform.service.Payment.ApiService;
-import de.hhu.propra.sharingplatform.service.Payment.PaymentService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

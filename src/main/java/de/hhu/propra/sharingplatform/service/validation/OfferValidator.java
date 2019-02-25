@@ -6,8 +6,8 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-import de.hhu.propra.sharingplatform.service.Payment.IPaymentApi;
-import de.hhu.propra.sharingplatform.service.Payment.IPaymentService;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
