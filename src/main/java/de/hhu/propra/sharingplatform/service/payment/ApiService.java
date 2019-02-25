@@ -40,32 +40,6 @@ public class ApiService implements IPaymentApi {
         this.paymentRepo = paymentRepo;
     }
 
-    private String fetchJson(String userName) {
-        String url = "http://" + host + ":8888/account/" + userName;
-        RestTemplate jsonResponse = new RestTemplate();
-
-        String response;
-        try {
-            response = jsonResponse.getForObject(url, String.class);
-        } catch (Exception exception) {
-            throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
-                "Couldnt reach Propayserver.");
-        }
-        return response;
-    }
-
-    private ProPay mapJson(String userName) {
-        String jsonResponse = fetchJson(userName);
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            return mapper.readValue(jsonResponse, ProPay.class);
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-            return null;
-        }
-    }
-
     @Override
     public void addMoney(String proPayId, int amount) {
         createAccountOrAddMoney(proPayId, amount);
@@ -119,6 +93,40 @@ public class ApiService implements IPaymentApi {
             return -1;
         }
     }
+
+    @Override
+    public void freeReservation(long amountProPayId, String proPayIdSender) {
+        List<String> path = new ArrayList<>();
+        path.add("reservation");
+        path.add("release");
+        path.add(proPayIdSender);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("reservationId", Long.toString(amountProPayId));
+
+        buildRequest("POST", "http://" + host + ":8888/",
+            path, parameters);
+    }
+
+
+    @Override
+    public void punishReservation(long bailProPayId, String proPayIdSender) {
+        List<String> path = new ArrayList<>();
+        path.add("reservation");
+        path.add("punish");
+        path.add(proPayIdSender);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("reservationId", Long.toString(bailProPayId));
+
+        buildRequest("POST", "http://" + host + ":8888/",
+            path, parameters);
+
+    }
+
+    @Override
+    public int getAccountBalance(String proPayId) {
+        return mapJson(proPayId).getAmount();
+    }
+
 
     private void createAccountOrAddMoney(String proPayId, int amount) {
         List<String> pathVariables = new ArrayList<>();
@@ -180,36 +188,29 @@ public class ApiService implements IPaymentApi {
         return null;
     }
 
-    @Override
-    public void freeReservation(long amountProPayId, String proPayIdSender) {
-        List<String> path = new ArrayList<>();
-        path.add("reservation");
-        path.add("release");
-        path.add(proPayIdSender);
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("reservationId", Long.toString(amountProPayId));
+    private String fetchJson(String userName) {
+        String url = "http://" + host + ":8888/account/" + userName;
+        RestTemplate jsonResponse = new RestTemplate();
 
-        buildRequest("POST", "http://" + host + ":8888/",
-            path, parameters);
+        String response;
+        try {
+            response = jsonResponse.getForObject(url, String.class);
+        } catch (Exception exception) {
+            throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
+                "Couldnt reach Propayserver.");
+        }
+        return response;
     }
 
+    private ProPay mapJson(String userName) {
+        String jsonResponse = fetchJson(userName);
+        ObjectMapper mapper = new ObjectMapper();
 
-    @Override
-    public void punishReservation(long bailProPayId, String proPayIdSender) {
-        List<String> path = new ArrayList<>();
-        path.add("reservation");
-        path.add("punish");
-        path.add(proPayIdSender);
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("reservationId", Long.toString(bailProPayId));
-
-        buildRequest("POST", "http://" + host + ":8888/",
-            path, parameters);
-
-    }
-
-    @Override
-    public int getAccountBalance(String proPayId) {
-        return mapJson(proPayId).getAmount();
+        try {
+            return mapper.readValue(jsonResponse, ProPay.class);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            return null;
+        }
     }
 }
