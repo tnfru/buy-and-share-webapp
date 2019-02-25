@@ -11,6 +11,8 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import java.time.LocalDateTime;
+
+import de.hhu.propra.sharingplatform.service.payment.PaymentService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -65,7 +67,7 @@ public class ContractServiceTest {
 
         ArgumentCaptor<Contract> argument = ArgumentCaptor.forClass(Contract.class);
 
-        verify(paymentService, times(0)).create(any());
+        verify(paymentService, times(0)).createPayment(any());
         verify(contractRepo, times(1)).save(argument.capture());
 
         Assert.assertEquals(contract, argument.getValue());
@@ -87,7 +89,7 @@ public class ContractServiceTest {
 
         contractService.calcPrice(anyLong());
 
-        verify(paymentService, times(1)).create(argument.capture());
+        verify(paymentService, times(1)).createPayment(argument.capture());
 
         Assert.assertEquals(contract, argument.getValue());
     }
@@ -100,7 +102,7 @@ public class ContractServiceTest {
 
         contractService.calcPrice(anyLong());
 
-        verify(paymentService, times(1)).create(argument.capture());
+        verify(paymentService, times(1)).createPayment(argument.capture());
 
         Assert.assertNull(argument.getValue());
 
