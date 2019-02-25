@@ -141,7 +141,9 @@
                                 <span style="color: red;">&#33;</span>
                             </td>
                             <td th:if="${con.isConflict()} == false">
-                                <span style="color: green;">&#45;</span>
+                                <a th:href="|/openConflict/${con.getId()}|" class="btn btn-primary btn-sm">
+                                    Open Conflict
+                                </a>
                             </td>
                             <td th:if="${con.getRealEnd()} == null and ${con.isConflict()} == false">
                                 <form method="post"
@@ -254,7 +256,7 @@
                                         </button>
                                     </form>
                                     <form method="post"
-                                          th:action="|/contract/${con.getId()}/openConflict|">
+                                          th:action="|/contract/${con.getId()}/openConflict?role=true|">
                                         <button type="submit" class="btn btn-danger btn-sm">
                                             Conflict
                                         </button>

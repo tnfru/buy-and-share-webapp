@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{base}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>Conflict Details</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div>
+        <b>Requester Name:</b>
+        <span th:text="|${conflict.getRequester().getAccountName()}|">test name</span>
+        <br>
+        <b>Contract Details:</b>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <b>Borrower Name:</b>
+                <span th:text="|${conflict.getContract().getBorrower().getAccountName()}|">test name</span>
+            </li>
+
+            <li class="list-group-item">
+                <b>Borrower Mail:</b>
+                <span th:text="|${conflict.getContract().getBorrower().getEmail()}|">test.mail</span>
+            </li>
+
+            <li class="list-group-item">
+                <b>Owner Name:</b>
+                <span th:text="|${conflict.getContract().getItem().getOwner().getName()}|"></span>
+            </li>
+
+            <li class="list-group-item">
+                <b>Owner Mail:</b>
+                <span th:text="|${conflict.getContract().getItem().getOwner().getEmail()}|"></span>
+            </li>
+
+            <li class="list-group-item">
+                <b>Description:</b>
+                <span th:text="|${conflict.getDescription()}|"></span>
+            </li>
+        </ul>
+        <div class="card-body">
+            <form method="post" th:action="|/conflicts/${conflict.getId()}/punishBail|">
+                <input type="number" name="punishPercent">
+                <button type="submit" class="btn btn-sm btn-primary">Punish Bail</button>
+            </form>
+            <form method="post" th:action="|/conflicts/${conflict.getId()}/cancel|">
+                <button type="submit" class="btn btn-sm btn-primary">Cancel Contract</button>
+            </form>
+            <form method="post" th:action="|/conflicts/${conflict.getId()}/continue|">
+                <button type="submit" class="btn btn-sm btn-primary">Continue contract</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
