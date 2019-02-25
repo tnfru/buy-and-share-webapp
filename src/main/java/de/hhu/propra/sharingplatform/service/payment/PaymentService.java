@@ -1,13 +1,11 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
 import de.hhu.propra.sharingplatform.dao.PaymentRepo;
-import de.hhu.propra.sharingplatform.model.Contract;
-import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.Payment;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
+import de.hhu.propra.sharingplatform.model.payments.Payment;
 import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Service

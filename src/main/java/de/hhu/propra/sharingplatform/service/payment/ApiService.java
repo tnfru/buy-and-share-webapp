@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.dto.ProPay;
 import de.hhu.propra.sharingplatform.dto.ProPayReservation;
-import de.hhu.propra.sharingplatform.model.Payment;
-import de.hhu.propra.sharingplatform.model.User;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;

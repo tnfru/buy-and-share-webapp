@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.model;
+package de.hhu.propra.sharingplatform.model.payments;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -6,6 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+
+import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import lombok.Data;
 import lombok.ToString;
 
@@ -16,28 +19,20 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private int amount;
-    private long amountProPayId;
-    private String proPayIdSender;
-    private String proPayIdRecipient;
-    private int bail;
-    private long bailProPayId;
+    long id;
+    int amount;
+    String proPayIdSender;
+    String proPayIdRecipient;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
         mappedBy = "payment")
-    private Contract contract;
+    Contract contract;
 
     @SuppressWarnings("unused")
     private Payment() {
         // used for jpa
     }
 
-    public Payment(User sender, User recipient, int amount, int bail) {
-        this.proPayIdSender = sender.getPropayId();
-        this.proPayIdRecipient = recipient.getPropayId();
-        this.amount = amount;
-        this.bail = bail;
-    }
+
 
 }

@@ -1,6 +1,7 @@
 package de.hhu.propra.sharingplatform.model;
 
 import de.hhu.propra.sharingplatform.dto.Status;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import lombok.Data;
 
 import javax.persistence.*;

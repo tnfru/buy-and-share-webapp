@@ -1,7 +1,7 @@
 package de.hhu.propra.sharingplatform.service.validation;
 
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
-import de.hhu.propra.sharingplatform.model.Contract;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.http.HttpStatus;

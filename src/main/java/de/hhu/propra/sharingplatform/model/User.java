@@ -2,6 +2,7 @@ package de.hhu.propra.sharingplatform.model;
 
 
 import com.google.common.io.Files;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
