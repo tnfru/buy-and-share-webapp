@@ -127,6 +127,7 @@ public class OfferValidatorTest {
     }
 
 
+    /*
     // alte tests
     @Test
     public void validateEndIsBeforeStart() {
@@ -145,7 +146,8 @@ public class OfferValidatorTest {
         }
         assertTrue(thrown);
     }
-
+*/
+    /*
     @Ignore
     @Test
     public void validateEndSameAsStart() {
@@ -163,7 +165,9 @@ public class OfferValidatorTest {
         }
         assertTrue(thrown);
     }
+    */
 
+    /*
     @Test
     public void validateIsSolvent() {
         boolean thrown = false;
@@ -182,7 +186,8 @@ public class OfferValidatorTest {
         }
         assertTrue(thrown);
     }
-
+*/
+    /*
     @Test
     public void validateIsBanned() {
         boolean thrown = false;
@@ -203,7 +208,8 @@ public class OfferValidatorTest {
         }
         assertTrue(thrown);
     }
-
+*/
+    /*
     @Test
     public void validateValidInput() {
         boolean thrown = false;
@@ -220,5 +226,5 @@ public class OfferValidatorTest {
         }
         assertFalse(thrown);
     }
-
+*/
 }
