@@ -20,7 +20,7 @@ public class PropayAccountService implements IBankAccountService {
     }
 
     @Override
-    public void transferMoney(int amount, String recipient, String sender) {
-        //TODO
+    public void transferMoney(int amount, String recipient, String sender) throws PaymentException {
+        api.transferMoney(amount, sender, recipient);
     }
 }
