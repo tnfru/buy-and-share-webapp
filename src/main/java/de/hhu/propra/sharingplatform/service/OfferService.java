@@ -34,8 +34,8 @@ public class OfferService {
 
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-                        ApiService apiService, IPaymentService paymentService,
-                        ItemService itemService, ContractRepo contractRepo) {
+        ApiService apiService, IPaymentService paymentService,
+        ItemService itemService, ContractRepo contractRepo) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
         this.apiService = apiService;
@@ -78,8 +78,8 @@ public class OfferService {
 
         if (itemService.userIsOwner(offer.getItem().getId(), owner.getId())) {
             offer.setAccept(true);
-            removeOverlappingOffer(offer); // todo test this
             offerRepo.save(offer);
+            removeOverlappingOffer(offer); // todo test this
             contractService.create(offer);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
@@ -87,23 +87,15 @@ public class OfferService {
         }
     }
 
-    private void removeOverlappingOffer(Offer offer) {
-        Item item = offer.getItem();
-        List<Offer> offersWithSameItem = offerRepo.findAllByItemId(item.getId());
-        for (Offer offerToTest : offersWithSameItem) {
-            if (offer.getId().equals(offerToTest.getId())) {
-                continue;
-            }
-            if (offer.getStart().isAfter(offerToTest.getStart())) {
-                if (offerToTest.getEnd().isAfter(offer.getStart())) {
-                    offerToTest.setDecline(true);
-                    offerRepo.save(offerToTest);
-                }
-            } else {
-                if (offer.getEnd().isAfter(offerToTest.getStart())) {
-                    offerToTest.setDecline(true);
-                    offerRepo.save(offerToTest);
-                }
+    void removeOverlappingOffer(Offer acceptedOffer) {
+        Item item = acceptedOffer.getItem();
+        List<Offer> itemOffers = offerRepo
+            .findAllByItemIdAndDeclineIsFalseAndAcceptIsFalse(item.getId());
+        for (Offer offer : itemOffers) {
+            if (!(acceptedOffer.getStart().isAfter(offer.getEnd()) || acceptedOffer.getEnd()
+                .isBefore(offer.getStart()))) {
+                offer.setDecline(true);
+                offerRepo.save(offer);
             }
         }
     }
