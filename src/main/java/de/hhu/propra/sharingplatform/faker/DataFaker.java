@@ -7,7 +7,8 @@ import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class DataFaker implements ServletContextInitializer {
 
     private final OfferService offerService;
 
-    private final ApiService apiService;
+    private final IPaymentApi apiService;
 
     private Logger log = Logger.getLogger(DataFaker.class.getName());
 
@@ -44,7 +45,7 @@ public class DataFaker implements ServletContextInitializer {
     @Autowired
     public DataFaker(Environment env, UserRepo userRepo, ItemRepo itemRepo,
         OfferRepo offerRepo, OfferService offerService,
-        ApiService apiService) {
+        IPaymentApi apiService) {
         this.env = env;
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;
@@ -100,7 +101,7 @@ public class DataFaker implements ServletContextInitializer {
 
         log.info("    Create ProPay...");
         for (User user : users) {
-            apiService.createAccountOrAddMoney(user.getPropayId(), 10000000);
+            apiService.addMoney(user.getPropayId(), 10000000);
         }
 
         log.info("    Creating Offers...");
