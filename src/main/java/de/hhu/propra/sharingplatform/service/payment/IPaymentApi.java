@@ -20,4 +20,6 @@ public interface IPaymentApi {
     void transferMoney(int amount, String fromAccount, String toAccount);
 
     int getAccountReservations(String account);
+
+    int getAccountBalanceLiquid(String account);
 }

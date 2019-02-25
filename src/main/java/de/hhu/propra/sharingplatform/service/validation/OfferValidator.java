@@ -23,7 +23,8 @@ public class OfferValidator {
                 + " Start date");
         }
         int totalCost = (int)Math.ceil((start.until(end, ChronoUnit.DAYS) + 1) * item.getPrice());
-        if (!(apiService.isSolvent(requester, totalCost))) {
+        int available = apiService.getAccountBalanceLiquid(requester.getPropayId());
+        if (totalCost > available) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough money");
         }
         if (requester.isBan()) {

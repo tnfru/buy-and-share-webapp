@@ -70,6 +70,11 @@ public class ApiService implements IPaymentApi {
     }
 
     @Override
+    public int getAccountBalanceLiquid(String account) {
+        return getAccountBalance(account) - getAccountReservations(account);
+    }
+
+    @Override
     public long reserveMoney(String proPayIdSender, String proPayIdRecipient, int amount) {
         List<String> pathVariables = new ArrayList<>();
         pathVariables.add("reservation");
