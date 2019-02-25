@@ -20,5 +20,5 @@ public class Conflict {
         mappedBy = "conflict")
     private Contract contract;
 
-
+    private boolean ownerConflict;
 }

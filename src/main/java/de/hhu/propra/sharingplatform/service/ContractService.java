@@ -115,7 +115,7 @@ public class ContractService {
      * @param accepted if accepted: item owner gets bail,
      *                 otherwise the conflict is rejected and borrower keeps bail.
      */
-    public void resolveConflict(boolean accepted, long conflictId) {
+    public void resolveOwnerConflict(boolean accepted, long conflictId) {
         Conflict conflict = conflictRepo.findOneById(conflictId);
         Contract contract = conflict.getContract();
         contract.setFinished(true);

@@ -31,7 +31,7 @@ public class ConflictController {
      */
     @PostMapping("/conflicts/{conflictId}/accept")
     public String acceptConflict(@PathVariable long conflictId, Principal principal) {
-        contractService.resolveConflict(true, conflictId);
+        contractService.resolveOwnerConflict(true, conflictId);
         return "redirect:/conflicts/show";
     }
 
@@ -43,7 +43,7 @@ public class ConflictController {
      */
     @PostMapping("/conflicts/{conflictId}/reject")
     public String rejectConflict(@PathVariable long conflictId, Principal principal) {
-        contractService.resolveConflict(false, conflictId);
+        contractService.resolveOwnerConflict(false, conflictId);
         return "redirect:/conflicts/show";
     }
 
