@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
 
+@Deprecated
 @Service
 public class PaymentService implements IPaymentService {
 
