@@ -5,6 +5,9 @@ import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.payment.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import de.hhu.propra.sharingplatform.service.validation.OfferValidator;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,9 +24,9 @@ public class OfferService {
 
     private ContractService contractService;
 
-    private ApiService apiService;
+    private IPaymentApi apiService;
 
-    private PaymentService paymentService;
+    private IPaymentService paymentService;
 
     private ItemService itemService;
 
@@ -31,8 +34,8 @@ public class OfferService {
 
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-        ApiService apiService, PaymentService paymentService,
-        ItemService itemService, ContractRepo contractRepo) {
+                        ApiService apiService, IPaymentService paymentService,
+                        ItemService itemService, ContractRepo contractRepo) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
         this.apiService = apiService;
