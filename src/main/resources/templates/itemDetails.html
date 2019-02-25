@@ -3,156 +3,156 @@
       xmlns:layout="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.com">
 <head>
-  <meta charset="UTF-8">
-  <title>Item Details</title>
-  <script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.3/source/jsCalendar.min.js"
-          integrity="sha384-JqNLUzAxpw7zEu6rKS/TNPZ5ayCWPUY601zaig7cUEVfL+pBoLcDiIEkWHjl07Ot"
-          crossorigin="anonymous"></script>
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.3/source/jsCalendar.min.css"
-        integrity="sha384-+OB2CadpqXIt7AheMhNaVI99xKH8j8b+bHC8P5m2tkpFopGBklD3IRvYjPekeWIJ"
-        crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Item Details</title>
+    <script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.3/source/jsCalendar.min.js"
+            integrity="sha384-JqNLUzAxpw7zEu6rKS/TNPZ5ayCWPUY601zaig7cUEVfL+pBoLcDiIEkWHjl07Ot"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.3/source/jsCalendar.min.css"
+          integrity="sha384-+OB2CadpqXIt7AheMhNaVI99xKH8j8b+bHC8P5m2tkpFopGBklD3IRvYjPekeWIJ"
+          crossorigin="anonymous">
 </head>
 <body>
 <div layout:fragment="content">
-  <h1 th:text="${item?.name}"></h1>
+    <h1 th:text="${item?.name}"></h1>
 
-  <div class="card-deck">
+    <div class="card-deck">
 
-    <div class="card border-dark">
-      <div th:if="${item?.imageFileName != null}">
-        <img style="max-width: border-box" th:src="@{${'/images/' + item?.imageFileName}}"/></div>
-      <div th:if="${item?.imageFileName == null}">
-        <img style="max-width: border-box" src="images/bike-dummy.png"
-             class="card-img-top"></div>
-
-      <div class="card-body">
-        <h4 class="card-title" th:text="${item.getName()}">Item Name</h4>
-        <p class="card-text" th:text="${item.getDescription()}"></p>
-      </div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          <b>Price per Day:</b>
-          <span th:text="|${item.getPrice()}€|"></span>
-        </li>
-
-        <li class="list-group-item">
-          <b>Safety Deposit:</b>
-          <span th:text="|${item.getBail()}€|"></span>
-        </li>
-
-        <li class="list-group-item">
-          <b>Location:</b>
-          <span th:text="${item?.location}"></span>
-        </li>
-
-        <li class="list-group-item">
-          <b>Supplier:</b>
-          <span th:text="${item?.owner?.accountName}"></span>
-        </li>
-
-        <li class="list-group-item">
-          <b>Ratings:</b>
-          <span th:text="|${item?.owner?.totalRatings()}|"></span>
-          <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
-        </li>
-
-        <li class="list-group-item">
-          <b>Availability:</b>
-
-          <style type="text/css">
-
-            .jsCalendar tbody td.jsCalendar-selected {
-              background-color: rgba(148, 0, 29, 0.71);
-              border:unset;
-            }
-          </style>
-
-          <div id="my-calendar", class = "jsCalendar"></div>
-
-          <script th:inline="javascript">
-            var calendar = document.getElementById("my-calendar");
-            var myCalendar = jsCalendar.new({
-              target: calendar,
-              monthFormat: "month YYYY"
-            });
-          </script>
-
-          <div th:each="contract : ${item.getChosenContracts(false)}">
-
-            <script th:inline="javascript"
-                    th:with=
-                        "start=${#temporals.format(contract.getStart(),'yyyy-MM-dd')},
-                      end=${#temporals.format(contract.getExpectedEnd(),'yyyy-MM-dd')}">
-              var start = new Date([[${start}]]);
-              var end = new Date([[${end}]]);
-
-              for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
-                myCalendar.select(
-                        [date]);
-              }
-
-            </script>
-          </div>
-
-
-        </li>
-
-
-      </ul>
-      <div class="card-footer bg-white text-center">
-        <a th:if="${ownItem} == false " href="#" class="btn btn-outline-secondary btn-block">User
-          Details</a>
-        <a th:if="${ownItem} == false " class="btn btn-outline-success btn-block"
-           th:href="|/offer/request/${item?.id}|">Request loan</a>
-        <a th:unless="${ownItem} == false " class="btn btn-outline-primary btn-block"
-           th:href="|/offer/show/${item.getId()}|">Show Requests</a>
-        <a th:unless="${ownItem} == false "
-           class="btn btn-outline-warning btn-block"
-           th:href="|/item/edit/${item?.Id}|">Edit Item</a>
-      </div>
-    </div>
-
-    <div>
-      <b style="margin-left: 5rem;">Other Users who borrowed this were also intressted in:</b>
-      <div class="column">
-        <div class="col" th:each="item : ${recItems}">
-          <div class="card border-dark" style="margin-left: 6rem;">
-
+        <div class="card border-dark">
             <div th:if="${item?.imageFileName != null}">
-              <img class="img-fluid"
-                   th:src="@{${'/images/' + item?.imageFileName}}"/></div>
+                <img style="max-width: border-box" th:src="@{${'/images/' + item?.imageFileName}}"/></div>
             <div th:if="${item?.imageFileName == null}">
-              <img class="img-fluid" src="images/bike-dummy.png">
-              <!--class="card-img-top">--></div>
+                <img style="max-width: border-box" src="images/bike-dummy.png"
+                     class="card-img-top"></div>
 
             <div class="card-body">
-              <h5 class="card-title" th:text="${item.getName()}">Item Name</h5>
+                <h4 class="card-title" th:text="${item.getName()}">Item Name</h4>
+                <p class="card-text" th:text="${item.getDescription()}"></p>
             </div>
             <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <b>Price per Day:</b>
+                    <span th:text="|${item.getPrice()}€|"></span>
+                </li>
 
-              <li class="list-group-item">
-                <b>Supplier:</b>
-                <p th:text="|${item?.owner?.name}|"></p>
-                <b>Rating:</b>
-                <span th:text="|${item?.owner?.totalRatings()}|"></span>
-                <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
-              </li>
+                <li class="list-group-item">
+                    <b>Safety Deposit:</b>
+                    <span th:text="|${item.getBail()}€|"></span>
+                </li>
+
+                <li class="list-group-item">
+                    <b>Location:</b>
+                    <span th:text="${item?.location}"></span>
+                </li>
+
+                <li class="list-group-item">
+                    <b>Supplier:</b>
+                    <span th:text="${item?.owner?.accountName}"></span>
+                </li>
+
+                <li class="list-group-item">
+                    <b>Ratings:</b>
+                    <span th:text="|${item?.owner?.totalRatings()}|"></span>
+                    <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
+                </li>
+
+                <li class="list-group-item">
+                    <b>Availability:</b>
+
+                    <style type="text/css">
+
+                        .jsCalendar tbody td.jsCalendar-selected {
+                            background-color: rgba(148, 0, 29, 0.71);
+                            border: unset;
+                        }
+                    </style>
+
+                    <div id="my-calendar" , class="jsCalendar"></div>
+
+                    <script th:inline="javascript">
+                        var calendar = document.getElementById("my-calendar");
+                        var myCalendar = jsCalendar.new({
+                            target: calendar,
+                            monthFormat: "month YYYY"
+                        });
+                    </script>
+
+                    <div th:each="contract : ${item.getChosenContracts(false)}">
+
+                        <script th:inline="javascript"
+                                th:with=
+                                        "start=${#temporals.format(contract.getStart(),'yyyy-MM-dd')},
+                      end=${#temporals.format(contract.getExpectedEnd(),'yyyy-MM-dd')}">
+                            var start = new Date([[${start}]]);
+                            var end = new Date([[${end}]]);
+
+                            for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
+                                myCalendar.select(
+                                    [date]);
+                            }
+
+                        </script>
+                    </div>
+
+
+                </li>
+
 
             </ul>
-            <div class="card-body">
-              <a th:href="|/item/details/${item.getId()}|"
-                 class="btn btn-outline-info btn-block">Details</a>
-              <a href="#" class="btn btn-outline-secondary btn-block">User Details</a>
+            <div class="card-footer bg-white text-center">
+                <a th:if="${ownItem} == false " href="#" class="btn btn-outline-secondary btn-block">User
+                    Details</a>
+                <a th:if="${ownItem} == false " class="btn btn-outline-success btn-block"
+                   th:href="|/offer/request/${item?.id}|">Request loan</a>
+                <a th:unless="${ownItem} == false " class="btn btn-outline-primary btn-block"
+                   th:href="|/offer/show/${item.getId()}|">Show Requests</a>
+                <a th:unless="${ownItem} == false "
+                   class="btn btn-outline-warning btn-block"
+                   th:href="|/item/edit/${item?.Id}|">Edit Item</a>
             </div>
-          </div>
         </div>
-      </div>
+
+        <div>
+            <b style="margin-left: 5rem;">Other Users who borrowed this were also intressted in:</b>
+            <div class="column">
+                <div class="col" th:each="item : ${recItems}">
+                    <div class="card border-dark" style="margin-left: 6rem;">
+
+                        <div th:if="${item?.imageFileName != null}">
+                            <img class="img-fluid"
+                                 th:src="@{${'/images/' + item?.imageFileName}}"/></div>
+                        <div th:if="${item?.imageFileName == null}">
+                            <img class="img-fluid" src="images/bike-dummy.png">
+                            <!--class="card-img-top">--></div>
+
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${item.getName()}">Item Name</h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+
+                            <li class="list-group-item">
+                                <b>Supplier:</b>
+                                <p th:text="|${item?.owner?.name}|"></p>
+                                <b>Rating:</b>
+                                <span th:text="|${item?.owner?.totalRatings()}|"></span>
+                                <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
+                            </li>
+
+                        </ul>
+                        <div class="card-body">
+                            <a th:href="|/item/details/${item.getId()}|"
+                               class="btn btn-outline-info btn-block">Details</a>
+                            <a href="#" class="btn btn-outline-secondary btn-block">User Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 
-
-  </div>
- 
 </div>
 </body>
 </html>
