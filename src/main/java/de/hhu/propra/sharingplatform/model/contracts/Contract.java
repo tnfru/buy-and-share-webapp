@@ -28,4 +28,6 @@ public abstract class Contract {
     Item item;
 
     public void pay(IPaymentApi paymentApi){}
+
+    public void prepare(IPaymentApi paymentApi){}
 }

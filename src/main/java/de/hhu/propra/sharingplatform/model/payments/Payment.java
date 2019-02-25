@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import lombok.Data;
 import lombok.ToString;
 
@@ -33,6 +34,13 @@ public class Payment {
         // used for jpa
     }
 
+    public Payment(int amount, String from, String to){
+        this.amount = amount;
+        this.proPayIdSender = from;
+        this.proPayIdRecipient = to;
+    }
 
-
+    public void pay(IPaymentApi paymentApi){
+        paymentApi.transferMoney(amount, proPayIdSender, proPayIdRecipient);
+    }
 }
