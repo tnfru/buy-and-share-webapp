@@ -6,6 +6,7 @@ import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Offer;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +23,12 @@ public class ContractService {
 
     final ContractRepo contractRepo;
 
-    final PaymentService paymentService;
+    final IPaymentService paymentService;
 
     final ConflictRepo conflictRepo;
 
     @Autowired
-    public ContractService(ContractRepo contractRepo, PaymentService paymentService,
+    public ContractService(ContractRepo contractRepo, IPaymentService paymentService,
                            ConflictRepo conflictRepo) {
         this.contractRepo = contractRepo;
         this.paymentService = paymentService;
@@ -36,8 +37,8 @@ public class ContractService {
 
     public void create(Offer offer) {
         Contract contract = new Contract(offer);
-        // -> Payment
-        contract.setPayment(paymentService.create(contract));
+        // -> payment
+        contract.setPayment(paymentService.createPayment(contract));
         contractRepo.save(contract);
     }
 
@@ -85,7 +86,7 @@ public class ContractService {
 
     public void calcPrice(long contractId) {
         Contract contract = contractRepo.findOneById(contractId);
-        paymentService.create(contract);
+        paymentService.createPayment(contract);
     }
 
     private boolean userIsBorrower(Contract contract, String accountName) {
