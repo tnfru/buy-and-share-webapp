@@ -84,7 +84,23 @@ public class ApiService implements IPaymentApi {
         createAccountOrAddMoney(proPayId, amount);
     }
 
-    private long reserveMoney(String proPayIdSender, String proPayIdRecipient, int amount) {
+    @Override
+    public void transferMoney(int amount, String fromAccount, String toAccount)
+                throws PaymentException {
+        List<String> path = new ArrayList<>();
+        path.add("account");
+        path.add(fromAccount);
+        path.add("transfer");
+        path.add(toAccount);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("amount", Integer.toString(amount));
+
+        buildRequest("POST", "http://" + host + ":8888/",
+            path, parameters);
+    }
+
+    @Override
+    public long reserveMoney(String proPayIdSender, String proPayIdRecipient, int amount) {
         List<String> pathVariables = new ArrayList<>();
         pathVariables.add("reservation");
         pathVariables.add("reserve");
