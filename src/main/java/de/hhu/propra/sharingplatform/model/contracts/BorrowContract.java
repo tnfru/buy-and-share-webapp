@@ -41,6 +41,11 @@ public class BorrowContract extends Contract {
     }
 
 
+    /**
+     * Called when Contrect is created. Reserves bail and payment.
+     *
+     * @param paymentApi api to reserve money
+     */
     @Override
     public void prepare(IPaymentApi paymentApi) {
         String from = borrower.getPropayId();
@@ -52,14 +57,32 @@ public class BorrowContract extends Contract {
         ((BorrowPayment) payment).reserve(paymentApi);
     }
 
+    /**
+     * Called when item owner when return is accepted.
+     *
+     * @param paymentApi
+     */
+
+
     public void freeBail(IPaymentApi paymentApi) {
 
     }
+
+
+    /**
+     * Called by admin if conflicts appear.
+     *
+     * @param paymentApi api for bail punishment.
+     */
 
     public void punishBail(IPaymentApi paymentApi) {
 
     }
 
+
+    /**
+     * Called when Item is returned. Sets the return date, calculates Price.
+     */
     public void returnItem() {
         realEnd = LocalDateTime.now();
         long timespan = Math.max(start.until(realEnd, ChronoUnit.DAYS) + 1, 0);
