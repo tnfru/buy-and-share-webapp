@@ -18,7 +18,8 @@ public class ItemService {
     private final UserService userService;
     private final ItemRentalRepo itemRentalRepo;
 
-    public ItemService(ItemRentalRepo itemRentalRepo, UserService userService, ImageService itemImageSaver) {
+    public ItemService(ItemRentalRepo itemRentalRepo, UserService userService,
+        ImageService itemImageSaver) {
         this.itemRentalRepo = itemRentalRepo;
         this.userService = userService;
         this.itemImageSaver = itemImageSaver;
@@ -32,7 +33,8 @@ public class ItemService {
 
         String imagefilename = "bike-dummy.png";
         if (itemRental.getImage() != null && itemRental.getImage().getSize() > 0) {
-            imagefilename = "itemRental-" + itemRental.getId() + "." + itemRental.getImageExtension();
+            imagefilename =
+                "itemRental-" + itemRental.getId() + "." + itemRental.getImageExtension();
             itemImageSaver.store(itemRental.getImage(), imagefilename);
         }
 

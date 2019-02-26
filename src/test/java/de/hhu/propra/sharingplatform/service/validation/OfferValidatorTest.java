@@ -59,7 +59,8 @@ public class OfferValidatorTest {
 
         contractRepo = mock(ContractRepo.class);
         when(contractRepo.findAllByItemRental(itemRental)).thenReturn(contractList);
-        when(contractRepo.findAllByItemRentalAndFinishedIsFalse(itemRental)).thenReturn(contractList);
+        when(contractRepo.findAllByItemRentalAndFinishedIsFalse(itemRental))
+            .thenReturn(contractList);
     }
 
 
@@ -73,7 +74,7 @@ public class OfferValidatorTest {
         start = LocalDateTime.now();
         end = LocalDateTime.now().plusDays(3);
     }
-    
+
     @Test
     public void periodIsNotAvailable() {
         alternativeSetUpTests();
@@ -137,7 +138,8 @@ public class OfferValidatorTest {
         when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(120);
 
         try {
-            OfferValidator.validate(itemRental, borrower, start, wrongEnd, paymentService, apiService);
+            OfferValidator.validate(itemRental, borrower, start, wrongEnd, paymentService,
+            apiService);
         } catch (ResponseStatusException responseException) {
             thrown = true;
             assertEquals("400 BAD_REQUEST \"End date needs to be after Start date\"",

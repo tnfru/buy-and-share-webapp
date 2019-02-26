@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
-public class ItemRental extends Item{
+public class ItemRental extends Item {
 
     private Integer bail;
     private Integer dailyRate;

@@ -24,7 +24,8 @@ public class PaymentService implements IPaymentService {
         int totalPrice = calculateTotalExpectedPrice(contract);
         User sender = contract.getBorrower();
         User recipient = contract.getItemRental().getOwner();
-        Payment payment = new Payment(sender, recipient, totalPrice, contract.getItemRental().getBail());
+        Payment payment = new Payment(sender, recipient, totalPrice,
+            contract.getItemRental().getBail());
 
         long id = apiService.reserveMoney(payment.getProPayIdSender(),
             payment.getProPayIdRecipient(), payment.getBail());
@@ -38,7 +39,8 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public boolean recipientSolvent(Contract contract) {
-        int totalAmount = contract.getItemRental().getBail() + calculateTotalExpectedPrice(contract);
+        int totalAmount =
+            contract.getItemRental().getBail() + calculateTotalExpectedPrice(contract);
         int available = apiService.getAccountBalanceLiquid(contract.getBorrower().getPropayId());
         return available >= totalAmount;
     }

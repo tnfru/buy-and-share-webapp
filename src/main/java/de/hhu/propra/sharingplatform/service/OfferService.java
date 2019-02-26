@@ -54,7 +54,8 @@ public class OfferService {
         offerRepo.save(offer);
     }
 
-    public void validate(ItemRental itemRental, User requester, LocalDateTime start, LocalDateTime end) {
+    public void validate(ItemRental itemRental, User requester, LocalDateTime start,
+        LocalDateTime end) {
         OfferValidator.validate(itemRental, requester, start, end, paymentService, apiService);
         OfferValidator.periodIsAvailable(contractRepo, itemRental, start, end);
     }

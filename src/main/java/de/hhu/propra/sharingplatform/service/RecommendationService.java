@@ -46,8 +46,8 @@ public class RecommendationService {
     }
 
     /**
-     * Looks for the best matches.
-     * If not enough are available by K-nearest neighbours random ones will be filled
+     * Looks for the best matches. If not enough are available by K-nearest neighbours random ones
+     * will be filled
      *
      * @param map to read itemRentals and values from
      * @return array List of best suggestions
@@ -73,7 +73,8 @@ public class RecommendationService {
     List<ItemRental> fillList(List<ItemRental> suggestions) {
         List<ItemRental> allItemRentals = (List<ItemRental>) itemRentalRepo.findAll();
         while (suggestions.size() < numberOfItems) {
-            ItemRental randomSuggestion = allItemRentals.get((int) (Math.random() * allItemRentals.size()));
+            ItemRental randomSuggestion = allItemRentals
+                .get((int) (Math.random() * allItemRentals.size()));
             if (!suggestions.contains(randomSuggestion)) {
                 suggestions.add(randomSuggestion);
             }
@@ -103,7 +104,8 @@ public class RecommendationService {
         return itemRentals;
     }
 
-    private void putBorrowedItems(Map<ItemRental, Integer> map, List<ItemRental> borrowedItemRentals) {
+    private void putBorrowedItems(Map<ItemRental, Integer> map,
+        List<ItemRental> borrowedItemRentals) {
         for (ItemRental borrowedItemRental : borrowedItemRentals) {
             map.put(borrowedItemRental, map.getOrDefault(borrowedItemRental, 1));
         }

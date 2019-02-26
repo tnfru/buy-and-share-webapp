@@ -30,11 +30,11 @@ public abstract class Item {
     private String location;
     private boolean deleted;
 
-    public Item(){
+    public Item() {
         // this is for jpa
     }
 
-    public Item(User owner){
+    public Item(User owner) {
         this.owner = owner;
     }
 
