@@ -1,25 +1,10 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.ImageService;
-import de.hhu.propra.sharingplatform.service.ItemService;
-import de.hhu.propra.sharingplatform.service.OfferService;
-import de.hhu.propra.sharingplatform.service.RecommendationService;
-import de.hhu.propra.sharingplatform.service.UserService;
-import java.util.Optional;
+import de.hhu.propra.sharingplatform.service.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +15,16 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ItemController.class)
@@ -287,7 +282,7 @@ public class ItemControllerTest {
         when(itemRepo.findById(3)).thenReturn(optI);
         when(itemRepo.findOneById(3)).thenReturn(item);
 
-        mvc.perform(get("/item/remove/3")
+        mvc.perform(post("/item/remove/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isForbidden());
 
@@ -307,7 +302,7 @@ public class ItemControllerTest {
         when(itemRepo.findById(3)).thenReturn(optI);
         when(itemRepo.findOneById(3)).thenReturn(item);
 
-        mvc.perform(get("/item/remove/3")
+        mvc.perform(post("/item/remove/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
 
