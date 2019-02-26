@@ -79,12 +79,12 @@ public class BorrowContract extends Contract {
     }
 
     @Override
-    public void pay(IPaymentApi iPaymentApi) {
-        borrowPayment.pay(iPaymentApi);
+    public void pay(IPaymentApi paymentApi) {
+        borrowPayment.pay(paymentApi);
     }
 
-    public void freeCharge(IPaymentApi iPaymentApi) {
-        borrowPayment.freeCharge(iPaymentApi);
+    public void freeCharge(IPaymentApi paymentApi) {
+        borrowPayment.freeCharge(paymentApi);
     }
 
 
