@@ -1,7 +1,9 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
+import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.ItemRental;
+import de.hhu.propra.sharingplatform.model.ItemSale;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
 import java.util.ArrayList;
@@ -16,81 +18,81 @@ public class ItemService {
 
     private ImageService itemImageSaver;
     private final UserService userService;
-    private final ItemRentalRepo itemRentalRepo;
+    private final ItemRepo itemRepo;
 
-    public ItemService(ItemRentalRepo itemRentalRepo, UserService userService,
-        ImageService itemImageSaver) {
-        this.itemRentalRepo = itemRentalRepo;
+    public ItemService(UserService userService,
+        ImageService itemImageSaver, ItemRepo itemRepo) {
         this.userService = userService;
         this.itemImageSaver = itemImageSaver;
+        this.itemRepo = itemRepo;
     }
 
-    public void persistItem(ItemRental itemRental, long userId) {
-        validateItem(itemRental);
+    public void persistItem(Item item, long userId) {
+        validateItem(item);
         User owner = userService.fetchUserById(userId);
-        itemRental.setOwner(owner);
-        itemRentalRepo.save(itemRental);
+        item.setOwner(owner);
+        itemRepo.save(item);
 
         String imagefilename = "bike-dummy.png";
-        if (itemRental.getImage() != null && itemRental.getImage().getSize() > 0) {
+        if (item.getImage() != null && item.getImage().getSize() > 0) {
             imagefilename =
-                "itemRental-" + itemRental.getId() + "." + itemRental.getImageExtension();
-            itemImageSaver.store(itemRental.getImage(), imagefilename);
+                "itemRental-" + item.getId() + "." + item.getImageExtension();
+            itemImageSaver.store(item.getImage(), imagefilename);
         }
 
-        itemRental.setImageFileName(imagefilename);
-        itemRentalRepo.save(itemRental);
+        item.setImageFileName(imagefilename);
+        itemRepo.save(item);
     }
 
     public void removeItem(long itemId, long userId) {
-        ItemRental itemRental = findIfPresent(itemId);
-        allowOnlyOwner(itemRental, userId);
+        Item item = findIfPresent(itemId);
+        allowOnlyOwner(item, userId);
 
-        if (userIsOwner(itemRental.getId(), userId)) {
-            itemRental.setDeleted(true);
-            itemRentalRepo.save(itemRental);
+        if (userIsOwner(item.getId(), userId)) {
+            item.setDeleted(true);
+            itemRepo.save(item);
         }
     }
 
-    private ItemRental findIfPresent(long itemId) {
-        Optional<ItemRental> optional = itemRentalRepo.findById(itemId);
+    private Item findIfPresent(long itemId) {
+        Optional<Item> optional = itemRepo.findById(itemId);
         if (!optional.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ItemRental not Found");
         }
         return optional.get();
     }
 
-    public ItemRental findItem(long itemId) {
-        ItemRental itemRental = findIfPresent(itemId);
-        if (itemRental.isDeleted()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This ItemRental was deleted");
+    public Item findItem(long itemId) {
+        Item item = findIfPresent(itemId);
+        if (item.isDeleted()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This Item was deleted");
         }
-        return itemRental;
+        return item;
     }
 
-    public void editItem(ItemRental newItemRental, long oldItemId, long userId) {
-        ItemRental oldItemRental = findItem(oldItemId);
+    public void editItem(Item newItem, long oldItemId, long userId) {
+        Item oldItemRental = findItem(oldItemId);
         allowOnlyOwner(oldItemRental, userId);
-        validateItem(newItemRental);
+        validateItem(newItem);
 
-        newItemRental.setOwner(oldItemRental.getOwner());
-        newItemRental.setId(oldItemRental.getId());
-        itemRentalRepo.save(newItemRental);
+        newItem.setOwner(oldItemRental.getOwner());
+        newItem.setId(oldItemRental.getId());
+        itemRepo.save(newItem);
     }
 
-    public void allowOnlyOwner(ItemRental itemRental, long userId) {
-        if (itemRental.getOwner().getId() != userId) {
+    public void allowOnlyOwner(Item item, long userId) {
+        if (item.getOwner().getId() != userId) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your ItemRental");
         }
     }
 
     public boolean userIsOwner(long itemId, long userId) {
-        ItemRental itemRental = findIfPresent(itemId);
-        return itemRental.getOwner().getId() == userId;
+        Item item = findIfPresent(itemId);
+        return item.getOwner().getId() == userId;
     }
 
-    public void validateItem(ItemRental itemRental) {
-        ItemValidator.validateItem(itemRental);
+    public void validateItem(Item item) {
+        ItemValidator.validateItem(item);
     }
 
     public List<String> searchKeywords(String search) {
@@ -112,15 +114,27 @@ public class ItemService {
         return keywords;
     }
 
-    public List<ItemRental> filter(List<String> keywords) {
+    public List<ItemSale> filterSale(List<String> keywords) {
         if (keywords == null || keywords.size() == 0) {
-            return (List<ItemRental>) itemRentalRepo.findAll();
+            return (List<ItemSale>) itemRepo.findAll();
         }
-        List<ItemRental> itemRentals = new ArrayList<>();
+        List<ItemSale> items = new ArrayList<>();
         for (String key : keywords) {
-            List<ItemRental> searching = itemRentalRepo.findAllByNameContainsIgnoreCase(key);
-            itemRentals.addAll(searching);
+            List<ItemSale> searching = itemRepo.findAllByNameContainsIgnoreCase(key);
+            items.addAll(searching);
         }
-        return itemRentals;
+        return items;
+    }
+
+    public List<ItemRental> filterRental(List<String> keywords) {
+        if (keywords == null || keywords.size() == 0) {
+            return (List<ItemRental>) itemRepo.findAll();
+        }
+        List<ItemRental> items = new ArrayList<>();
+        for (String key : keywords) {
+            List<ItemRental> searching = itemRepo.findAllByNameContainsIgnoreCase(key);
+            items.addAll(searching);
+        }
+        return items;
     }
 }
