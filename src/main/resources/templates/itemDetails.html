@@ -15,49 +15,49 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1 th:text="${item?.name}"></h1>
+    <h1 th:text="${itemRental?.name}"></h1>
 
     <div class="card-deck">
 
         <div class="card border-dark">
-            <div th:if="${item?.imageFileName != null}">
-                <img th:src="@{${'/images/' + item?.imageFileName}}" style="width: content-box;
+            <div th:if="${itemRental?.imageFileName != null}">
+                <img th:src="@{${'/images/' + itemRental?.imageFileName}}" style="width: content-box;
                      padding: 2rem;"
                      class="img-fluid"></div>
 
-            <div th:if="${item?.imageFileName == null}">
+            <div th:if="${itemRental?.imageFileName == null}">
                 <img src="/images/bike-dummy.png" style="width: content-box; padding: 2rem;"
                      class="img-fluid"/></div>
 
             <div class="card-body">
-                <h4 class="card-title" th:text="${item.getName()}">Item Name</h4>
-                <p class="card-text" th:text="${item.getDescription()}"></p>
+                <h4 class="card-title" th:text="${itemRental.getName()}">Item Name</h4>
+                <p class="card-text" th:text="${itemRental.getDescription()}"></p>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <b>Price per Day:</b>
-                    <span th:text="|${item.getPrice()}€|"></span>
+                    <span th:text="|${itemRental.getDailyRate()}€|"></span>
                 </li>
 
                 <li class="list-group-item">
                     <b>Safety Deposit:</b>
-                    <span th:text="|${item.getBail()}€|"></span>
+                    <span th:text="|${itemRental.getBail()}€|"></span>
                 </li>
 
                 <li class="list-group-item">
                     <b>Location:</b>
-                    <span th:text="${item?.location}"></span>
+                    <span th:text="${itemRental?.location}"></span>
                 </li>
 
                 <li class="list-group-item">
                     <b>Supplier:</b>
-                    <span th:text="${item?.owner?.accountName}"></span>
+                    <span th:text="${itemRental?.owner?.accountName}"></span>
                 </li>
 
                 <li class="list-group-item">
                     <b>Ratings:</b>
-                    <span th:text="|${item?.owner?.totalRatings()}|"></span>
-                    <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
+                    <span th:text="|${itemRental?.owner?.totalRatings()}|"></span>
+                    <span th:text="|(${itemRental?.owner?.getRating()}|"></span> &#128077;)
                 </li>
 
                 <li class="list-group-item">
@@ -73,7 +73,7 @@
                       });
                     </script>
 
-                    <div th:each="contract : ${item.getChosenContracts(false)}">
+                    <div th:each="contract : ${itemRental.getChosenContracts(false)}">
 
                         <script th:inline="javascript"
                                 th:with=
@@ -93,16 +93,16 @@
                 </li>
             </ul>
             <div class="card-footer bg-white text-center">
-                <a th:if="${ownItem} == false " th:href="|/user/${item.getOwner().getId()}|"
+                <a th:if="${ownItem} == false " th:href="|/user/${itemRental.getOwner().getId()}|"
                    class="btn btn-outline-secondary btn-block">User
                     Details</a>
                 <a th:if="${ownItem} == false " class="btn btn-outline-success btn-block"
-                   th:href="|/offer/request/${item?.id}|">Request loan</a>
+                   th:href="|/offer/request/${itemRental?.id}|">Request loan</a>
                 <a th:unless="${ownItem} == false " class="btn btn-outline-primary btn-block"
-                   th:href="|/offer/show/${item.getId()}|">Show Requests</a>
+                   th:href="|/offer/show/${itemRental.getId()}|">Show Requests</a>
                 <a th:unless="${ownItem} == false "
                    class="btn btn-outline-warning btn-block"
-                   th:href="|/item/edit/${item?.Id}|">Edit Item</a>
+                   th:href="|/itemRental/edit/${itemRental?.Id}|">Edit Item</a>
             </div>
         </div>
 
@@ -111,15 +111,15 @@
                 in:</b>
             <div class="column">
                 <br>
-                <div class="col" th:each="item : ${recItems}">
+                <div class="col" th:each="itemRental : ${recItems}">
                     <div class="card border-dark" style="margin-left: 6rem;">
 
                         <article class="photo">
                             <div style="text-align: center">
-                                <div th:if="${item?.imageFileName != null}">
+                                <div th:if="${itemRental?.imageFileName != null}">
                                     <img style="width: 200px; padding-top: 1rem;"
-                                         th:src="@{${'/images/' + item?.imageFileName}}"/></div>
-                                <div th:if="${item?.imageFileName == null}">
+                                         th:src="@{${'/images/' + itemRental?.imageFileName}}"/></div>
+                                <div th:if="${itemRental?.imageFileName == null}">
                                     <img class="img-fluid" src="/images/bike-dummy.png"
                                          style="width: 200px; padding-top: 1rem;"/>
                                 </div>
@@ -127,21 +127,21 @@
                         </article>
 
                         <div class="card-body">
-                            <h5 class="card-title" th:text="${item.getName()}">Item Name</h5>
+                            <h5 class="card-title" th:text="${itemRental.getName()}">Item Name</h5>
                         </div>
                         <ul class="list-group list-group-flush">
 
                             <li class="list-group-item">
                                 <b>Rating:</b>
-                                <span th:text="|${item?.owner?.totalRatings()}|"></span>
-                                <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
+                                <span th:text="|${itemRental?.owner?.totalRatings()}|"></span>
+                                <span th:text="|(${itemRental?.owner?.getRating()}|"></span> &#128077;)
                             </li>
 
                         </ul>
                         <div class="card-body">
-                            <a th:href="|/item/details/${item.getId()}|"
+                            <a th:href="|/itemRental/details/${itemRental.getId()}|"
                                class="btn btn-outline-info btn-block">Details</a>
-                            <a th:href="|/user/${item.getOwner().getId()}|"
+                            <a th:href="|/user/${itemRental.getOwner().getId()}|"
                                class="btn btn-outline-secondary btn-block">User Details</a>
                         </div>
                     </div>

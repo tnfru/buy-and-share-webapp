@@ -1,6 +1,6 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
@@ -34,9 +34,9 @@ public class OfferController {
 
     @GetMapping("/offer/request/{itemId}")
     public String gotOfferForm(@PathVariable long itemId, Model model) {
-        Item item = itemService.findItem(itemId);
-        model.addAttribute(item);
-        item.getOwner().getAccountName();
+        ItemRental itemRental = itemService.findItem(itemId);
+        model.addAttribute(itemRental);
+        itemRental.getOwner().getAccountName();
         return "offerRequest";
     }
 
@@ -52,7 +52,7 @@ public class OfferController {
     @GetMapping("/offer/show/{itemId}")
     public String showAllOffers(@PathVariable long itemId, Principal principal, Model model) {
         User user = userService.fetchUserByAccountName(principal.getName());
-        model.addAttribute("item", itemService.findItem(itemId));
+        model.addAttribute("itemRental", itemService.findItem(itemId));
         model.addAttribute("closedOffers",
             offerService.getItemOffers(itemId, user, true));
         model.addAttribute("openOffers",

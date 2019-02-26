@@ -1,25 +1,25 @@
 package de.hhu.propra.sharingplatform.service.validation;
 
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.ItemRental;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import static de.hhu.propra.sharingplatform.service.validation.Validator.validateName;
 
 public class ItemValidator {
-    public static void validateItem(Item item) {
+    public static void validateItem(ItemRental itemRental) {
 
-        if (!Validator.matchesDbGuidelines(item.getDescription())
-            || !Validator.isPrintable(item.getDescription())) {
+        if (!Validator.matchesDbGuidelines(itemRental.getDescription())
+            || !Validator.isPrintable(itemRental.getDescription())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Description");
         }
-        if (item.getBail() == null) {
+        if (itemRental.getBail() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Bail");
         }
-        if (item.getPrice() == null) {
+        if (itemRental.getDailyRate() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Price");
         }
-        validateName(item.getLocation(), "Invalid Location");
-        validateName(item.getName(), "Invalid Item Name");
+        validateName(itemRental.getLocation(), "Invalid Location");
+        validateName(itemRental.getName(), "Invalid ItemRental Name");
     }
 }

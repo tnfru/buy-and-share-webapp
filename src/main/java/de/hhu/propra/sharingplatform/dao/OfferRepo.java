@@ -8,11 +8,11 @@ import java.util.List;
 public interface OfferRepo extends CrudRepository<Offer, Long> {
     Offer findOneById(long id);
     
-    List<Offer> findAllByItemId(long itemId);
+    List<Offer> findAllByItemRentalId(long itemId);
 
-    List<Offer> findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(long itemId);
+    List<Offer> findAllByItemRentalIdAndAcceptIsFalseAndDeclineIsFalse(long itemId);
 
-    List<Offer> findAllByItemIdAndAcceptIsTrueOrDeclineIsTrue(long itemId);
+    List<Offer> findAllByItemRentalIdAndAcceptIsTrueOrDeclineIsTrue(long itemId);
 
-    List<Offer> findAllByItemIdAndDeclineIsFalseAndAcceptIsFalse(long itemId);
+    List<Offer> findAllByItemRentalIdAndDeclineIsFalseAndAcceptIsFalse(long itemId);
 }

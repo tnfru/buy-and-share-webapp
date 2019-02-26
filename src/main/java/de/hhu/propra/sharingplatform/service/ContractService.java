@@ -90,7 +90,7 @@ public class ContractService {
     }
 
     private boolean userIsContractOwner(Contract contract, String userName) {
-        return contract.getItem().getOwner().getAccountName().equals(userName)
+        return contract.getItemRental().getOwner().getAccountName().equals(userName)
             || contract.getBorrower().getAccountName().equals(userName);
     }
 

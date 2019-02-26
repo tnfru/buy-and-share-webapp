@@ -43,7 +43,7 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "owner")
-    private List<Item> items = new ArrayList<>();
+    private List<ItemRental> itemRentals = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
@@ -95,16 +95,16 @@ public class User {
     }
 
     /**
-     * @return all items the user has. Items that are marked as removed are not returned
+     * @return all itemRentals the user has. Items that are marked as removed are not returned
      */
     public Collection getItemsExcludeRemoved() {
-        ArrayList<Item> notRemovedItems = new ArrayList<>();
-        for (Item item : items) {
-            if (!item.isDeleted()) {
-                notRemovedItems.add(item);
+        ArrayList<ItemRental> notRemovedItemRentals = new ArrayList<>();
+        for (ItemRental itemRental : itemRentals) {
+            if (!itemRental.isDeleted()) {
+                notRemovedItemRentals.add(itemRental);
             }
         }
-        return notRemovedItems;
+        return notRemovedItemRentals;
     }
 
     public List<Contract> getChosenContracts(boolean finished) {

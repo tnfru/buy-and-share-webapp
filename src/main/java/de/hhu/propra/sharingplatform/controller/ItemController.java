@@ -1,6 +1,6 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
@@ -32,34 +32,34 @@ public class ItemController {
         this.recommendationService = recommendationService;
     }
 
-    @GetMapping("/item/details/{itemId}")
+    @GetMapping("/itemRental/details/{itemId}")
     public String detailPage(Model model, @PathVariable long itemId, Principal principal) {
-        Item item = itemService.findItem(itemId);
-        model.addAttribute("item", item);
+        ItemRental itemRental = itemService.findItem(itemId);
+        model.addAttribute("itemRental", itemRental);
         model.addAttribute("user", userService.fetchUserByAccountName(principal.getName()));
-        boolean ownItem = itemService.userIsOwner(item.getId(),
+        boolean ownItem = itemService.userIsOwner(itemRental.getId(),
             userService.fetchUserIdByAccountName(principal.getName()));
         model.addAttribute("ownItem", ownItem);
         model.addAttribute("recItems", recommendationService.findRecommendations(itemId));
         return "itemDetails";
     }
 
-    @GetMapping("/item/new")
+    @GetMapping("/itemRental/new")
     public String newItem(Model model, Principal principal) {
         User user = userService.fetchUserByAccountName(principal.getName());
-        model.addAttribute("item", new Item(user));
+        model.addAttribute("itemRental", new ItemRental(user));
         model.addAttribute("user", user);
         return "itemForm";
     }
 
-    @PostMapping("/item/new")
-    public String inputItemData(Model model, Item item, Principal principal) {
+    @PostMapping("/itemRental/new")
+    public String inputItemData(Model model, ItemRental itemRental, Principal principal) {
         itemService
-            .persistItem(item, userService.fetchUserIdByAccountName(principal.getName()));
+            .persistItem(itemRental, userService.fetchUserIdByAccountName(principal.getName()));
         return "redirect:/user/account/";
     }
 
-    @GetMapping("/item/remove/{itemId}")
+    @GetMapping("/itemRental/remove/{itemId}")
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
         Principal principal) {
         itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
@@ -67,23 +67,23 @@ public class ItemController {
         return "redirect:/user/account/";
     }
 
-    @GetMapping("/item/edit/{itemId}")
+    @GetMapping("/itemRental/edit/{itemId}")
     public String editItem(Model model, @PathVariable long itemId, Principal principal) {
-        Item item = itemService.findItem(itemId);
-        model.addAttribute("item", item);
+        ItemRental itemRental = itemService.findItem(itemId);
+        model.addAttribute("itemRental", itemRental);
         model.addAttribute("itemId", itemId);
         long userId = userService.fetchUserIdByAccountName(principal.getName());
         model.addAttribute("userId", userId);
-        itemService.allowOnlyOwner(item, userId);
+        itemService.allowOnlyOwner(itemRental, userId);
         return "itemForm";
     }
 
-    @PostMapping("/item/edit/{itemId}")
-    public String editItemData(Model model, Item item,
+    @PostMapping("/itemRental/edit/{itemId}")
+    public String editItemData(Model model, ItemRental itemRental,
         @PathVariable long itemId,
         Principal principal) {
         long userId = userService.fetchUserIdByAccountName(principal.getName());
-        itemService.editItem(item, itemId, userId);
+        itemService.editItem(itemRental, itemId, userId);
         return "redirect:/user/account";
     }
 }

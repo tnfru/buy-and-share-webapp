@@ -1,11 +1,8 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
 import de.hhu.propra.sharingplatform.model.Contract;
-import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Payment;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 public interface IPaymentService {
@@ -37,14 +34,14 @@ public interface IPaymentService {
 
     /**
      * Frees the reservation of the bail.
-     * Is called when a contract ends and Item owner accepts the return.
+     * Is called when a contract ends and ItemRental owner accepts the return.
      *
      * @param contract contract
      */
     void freeBailReservation(Contract contract);
 
     /**
-     * Transfers the bail to the item owner.
+     * Transfers the bail to the itemRental owner.
      *
      * @param contract contract
      */

@@ -23,7 +23,7 @@ public class Contract {
     private Payment payment;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private Item item;
+    private ItemRental itemRental;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
         mappedBy = "contract")
@@ -42,7 +42,7 @@ public class Contract {
 
     public Contract(Offer offer) {
         this.borrower = offer.getBorrower();
-        this.item = offer.getItem();
+        this.itemRental = offer.getItemRental();
         this.expectedEnd = offer.getEnd();
         this.start = offer.getStart();
     }

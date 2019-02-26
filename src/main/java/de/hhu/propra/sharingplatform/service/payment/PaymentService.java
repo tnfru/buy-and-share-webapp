@@ -2,12 +2,10 @@ package de.hhu.propra.sharingplatform.service.payment;
 
 import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.model.Contract;
-import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Payment;
 import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Service
@@ -25,8 +23,8 @@ public class PaymentService implements IPaymentService {
     public Payment createPayment(Contract contract) {
         int totalPrice = calculateTotalExpectedPrice(contract);
         User sender = contract.getBorrower();
-        User recipient = contract.getItem().getOwner();
-        Payment payment = new Payment(sender, recipient, totalPrice, contract.getItem().getBail());
+        User recipient = contract.getItemRental().getOwner();
+        Payment payment = new Payment(sender, recipient, totalPrice, contract.getItemRental().getBail());
 
         long id = apiService.reserveMoney(payment.getProPayIdSender(),
             payment.getProPayIdRecipient(), payment.getBail());
@@ -40,7 +38,7 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public boolean recipientSolvent(Contract contract) {
-        int totalAmount = contract.getItem().getBail() + calculateTotalExpectedPrice(contract);
+        int totalAmount = contract.getItemRental().getBail() + calculateTotalExpectedPrice(contract);
         int available = apiService.getAccountBalanceLiquid(contract.getBorrower().getPropayId());
         return available >= totalAmount;
     }
@@ -70,11 +68,11 @@ public class PaymentService implements IPaymentService {
 
     private int calculateTotalExpectedPrice(Contract contract) {
         long timePassed = contract.getStart().until(contract.getExpectedEnd(), ChronoUnit.DAYS) + 1;
-        return (int) Math.ceil(timePassed * contract.getItem().getPrice());
+        return (int) Math.ceil(timePassed * contract.getItemRental().getDailyRate());
     }
 
     private int calculateTotalActualPrice(Contract contract) {
         long timePassed = contract.getStart().until(contract.getRealEnd(), ChronoUnit.DAYS) + 1;
-        return Math.max((int) Math.ceil(timePassed * contract.getItem().getPrice()), 0);
+        return Math.max((int) Math.ceil(timePassed * contract.getItemRental().getDailyRate()), 0);
     }
 }

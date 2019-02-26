@@ -12,7 +12,7 @@ import lombok.ToString;
 
 @Data
 @Entity
-@ToString(exclude = {"item", "borrower"})
+@ToString(exclude = {"itemRental", "borrower"})
 public class Offer {
 
     @Id
@@ -20,7 +20,7 @@ public class Offer {
     private Long id;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private Item item;
+    private ItemRental itemRental;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User borrower;
@@ -35,11 +35,11 @@ public class Offer {
         // used for jpa
     }
 
-    public Offer(Item item, User borrower, LocalDateTime start, LocalDateTime end) {
+    public Offer(ItemRental itemRental, User borrower, LocalDateTime start, LocalDateTime end) {
         this.setStart(start);
         this.setEnd(end);
 
-        this.setItem(item);
+        this.setItemRental(itemRental);
         this.setBorrower(borrower);
 
         this.accept = false;

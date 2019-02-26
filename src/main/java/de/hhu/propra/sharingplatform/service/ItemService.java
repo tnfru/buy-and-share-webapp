@@ -1,7 +1,7 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.ItemRepo;
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
+import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
 import java.util.ArrayList;
@@ -16,79 +16,79 @@ public class ItemService {
 
     private ImageService itemImageSaver;
     private final UserService userService;
-    private final ItemRepo itemRepo;
+    private final ItemRentalRepo itemRentalRepo;
 
-    public ItemService(ItemRepo itemRepo, UserService userService, ImageService itemImageSaver) {
-        this.itemRepo = itemRepo;
+    public ItemService(ItemRentalRepo itemRentalRepo, UserService userService, ImageService itemImageSaver) {
+        this.itemRentalRepo = itemRentalRepo;
         this.userService = userService;
         this.itemImageSaver = itemImageSaver;
     }
 
-    public void persistItem(Item item, long userId) {
-        validateItem(item);
+    public void persistItem(ItemRental itemRental, long userId) {
+        validateItem(itemRental);
         User owner = userService.fetchUserById(userId);
-        item.setOwner(owner);
-        itemRepo.save(item);
+        itemRental.setOwner(owner);
+        itemRentalRepo.save(itemRental);
 
         String imagefilename = "bike-dummy.png";
-        if (item.getImage() != null && item.getImage().getSize() > 0) {
-            imagefilename = "item-" + item.getId() + "." + item.getImageExtension();
-            itemImageSaver.store(item.getImage(), imagefilename);
+        if (itemRental.getImage() != null && itemRental.getImage().getSize() > 0) {
+            imagefilename = "itemRental-" + itemRental.getId() + "." + itemRental.getImageExtension();
+            itemImageSaver.store(itemRental.getImage(), imagefilename);
         }
 
-        item.setImageFileName(imagefilename);
-        itemRepo.save(item);
+        itemRental.setImageFileName(imagefilename);
+        itemRentalRepo.save(itemRental);
     }
 
     public void removeItem(long itemId, long userId) {
-        Item item = findIfPresent(itemId);
-        allowOnlyOwner(item, userId);
+        ItemRental itemRental = findIfPresent(itemId);
+        allowOnlyOwner(itemRental, userId);
 
-        if (userIsOwner(item.getId(), userId)) {
-            item.setDeleted(true);
-            itemRepo.save(item);
+        if (userIsOwner(itemRental.getId(), userId)) {
+            itemRental.setDeleted(true);
+            itemRentalRepo.save(itemRental);
         }
     }
 
-    private Item findIfPresent(long itemId) {
-        Optional<Item> optional = itemRepo.findById(itemId);
+    private ItemRental findIfPresent(long itemId) {
+        Optional<ItemRental> optional = itemRentalRepo.findById(itemId);
         if (!optional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not Found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ItemRental not Found");
         }
         return optional.get();
     }
 
-    public Item findItem(long itemId) {
-        Item item = findIfPresent(itemId);
-        if (item.isDeleted()) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This Item was deleted");
+    public ItemRental findItem(long itemId) {
+        ItemRental itemRental = findIfPresent(itemId);
+        if (itemRental.isDeleted()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This ItemRental was deleted");
         }
-        return item;
+        return itemRental;
     }
 
-    public void editItem(Item newItem, long oldItemId, long userId) {
-        Item oldItem = findItem(oldItemId);
-        allowOnlyOwner(oldItem, userId);
-        validateItem(newItem);
+    public void editItem(ItemRental newItemRental, long oldItemId, long userId) {
+        ItemRental oldItemRental = findItem(oldItemId);
+        allowOnlyOwner(oldItemRental, userId);
+        validateItem(newItemRental);
 
-        newItem.setOwner(oldItem.getOwner());
-        newItem.setId(oldItem.getId());
-        itemRepo.save(newItem);
+        newItemRental.setOwner(oldItemRental.getOwner());
+        newItemRental.setId(oldItemRental.getId());
+        itemRentalRepo.save(newItemRental);
     }
 
-    public void allowOnlyOwner(Item item, long userId) {
-        if (item.getOwner().getId() != userId) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your Item");
+    public void allowOnlyOwner(ItemRental itemRental, long userId) {
+        if (itemRental.getOwner().getId() != userId) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your ItemRental");
         }
     }
 
     public boolean userIsOwner(long itemId, long userId) {
-        Item item = findIfPresent(itemId);
-        return item.getOwner().getId() == userId;
+        ItemRental itemRental = findIfPresent(itemId);
+        return itemRental.getOwner().getId() == userId;
     }
 
-    public void validateItem(Item item) {
-        ItemValidator.validateItem(item);
+    public void validateItem(ItemRental itemRental) {
+        ItemValidator.validateItem(itemRental);
     }
 
     public List<String> searchKeywords(String search) {
@@ -110,15 +110,15 @@ public class ItemService {
         return keywords;
     }
 
-    public List<Item> filter(List<String> keywords) {
+    public List<ItemRental> filter(List<String> keywords) {
         if (keywords == null || keywords.size() == 0) {
-            return (List<Item>) itemRepo.findAll();
+            return (List<ItemRental>) itemRentalRepo.findAll();
         }
-        List<Item> items = new ArrayList<>();
+        List<ItemRental> itemRentals = new ArrayList<>();
         for (String key : keywords) {
-            List<Item> searching = itemRepo.findAllByNameContainsIgnoreCase(key);
-            items.addAll(searching);
+            List<ItemRental> searching = itemRentalRepo.findAllByNameContainsIgnoreCase(key);
+            itemRentals.addAll(searching);
         }
-        return items;
+        return itemRentals;
     }
 }

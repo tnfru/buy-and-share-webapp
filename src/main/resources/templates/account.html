@@ -14,7 +14,7 @@
                    href="#v-pills-ownItems"
                    role="tab" aria-controls="v-pills-messages" aria-selected="false">Own Items</a>
                 <a class="nav-link" id="v-pills-borrowed-tab" data-toggle="pill"
-                   href="#v-pills-borrowedItems"
+                   href="#v-pills-borrowedItemRentals"
                    role="tab" aria-controls="v-borrowed-tab" aria-selected="false">Borrowed
                     Items</a>
                 <a class="nav-link" id="v-pills-lent-tab" data-toggle="pill"
@@ -83,40 +83,40 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="item : ${user.getItemsExcludeRemoved()}">
-                            <td th:text="${item.getName()}"> Test Name</td>
-                            <td th:text="${item.getPrice()}"> 33</td>
-                            <td th:text="${item.getBail()}"> 333</td>
+                        <tr th:each="itemRental : ${user.getItemsExcludeRemoved()}">
+                            <td th:text="${itemRental.getName()}"> Test Name</td>
+                            <td th:text="${itemRental.getDailyRate()}"> 33</td>
+                            <td th:text="${itemRental.getBail()}"> 333</td>
                             <td>
-                                <a th:href="|/offer/show/${item.getId()}|" class="btn-primary">
+                                <a th:href="|/offer/show/${itemRental.getId()}|" class="btn-primary">
                                     <button type="button" class="btn btn-primary btn-sm"
-                                            th:if="${item.getActiveOffers()} > 0">
+                                            th:if="${itemRental.getActiveOffers()} > 0">
                                         Offers
                                         <span class="badge badge-light"
-                                              th:text="${item.getActiveOffers()}"></span>
+                                              th:text="${itemRental.getActiveOffers()}"></span>
                                     </button>
                                     <button type="button" class="btn btn-secondary btn-sm"
-                                            th:if="${item.getActiveOffers()} == 0">
+                                            th:if="${itemRental.getActiveOffers()} == 0">
                                         Offers
                                         <span class="badge badge-light"
-                                              th:text="${item.getActiveOffers()}"></span>
+                                              th:text="${itemRental.getActiveOffers()}"></span>
                                     </button>
                                 </a>
                             </td>
                             </td>
                             <td> Is Conflict?</td>
                             <td>
-                                <a th:href="|/item/details/${item.getId()}|"
+                                <a th:href="|/itemRental/details/${itemRental.getId()}|"
                                    class="btn btn-primary btn-sm">Details</a>
-                                <a th:href="|/item/remove/${item.getId()}|"
+                                <a th:href="|/itemRental/remove/${itemRental.getId()}|"
                                    class="btn btn-danger btn-sm">Remove</a>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                    <a class="btn btn-primary" href="/item/new">New Item</a>
+                    <a class="btn btn-primary" href="/itemRental/new">New Item</a>
                 </div>
-                <div class="tab-pane fade" id="v-pills-borrowedItems" role="tabpanel"
+                <div class="tab-pane fade" id="v-pills-borrowedItemRentals" role="tabpanel"
                      aria-labelledby="v-pills-messages-tab">
                     <table class="table table-striped">
                         <thead>
@@ -134,9 +134,9 @@
                         </thead>
                         <tbody>
                         <tr th:each="con : ${user.getChosenContracts(false)}">
-                            <td th:text="${con.getItem().getName()}"> Item Name</td>
-                            <td th:text="${con.getItem().getPrice()}"> Item Price</td>
-                            <td th:text="${con.getItem().getBail()}"> Item Bail</td>
+                            <td th:text="${con.getItemRental().getName()}"> Item Name</td>
+                            <td th:text="${con.getItemRental().getDailyRate()}"> Item Price</td>
+                            <td th:text="${con.getItemRental().getBail()}"> Item Bail</td>
                             <td th:text="${con.getStart()}"> Start Date</td>
                             <td th:text="${con.getExpectedEnd()}"> Expected End Date</td>
                             <td th:if="${con.getConflicts().size()} > 0 ">
@@ -194,9 +194,9 @@
                                 </thead>
                                 <tbody>
                                 <tr th:each="con : ${user.getChosenContracts(true)}">
-                                    <td th:text="${con.getItem().getName()}"> Item Name</td>
-                                    <td th:text="${con.getItem().getPrice()}"> Item Price</td>
-                                    <td th:text="${con.getItem().getBail()}"> Item Bail</td>
+                                    <td th:text="${con.getItemRental().getName()}"> Item Name</td>
+                                    <td th:text="${con.getItemRental().getDailyRate()}"> Item Price</td>
+                                    <td th:text="${con.getItemRental().getBail()}"> Item Bail</td>
                                     <td th:text="${con.getStart()}"> Contract Start Date</td>
                                     <td th:text="${con.getExpectedEnd()}"> Contract Expected End
                                         Date
@@ -236,12 +236,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <div th:each="item : ${user.getItems()}">
-                            <tr th:each="con : ${item.getChosenContracts(false)}">
+                        <div th:each="itemRental : ${user.getItemRentals()}">
+                            <tr th:each="con : ${itemRental.getChosenContracts(false)}">
                                 <td th:text="${con.getBorrower().getName()}">Borrowed by</td>
-                                <td th:text="${con.getItem().getName()}">Item Name</td>
-                                <td th:text="${con.getItem().getPrice()}"> Item Price</td>
-                                <td th:text="${con.getItem().getBail()}"> Item Bail</td>
+                                <td th:text="${con.getItemRental().getName()}">Item Name</td>
+                                <td th:text="${con.getItemRental().getDailyRate()}"> Item Price</td>
+                                <td th:text="${con.getItemRental().getBail()}"> Item Bail</td>
                                 <td th:text="${con.getStart()}"> Contract Start Date</td>
                                 <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date
                                 </td>
@@ -296,13 +296,13 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <div th:each="item : ${user.getItems()}">
-                                    <tr th:each="con : ${item.getChosenContracts(true)}">
+                                <div th:each="itemRental : ${user.getItemRentals()}">
+                                    <tr th:each="con : ${itemRental.getChosenContracts(true)}">
                                         <td th:text="${con.getBorrower().getName()}">Borrowed by
                                         </td>
-                                        <td th:text="${con.getItem().getName()}">Item Name</td>
-                                        <td th:text="${con.getItem().getPrice()}"> Item Price</td>
-                                        <td th:text="${con.getItem().getBail()}"> Item Bail</td>
+                                        <td th:text="${con.getItemRental().getName()}">Item Name</td>
+                                        <td th:text="${con.getItemRental().getDailyRate()}"> Item Price</td>
+                                        <td th:text="${con.getItemRental().getBail()}"> Item Bail</td>
                                         <td th:text="${con.getStart()}"> Contract Start Date</td>
                                         <td th:text="${con.getExpectedEnd()}"> Contract Expected End
                                             Date
@@ -342,9 +342,9 @@
                         </thead>
                         <tbody>
                         <tr th:each="offer : ${user.getOffers()}">
-                            <td th:text="${offer.getItem().getName()}"> Test Name</td>
-                            <td th:text="${offer.getItem().getPrice()}"> 33</td>
-                            <td th:text="${offer.getItem().getBail()}"> 333</td>
+                            <td th:text="${offer.getItemRental().getName()}"> Test Name</td>
+                            <td th:text="${offer.getItemRental().getDailyRate()}"> 33</td>
+                            <td th:text="${offer.getItemRental().getBail()}"> 333</td>
                             <td th:text="${#temporals.format(offer.getStart(), 'dd-MM-yyyy HH:mm')}"></td>
                             <td th:text="${#temporals.format(offer.getEnd(), 'dd-MM-yyyy HH:mm')}"></td>
                             <td th:if="${offer.isAccept()} == true">
@@ -357,9 +357,9 @@
                                 <span class="badge badge-info">Pending</span>
                             </td>
                             <td>
-                                <a th:href="|/user/${offer.getItem().getOwner().getId()}|"
+                                <a th:href="|/user/${offer.getItemRental().getOwner().getId()}|"
                                    class="btn btn-sm btn-primary btn-block">
-                                    <span th:text="${offer.getItem().getOwner().getAccountName()}"></span>
+                                    <span th:text="${offer.getItemRental().getOwner().getAccountName()}"></span>
                                 </a>
                             </td>
                             <td>
@@ -371,8 +371,8 @@
                     </table>
                 </div>
                 <div class="tab-pane fade" id="v-pills-userServices" role="tabpanel"
-                     aria-labelledby="v-pills-newItem-tab">
-                    <a class="btn btn-primary" href="/item/new">New Item</a>
+                     aria-labelledby="v-pills-newItemRental-tab">
+                    <a class="btn btn-primary" href="/itemRental/new">New Item</a>
                     <br>
                     <a style="margin-top:1em; " class="btn btn-info" href="/user/edit">Edit
                         Profile</a>
@@ -381,7 +381,7 @@
                         Password</a>
                 </div>
                 <div th:if="${user.getRole().equals('admin')}" class="tab-pane fade" id="v-pills-admin" role="tabpanel"
-                     aria-labelledby="v-pills-newItem-tab">
+                     aria-labelledby="v-pills-newItemRental-tab">
                     <a class="btn btn-primary" href="/conflicts/show">View conflicts</a>
                     <br>
                 </div>

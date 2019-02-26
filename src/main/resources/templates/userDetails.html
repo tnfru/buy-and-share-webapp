@@ -49,13 +49,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="item : ${user.getItemsExcludeRemoved()}">
-                        <td th:text="${item.getName()}"></td>
-                        <td th:text="${item.getPrice()}"></td>
-                        <td th:text="${item.getBail()}"></td>
-                        <td th:text="${item.getLocation()}"></td>
+                    <tr th:each="itemRental : ${user.getItemsExcludeRemoved()}">
+                        <td th:text="${itemRental.getName()}"></td>
+                        <td th:text="${itemRental.getDailyRate()}"></td>
+                        <td th:text="${itemRental.getBail()}"></td>
+                        <td th:text="${itemRental.getLocation()}"></td>
                         <td>
-                            <a th:href="|/item/details/${item.getId()}|"
+                            <a th:href="|/itemRental/details/${itemRental.getId()}|"
                                class="btn btn-primary btn-sm">Item Details</a>
                         </td>
                     </tr>

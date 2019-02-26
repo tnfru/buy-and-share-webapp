@@ -1,10 +1,10 @@
 package de.hhu.propra.sharingplatform.faker;
 
 import com.github.javafaker.Faker;
-import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.payment.ApiService;
@@ -30,7 +30,7 @@ public class DataFaker implements ServletContextInitializer {
 
     private final UserRepo userRepo;
 
-    private final ItemRepo itemRepo;
+    private final ItemRentalRepo itemRentalRepo;
 
     private final OfferRepo offerRepo;
 
@@ -43,12 +43,12 @@ public class DataFaker implements ServletContextInitializer {
     private Faker faker;
 
     @Autowired
-    public DataFaker(Environment env, UserRepo userRepo, ItemRepo itemRepo,
+    public DataFaker(Environment env, UserRepo userRepo, ItemRentalRepo itemRentalRepo,
         OfferRepo offerRepo, OfferService offerService,
         IPaymentApi apiService) {
         this.env = env;
         this.userRepo = userRepo;
-        this.itemRepo = itemRepo;
+        this.itemRentalRepo = itemRentalRepo;
         this.offerRepo = offerRepo;
         this.offerService = offerService;
         this.apiService = apiService;
@@ -57,12 +57,12 @@ public class DataFaker implements ServletContextInitializer {
         this.faker = new Faker(Locale.ENGLISH, rnd);
     }
 
-    public DataFaker(long seed, Environment env, UserRepo userRepo, ItemRepo itemRepo,
+    public DataFaker(long seed, Environment env, UserRepo userRepo, ItemRentalRepo itemRentalRepo,
         OfferRepo offerRepo, OfferService offerService,
         ApiService apiService) {
         this.env = env;
         this.userRepo = userRepo;
-        this.itemRepo = itemRepo;
+        this.itemRentalRepo = itemRentalRepo;
         this.offerRepo = offerRepo;
         this.offerService = offerService;
         this.apiService = apiService;
@@ -88,14 +88,14 @@ public class DataFaker implements ServletContextInitializer {
         users.add(userFaker.createAdmin());
 
         log.info("    Creating Items...");
-        List<Item> items = new ArrayList<>();
+        List<ItemRental> itemRentals = new ArrayList<>();
         for (int i = 0; i < (dataSize / 8); i++) {
             User user = getRandomUser(users);
-            itemFaker.createItems(items, user, dataSize / 15);
+            itemFaker.createItems(itemRentals, user, dataSize / 15);
         }
 
         log.info("    Persist Items...");
-        itemRepo.saveAll(items);
+        itemRentalRepo.saveAll(itemRentals);
         log.info("    Persist Users...");
         userRepo.saveAll(users);
 
@@ -107,13 +107,13 @@ public class DataFaker implements ServletContextInitializer {
         log.info("    Creating Offers...");
         for (int i = 0; i < (dataSize / 3); i++) {
             User user = getRandomUser(users);
-            Item item = getRandomItem(items);
+            ItemRental itemRental = getRandomItem(itemRentals);
 
             LocalDateTime start = timeFaker.rndTime();
             LocalDateTime end = timeFaker.rndTimeAfter(start);
 
-            if (item.getOwner().getId() != user.getId()) {
-                offerService.create(item.getId(), user, start, end);
+            if (itemRental.getOwner().getId() != user.getId()) {
+                offerService.create(itemRental.getId(), user, start, end);
             } else {
                 i--;
             }
@@ -125,9 +125,9 @@ public class DataFaker implements ServletContextInitializer {
             Offer offer = getRandomOffer(offers);
             if (!(offer.isAccept() || offer.isDecline())) {
                 if (faker.number().numberBetween(0, 1) == 1) {
-                    offerService.acceptOffer(offer.getId(), offer.getItem().getOwner());
+                    offerService.acceptOffer(offer.getId(), offer.getItemRental().getOwner());
                 } else {
-                    offerService.declineOffer(offer.getId(), offer.getItem().getOwner());
+                    offerService.declineOffer(offer.getId(), offer.getItemRental().getOwner());
                 }
             } else {
                 i--;
@@ -141,8 +141,8 @@ public class DataFaker implements ServletContextInitializer {
         return users.get(faker.number().numberBetween(0, users.size() - 1));
     }
 
-    private Item getRandomItem(List<Item> items) {
-        return items.get(faker.number().numberBetween(0, items.size() - 1));
+    private ItemRental getRandomItem(List<ItemRental> itemRentals) {
+        return itemRentals.get(faker.number().numberBetween(0, itemRentals.size() - 1));
     }
 
     private Offer getRandomOffer(List<Offer> offers) {

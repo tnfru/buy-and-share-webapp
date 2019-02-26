@@ -1,6 +1,6 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import java.security.Principal;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class SharingPlatformController {
 
     @Autowired
-    private ItemRepo itemRepo;
+    private ItemRentalRepo itemRentalRepo;
 
     @Autowired
     private ItemService itemService;
@@ -27,7 +27,7 @@ public class SharingPlatformController {
             user = new User();
         }
         model.addAttribute("user", user);
-        model.addAttribute("items", itemRepo.findAll());
+        model.addAttribute("itemRentals", itemRentalRepo.findAll());
         return "mainpage";
     }
 
@@ -40,7 +40,7 @@ public class SharingPlatformController {
         List<String> keywords = itemService.searchKeywords(search);
         model.addAttribute("user", user);
         model.addAttribute("keywords", keywords);
-        model.addAttribute("items", itemService.filter(keywords));
+        model.addAttribute("itemRentals", itemService.filter(keywords));
         return "mainpage";
     }
 }

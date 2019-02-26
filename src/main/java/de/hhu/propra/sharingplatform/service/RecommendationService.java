@@ -1,9 +1,9 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
-import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
 import de.hhu.propra.sharingplatform.model.Contract;
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,29 +18,29 @@ public class RecommendationService {
 
     private final ContractRepo contractRepo;
 
-    private final ItemRepo itemRepo;
+    private final ItemRentalRepo itemRentalRepo;
 
     private int numberOfItems;
 
     @Autowired
-    public RecommendationService(ContractRepo contractRepo, ItemRepo itemRepo) {
+    public RecommendationService(ContractRepo contractRepo, ItemRentalRepo itemRentalRepo) {
         this.contractRepo = contractRepo;
-        this.itemRepo = itemRepo;
+        this.itemRentalRepo = itemRentalRepo;
         this.numberOfItems = 4;
     }
 
     /**
      * uses the users who bought x also bought y schema.
      *
-     * @param itemId item to find recommendations for
-     * @return returns list of items
+     * @param itemId itemRental to find recommendations for
+     * @return returns list of itemRentals
      */
 
-    public List<Item> findRecommendations(long itemId) {
-        Item item = itemRepo.findOneById(itemId);
-        List<Contract> contracts = contractRepo.findAllByItem(item);
+    public List<ItemRental> findRecommendations(long itemId) {
+        ItemRental itemRental = itemRentalRepo.findOneById(itemId);
+        List<Contract> contracts = contractRepo.findAllByItemRental(itemRental);
         List<User> otherBorrowers = findOtherBorrowers(contracts);
-        Map<Item, Integer> map = fillMap(otherBorrowers);
+        Map<ItemRental, Integer> map = fillMap(otherBorrowers);
 
         return findBestItems(map, itemId);
     }
@@ -49,15 +49,15 @@ public class RecommendationService {
      * Looks for the best matches.
      * If not enough are available by K-nearest neighbours random ones will be filled
      *
-     * @param map to read items and values from
+     * @param map to read itemRentals and values from
      * @return array List of best suggestions
      */
 
-    List<Item> findBestItems(Map<Item, Integer> map, long itemId) {
-        List<Entry<Item, Integer>> entrys = findGreatest(map);
-        List<Item> suggestions = new ArrayList<>();
+    List<ItemRental> findBestItems(Map<ItemRental, Integer> map, long itemId) {
+        List<Entry<ItemRental, Integer>> entrys = findGreatest(map);
+        List<ItemRental> suggestions = new ArrayList<>();
 
-        for (Entry<Item, Integer> entry : entrys) {
+        for (Entry<ItemRental, Integer> entry : entrys) {
             if (entry.getKey().getId() != itemId) {
                 suggestions.add(entry.getKey());
             }
@@ -70,10 +70,10 @@ public class RecommendationService {
         return suggestions.size() < numberOfItems ? fillList(suggestions) : suggestions;
     }
 
-    List<Item> fillList(List<Item> suggestions) {
-        List<Item> allItems = (List<Item>) itemRepo.findAll();
+    List<ItemRental> fillList(List<ItemRental> suggestions) {
+        List<ItemRental> allItemRentals = (List<ItemRental>) itemRentalRepo.findAll();
         while (suggestions.size() < numberOfItems) {
-            Item randomSuggestion = allItems.get((int) (Math.random() * allItems.size()));
+            ItemRental randomSuggestion = allItemRentals.get((int) (Math.random() * allItemRentals.size()));
             if (!suggestions.contains(randomSuggestion)) {
                 suggestions.add(randomSuggestion);
             }
@@ -81,31 +81,31 @@ public class RecommendationService {
         return suggestions;
     }
 
-    Map<Item, Integer> fillMap(List<User> otherBorrowers) {
-        // Maps the items with the values of their frequency
-        Map<Item, Integer> map = new HashMap<>();
+    Map<ItemRental, Integer> fillMap(List<User> otherBorrowers) {
+        // Maps the itemRentals with the values of their frequency
+        Map<ItemRental, Integer> map = new HashMap<>();
         for (User otherBorrower : otherBorrowers) {
-            List<Item> borrowedItems = findBorrowedItems(otherBorrower.getId());
-            putBorrowedItems(map, borrowedItems);
+            List<ItemRental> borrowedItemRentals = findBorrowedItems(otherBorrower.getId());
+            putBorrowedItems(map, borrowedItemRentals);
         }
         return map;
     }
 
-    List<Item> findBorrowedItems(long userId) {
+    List<ItemRental> findBorrowedItems(long userId) {
         List<Contract> allContracts = (List<Contract>) contractRepo.findAll();
-        List<Item> items = new ArrayList<>();
+        List<ItemRental> itemRentals = new ArrayList<>();
 
         for (Contract contract : allContracts) {
             if (contract.getBorrower().getId() == userId) {
-                items.add(contract.getItem());
+                itemRentals.add(contract.getItemRental());
             }
         }
-        return items;
+        return itemRentals;
     }
 
-    private void putBorrowedItems(Map<Item, Integer> map, List<Item> borrowedItems) {
-        for (Item borrowedItem : borrowedItems) {
-            map.put(borrowedItem, map.getOrDefault(borrowedItem, 1));
+    private void putBorrowedItems(Map<ItemRental, Integer> map, List<ItemRental> borrowedItemRentals) {
+        for (ItemRental borrowedItemRental : borrowedItemRentals) {
+            map.put(borrowedItemRental, map.getOrDefault(borrowedItemRental, 1));
         }
     }
 
