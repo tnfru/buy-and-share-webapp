@@ -170,7 +170,7 @@ public class ItemRentalControllerTest {
         mvc.perform(get("/item/rental/details/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("Edit ItemRental")));
+            .andExpect(content().string(containsString("Edit Item")));
     }
 
     @Test
@@ -209,7 +209,7 @@ public class ItemRentalControllerTest {
         mvc.perform(get("/item/rental/new")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("New ItemRental")));
+            .andExpect(content().string(containsString("New Item")));
     }
 
     //TODO: Add image upload
@@ -447,7 +447,7 @@ public class ItemRentalControllerTest {
         when(itemRentalRepo.findById(3L)).thenReturn(Optional.of(itemRental));
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
 
-        mvc.perform(post("/v/edit/3")
+        mvc.perform(post("/item/rental/edit/3")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("name", "name")
             .param("location", "loc")
