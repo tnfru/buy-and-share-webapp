@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.service.payment;
+package de.hhu.propra.sharingplatform.model;
 
 import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
@@ -7,6 +7,7 @@ import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.payments.BorrowPayment;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -141,7 +142,8 @@ public class BorrowContractPaymentTest {
 
         Assert.assertEquals(100, borrowContract.getBorrowPayment().getAmount());
         //Only compares the full days
-        Assert.assertEquals(LocalDateTime.now().toLocalDate(), borrowContract.getRealEnd().toLocalDate());
+        Assert.assertEquals(LocalDateTime.now().toLocalDate(),
+            borrowContract.getRealEnd().toLocalDate());
     }
 
     @Test
