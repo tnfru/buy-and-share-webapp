@@ -14,10 +14,14 @@ WORKDIR /app
 
 RUN apk add bash
 
-COPY --from=build /app/build/libs/sharingplatform-0.0.1-SNAPSHOT.jar .
+COPY ./src/main/resources/application-prod.properties .
 COPY ./wait-for-it.sh .
+RUN mkdir public
+COPY ./public ./public
 RUN chmod +x wait-for-it.sh
+
+COPY --from=build /app/build/libs/sharingplatform-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8080
 
-ENTRYPOINT ./wait-for-it.sh sharingDB:5432 -- java -jar sharingplatform-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ./wait-for-it.sh -t 30 h2DB:1521 -- java -jar sharingplatform-0.0.1-SNAPSHOT.jar --spring.config.location=file:/app/application-prod.properties
