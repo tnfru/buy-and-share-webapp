@@ -11,7 +11,7 @@ import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import java.time.LocalDateTime;
@@ -54,7 +54,7 @@ public class OfferServiceTest {
 
     private User owner;
     private User borrower;
-    private Item item;
+    private ItemRental itemRental;
     private Offer offer;
     private LocalDateTime start;
     private LocalDateTime end;
@@ -66,35 +66,35 @@ public class OfferServiceTest {
         owner = new User();
         owner.setId(1L);
         borrower = new User();
-        item = new Item(owner);
-        item.setId(1L);
+        itemRental = new ItemRental(owner);
+        itemRental.setId(1L);
 
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusDays(3);
-        offer = new Offer(item, borrower, start, end);
+        offer = new Offer(itemRental, borrower, start, end);
     }
 
 
     @Test
     public void createTest() {
-        when(itemService.findItem(anyLong())).thenReturn(item);
+        when(itemService.findItem(anyLong())).thenReturn(itemRental);
 
         OfferService spyService = Mockito.spy(offerService);
         Mockito.doNothing().when(spyService).validate(any(), any(), any(), any());
 
-        spyService.create(item.getId(), borrower, start, end);
+        spyService.create(itemRental.getId(), borrower, start, end);
 
         ArgumentCaptor<Offer> argument = ArgumentCaptor.forClass(Offer.class);
         verify(offerRepo, times(1)).save(argument.capture());
         Offer capturedOffer = argument.getValue();
 
-        assertEquals(item, capturedOffer.getItem());
+        assertEquals(itemRental, capturedOffer.getItemRental());
         assertEquals(borrower, capturedOffer.getBorrower());
         assertEquals(start, capturedOffer.getStart());
         assertEquals(end, capturedOffer.getEnd());
 
         assertTrue(borrower.getOffers().contains(capturedOffer));
-        assertTrue(item.getOffers().contains(capturedOffer));
+        assertTrue(itemRental.getOffers().contains(capturedOffer));
 
         assertFalse(offer.isAccept());
         assertFalse(offer.isDecline());
@@ -116,7 +116,7 @@ public class OfferServiceTest {
     @Test
     public void createUserNullTest() {
         boolean thrown = false;
-        when(itemService.findItem(anyLong())).thenReturn(item);
+        when(itemService.findItem(anyLong())).thenReturn(itemRental);
 
         try {
             offerService.create(1, null, start, end);
@@ -134,7 +134,7 @@ public class OfferServiceTest {
         OfferService spyService = Mockito.spy(offerService);
         Mockito.doNothing().when(spyService).validate(any(), any(), any(), any());
 
-        spyService.acceptOffer(1L, item.getOwner());
+        spyService.acceptOffer(1L, itemRental.getOwner());
 
         ArgumentCaptor<Offer> argument1 = ArgumentCaptor.forClass(Offer.class);
         ArgumentCaptor<Offer> argument2 = ArgumentCaptor.forClass(Offer.class);
@@ -159,9 +159,9 @@ public class OfferServiceTest {
         Mockito.doNothing().when(spyService).validate(any(), any(), any(), any());
 
         try {
-            spyService.acceptOffer(1L, item.getOwner());
+            spyService.acceptOffer(1L, itemRental.getOwner());
         } catch (ResponseStatusException respException) {
-            assertEquals("403 FORBIDDEN \"This item does not belong to you\"",
+            assertEquals("403 FORBIDDEN \"This itemRental does not belong to you\"",
                 respException.getMessage());
             thrown = true;
         }
@@ -183,7 +183,7 @@ public class OfferServiceTest {
         Mockito.doNothing().when(spyService).validate(any(), any(), any(), any());
 
         try {
-            spyService.acceptOffer(1L, item.getOwner());
+            spyService.acceptOffer(1L, itemRental.getOwner());
         } catch (NullPointerException nullException) {
             thrown = true;
         }
@@ -195,7 +195,7 @@ public class OfferServiceTest {
         when(offerRepo.findOneById(anyLong())).thenReturn(offer);
         when(itemService.userIsOwner(anyLong(), anyLong())).thenReturn(true);
 
-        offerService.declineOffer(anyLong(), item.getOwner());
+        offerService.declineOffer(anyLong(), itemRental.getOwner());
 
         ArgumentCaptor<Offer> argument = ArgumentCaptor.forClass(Offer.class);
 
@@ -214,7 +214,7 @@ public class OfferServiceTest {
         boolean thrown = false;
 
         try {
-            offerService.acceptOffer(1L, item.getOwner());
+            offerService.acceptOffer(1L, itemRental.getOwner());
         } catch (NullPointerException nullException) {
             thrown = true;
         }
@@ -229,9 +229,9 @@ public class OfferServiceTest {
         boolean thrown = false;
 
         try {
-            offerService.declineOffer(1L, item.getOwner());
+            offerService.declineOffer(1L, itemRental.getOwner());
         } catch (ResponseStatusException respException) {
-            assertEquals("403 FORBIDDEN \"This item does not belong to you\"",
+            assertEquals("403 FORBIDDEN \"This itemRental does not belong to you\"",
                 respException.getMessage());
             thrown = true;
         }
@@ -242,15 +242,15 @@ public class OfferServiceTest {
     public void removeOverlappingOffers() {
         List<Offer> dbOffers = new ArrayList<>();
 
-        Offer overlapping1 = new Offer(new Item(new User()), new User(), offer.getStart(),
+        Offer overlapping1 = new Offer(new ItemRental(new User()), new User(), offer.getStart(),
             offer.getStart().plusDays(3));
-        Offer overlapping2 = new Offer(new Item(new User()), new User(),
+        Offer overlapping2 = new Offer(new ItemRental(new User()), new User(),
             offer.getStart().minusDays(3), offer.getStart().plusDays(5));
-        Offer overlapping3 = new Offer(new Item(new User()), new User(),
+        Offer overlapping3 = new Offer(new ItemRental(new User()), new User(),
             offer.getStart().plusDays(2), offer.getStart().plusDays(4));
-        Offer validPeriod1 = new Offer(new Item(new User()), new User(),
+        Offer validPeriod1 = new Offer(new ItemRental(new User()), new User(),
             offer.getStart().plusDays(5), offer.getStart().plusDays(8));
-        Offer validPeriod2 = new Offer(new Item(new User()), new User(),
+        Offer validPeriod2 = new Offer(new ItemRental(new User()), new User(),
             offer.getStart().minusDays(10), offer.getStart().minusDays(3));
 
         dbOffers.add(overlapping1);
@@ -259,7 +259,7 @@ public class OfferServiceTest {
         dbOffers.add(validPeriod1);
         dbOffers.add(validPeriod2);
 
-        when(offerRepo.findAllByItemIdAndDeclineIsFalseAndAcceptIsFalse(anyLong()))
+        when(offerRepo.findAllByItemRentalIdAndDeclineIsFalseAndAcceptIsFalse(anyLong()))
             .thenReturn(dbOffers);
 
         offerService.removeOverlappingOffer(offer);

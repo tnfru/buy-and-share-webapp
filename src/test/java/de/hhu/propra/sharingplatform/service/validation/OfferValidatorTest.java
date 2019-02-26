@@ -3,14 +3,13 @@ package de.hhu.propra.sharingplatform.service.validation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.Contract;
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.payment.ApiService;
@@ -19,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,7 +26,7 @@ public class OfferValidatorTest {
 
     private User owner;
     private User borrower;
-    private Item item;
+    private ItemRental itemRental;
     private LocalDateTime start;
     private LocalDateTime end;
 
@@ -44,24 +42,24 @@ public class OfferValidatorTest {
     public void alternativeSetUpTests() {
         owner = new User();
         borrower = new User();
-        item = new Item(owner);
-        item.setBail(234);
+        itemRental = new ItemRental(owner);
+        itemRental.setBail(234);
 
         start = LocalDateTime.now().plusDays(3);
         end = start.plusDays(1);
-        Contract contractOne = new Contract(new Offer(item, borrower, start, end));
+        Contract contractOne = new Contract(new Offer(itemRental, borrower, start, end));
 
         LocalDateTime newStart = end.plusDays(3);
         LocalDateTime newEnd = start.plusDays(4);
-        Contract contractTwo = new Contract(new Offer(item, borrower, newStart, newEnd));
+        Contract contractTwo = new Contract(new Offer(itemRental, borrower, newStart, newEnd));
 
         List<Contract> contractList = new ArrayList<>();
         contractList.add(contractOne);
         contractList.add(contractTwo);
 
         contractRepo = mock(ContractRepo.class);
-        when(contractRepo.findAllByItem(item)).thenReturn(contractList);
-        when(contractRepo.findAllByItemAndFinishedIsFalse(item)).thenReturn(contractList);
+        when(contractRepo.findAllByItemRental(itemRental)).thenReturn(contractList);
+        when(contractRepo.findAllByItemRentalAndFinishedIsFalse(itemRental)).thenReturn(contractList);
     }
 
 
@@ -69,8 +67,8 @@ public class OfferValidatorTest {
     public void setUpTests() {
         owner = new User();
         borrower = new User();
-        item = new Item(owner);
-        item.setBail(234);
+        itemRental = new ItemRental(owner);
+        itemRental.setBail(234);
 
         start = LocalDateTime.now();
         end = LocalDateTime.now().plusDays(3);
@@ -85,7 +83,7 @@ public class OfferValidatorTest {
         LocalDateTime testEnd = start.plusDays(9);
 
         try {
-            OfferValidator.periodIsAvailable(contractRepo, item, testStart, testEnd);
+            OfferValidator.periodIsAvailable(contractRepo, itemRental, testStart, testEnd);
         } catch (ResponseStatusException responseException) {
             thrown = true;
             assertEquals("400 BAD_REQUEST \"Invalid period\"",
@@ -103,7 +101,7 @@ public class OfferValidatorTest {
         end = start.plusDays(2);
 
         try {
-            OfferValidator.periodIsAvailable(contractRepo, item, start, end);
+            OfferValidator.periodIsAvailable(contractRepo, itemRental, start, end);
         } catch (ResponseStatusException responseException) {
             thrown = true;
         }
@@ -120,7 +118,7 @@ public class OfferValidatorTest {
         end = start.plusDays(2);
 
         try {
-            OfferValidator.periodIsAvailable(contractRepo, item, start, end);
+            OfferValidator.periodIsAvailable(contractRepo, itemRental, start, end);
         } catch (ResponseStatusException responseException) {
             thrown = true;
         }
@@ -136,10 +134,10 @@ public class OfferValidatorTest {
         boolean thrown = false;
 
         paymentService = mock(PaymentService.class);
-        when(paymentService.calculateTotalPrice(item, start, end)).thenReturn(120);
+        when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(120);
 
         try {
-            OfferValidator.validate(item, borrower, start, wrongEnd, paymentService, apiService);
+            OfferValidator.validate(itemRental, borrower, start, wrongEnd, paymentService, apiService);
         } catch (ResponseStatusException responseException) {
             thrown = true;
             assertEquals("400 BAD_REQUEST \"End date needs to be after Start date\"",
@@ -155,10 +153,10 @@ public class OfferValidatorTest {
         boolean thrown = false;
 
         paymentService = mock(PaymentService.class);
-        when(paymentService.calculateTotalPrice(item, start, start)).thenReturn(120);
+        when(paymentService.calculateTotalPrice(itemRental, start, start)).thenReturn(120);
 
         try {
-            OfferValidator.validate(item, borrower, start, start, paymentService, apiService);
+            OfferValidator.validate(itemRental, borrower, start, start, paymentService, apiService);
         } catch (ResponseStatusException responseException) {
             thrown = true;
             assertEquals("400 BAD_REQUEST \"End date needs to be after Start date\"",
@@ -175,11 +173,11 @@ public class OfferValidatorTest {
 
         paymentService = mock(PaymentService.class);
         apiService = mock(ApiService.class);
-        when(paymentService.calculateTotalPrice(item, start, end)).thenReturn(120);
+        when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(120);
         when(apiService.isSolvent(eq(borrower), anyInt())).thenReturn(false);
 
         try {
-            OfferValidator.validate(item, borrower, start, end, paymentService, apiService);
+            OfferValidator.validate(itemRental, borrower, start, end, paymentService, apiService);
         } catch (ResponseStatusException responseException) {
             thrown = true;
             assertEquals("400 BAD_REQUEST \"Not enough money\"",
@@ -197,11 +195,11 @@ public class OfferValidatorTest {
 
         paymentService = mock(PaymentService.class);
         apiService = mock(ApiService.class);
-        when(paymentService.calculateTotalPrice(item, start, end)).thenReturn(120);
+        when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(120);
         when(apiService.isSolvent(eq(borrower), anyInt())).thenReturn(true);
 
         try {
-            OfferValidator.validate(item, borrower, start, end, paymentService, apiService);
+            OfferValidator.validate(itemRental, borrower, start, end, paymentService, apiService);
         } catch (ResponseStatusException responseException) {
             thrown = true;
             assertEquals("400 BAD_REQUEST \"Account currently suspended\"",
@@ -217,11 +215,11 @@ public class OfferValidatorTest {
 
         paymentService = mock(PaymentService.class);
         apiService = mock(ApiService.class);
-        when(paymentService.calculateTotalPrice(item, start, end)).thenReturn(234);
+        when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(234);
         when(apiService.isSolvent(eq(borrower), anyInt())).thenReturn(true);
 
         try {
-            OfferValidator.validate(item, borrower, start, end, paymentService, apiService);
+            OfferValidator.validate(itemRental, borrower, start, end, paymentService, apiService);
         } catch (ResponseStatusException responseException) {
             thrown = true;
         }

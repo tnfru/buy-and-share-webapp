@@ -1,9 +1,9 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
-import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
 import de.hhu.propra.sharingplatform.model.Contract;
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import org.junit.Before;
@@ -29,23 +29,23 @@ public class RecommendationServiceTest {
     ContractRepo contractRepo;
 
     @MockBean
-    ItemRepo itemRepo;
+    ItemRentalRepo itemRentalRepo;
 
     private RecommendationService recommendationService;
 
     @Before
     public void setUp() {
-        this.recommendationService = new RecommendationService(contractRepo, itemRepo);
+        this.recommendationService = new RecommendationService(contractRepo, itemRentalRepo);
     }
 
     @Test
     public void findBorrowedItem() {
         List<Contract> contracts = createFakeContracts();
         when(contractRepo.findAll()).thenReturn(contracts);
-        List<Item> items = recommendationService.findBorrowedItems(5L);
+        List<ItemRental> itemRentals = recommendationService.findBorrowedItems(5L);
 
-        assertEquals(1, items.size());
-        assertEquals(contracts.get(5).getItem(), items.get(0));
+        assertEquals(1, itemRentals.size());
+        assertEquals(contracts.get(5).getItemRental(), itemRentals.get(0));
     }
 
 
@@ -53,16 +53,16 @@ public class RecommendationServiceTest {
     @Test
     public void findGreatest() {
         this.recommendationService.setNumberOfItems(1);
-        Map<Item, Integer> map = new HashMap<>();
-        Item itemOne = new Item(mock(User.class));
-        itemOne.setId(1337L);
-        Item itemTwo = new Item(mock(User.class));
-        itemTwo.setId(7331L);
-        map.put(itemOne, 10);
-        map.put(itemTwo, 2);
+        Map<ItemRental, Integer> map = new HashMap<>();
+        ItemRental itemRentalOne = new ItemRental(mock(User.class));
+        itemRentalOne.setId(1337L);
+        ItemRental itemRentalTwo = new ItemRental(mock(User.class));
+        itemRentalTwo.setId(7331L);
+        map.put(itemRentalOne, 10);
+        map.put(itemRentalTwo, 2);
 
         assertEquals(2, recommendationService.findGreatest(map).size());
-        assertEquals(itemOne, recommendationService.findGreatest(map).get(0).getKey());
+        assertEquals(itemRentalOne, recommendationService.findGreatest(map).get(0).getKey());
     }
 
     public List<User> createFakerUser() {
@@ -75,25 +75,25 @@ public class RecommendationServiceTest {
         return users;
     }
 
-    public List<Item> createFakeItems() {
+    public List<ItemRental> createFakeItems() {
         List<User> users = createFakerUser();
-        List<Item> items = new ArrayList<>();
+        List<ItemRental> itemRentals = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            Item item = new Item(users.get(i));
-            items.add(item);
+            ItemRental itemRental = new ItemRental(users.get(i));
+            itemRentals.add(itemRental);
         }
-        return items;
+        return itemRentals;
     }
 
     public List<Contract> createFakeContracts() {
         List<User> users = createFakerUser();
-        List<Item> items = createFakeItems();
+        List<ItemRental> itemRentals = createFakeItems();
         List<Contract> contracts = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
             LocalDateTime start = LocalDateTime.now();
             LocalDateTime end = start.plusDays(3);
-            Offer offer = new Offer(items.get(i), users.get(i), start, end);
+            Offer offer = new Offer(itemRentals.get(i), users.get(i), start, end);
             Contract contract = new Contract(offer);
             contracts.add(contract);
         }
@@ -101,7 +101,7 @@ public class RecommendationServiceTest {
         for (int i = 0; i < 4; i++) {
             LocalDateTime start = LocalDateTime.now();
             LocalDateTime end = start.plusDays(3);
-            Offer offer = new Offer(items.get(i), users.get(4 - i), start, end);
+            Offer offer = new Offer(itemRentals.get(i), users.get(4 - i), start, end);
             Contract contract = new Contract(offer);
             contracts.add(contract);
         }
