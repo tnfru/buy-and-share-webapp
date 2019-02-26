@@ -18,7 +18,7 @@ import org.junit.Test;
 
 public class ItemRentalFakerTest {
 
-    private ItemFaker itemFaker;
+    private ItemRentalFaker itemRentalFaker;
     private UserFaker userFaker;
     private Faker faker;
 
@@ -28,7 +28,7 @@ public class ItemRentalFakerTest {
         Random rnd = new Random();
         rnd.setSeed(seed);
         faker = new Faker(Locale.ENGLISH, rnd);
-        itemFaker = new ItemFaker(faker);
+        itemRentalFaker = new ItemRentalFaker(faker);
         userFaker = new UserFaker(faker);
     }
 
@@ -43,7 +43,7 @@ public class ItemRentalFakerTest {
     public void createItemTest() {
         User user = userFaker.create();
 
-        ItemRental itemRental = itemFaker.create(user);
+        ItemRental itemRental = itemRentalFaker.create(user);
 
         String pattern = "^[a-zA-Z0-9?!',\\. ]*$";
 
@@ -63,7 +63,7 @@ public class ItemRentalFakerTest {
 
         List<ItemRental> itemRentals = new ArrayList<>();
 
-        itemFaker.createItems(itemRentals, user, 0);
+        itemRentalFaker.createItems(itemRentals, user, 0);
 
         assertEquals(0, itemRentals.size());
     }
@@ -76,8 +76,8 @@ public class ItemRentalFakerTest {
         List<ItemRental> items1 = new ArrayList<>();
         List<ItemRental> items2 = new ArrayList<>();
 
-        itemFaker.createItems(items1, user1, 3);
-        itemFaker.createItems(items2, user2, 19);
+        itemRentalFaker.createItems(items1, user1, 3);
+        itemRentalFaker.createItems(items2, user2, 19);
 
         assertEquals(3, items1.size());
         for (ItemRental itemRental : items1) {

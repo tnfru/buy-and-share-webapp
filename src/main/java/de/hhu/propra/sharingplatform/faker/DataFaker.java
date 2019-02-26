@@ -2,14 +2,16 @@ package de.hhu.propra.sharingplatform.faker;
 
 import com.github.javafaker.Faker;
 import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
+import de.hhu.propra.sharingplatform.dao.ItemSaleRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.ItemRental;
+import de.hhu.propra.sharingplatform.model.ItemSale;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.payment.ApiService;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
-import de.hhu.propra.sharingplatform.service.OfferService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,8 @@ public class DataFaker implements ServletContextInitializer {
 
     private final ItemRentalRepo itemRentalRepo;
 
+    private final ItemSaleRepo itemSaleRepo;
+
     private final OfferRepo offerRepo;
 
     private final OfferService offerService;
@@ -44,11 +48,13 @@ public class DataFaker implements ServletContextInitializer {
 
     @Autowired
     public DataFaker(Environment env, UserRepo userRepo, ItemRentalRepo itemRentalRepo,
-        OfferRepo offerRepo, OfferService offerService,
+        ItemSaleRepo itemSaleRepo, OfferRepo offerRepo,
+        OfferService offerService,
         IPaymentApi apiService) {
         this.env = env;
         this.userRepo = userRepo;
         this.itemRentalRepo = itemRentalRepo;
+        this.itemSaleRepo = itemSaleRepo;
         this.offerRepo = offerRepo;
         this.offerService = offerService;
         this.apiService = apiService;
@@ -58,11 +64,13 @@ public class DataFaker implements ServletContextInitializer {
     }
 
     public DataFaker(long seed, Environment env, UserRepo userRepo, ItemRentalRepo itemRentalRepo,
-        OfferRepo offerRepo, OfferService offerService,
+        ItemSaleRepo itemSaleRepo, OfferRepo offerRepo,
+        OfferService offerService,
         ApiService apiService) {
         this.env = env;
         this.userRepo = userRepo;
         this.itemRentalRepo = itemRentalRepo;
+        this.itemSaleRepo = itemSaleRepo;
         this.offerRepo = offerRepo;
         this.offerService = offerService;
         this.apiService = apiService;
@@ -78,7 +86,8 @@ public class DataFaker implements ServletContextInitializer {
 
         log.info("Generating Database");
         UserFaker userFaker = new UserFaker(faker);
-        ItemFaker itemFaker = new ItemFaker(faker);
+        ItemRentalFaker itemRentalFaker = new ItemRentalFaker(faker);
+        ItemSaleFaker itemSaleFaker = new ItemSaleFaker(faker);
         TimeFaker timeFaker = new TimeFaker(faker);
 
         log.info("    Creating User...");
@@ -87,15 +96,24 @@ public class DataFaker implements ServletContextInitializer {
 
         users.add(userFaker.createAdmin());
 
-        log.info("    Creating Items...");
+        log.info("    Creating ItemsRental...");
         List<ItemRental> itemRentals = new ArrayList<>();
         for (int i = 0; i < (dataSize / 8); i++) {
             User user = getRandomUser(users);
-            itemFaker.createItems(itemRentals, user, dataSize / 15);
+            itemRentalFaker.createItems(itemRentals, user, dataSize / 15);
         }
 
-        log.info("    Persist Items...");
+        log.info("    Creating ItemsSale...");
+        List<ItemSale> itemSales = new ArrayList<>();
+        for (int i = 0; i < (dataSize / 8); i++) {
+            User user = getRandomUser(users);
+            itemSaleFaker.createItems(itemSales, user, dataSize / 15);
+        }
+
+        log.info("    Persist ItemsRental...");
         itemRentalRepo.saveAll(itemRentals);
+        log.info("    Persist ItemsSale...");
+        itemSaleRepo.saveAll(itemSales);
         log.info("    Persist Users...");
         userRepo.saveAll(users);
 

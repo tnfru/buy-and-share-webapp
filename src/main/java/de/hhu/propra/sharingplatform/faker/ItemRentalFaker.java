@@ -5,11 +5,11 @@ import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
 import java.util.List;
 
-public class ItemFaker {
+public class ItemRentalFaker {
 
     private Faker faker;
 
-    public ItemFaker(Faker faker) {
+    public ItemRentalFaker(Faker faker) {
         this.faker = faker;
     }
 
