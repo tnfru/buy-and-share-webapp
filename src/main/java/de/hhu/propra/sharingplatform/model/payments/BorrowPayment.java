@@ -52,7 +52,7 @@ public class BorrowPayment extends Payment {
      */
     @Override
     public void pay(IPaymentApi paymentApi) {
-        paymentApi.freeReservation(amountProPayId, proPayIdSender);
+        freeCharge(paymentApi);
         paymentApi.transferMoney(super.amount, proPayIdSender, proPayIdRecipient);
     }
 
@@ -62,5 +62,9 @@ public class BorrowPayment extends Payment {
 
     public void freeBail(IPaymentApi paymentApi) {
         paymentApi.freeReservation(bailProPayId, proPayIdSender);
+    }
+
+    public void freeCharge(IPaymentApi paymentApi) {
+        paymentApi.freeReservation(amountProPayId, proPayIdSender);
     }
 }

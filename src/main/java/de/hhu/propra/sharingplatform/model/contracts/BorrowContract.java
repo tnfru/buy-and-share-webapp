@@ -78,6 +78,15 @@ public class BorrowContract extends Contract {
         borrowPayment.punishBail(paymentApi);
     }
 
+    @Override
+    public void pay(IPaymentApi iPaymentApi) {
+        borrowPayment.pay(iPaymentApi);
+    }
+
+    public void freeCharge(IPaymentApi iPaymentApi) {
+        borrowPayment.freeCharge(iPaymentApi);
+    }
+
 
     /**
      * Called when Item is returned. Sets the return date, calculates Price.
