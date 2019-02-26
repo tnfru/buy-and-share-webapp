@@ -60,12 +60,12 @@ public class BorrowContract extends Contract {
     /**
      * Called when item owner when return is accepted.
      *
-     * @param paymentApi
+     * @param paymentApi paymentApi.
      */
 
 
     public void freeBail(IPaymentApi paymentApi) {
-        ((BorrowPayment)payment).freeBail(paymentApi);
+        ((BorrowPayment) payment).freeBail(paymentApi);
     }
 
 
@@ -76,7 +76,7 @@ public class BorrowContract extends Contract {
      */
 
     public void punishBail(IPaymentApi paymentApi) {
-        ((BorrowPayment)payment).punishBail(paymentApi);
+        ((BorrowPayment) payment).punishBail(paymentApi);
     }
 
 
