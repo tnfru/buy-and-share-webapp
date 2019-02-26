@@ -50,6 +50,10 @@ public class User {
         CascadeType.REFRESH}, mappedBy = "borrower")
     private List<Offer> offers = new ArrayList<>();
 
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+        mappedBy = "requester")
+    private List<Conflict> conflicts;
+
     @Transient
     @Value("${passwords.pepper}")
     private String pepper;

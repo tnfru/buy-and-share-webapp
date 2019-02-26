@@ -20,5 +20,10 @@ public class Conflict {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Contract contract;
 
+    @Column(length = 1000)
+    private String description;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private User requester;
 
 }

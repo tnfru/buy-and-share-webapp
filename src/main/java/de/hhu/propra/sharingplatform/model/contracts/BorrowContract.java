@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.model.contracts;
 
+import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
@@ -11,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BorrowContract extends Contract {
@@ -59,5 +61,15 @@ public class BorrowContract extends Contract {
         long timespan = Math.max(start.until(realEnd, ChronoUnit.DAYS) + 1, 0);
         int amount = (int) Math.ceil(timespan * super.item.getPrice());
         payment.setAmount(amount);
+    }
+
+    public List<Conflict> getOpenConflicts() {
+        List<Conflict> openConflicts = new ArrayList<>();
+        for (Conflict conflict : conflicts) {
+            if (conflict.getStatus().equals(Status.PENDING)) {
+                openConflicts.add(conflict);
+            }
+        }
+        return openConflicts;
     }
 }

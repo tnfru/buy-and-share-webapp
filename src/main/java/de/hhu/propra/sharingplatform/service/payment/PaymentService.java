@@ -4,10 +4,8 @@ import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.payments.Payment;
-import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.stereotype.Service;
 
-import java.time.temporal.ChronoUnit;
 
 @Deprecated
 @Service

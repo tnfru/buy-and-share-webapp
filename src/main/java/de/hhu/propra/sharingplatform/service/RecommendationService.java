@@ -2,7 +2,7 @@ package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
-import de.hhu.propra.sharingplatform.model.Contract;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import lombok.Data;
