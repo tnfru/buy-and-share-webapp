@@ -106,9 +106,9 @@ public class ItemService {
         search = search.trim().replaceAll(" +", " ");
         String[] split = search.split(" ");
         List<String> keywords = new ArrayList<>();
-        for (String aSplit : split) {
-            if (!keywords.contains(aSplit)) {
-                keywords.add(aSplit);
+        for (String word : split) {
+            if (!keywords.contains(word)) {
+                keywords.add(word);
             }
         }
         return keywords;
