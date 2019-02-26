@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -45,6 +46,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RunWith(SpringRunner.class)
 @WebMvcTest(OfferController.class)
 @Import({ItemService.class})
+@Ignore
 public class OfferControllerTest {
 
     @Autowired
