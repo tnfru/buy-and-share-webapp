@@ -51,7 +51,8 @@ public class OfferValidatorTest {
 
         LocalDateTime newStart = end.plusDays(3);
         LocalDateTime newEnd = start.plusDays(4);
-        BorrowContract contractTwo = new BorrowContract(new Offer(item, borrower, newStart, newEnd));
+        BorrowContract contractTwo =
+            new BorrowContract(new Offer(item, borrower, newStart, newEnd));
 
         List<BorrowContract> contractList = new ArrayList<>();
         contractList.add(contractOne);
