@@ -22,8 +22,8 @@
         <div class="card border-dark">
             <div th:if="${itemRental?.imageFileName != null}">
                 <img th:src="@{${'/images/' + itemRental?.imageFileName}}" style="width: content-box;
-                     padding: 2rem;"
-                     class="img-fluid"></div>
+                     padding: 2rem;" class="img-fluid">
+            </div>
 
             <div th:if="${itemRental?.imageFileName == null}">
                 <img src="/images/bike-dummy.png" style="width: content-box; padding: 2rem;"
@@ -63,7 +63,16 @@
                 <li class="list-group-item">
                     <b>Availability:</b>
 
-                    <div id="my-calendar"></div>
+
+                    <style type="text/css">
+
+                        .jsCalendar tbody td.jsCalendar-selected {
+                            background-color: rgba(148, 0, 29, 0.71);
+                            border: unset;
+                        }
+                    </style>
+
+                    <div id="my-calendar" , class="jsCalendar"></div>
 
                     <script th:inline="javascript">
                       var calendar = document.getElementById("my-calendar");
@@ -71,6 +80,7 @@
                         target: calendar,
                         monthFormat: "month YYYY"
                       });
+
                     </script>
 
                     <div th:each="contract : ${itemRental.getChosenContracts(false)}">
@@ -83,15 +93,19 @@
                           var end = new Date([[${end}]]);
 
                           for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
-                            myCalendar.select([
-                              date
-                            ]);
+                            myCalendar.select(
+                                [date]);
                           }
 
                         </script>
                     </div>
+
+
                 </li>
+
+
             </ul>
+
             <div class="card-footer bg-white text-center">
                 <a th:if="${ownItem} == false " th:href="|/user/${itemRental.getOwner().getId()}|"
                    class="btn btn-outline-secondary btn-block">User
@@ -107,6 +121,7 @@
         </div>
 
         <div>
+
             <b style="margin-left: 5rem;">Other Users who looked at this were also interested
                 in:</b>
             <div class="column">
@@ -132,6 +147,7 @@
                         <ul class="list-group list-group-flush">
 
                             <li class="list-group-item">
+
                                 <b>Rating:</b>
                                 <span th:text="|${itemRental?.owner?.totalRatings()}|"></span>
                                 <span th:text="|(${itemRental?.owner?.getRating()}|"></span> &#128077;)

@@ -1,7 +1,7 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;

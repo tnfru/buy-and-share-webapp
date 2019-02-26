@@ -11,8 +11,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
-import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

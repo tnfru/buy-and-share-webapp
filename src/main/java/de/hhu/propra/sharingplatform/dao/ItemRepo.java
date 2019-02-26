@@ -1,6 +1,6 @@
 package de.hhu.propra.sharingplatform.dao;
 
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.items.Item;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 

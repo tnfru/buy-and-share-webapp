@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.model;
 
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

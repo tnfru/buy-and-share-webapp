@@ -2,9 +2,9 @@ package de.hhu.propra.sharingplatform.service.validation;
 
 import static de.hhu.propra.sharingplatform.service.validation.Validator.validateName;
 
-import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.ItemRental;
-import de.hhu.propra.sharingplatform.model.ItemSale;
+import de.hhu.propra.sharingplatform.model.items.Item;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
+import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 

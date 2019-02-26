@@ -1,10 +1,10 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
-import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.ItemRental;
-import de.hhu.propra.sharingplatform.model.ItemSale;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.Item;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
+import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
 import java.util.ArrayList;
 import java.util.List;

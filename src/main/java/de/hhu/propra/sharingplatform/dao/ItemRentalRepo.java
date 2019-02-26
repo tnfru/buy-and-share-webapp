@@ -1,6 +1,6 @@
 package de.hhu.propra.sharingplatform.dao;
 
-import de.hhu.propra.sharingplatform.model.ItemRental;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import java.util.List;
 import java.util.Optional;
 

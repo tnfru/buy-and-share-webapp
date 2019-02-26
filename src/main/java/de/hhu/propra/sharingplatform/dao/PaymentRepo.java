@@ -1,7 +1,7 @@
 package de.hhu.propra.sharingplatform.dao;
 
 
-import de.hhu.propra.sharingplatform.model.Payment;
+import de.hhu.propra.sharingplatform.model.payments.Payment;
 import org.springframework.data.repository.CrudRepository;
 
 public interface PaymentRepo extends CrudRepository<Payment, Long> {

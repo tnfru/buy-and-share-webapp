@@ -1,11 +1,21 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.ContractRepo;
-import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
-import de.hhu.propra.sharingplatform.model.Contract;
-import de.hhu.propra.sharingplatform.model.ItemRental;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
+import de.hhu.propra.sharingplatform.model.items.Item;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -13,39 +23,29 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 @RunWith(SpringRunner.class)
 public class RecommendationServiceTest {
     @MockBean
-    ContractRepo contractRepo;
+    BorrowContractRepo borrowContractRepo;
 
     @MockBean
-    ItemRentalRepo itemRentalRepo;
+    ItemRepo itemRepo;
 
     private RecommendationService recommendationService;
 
     @Before
     public void setUp() {
-        this.recommendationService = new RecommendationService(contractRepo, itemRentalRepo);
+        this.recommendationService = new RecommendationService(borrowContractRepo, itemRepo);
     }
 
     @Test
     public void findBorrowedItem() {
-        List<Contract> contracts = createFakeContracts();
-        when(contractRepo.findAll()).thenReturn(contracts);
-        List<ItemRental> itemRentals = recommendationService.findBorrowedItems(5L);
+        List<BorrowContract> contracts = createFakeContracts();
+        when(borrowContractRepo.findAll()).thenReturn(contracts);
+        List<Item> items = recommendationService.findBorrowedItems(5L);
 
-        assertEquals(1, itemRentals.size());
-        assertEquals(contracts.get(5).getItemRental(), itemRentals.get(0));
+        assertEquals(1, items.size());
+        assertEquals(contracts.get(5).getItem(), items.get(0));
     }
 
 
@@ -53,16 +53,16 @@ public class RecommendationServiceTest {
     @Test
     public void findGreatest() {
         this.recommendationService.setNumberOfItems(1);
-        Map<ItemRental, Integer> map = new HashMap<>();
-        ItemRental itemRentalOne = new ItemRental(mock(User.class));
-        itemRentalOne.setId(1337L);
-        ItemRental itemRentalTwo = new ItemRental(mock(User.class));
-        itemRentalTwo.setId(7331L);
-        map.put(itemRentalOne, 10);
-        map.put(itemRentalTwo, 2);
+        Map<Item, Integer> map = new HashMap<>();
+        Item ItemOne = new ItemRental(mock(User.class));
+        ItemOne.setId(1337L);
+        Item ItemTwo = new ItemRental(mock(User.class));
+        ItemTwo.setId(7331L);
+        map.put(ItemOne, 10);
+        map.put(ItemTwo, 2);
 
         assertEquals(2, recommendationService.findGreatest(map).size());
-        assertEquals(itemRentalOne, recommendationService.findGreatest(map).get(0).getKey());
+        assertEquals(ItemOne, recommendationService.findGreatest(map).get(0).getKey());
     }
 
     public List<User> createFakerUser() {
@@ -75,34 +75,34 @@ public class RecommendationServiceTest {
         return users;
     }
 
-    public List<ItemRental> createFakeItems() {
+    public List<Item> createFakeItems() {
         List<User> users = createFakerUser();
-        List<ItemRental> itemRentals = new ArrayList<>();
+        List<Item> Items = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            ItemRental itemRental = new ItemRental(users.get(i));
-            itemRentals.add(itemRental);
+            Item Item = new ItemRental(users.get(i));
+            Items.add(Item);
         }
-        return itemRentals;
+        return Items;
     }
 
-    public List<Contract> createFakeContracts() {
+    public List<BorrowContract> createFakeContracts() {
         List<User> users = createFakerUser();
-        List<ItemRental> itemRentals = createFakeItems();
-        List<Contract> contracts = new ArrayList<>();
+        List<Item> items = createFakeItems();
+        List<BorrowContract> contracts = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
             LocalDateTime start = LocalDateTime.now();
             LocalDateTime end = start.plusDays(3);
-            Offer offer = new Offer(itemRentals.get(i), users.get(i), start, end);
-            Contract contract = new Contract(offer);
+            Offer offer = new Offer((ItemRental) items.get(i), users.get(i), start, end);
+            BorrowContract contract = new BorrowContract(offer);
             contracts.add(contract);
         }
 
         for (int i = 0; i < 4; i++) {
             LocalDateTime start = LocalDateTime.now();
             LocalDateTime end = start.plusDays(3);
-            Offer offer = new Offer(itemRentals.get(i), users.get(4 - i), start, end);
-            Contract contract = new Contract(offer);
+            Offer offer = new Offer((ItemRental) items.get(i), users.get(4 - i), start, end);
+            BorrowContract contract = new BorrowContract(offer);
             contracts.add(contract);
         }
 

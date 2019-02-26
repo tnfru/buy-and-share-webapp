@@ -1,7 +1,7 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.RecommendationService;
@@ -59,11 +59,11 @@ public class ItemRentalController {
         return "redirect:/user/account/";
     }
 
-    @GetMapping("/item/rental/remove/{itemId}")
+    @PostMapping("/item/rental/remove/{itemId}")
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
         Principal principal) {
-        itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
         offerService.removeOffersFromDeletedItem(itemId);
+        itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
         return "redirect:/user/account/";
     }
 

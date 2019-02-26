@@ -1,18 +1,20 @@
 package de.hhu.propra.sharingplatform.service;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.hhu.propra.sharingplatform.dao.ContractRepo;
-import de.hhu.propra.sharingplatform.model.Contract;
-import de.hhu.propra.sharingplatform.model.ItemRental;
+import de.hhu.propra.sharingplatform.dao.contractdao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import java.time.LocalDateTime;
-
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.payment.PaymentService;
+import java.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -33,7 +35,7 @@ public class ContractServiceTest {
     private User borrower;
     private ItemRental itemRental;
     private Offer offer;
-    private Contract contract;
+    private BorrowContract contract;
 
     @MockBean
     ContractRepo contractRepo;
@@ -54,7 +56,7 @@ public class ContractServiceTest {
         LocalDateTime end = LocalDateTime.now();
         end = end.plusDays(3);
         offer = new Offer(itemRental, borrower, start, end);
-        contract = new Contract(offer);
+        contract = new BorrowContract(offer);
     }
 
     @Test

@@ -4,6 +4,7 @@ import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.service.ConflictService;
 import de.hhu.propra.sharingplatform.service.ContractService;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.security.Principal;
 
 @Controller
 public class ConflictController {
@@ -56,7 +55,7 @@ public class ConflictController {
                                     Principal principal, Model model) {
         contractService.validateOwner(contractId, principal.getName());
         model.addAttribute("conflicts",
-            contractService.fetchContractById(contractId).getConflicts());
+            contractService.fetchBorrowContractById(contractId).getConflicts());
         model.addAttribute("contractId", contractId);
         return "showConflicts";
     }

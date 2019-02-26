@@ -1,80 +1,43 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
-import de.hhu.propra.sharingplatform.dao.PaymentRepo;
-import de.hhu.propra.sharingplatform.model.Contract;
-import de.hhu.propra.sharingplatform.model.Payment;
-import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import org.springframework.stereotype.Service;
 
-import java.time.temporal.ChronoUnit;
 
 @Service
 public class PaymentService implements IPaymentService {
 
-    private final PaymentRepo paymentRepo;
     private final IPaymentApi apiService;
 
-    public PaymentService(PaymentRepo paymentRepo, IPaymentApi apiService) {
-        this.paymentRepo = paymentRepo;
+    public PaymentService(IPaymentApi apiService) {
         this.apiService = apiService;
     }
 
     @Override
-    public Payment createPayment(Contract contract) {
-        int totalPrice = calculateTotalExpectedPrice(contract);
-        User sender = contract.getBorrower();
-        User recipient = contract.getItemRental().getOwner();
-        Payment payment = new Payment(sender, recipient, totalPrice,
-            contract.getItemRental().getBail());
+    public void createPayment(Contract contract) {
+        contract.prepare(apiService);
+    }
 
-        long id = apiService.reserveMoney(payment.getProPayIdSender(),
-            payment.getProPayIdRecipient(), payment.getBail());
-        payment.setBailProPayId(id);
-        id = apiService.reserveMoney(payment.getProPayIdSender(), payment.getProPayIdRecipient(),
-            totalPrice);
-        payment.setAmountProPayId(id);
-        paymentRepo.save(payment);
-        return payment;
+
+    @Override
+    public void transferPayment(BorrowContract contract) {
+        contract.returnItem();
+        contract.pay(apiService);
     }
 
     @Override
-    public boolean recipientSolvent(Contract contract) {
-        int totalAmount =
-            contract.getItemRental().getBail() + calculateTotalExpectedPrice(contract);
-        int available = apiService.getAccountBalanceLiquid(contract.getBorrower().getPropayId());
-        return available >= totalAmount;
+    public void freeBailReservation(BorrowContract contract) {
+        contract.freeBail(apiService);
     }
 
     @Override
-    public void transferPayment(Contract contract) {
-        Payment paymentInfo = contract.getPayment();
-        apiService.freeReservation(paymentInfo.getAmountProPayId(),
-            paymentInfo.getProPayIdSender());
-        int amount = calculateTotalActualPrice(contract);
-        apiService.transferMoney(amount, paymentInfo.getProPayIdSender(),
-            paymentInfo.getProPayIdRecipient());
+    public void freeChargeReservation(BorrowContract contract) {
+        contract.freeCharge(apiService);
     }
 
     @Override
-    public void freeBailReservation(Contract contract) {
-        Payment paymentInfo = contract.getPayment();
-        apiService.freeReservation(paymentInfo.getBailProPayId(), paymentInfo.getProPayIdSender());
-    }
-
-    @Override
-    public void punishBailReservation(Contract contract) {
-        Payment paymentInfo = contract.getPayment();
-        apiService.punishReservation(paymentInfo.getBailProPayId(),
-            paymentInfo.getProPayIdSender());
-    }
-
-    private int calculateTotalExpectedPrice(Contract contract) {
-        long timePassed = contract.getStart().until(contract.getExpectedEnd(), ChronoUnit.DAYS) + 1;
-        return (int) Math.ceil(timePassed * contract.getItemRental().getDailyRate());
-    }
-
-    private int calculateTotalActualPrice(Contract contract) {
-        long timePassed = contract.getStart().until(contract.getRealEnd(), ChronoUnit.DAYS) + 1;
-        return Math.max((int) Math.ceil(timePassed * contract.getItemRental().getDailyRate()), 0);
+    public void punishBailReservation(BorrowContract contract) {
+        contract.punishBail(apiService);
     }
 }

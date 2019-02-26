@@ -1,5 +1,7 @@
-package de.hhu.propra.sharingplatform.model;
+package de.hhu.propra.sharingplatform.model.items;
 
+import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.contracts.SellContract;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -17,8 +19,8 @@ public class ItemSale extends Item {
     private Integer price;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH}, mappedBy = "itemRental")
-    private List<Contract> contracts = new ArrayList<>();
+        CascadeType.REFRESH}, mappedBy = "item")
+    private List<SellContract> contracts = new ArrayList<>();
 
     @SuppressWarnings("unused")
     private ItemSale() {

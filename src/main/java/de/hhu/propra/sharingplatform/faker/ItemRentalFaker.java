@@ -1,8 +1,8 @@
 package de.hhu.propra.sharingplatform.faker;
 
 import com.github.javafaker.Faker;
-import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import java.util.List;
 
 public class ItemRentalFaker {

@@ -1,5 +1,7 @@
-package de.hhu.propra.sharingplatform.model;
+package de.hhu.propra.sharingplatform.model.payments;
 
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,28 +18,28 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private int amount;
-    private long amountProPayId;
-    private String proPayIdSender;
-    private String proPayIdRecipient;
-    private int bail;
-    private long bailProPayId;
+    long id;
+    int amount;
+    String proPayIdSender;
+    String proPayIdRecipient;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
         mappedBy = "payment")
-    private Contract contract;
+    Contract contract;
 
     @SuppressWarnings("unused")
-    private Payment() {
+    public Payment() {
         // used for jpa
     }
 
-    public Payment(User sender, User recipient, int amount, int bail) {
-        this.proPayIdSender = sender.getPropayId();
-        this.proPayIdRecipient = recipient.getPropayId();
+    public Payment(int amount, String from, String to) {
         this.amount = amount;
-        this.bail = bail;
+        this.proPayIdSender = from;
+        this.proPayIdRecipient = to;
     }
 
+
+    public void pay(IPaymentApi paymentApi) {
+        paymentApi.transferMoney(amount, proPayIdSender, proPayIdRecipient);
+    }
 }

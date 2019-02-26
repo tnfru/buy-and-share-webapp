@@ -12,9 +12,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
-import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.Item;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.ImageService;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
@@ -285,7 +285,7 @@ public class ItemRentalControllerTest {
         when(userRepo.findByAccountName("otheraccountname")).thenReturn(optU2);
         when(itemRepo.findById(3L)).thenReturn(optI);
 
-        mvc.perform(get("/item/rental/remove/3")
+        mvc.perform(post("/item/rental/remove/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isForbidden());
 
@@ -299,12 +299,10 @@ public class ItemRentalControllerTest {
 
         ItemRental itemRental = testItem(user);
 
-        Optional<ItemRental> optI = Optional.of(itemRental);
-
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
-        when(itemRepo.findById(3L)).thenReturn(optI);
+        when(itemRepo.findById(3L)).thenReturn(Optional.of(itemRental));
 
-        mvc.perform(get("/item/rental/remove/3")
+        mvc.perform(post("/item/rental/remove/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
 

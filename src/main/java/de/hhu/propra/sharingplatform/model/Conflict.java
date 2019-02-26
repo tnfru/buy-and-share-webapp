@@ -1,9 +1,17 @@
 package de.hhu.propra.sharingplatform.model;
 
 import de.hhu.propra.sharingplatform.dto.Status;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import lombok.Data;
-
-import javax.persistence.*;
 
 @Data
 @Entity
@@ -24,5 +32,7 @@ public class Conflict {
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User requester;
+
+    private boolean finished = false;
 
 }

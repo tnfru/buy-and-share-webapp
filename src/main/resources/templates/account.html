@@ -24,7 +24,8 @@
                    href="#v-pills-requests"
                    role="tab" aria-controls="v-pills-requests-tab"
                    aria-selected="false">Requests</a>
-                <a th:if="${user.getRole().equals('admin')}" class="nav-link" id="v-pills-admin-tab" data-toggle="pill"
+                <a th:if="${user.getRole().equals('admin')}" class="nav-link" id="v-pills-admin-tab"
+                   data-toggle="pill"
                    href="#v-pills-admin"
                    role="tab" aria-controls="v-pills-admin-tab" aria-selected="false">Admin</a>
                 <a class="nav-link" id="v-pills-userService-tab" data-toggle="pill"
@@ -45,8 +46,13 @@
                             <h4 th:text="${user.getName()}">User Name</h4>
                         </li>
                         <li class="list-group-item">
-                            <img th:src="@{${'/images/' + user?.imageFileName}}" class="card-img-top"
-                                 style="max-height: 20em; max-width: 70em">
+                            <article class="photo">
+                                <div style="text-align: center">
+                                    <img th:src="@{${'/images/' + user?.imageFileName}}"
+                                         class="img-fluid"
+                                         style="max-height: 20em; max-width: 70em">
+                                </div>
+                            </article>
                         </li>
                         <li class="list-group-item">
                             <b>Username:</b>
@@ -113,8 +119,11 @@
                             <td>
                                 <a th:href="|/item/rental/details/${itemRental.getId()}|"
                                    class="btn btn-primary btn-sm">Details</a>
-                                <a th:href="|/item/rental/remove/${itemRental.getId()}|"
-                                   class="btn btn-danger btn-sm">Remove</a>
+                                <form method="post"
+                                      th:action="|/item/rental/remove/${itemRental.getId()}|">
+                                    <button type="submit" class="btn btn-danger btn-sm">Remove
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         </tbody>
@@ -172,10 +181,12 @@
                             <td th:text="${con.getStart()}"> Start Date</td>
                             <td th:text="${con.getExpectedEnd()}"> Expected End Date</td>
                             <td th:if="${con.getConflicts().size()} > 0 ">
-                                <a th:href="|/showConflicts/${con.getId()}|" class="btn btn-danger btn-sm">Show conflicts</a>
+                                <a th:href="|/showConflicts/${con.getId()}|"
+                                   class="btn btn-danger btn-sm">Show conflicts</a>
                             </td>
                             <td th:if="${con.getConflicts().size() == 0} ">
-                                <a th:if="${con.getRealEnd()} == null" th:href="|/openConflict/${con.getId()}|"
+                                <a th:if="${con.getRealEnd()} == null"
+                                   th:href="|/openConflict/${con.getId()}|"
                                    class="btn btn-danger btn-sm">
                                     Open Conflict
                                 </a>
@@ -234,7 +245,8 @@
                                         Date
                                     </td>
                                     <td th:if="${con.getConflicts().size()} > 0">
-                                        <a th:href="|/showConflicts/${con.getId()}|" class="btn btn-info btn-sm">Show conflicts</a>
+                                        <a th:href="|/showConflicts/${con.getId()}|"
+                                           class="btn btn-info btn-sm">Show conflicts</a>
                                     </td>
                                     <td th:if="${con.getConflicts().size()} == 0">
                                         <span style="color: green;">&#45;</span>
@@ -278,7 +290,8 @@
                                 <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date
                                 </td>
                                 <td th:if="${con.getConflicts().size()} > 0">
-                                    <a th:href="|/showConflicts/${con.getId()}|" class="btn btn-danger btn-sm">Show conflicts</a>
+                                    <a th:href="|/showConflicts/${con.getId()}|"
+                                       class="btn btn-danger btn-sm">Show conflicts</a>
                                 </td>
                                 <td th:if="${con.getConflicts().size()} == 0">
                                     <span style="color: green;">&#45;</span>
@@ -290,13 +303,16 @@
                                             Return
                                         </button>
                                     </form>
-                                    <a th:href="|/openConflict/${con.getId()}|" class="btn btn-sm btn-danger">
+                                    <a th:href="|/openConflict/${con.getId()}|"
+                                       class="btn btn-sm btn-danger">
                                         Open Conflict
                                     </a>
                                 </td>
                                 <td th:if="${con.getOpenConflicts().size()} == 0">
-                                    <span th:if="${con.getRealEnd()} == null" class="badge badge-info">In Progress</span>
-                                    <span th:if="${con.getRealEnd()} != null" class="badge badge-info">Waiting for return confirmation</span>
+                                    <span th:if="${con.getRealEnd()} == null"
+                                          class="badge badge-info">In Progress</span>
+                                    <span th:if="${con.getRealEnd()} != null"
+                                          class="badge badge-info">Waiting for return confirmation</span>
                                 </td>
                                 <td th:if="${con.getOpenConflicts().size()} > 0">
                                     <span class="badge badge-danger">Conflict</span>
@@ -342,7 +358,8 @@
                                         <td th:text="${con?.getRealEnd()}"> Contract Real End Date
                                         </td>
                                         <td th:if="${con.getConflicts().size()} > 0">
-                                            <a th:href="|/showConflicts/${con.getId()}|" class="btn btn-info btn-sm">Show conflicts</a>
+                                            <a th:href="|/showConflicts/${con.getId()}|"
+                                               class="btn btn-info btn-sm">Show conflicts</a>
                                         </td>
                                         <td th:if="${con.getConflicts().size()} == 0">
                                             <span style="color: green;">&#45;</span>

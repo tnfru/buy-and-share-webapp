@@ -1,6 +1,7 @@
-package de.hhu.propra.sharingplatform.model;
+package de.hhu.propra.sharingplatform.model.items;
 
 import com.google.common.io.Files;
+import de.hhu.propra.sharingplatform.model.User;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -2,6 +2,11 @@ package de.hhu.propra.sharingplatform.model;
 
 
 import com.google.common.io.Files;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
+import de.hhu.propra.sharingplatform.model.items.Item;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
+import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -45,7 +50,7 @@ public class User {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
-    private List<Contract> contracts = new ArrayList<>();
+    private List<BorrowContract> contracts = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "owner")
