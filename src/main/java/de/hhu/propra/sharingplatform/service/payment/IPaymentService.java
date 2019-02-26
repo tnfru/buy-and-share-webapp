@@ -5,7 +5,6 @@ import de.hhu.propra.sharingplatform.model.payments.Payment;
 import org.springframework.stereotype.Component;
 
 @Deprecated
-@Component
 public interface IPaymentService {
 
     /**
