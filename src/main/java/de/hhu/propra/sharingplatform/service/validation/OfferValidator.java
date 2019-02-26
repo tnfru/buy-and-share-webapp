@@ -1,6 +1,7 @@
 package de.hhu.propra.sharingplatform.service.validation;
 
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
@@ -35,8 +36,8 @@ public class OfferValidator {
 
     public static void periodIsAvailable(ContractRepo contractRepo, Item item, LocalDateTime start,
                                          LocalDateTime end) {
-        List<Contract> contracts = contractRepo.findAllByItemAndFinishedIsFalse(item);
-        for (Contract contract : contracts) {
+        List<BorrowContract> contracts = contractRepo.findAllBorrowByItemAndFinishedIsFalse(item);
+        for (BorrowContract contract : contracts) {
             if (!(contract.getStart().isAfter(end) || contract.getExpectedEnd().isBefore(start))) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid period");
             }

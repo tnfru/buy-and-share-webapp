@@ -87,6 +87,10 @@ public class ContractService {
         paymentService.createPayment(contract);
     }
 
+    private boolean userIsBorrower(BorrowContract contract, String accountName){
+        return contract.getBorrower().getAccountName().equals(accountName);
+    }
+
     private boolean userIsContractOwner(BorrowContract contract, String userName) {
         return contract.getItem().getOwner().getAccountName().equals(userName)
             || contract.getBorrower().getAccountName().equals(userName);
@@ -111,7 +115,7 @@ public class ContractService {
     }
 
     public void continueContract(long conflictId) {
-        BorrowContract contract = conflictService.fetchConflictById(conflictId).getContract();
+        BorrowContract contract = (BorrowContract) conflictService.fetchConflictById(conflictId).getContract();
         contract.setRealEnd(null);
         contractRepo.save(contract);
     }

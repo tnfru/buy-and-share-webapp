@@ -18,5 +18,13 @@ public interface ContractRepo extends CrudRepository<Contract, Long> {
 
     List<Contract> findAllByItem(Item item);
 
+    List<BorrowContract> findAllBorrorByItem(Item item);
+
     List<Contract> findAllByItemAndFinishedIsFalse(Item item);
+
+    List<BorrowContract> findAllBorrowByItemAndFinishedIsFalse(Item item);
+
+    List<SellContract> findAllSellByItemAndFinishedIsFalse(Item item);
+
+    List<BorrowContract> findAllBorrowContracts();
 }
