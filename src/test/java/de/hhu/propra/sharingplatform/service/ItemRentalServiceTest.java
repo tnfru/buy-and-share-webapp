@@ -1,10 +1,22 @@
 package de.hhu.propra.sharingplatform.service;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
+import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,13 +25,6 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static junit.framework.TestCase.assertTrue;
-import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 public class ItemRentalServiceTest {
@@ -30,6 +35,9 @@ public class ItemRentalServiceTest {
     @MockBean
     private ItemRentalRepo itemRentalRepo;
 
+    @MockBean
+    private ItemRepo itemRepo;
+
     private ItemRental itemRental;
     private User user;
     private ItemService itemService;
@@ -38,7 +46,7 @@ public class ItemRentalServiceTest {
     @Before
     public void init() {
         imageService = mock(ImageService.class);
-        itemService = new ItemService(itemRentalRepo, userService, imageService);
+        itemService = new ItemService(userService, imageService, itemRepo);
 
         user = new User();
         user.setName("Test");
@@ -265,7 +273,7 @@ public class ItemRentalServiceTest {
         when(itemRentalRepo.findAllByNameContainsIgnoreCase(any())).thenReturn(dbNoItemRentals);
         when(itemRentalRepo.findAll()).thenReturn(dbAllItemRental);
 
-        List<ItemRental> itemRentals = itemService.filter(keywords);
+        List<ItemRental> itemRentals = itemService.filterRental(keywords);
 
         assertEquals(1, itemRentals.size());
     }
@@ -288,7 +296,7 @@ public class ItemRentalServiceTest {
         when(itemRentalRepo.findAllByNameContainsIgnoreCase("search")).thenReturn(dbFilterParam2);
         when(itemRentalRepo.findAll()).thenReturn(dbAllItemRental);
 
-        List<ItemRental> itemRentals = itemService.filter(keywords);
+        List<ItemRental> itemRentals = itemService.filterRental(keywords);
 
         assertEquals(3, itemRentals.size());
     }
