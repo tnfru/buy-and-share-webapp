@@ -24,6 +24,7 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class DataFaker implements ServletContextInitializer {
@@ -82,6 +83,10 @@ public class DataFaker implements ServletContextInitializer {
     @Override
     @Transactional
     public void onStartup(ServletContext servletContext) {
+        if (userRepo.count() != 0) {
+            log.info("Database already initialized.");
+            log.info("Skipping database faking");
+        }
         int dataSize = 75;
 
         log.info("Generating Database");
@@ -119,7 +124,13 @@ public class DataFaker implements ServletContextInitializer {
 
         log.info("    Create ProPay...");
         for (User user : users) {
-            apiService.addMoney(user.getPropayId(), 10000000);
+            try {
+                apiService.addMoney(user.getPropayId(), 10000000);
+            } catch (ResponseStatusException respException) {
+                log.warning("Could not reach Propay Server");
+                log.warning("Database may be incomplete");
+                return;
+            }
         }
 
         log.info("    Creating Offers...");
@@ -131,7 +142,13 @@ public class DataFaker implements ServletContextInitializer {
             LocalDateTime end = timeFaker.rndTimeAfter(start);
 
             if (itemRental.getOwner().getId() != user.getId()) {
-                offerService.create(itemRental.getId(), user, start, end);
+                try {
+                    offerService.create(itemRental.getId(), user, start, end);
+                } catch (ResponseStatusException respException) {
+                    log.warning("Could not reach Propay Server");
+                    log.warning("Database may be incomplete");
+                    return;
+                }
             } else {
                 i--;
             }
@@ -142,10 +159,16 @@ public class DataFaker implements ServletContextInitializer {
         for (int i = 0; i < (dataSize / 6); i++) {
             Offer offer = getRandomOffer(offers);
             if (!(offer.isAccept() || offer.isDecline())) {
-                if (faker.number().numberBetween(0, 1) == 1) {
-                    offerService.acceptOffer(offer.getId(), offer.getItemRental().getOwner());
-                } else {
-                    offerService.declineOffer(offer.getId(), offer.getItemRental().getOwner());
+                try {
+                    if (faker.number().numberBetween(0, 1) == 1) {
+                        offerService.acceptOffer(offer.getId(), offer.getItemRental().getOwner());
+                    } else {
+                        offerService.declineOffer(offer.getId(), offer.getItemRental().getOwner());
+                    }
+                } catch (ResponseStatusException respException) {
+                    log.warning("Could not reach Propay Server");
+                    log.warning("Database may be incomplete");
+                    return;
                 }
             } else {
                 i--;
