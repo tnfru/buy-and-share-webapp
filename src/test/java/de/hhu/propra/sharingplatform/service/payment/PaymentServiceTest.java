@@ -25,7 +25,7 @@ public class PaymentServiceTest {
 
     @Before
     public void setUp() {
-        this.paymentService = new PaymentService(paymentRepo, proPayApi);
+        this.paymentService = new PaymentService(paymentRepo, borrowContractRepo, proPayApi);
         this.millisecondsInDay = 1000 * 60 * 60 * 24;
     }
 
