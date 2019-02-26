@@ -2,10 +2,7 @@ package de.hhu.propra.sharingplatform.service.payment;
 
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
-import de.hhu.propra.sharingplatform.model.payments.Payment;
-import org.springframework.stereotype.Component;
 
-@Deprecated
 public interface IPaymentService {
 
     /**
@@ -15,16 +12,6 @@ public interface IPaymentService {
      * @return The payment information.
      */
     void createPayment(Contract contract);
-
-    /**
-     * Checks if the borrower in the contract is able to pay.
-     * This is done by getting the account balance and subtracting
-     * all open Bails.
-     *
-     * @param contract Contract
-     * @return true if enough money is available.
-     */
-    boolean recipientSolvent(Contract contract);
 
     /**
      * Transfers the money in the contract.

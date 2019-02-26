@@ -6,15 +6,12 @@ import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import org.springframework.stereotype.Service;
 
 
-@Deprecated
 @Service
 public class PaymentService implements IPaymentService {
 
-    private final PaymentRepo paymentRepo;
     private final IPaymentApi apiService;
 
-    public PaymentService(PaymentRepo paymentRepo, IPaymentApi apiService) {
-        this.paymentRepo = paymentRepo;
+    public PaymentService(IPaymentApi apiService) {
         this.apiService = apiService;
     }
 
@@ -23,11 +20,6 @@ public class PaymentService implements IPaymentService {
         contract.prepare(apiService);
     }
 
-    @Override
-    public boolean recipientSolvent(Contract contract) {
-        //TODO
-        return true;
-    }
 
     @Override
     public void transferPayment(BorrowContract contract) {
