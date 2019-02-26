@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.security.Principal;
 
 @Controller
-public class ConflictController extends BaseController{
+public class ConflictController extends BaseController {
 
     @Autowired
     private ContractService contractService;

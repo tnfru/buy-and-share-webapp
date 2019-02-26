@@ -5,11 +5,13 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
+
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 @Controller
-public class OfferController  extends BaseController{
+public class OfferController extends BaseController {
 
     @Autowired
     private ItemService itemService;
@@ -42,8 +44,8 @@ public class OfferController  extends BaseController{
 
     @PostMapping("/offer/request/{itemId}")
     public String createOffer(@PathVariable long itemId,
-        @RequestParam(name = "daterange") String dateRange,
-        Principal principal) {
+                              @RequestParam(name = "daterange") String dateRange,
+                              Principal principal) {
         User user = userService.fetchUserByAccountName(principal.getName());
         offerService.create(itemId, user, getStart(dateRange), getEnd(dateRange));
         return "redirect:/";

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.security.Principal;
 
 @Controller
-public class ContractController extends BaseController{
+public class ContractController extends BaseController {
 
     @Autowired
     private ContractService contractService;

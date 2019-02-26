@@ -14,13 +14,13 @@ import java.util.Optional;
 
 
 @Controller
-public  class BaseController {
+public class BaseController {
 
     @Autowired
     private UserRepo userRepo;
 
     @ModelAttribute("baseUser")
-    public String getUser(Principal principal){
+    public String getUser(Principal principal) {
 
         return "test";
     }

@@ -6,7 +6,9 @@ import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.RecommendationService;
 import de.hhu.propra.sharingplatform.service.UserService;
+
 import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +27,7 @@ public class ItemController extends BaseController {
 
     @Autowired
     public ItemController(ItemService itemService, OfferService offerService,
-        UserService userService, RecommendationService recommendationService) {
+                          UserService userService, RecommendationService recommendationService) {
         this.itemService = itemService;
         this.offerService = offerService;
         this.userService = userService;
@@ -61,7 +63,7 @@ public class ItemController extends BaseController {
 
     @GetMapping("/item/remove/{itemId}")
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
-        Principal principal) {
+                                    Principal principal) {
         itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
         offerService.removeOffersFromDeletedItem(itemId);
         return "redirect:/user/account/";
@@ -80,8 +82,8 @@ public class ItemController extends BaseController {
 
     @PostMapping("/item/edit/{itemId}")
     public String editItemData(Model model, Item item,
-        @PathVariable long itemId,
-        Principal principal) {
+                               @PathVariable long itemId,
+                               Principal principal) {
         long userId = userService.fetchUserIdByAccountName(principal.getName());
         itemService.editItem(item, itemId, userId);
         return "redirect:/user/account";

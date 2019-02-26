@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
