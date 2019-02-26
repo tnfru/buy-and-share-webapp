@@ -31,7 +31,6 @@ public class BorrowPayment extends Payment {
 
     @Override
     public void pay(IPaymentApi paymentApi){
-        paymentApi.freeReservation(bailProPayId, proPayIdSender);
         paymentApi.freeReservation(amountProPayId, proPayIdSender);
         paymentApi.transferMoney(super.amount, proPayIdSender, proPayIdRecipient);
     }

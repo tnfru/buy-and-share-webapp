@@ -16,14 +16,4 @@ public class SellContract extends Contract {
         super.payment = new Payment(0, fromPropaiId, toPropayId);
     }
 
-    @Override
-    public void pay(IPaymentApi paymentApi) {
-        String from = super.payment.getProPayIdSender();
-        String to = super.payment.getProPayIdRecipient();
-        int amount = super.payment.getAmount();
-
-        if (paymentApi.getAccountBalanceLiquid(from) >= amount) {
-            paymentApi.transferMoney(amount, from, to);
-        }
-    }
 }

@@ -27,7 +27,10 @@ public abstract class Contract {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     Item item;
 
-    public void pay(IPaymentApi paymentApi){}
+    public void pay(IPaymentApi paymentApi) {
+        payment.pay(paymentApi);
+    }
 
-    public void prepare(IPaymentApi paymentApi){}
+    public void prepare(IPaymentApi paymentApi) {
+    }
 }

@@ -37,10 +37,6 @@ public class BorrowContract extends Contract {
         return conflict != null;
     }
 
-    @Override
-    public void pay(IPaymentApi paymentApi) {
-        super.payment.pay(paymentApi);
-    }
 
     @Override
     public void prepare(IPaymentApi paymentApi) {
