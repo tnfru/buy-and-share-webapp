@@ -2,8 +2,9 @@ package de.hhu.propra.sharingplatform.model.contracts;
 
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.payments.Payment;
-import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
+import lombok.Data;
 
+@Data
 public class SellContract extends Contract {
 
     private SellContract() {
