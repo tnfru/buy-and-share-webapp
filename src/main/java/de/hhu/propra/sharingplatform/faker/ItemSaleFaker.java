@@ -15,7 +15,7 @@ public class ItemSaleFaker {
 
     public ItemSale create(User owner) {
         ItemSale itemSale = new ItemSale(owner);
-        itemSale.setName(faker.space().nasaSpaceCraft());
+        itemSale.setName(faker.harryPotter().character());
         itemSale.setDescription(faker.lorem().paragraph(1));
         itemSale.setPrice(faker.number().numberBetween(10, 523));
         itemSale.setLocation(faker.address().cityName());
