@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
-@Import({UserService.class})
+@Import( {UserService.class})
 @ConditionalOnClass
 @Ignore
 public class UserControllerTest {

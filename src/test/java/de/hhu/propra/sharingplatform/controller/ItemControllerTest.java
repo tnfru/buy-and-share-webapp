@@ -40,7 +40,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ItemController.class)
-@Import({ItemService.class})
+@Import( {ItemService.class})
 @Ignore
 public class ItemControllerTest {
 
@@ -67,7 +67,6 @@ public class ItemControllerTest {
 
     @MockBean
     private Contract contract;
-
 
 
     private User testUser() {
@@ -100,7 +99,7 @@ public class ItemControllerTest {
 
 
     @Before
-    private void exclueBaseController(){
+    private void exclueBaseController() {
         when(userService.fetchUserByAccountName(anyString())).thenReturn(new User());
         //when(testUser().getChosenContracts(any())).thenReturn(new List<Contract> );
     }
