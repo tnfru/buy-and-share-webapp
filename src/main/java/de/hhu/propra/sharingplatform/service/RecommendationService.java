@@ -24,8 +24,7 @@ public class RecommendationService {
     private int numberOfItems;
 
     @Autowired
-    public RecommendationService(ContractRepo contractRepo,
-                                 BorrowContractRepo borrowContractRepo, ItemRepo itemRepo) {
+    public RecommendationService(BorrowContractRepo borrowContractRepo, ItemRepo itemRepo) {
         this.borrowContractRepo = borrowContractRepo;
         this.itemRepo = itemRepo;
         this.numberOfItems = 4;

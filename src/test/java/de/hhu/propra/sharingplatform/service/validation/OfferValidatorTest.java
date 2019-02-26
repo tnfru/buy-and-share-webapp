@@ -1,27 +1,26 @@
 package de.hhu.propra.sharingplatform.service.validation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import de.hhu.propra.sharingplatform.dao.contractDao.ContractRepo;
-import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
-import de.hhu.propra.sharingplatform.model.contracts.Contract;
+import de.hhu.propra.sharingplatform.dao.contractDao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.service.payment.PaymentService;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+;
 
 public class OfferValidatorTest {
 
@@ -38,7 +37,7 @@ public class OfferValidatorTest {
     private PaymentService paymentService;
 
     @MockBean
-    private ContractRepo contractRepo;
+    private BorrowContractRepo borrowContractRepo;
 
     public void alternativeSetUpTests() {
         owner = new User();
@@ -48,19 +47,19 @@ public class OfferValidatorTest {
 
         start = LocalDateTime.now().plusDays(3);
         end = start.plusDays(1);
-        Contract contractOne = new BorrowContract(new Offer(item, borrower, start, end));
+        BorrowContract contractOne = new BorrowContract(new Offer(item, borrower, start, end));
 
         LocalDateTime newStart = end.plusDays(3);
         LocalDateTime newEnd = start.plusDays(4);
-        Contract contractTwo = new BorrowContract(new Offer(item, borrower, newStart, newEnd));
+        BorrowContract contractTwo = new BorrowContract(new Offer(item, borrower, newStart, newEnd));
 
-        List<Contract> contractList = new ArrayList<>();
+        List<BorrowContract> contractList = new ArrayList<>();
         contractList.add(contractOne);
         contractList.add(contractTwo);
 
-        contractRepo = mock(ContractRepo.class);
-        when(contractRepo.findAllByItem(item)).thenReturn(contractList);
-        when(contractRepo.findAllByItemAndFinishedIsFalse(item)).thenReturn(contractList);
+        borrowContractRepo = mock(BorrowContractRepo.class);
+        when(borrowContractRepo.findAllByItem(item)).thenReturn(contractList);
+        when(borrowContractRepo.findAllByItemAndFinishedIsFalse(item)).thenReturn(contractList);
     }
 
 
@@ -84,7 +83,7 @@ public class OfferValidatorTest {
         LocalDateTime testEnd = start.plusDays(9);
 
         try {
-            OfferValidator.periodIsAvailable(contractRepo, item, testStart, testEnd);
+            OfferValidator.periodIsAvailable(borrowContractRepo, item, testStart, testEnd);
         } catch (ResponseStatusException responseException) {
             thrown = true;
             assertEquals("400 BAD_REQUEST \"Invalid period\"",
@@ -102,7 +101,7 @@ public class OfferValidatorTest {
         end = start.plusDays(2);
 
         try {
-            OfferValidator.periodIsAvailable(contractRepo, item, start, end);
+            OfferValidator.periodIsAvailable(borrowContractRepo, item, start, end);
         } catch (ResponseStatusException responseException) {
             thrown = true;
         }
@@ -119,7 +118,7 @@ public class OfferValidatorTest {
         end = start.plusDays(2);
 
         try {
-            OfferValidator.periodIsAvailable(contractRepo, item, start, end);
+            OfferValidator.periodIsAvailable(borrowContractRepo, item, start, end);
         } catch (ResponseStatusException responseException) {
             thrown = true;
         }

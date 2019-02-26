@@ -1,9 +1,8 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.contractDao.ContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractDao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
-import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
@@ -22,12 +21,11 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class RecommendationServiceTest {
     @MockBean
-    ContractRepo contractRepo;
+    BorrowContractRepo borrowContractRepo;
 
     @MockBean
     ItemRepo itemRepo;
@@ -36,13 +34,13 @@ public class RecommendationServiceTest {
 
     @Before
     public void setUp() {
-        this.recommendationService = new RecommendationService(contractRepo, borrowContractRepo, itemRepo);
+        this.recommendationService = new RecommendationService(borrowContractRepo, itemRepo);
     }
 
     @Test
     public void findBorrowedItem() {
         List<BorrowContract> contracts = createFakeContracts();
-        //when(contractRepo.findAll()).thenReturn(contracts);
+        //when(borrowContractRepo.findAll()).thenReturn(contracts);
         List<Item> items = recommendationService.findBorrowedItems(5L);
 
         assertEquals(1, items.size());

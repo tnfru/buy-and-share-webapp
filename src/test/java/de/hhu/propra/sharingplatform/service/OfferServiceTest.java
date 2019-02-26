@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.hhu.propra.sharingplatform.dao.contractDao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.dao.contractDao.ContractRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
@@ -48,7 +49,7 @@ public class OfferServiceTest {
     private ItemService itemService;
 
     @MockBean
-    private ContractRepo contractRepo;
+    private BorrowContractRepo borrowContractRepo;
 
     private OfferService offerService;
 
@@ -62,7 +63,7 @@ public class OfferServiceTest {
     @Before
     public void setUpTests() {
         offerService = new OfferService(contractService, offerRepo, proPayApi, paymentService,
-            itemService, contractRepo);
+            itemService, borrowContractRepo);
         owner = new User();
         owner.setId(1L);
         borrower = new User();
