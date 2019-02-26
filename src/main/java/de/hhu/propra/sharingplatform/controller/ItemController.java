@@ -6,15 +6,14 @@ import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.RecommendationService;
 import de.hhu.propra.sharingplatform.service.UserService;
-
-import java.security.Principal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.security.Principal;
 
 @Controller
 public class ItemController extends BaseController {
@@ -61,11 +60,11 @@ public class ItemController extends BaseController {
         return "redirect:/user/account/";
     }
 
-    @GetMapping("/item/remove/{itemId}")
+    @PostMapping("/item/remove/{itemId}")
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
                                     Principal principal) {
-        itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
         offerService.removeOffersFromDeletedItem(itemId);
+        itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
         return "redirect:/user/account/";
     }
 
