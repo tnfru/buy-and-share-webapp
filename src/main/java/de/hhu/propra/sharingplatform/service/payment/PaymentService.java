@@ -75,6 +75,6 @@ public class PaymentService implements IPaymentService {
 
     private int calculateTotalActualPrice(Contract contract) {
         long timePassed = contract.getStart().until(contract.getRealEnd(), ChronoUnit.DAYS) + 1;
-        return (int) Math.ceil(timePassed * contract.getItem().getPrice());
+        return Math.max((int) Math.ceil(timePassed * contract.getItem().getPrice()), 0);
     }
 }
