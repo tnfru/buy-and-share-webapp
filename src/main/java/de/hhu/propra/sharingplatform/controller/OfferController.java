@@ -25,14 +25,17 @@ import org.springframework.web.server.ResponseStatusException;
 @Controller
 public class OfferController extends BaseController {
 
-    @Autowired
-    private ItemService itemService;
+    final ItemService itemService;
+
+    final OfferService offerService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private OfferService offerService;
+    public OfferController(UserService userService, ItemService itemService,
+        OfferService offerService) {
+        super(userService);
+        this.itemService = itemService;
+        this.offerService = offerService;
+    }
 
     @GetMapping("/offer/request/{itemId}")
     public String gotOfferForm(@PathVariable long itemId, Model model) {
@@ -44,8 +47,8 @@ public class OfferController extends BaseController {
 
     @PostMapping("/offer/request/{itemId}")
     public String createOffer(@PathVariable long itemId,
-                              @RequestParam(name = "daterange") String dateRange,
-                              Principal principal) {
+        @RequestParam(name = "daterange") String dateRange,
+        Principal principal) {
         User user = userService.fetchUserByAccountName(principal.getName());
         offerService.create(itemId, user, getStart(dateRange), getEnd(dateRange));
         return "redirect:/";

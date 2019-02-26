@@ -4,6 +4,7 @@ import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.service.ConflictService;
 import de.hhu.propra.sharingplatform.service.ContractService;
+import de.hhu.propra.sharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,11 +18,17 @@ import java.security.Principal;
 @Controller
 public class ConflictController extends BaseController {
 
-    @Autowired
-    private ContractService contractService;
+    private final ContractService contractService;
+
+    private final ConflictService conflictService;
 
     @Autowired
-    private ConflictService conflictService;
+    public ConflictController(UserService userService, ContractService contractService,
+        ConflictService conflictService) {
+        super(userService);
+        this.contractService = contractService;
+        this.conflictService = conflictService;
+    }
 
 
     /**
@@ -45,7 +52,7 @@ public class ConflictController extends BaseController {
 
     @PostMapping("/openConflict/{contractId}")
     public String openConflict(@RequestParam(value = "description") String description,
-                               Principal principal, @PathVariable long contractId) {
+        Principal principal, @PathVariable long contractId) {
         contractService.validateOwner(contractId, principal.getName());
         contractService.openConflict(description, principal.getName(), contractId);
         return "redirect:/user/account";
@@ -53,7 +60,7 @@ public class ConflictController extends BaseController {
 
     @GetMapping("/showConflicts/{contractId}")
     public String showUserConflicts(@PathVariable long contractId,
-                                    Principal principal, Model model) {
+        Principal principal, Model model) {
         contractService.validateOwner(contractId, principal.getName());
         model.addAttribute("conflicts",
             contractService.fetchContractById(contractId).getConflicts());

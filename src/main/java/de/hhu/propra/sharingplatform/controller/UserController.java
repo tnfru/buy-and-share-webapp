@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class UserController extends BaseController {
 
-    @Autowired
-    private HttpServletRequest request;
+    private final HttpServletRequest request;
 
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService, HttpServletRequest request) {
+        super(userService);
+        this.request = request;
+    }
 
     @GetMapping("/user/register")
     public String registerPage(Model model) {
@@ -78,7 +80,7 @@ public class UserController extends BaseController {
 
     @PostMapping("/user/changePassword")
     public String changePassword(Model model, Principal principal, String oldPassword,
-                                 String newPassword, String confirm) {
+        String newPassword, String confirm) {
         User user = userService.fetchUserByAccountName(principal.getName());
         userService.updatePassword(user, oldPassword, newPassword, confirm);
         return "redirect:/user/account";

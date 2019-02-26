@@ -21,8 +21,12 @@ import java.util.Optional;
 @Controller
 public class BaseController {
 
+    final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public BaseController(UserService userService) {
+        this.userService = userService;
+    }
 
     @ModelAttribute("overdueMsg")
     public String overdueMsg(Principal principal) {

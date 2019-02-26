@@ -20,16 +20,15 @@ public class ItemController extends BaseController {
 
     private final ItemService itemService;
     private final OfferService offerService;
-    private final UserService userService;
     private final RecommendationService recommendationService;
 
 
     @Autowired
     public ItemController(ItemService itemService, OfferService offerService,
-                          UserService userService, RecommendationService recommendationService) {
+        UserService userService, RecommendationService recommendationService) {
+        super(userService);
         this.itemService = itemService;
         this.offerService = offerService;
-        this.userService = userService;
         this.recommendationService = recommendationService;
     }
 
@@ -62,7 +61,7 @@ public class ItemController extends BaseController {
 
     @PostMapping("/item/remove/{itemId}")
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
-                                    Principal principal) {
+        Principal principal) {
         offerService.removeOffersFromDeletedItem(itemId);
         itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
         return "redirect:/user/account/";
@@ -81,8 +80,8 @@ public class ItemController extends BaseController {
 
     @PostMapping("/item/edit/{itemId}")
     public String editItemData(Model model, Item item,
-                               @PathVariable long itemId,
-                               Principal principal) {
+        @PathVariable long itemId,
+        Principal principal) {
         long userId = userService.fetchUserIdByAccountName(principal.getName());
         itemService.editItem(item, itemId, userId);
         return "redirect:/user/account";

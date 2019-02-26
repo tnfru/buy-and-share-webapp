@@ -24,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
+@Ignore
 @RunWith(SpringRunner.class)
 @Import( {Offer.class, Contract.class, ContractService.class})
 public class ContractServiceTest {
@@ -54,6 +55,7 @@ public class ContractServiceTest {
         end = end.plusDays(3);
         offer = new Offer(item, borrower, start, end);
         contract = new Contract(offer);
+
     }
 
     @Test
