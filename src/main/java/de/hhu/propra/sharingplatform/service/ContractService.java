@@ -3,6 +3,7 @@ package de.hhu.propra.sharingplatform.service;
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
 import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
@@ -35,14 +36,14 @@ public class ContractService {
     }
 
     public void create(Offer offer) {
-        Contract contract = new Contract(offer);
+        BorrowContract contract = new BorrowContract(offer);
         // -> payment
         contract.setPayment(paymentService.createPayment(contract));
         contractRepo.save(contract);
     }
 
     public void returnItem(long contractId, String accountName) {
-        Contract contract = contractRepo.findOneById(contractId);
+        BorrowContract contract = (BorrowContract)contractRepo.findOneById(contractId);
         if (!userIsBorrower(contract, accountName)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
@@ -54,7 +55,7 @@ public class ContractService {
     }
 
     public void acceptReturn(long contractId, String accountName) {
-        Contract contract = contractRepo.findOneById(contractId);
+        BorrowContract contract = (BorrowContract)contractRepo.findOneById(contractId);
         if (!(userIsContractOwner(contract, accountName) || accountName.equals("admin"))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
@@ -66,7 +67,7 @@ public class ContractService {
 
 
     public void openConflict(String description, String accountName, long contractId) {
-        Contract contract = contractRepo.findOneById(contractId);
+        BorrowContract contract = (BorrowContract)contractRepo.findOneById(contractId);
         List<Conflict> conflicts = contract.getConflicts();
         for (Conflict conflict : conflicts) {
             if (conflict.getStatus().equals(Status.PENDING)) {
@@ -85,11 +86,7 @@ public class ContractService {
         paymentService.createPayment(contract);
     }
 
-    private boolean userIsBorrower(Contract contract, String accountName) {
-        return contract.getBorrower().getAccountName().equals(accountName);
-    }
-
-    private boolean userIsContractOwner(Contract contract, String userName) {
+    private boolean userIsContractOwner(BorrowContract contract, String userName) {
         return contract.getItem().getOwner().getAccountName().equals(userName)
             || contract.getBorrower().getAccountName().equals(userName);
     }
@@ -99,7 +96,7 @@ public class ContractService {
     }
 
     public void validateOwner(long contractId, String accountName) {
-        Contract contract = contractRepo.findOneById(contractId);
+        BorrowContract contract = (BorrowContract)contractRepo.findOneById(contractId);
         if (!userIsContractOwner(contract, accountName)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
@@ -113,7 +110,7 @@ public class ContractService {
     }
 
     public void continueContract(long conflictId) {
-        Contract contract = conflictService.fetchConflictById(conflictId).getContract();
+        BorrowContract contract = conflictService.fetchConflictById(conflictId).getContract();
         contract.setRealEnd(null);
         contractRepo.save(contract);
     }

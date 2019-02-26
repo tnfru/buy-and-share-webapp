@@ -3,7 +3,7 @@ package de.hhu.propra.sharingplatform.service;
 import de.hhu.propra.sharingplatform.dao.ConflictRepo;
 import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
-import de.hhu.propra.sharingplatform.model.Contract;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import org.springframework.stereotype.Service;
 
