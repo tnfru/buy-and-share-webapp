@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration
+    .WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,12 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecConfig extends WebSecurityConfigurerAdapter {
 
 
-    private final UserDetailsService userDetailsService;
-
+    // this cannot be autowired in an constructor?!?!
     @Autowired
-    public SecConfig(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    private UserDetailsService userDetailsService;
 
     @Bean
     public PasswordEncoder encoder() {
@@ -44,7 +42,6 @@ public class SecConfig extends WebSecurityConfigurerAdapter {
         // Later they should be removed again
         http.headers().frameOptions().disable();
         http.csrf().disable();
-
     }
 
 }
