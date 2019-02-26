@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -87,6 +88,13 @@ public class UserController extends BaseController {
         User user = userService.fetchUserByAccountName(principal.getName());
         userService.updateProPay(user, propayAccount, propayAmount);
         return "redirect:/user/account";
+    }
+
+    @GetMapping("/user/{id}")
+    public String userDetails(Model model, @PathVariable long id) {
+        User user = userService.fetchUserById(id);
+        model.addAttribute("user", user);
+        return "userDetails";
     }
 
     @GetMapping("/user/propay")

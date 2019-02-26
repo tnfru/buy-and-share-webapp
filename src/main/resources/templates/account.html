@@ -128,6 +128,8 @@
                             <th scope="col">Expected End Date</th>
                             <th scope="col">Conflict</th>
                             <th scope="col" class="mx-auto">Options</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Owner</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -137,26 +139,33 @@
                             <td th:text="${con.getItem().getBail()}"> Item Bail</td>
                             <td th:text="${con.getStart()}"> Start Date</td>
                             <td th:text="${con.getExpectedEnd()}"> Expected End Date</td>
-                            <td th:if="${con.isConflict()} == true">
-                                <span style="color: red;">&#33;</span>
+                            <td th:if="${con.getConflicts().size()} > 0 ">
+                                <a th:href="|/showConflicts/${con.getId()}|" class="btn btn-danger btn-sm">Show conflicts</a>
                             </td>
-                            <td th:if="${con.isConflict()} == false">
-                                <span style="color: green;">&#45;</span>
+                            <td th:if="${con.getConflicts().size() == 0} ">
+                                <a th:if="${con.getRealEnd()} == null" th:href="|/openConflict/${con.getId()}|"
+                                   class="btn btn-danger btn-sm">
+                                    Open Conflict
+                                </a>
                             </td>
-                            <td th:if="${con.getRealEnd()} == null and ${con.isConflict()} == false">
+                            <td>
                                 <form method="post"
-                                      th:action="|/contract/${con.getId()}/returnItem|">
+                                      th:action="|/contract/${con.getId()}/returnItem|"
+                                      th:if="${con.getRealEnd()} == null">
                                     <button type="submit" class="btn btn-primary btn-sm">Return
                                         Item
                                     </button>
                                 </form>
-                                <a href="#"
-                                   class="btn btn-danger btn-sm">Item Owner</a>
                             </td>
-                            <td th:if="${con.getRealEnd()} != null">
-                                <span class="badge badge-info">PENDING</span>
-                                <span th:if="${con.isConflict()} == true" class="badge badge-danger"
-                                      th:text="${con.getConflict().getStatus()}"></span>
+                            <td th:if="${con.getOpenConflicts().size()} == 0">
+                                <span th:if="${con.getRealEnd()} != null" class="badge badge-info">Waiting for owner</span>
+                                <span th:if="${con.getRealEnd()} == null" class="badge badge-info">In progress</span>
+                            </td>
+                            <td th:if="${con.getOpenConflicts().size()} > 0">
+                                <span class="badge badge-danger">Conflict</span>
+                            <td>
+                                <a href="#"
+                                   class="btn btn-info btn-sm">Item Owner</a>
                             </td>
                         </tr>
                         </tbody>
@@ -180,6 +189,7 @@
                                     <th scope="col">Expected End Date</th>
                                     <th scope="col">Conflict</th>
                                     <th scope="col" class="mx-auto">Options</th>
+                                    <th scope="col">Owner</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -191,21 +201,18 @@
                                     <td th:text="${con.getExpectedEnd()}"> Contract Expected End
                                         Date
                                     </td>
-                                    <td th:if="${con.isConflict()} == true">
-                                        <span style="color: red;">&#33;</span>
+                                    <td th:if="${con.getConflicts().size()} > 0">
+                                        <a th:href="|/showConflicts/${con.getId()}|" class="btn btn-info btn-sm">Show conflicts</a>
                                     </td>
-                                    <td th:if="${con.isConflict()} == false">
+                                    <td th:if="${con.getConflicts().size()} == 0">
                                         <span style="color: green;">&#45;</span>
                                     </td>
-                                    <td th:if="${con.isConflict()} == false">
+                                    <td>
                                         <span class="badge badge-info">Finished</span>
-                                        <a href="#"
-                                           class="btn btn-danger btn-sm">Item Owner</a>
                                     </td>
-                                    <td th:if="${con.isConflict()} == true">
-                                        <span class="badge badge-info">Finished</span>
-                                        <span class="badge badge-danger"
-                                              th:text="${con.getConflict().getStatus()}"></span>
+                                    <td>
+                                        <a href="#"
+                                           class="btn btn-info btn-sm">Item Owner</a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -224,7 +231,6 @@
                             <th scope="col">Item Bail</th>
                             <th scope="col">Start Date</th>
                             <th scope="col">Expected End Date</th>
-                            <th scope="col">End Date</th>
                             <th scope="col">Conflict</th>
                             <th scope="col" class="mx-auto">Options</th>
                         </tr>
@@ -239,34 +245,30 @@
                                 <td th:text="${con.getStart()}"> Contract Start Date</td>
                                 <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date
                                 </td>
-                                <td th:text="${con?.getRealEnd()}"> Contract Real End Date</td>
-                                <td th:if="${con.isConflict()} == true">
-                                    <span style="color: red;">&#33;</span>
+                                <td th:if="${con.getConflicts().size()} > 0">
+                                    <a th:href="|/showConflicts/${con.getId()}|" class="btn btn-danger btn-sm">Show conflicts</a>
                                 </td>
-                                <td th:if="${con.isConflict()} == false">
+                                <td th:if="${con.getConflicts().size()} == 0">
                                     <span style="color: green;">&#45;</span>
                                 </td>
-                                <td th:if="${con.getRealEnd()} != null and ${con.isConflict() == false}">
+                                <td th:if="${con.getRealEnd()} != null and ${con.getConflicts().size() == 0}">
                                     <form method="post"
                                           th:action="|/contract/${con.getId()}/acceptReturn|">
                                         <button type="submit" class="btn btn-primary btn-sm">Accept
                                             Return
                                         </button>
                                     </form>
-                                    <form method="post"
-                                          th:action="|/contract/${con.getId()}/openConflict|">
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            Conflict
-                                        </button>
-                                    </form>
+                                    <a th:href="|/openConflict/${con.getId()}|" class="btn btn-sm btn-danger">
+                                        Open Conflict
+                                    </a>
                                 </td>
-                                <td th:if="${con.getRealEnd()} == null">
-                                    <span class="badge badge-info">In Progress</span>
+                                <td th:if="${con.getOpenConflicts().size()} == 0">
+                                    <span th:if="${con.getRealEnd()} == null" class="badge badge-info">In Progress</span>
+                                    <span th:if="${con.getRealEnd()} != null" class="badge badge-info">Waiting for return confirmation</span>
                                 </td>
-                                <td th:if="${con.getRealEnd()} != null and ${con.isConflict() == true}">
-                                    <span class="badge badge-danger"
-                                          th:text="${con.getConflict().getStatus()}"></span>
-                                </td>
+                                <td th:if="${con.getOpenConflicts().size()} > 0">
+                                    <span class="badge badge-danger">Conflict</span>
+                                <td>
                             </tr>
                         </div>
                         </tbody>
@@ -307,17 +309,14 @@
                                         </td>
                                         <td th:text="${con?.getRealEnd()}"> Contract Real End Date
                                         </td>
-                                        <td th:if="${con.isConflict()} == true">
-                                            <span style="color: red;">&#33;</span>
+                                        <td th:if="${con.getConflicts().size()} > 0">
+                                            <a th:href="|/showConflicts/${con.getId()}|" class="btn btn-info btn-sm">Show conflicts</a>
                                         </td>
-                                        <td th:if="${con.isConflict()} == false">
+                                        <td th:if="${con.getConflicts().size()} == 0">
                                             <span style="color: green;">&#45;</span>
                                         </td>
                                         <td>
                                             <span class="badge badge-info">Finished</span>
-                                            <span th:if="${con.isConflict()}"
-                                                  th:text="${con.getConflict().getStatus()}"
-                                                  class="badge badge-danger"></span>
                                         </td>
                                     </tr>
                                 </div>
@@ -358,7 +357,7 @@
                                 <span class="badge badge-info">Pending</span>
                             </td>
                             <td>
-                                <a th:href="|/user/visitor/${offer.getItem().getOwner().getId()}|"
+                                <a th:href="|/user/${offer.getItem().getOwner().getId()}|"
                                    class="btn btn-sm btn-primary btn-block">
                                     <span th:text="${offer.getItem().getOwner().getAccountName()}"></span>
                                 </a>
