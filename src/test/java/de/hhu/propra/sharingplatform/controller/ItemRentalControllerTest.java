@@ -91,21 +91,21 @@ public class ItemRentalControllerTest {
 
     @Test
     public void getItemDetailsNotLoggedIn() throws Exception {
-        mvc.perform(get("/itemRental/details/1000")
+        mvc.perform(get("/item/rental/details/1000")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
     }
 
     @Test
     public void getNewItemNotLoggedIn() throws Exception {
-        mvc.perform(get("/itemRental/new")
+        mvc.perform(get("/item/rental/new")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
     }
 
     @Test
     public void postNewItemNotLoggedIn() throws Exception {
-        mvc.perform(post("/itemRental/new")
+        mvc.perform(post("/item/rental/new")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("any", "any"))
             .andExpect(status().is3xxRedirection());
@@ -113,21 +113,21 @@ public class ItemRentalControllerTest {
 
     @Test
     public void getRemoveItemNotLoggedIn() throws Exception {
-        mvc.perform(get("/itemRental/remove/1000")
+        mvc.perform(get("/item/rental/remove/1000")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
     }
 
     @Test
     public void getEditItemNotLoggedIn() throws Exception {
-        mvc.perform(get("/itemRental/edit/1000")
+        mvc.perform(get("/item/rental/edit/1000")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
     }
 
     @Test
     public void postEditItemNotLoggedIn() throws Exception {
-        mvc.perform(post("/itemRental/edit/1000")
+        mvc.perform(post("/item/rental/edit/1000")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("any", "any"))
             .andExpect(status().is3xxRedirection());
@@ -142,7 +142,7 @@ public class ItemRentalControllerTest {
     @Test
     @WithMockUser
     public void itemDetailsDontExistLoggedIn() throws Exception {
-        mvc.perform(get("/itemRental/details/1000")
+        mvc.perform(get("/item/rental/details/1000")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is4xxClientError());
     }
@@ -167,7 +167,7 @@ public class ItemRentalControllerTest {
         when(userService.fetchUserByAccountName("accountname")).thenReturn(user);
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
 
-        mvc.perform(get("/itemRental/details/3")
+        mvc.perform(get("/item/rental/details/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Edit ItemRental")));
@@ -197,7 +197,7 @@ public class ItemRentalControllerTest {
         when(itemRentalRepo.findOneById(3)).thenReturn(itemRental);
         when(userRepo.findByAccountName("otheraccountname")).thenReturn(optU2);
 
-        mvc.perform(get("/itemRental/details/3")
+        mvc.perform(get("/item/rental/details/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Request")));
@@ -206,7 +206,7 @@ public class ItemRentalControllerTest {
     @Test
     @WithMockUser("accountname")
     public void getNewItemLoggedIn() throws Exception {
-        mvc.perform(get("/itemRental/new")
+        mvc.perform(get("/item/rental/new")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("New ItemRental")));
@@ -222,7 +222,7 @@ public class ItemRentalControllerTest {
 
         when(userRepo.findByAccountName("accountname")).thenReturn(optU);
 
-        mvc.perform(post("/itemRental/new")
+        mvc.perform(post("/item/rental/new")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("any", "any"))
             .andExpect(status().is4xxClientError());
@@ -239,7 +239,7 @@ public class ItemRentalControllerTest {
 
         when(userRepo.findByAccountName("accountname")).thenReturn(optU);
 
-        mvc.perform(post("/itemRental/new")
+        mvc.perform(post("/item/rental/new")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("name", "name")
             .param("dailyRate", "1")
@@ -258,7 +258,7 @@ public class ItemRentalControllerTest {
 
         when(userRepo.findByAccountName("accountname")).thenReturn(optU);
 
-        mvc.perform(get("/itemRental/remove/1000")
+        mvc.perform(get("/item/rental/remove/1000")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is4xxClientError());
     }
@@ -287,7 +287,7 @@ public class ItemRentalControllerTest {
         when(itemRentalRepo.findById(3)).thenReturn(optI);
         when(itemRentalRepo.findOneById(3)).thenReturn(itemRental);
 
-        mvc.perform(get("/itemRental/remove/3")
+        mvc.perform(get("/item/rental/remove/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isForbidden());
 
@@ -307,7 +307,7 @@ public class ItemRentalControllerTest {
         when(itemRentalRepo.findById(3)).thenReturn(optI);
         when(itemRentalRepo.findOneById(3)).thenReturn(itemRental);
 
-        mvc.perform(get("/itemRental/remove/3")
+        mvc.perform(get("/item/rental/remove/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
 
@@ -319,7 +319,7 @@ public class ItemRentalControllerTest {
     public void editItemDontExistsLoggedIn() throws Exception {
         User user = testUser();
 
-        mvc.perform(get("/itemRental/edit/3")
+        mvc.perform(get("/item/rental/edit/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isNotFound());
     }
@@ -347,7 +347,7 @@ public class ItemRentalControllerTest {
         when(userRepo.findByAccountName("otheraccountname")).thenReturn(optU2);
         when(itemRentalRepo.findById(3)).thenReturn(optI);
 
-        mvc.perform(get("/itemRental/edit/3")
+        mvc.perform(get("/item/rental/edit/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isForbidden());
     }
@@ -364,7 +364,7 @@ public class ItemRentalControllerTest {
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
         when(itemRentalRepo.findById(3)).thenReturn(optI);
 
-        mvc.perform(get("/itemRental/edit/3")
+        mvc.perform(get("/item/rental/edit/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk());
     }
@@ -378,7 +378,7 @@ public class ItemRentalControllerTest {
 
         when(userRepo.findByAccountName("accountname")).thenReturn(optU);
 
-        mvc.perform(post("/itemRental/edit/1000")
+        mvc.perform(post("/item/rental/edit/1000")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("any", "any"))
             .andExpect(status().is4xxClientError());
@@ -407,7 +407,7 @@ public class ItemRentalControllerTest {
         when(itemRentalRepo.findOneById(3L)).thenReturn(itemRental);
         when(itemRentalRepo.findById(3L)).thenReturn(Optional.of(itemRental));
 
-        mvc.perform(post("/itemRental/edit/3")
+        mvc.perform(post("/item/rental/edit/3")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("any", "any"))
             .andExpect(status().isForbidden());
@@ -424,7 +424,7 @@ public class ItemRentalControllerTest {
         when(itemRentalRepo.findById(3L)).thenReturn(Optional.of(itemRental));
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
 
-        mvc.perform(post("/itemRental/edit/3")
+        mvc.perform(post("/item/rental/edit/3")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("name", "name")
             .param("dailyRate", "1")
@@ -447,7 +447,7 @@ public class ItemRentalControllerTest {
         when(itemRentalRepo.findById(3L)).thenReturn(Optional.of(itemRental));
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
 
-        mvc.perform(post("/itemRental/edit/3")
+        mvc.perform(post("/v/edit/3")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("name", "name")
             .param("location", "loc")

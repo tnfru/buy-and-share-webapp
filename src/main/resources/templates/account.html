@@ -106,15 +106,15 @@
                             </td>
                             <td> Is Conflict?</td>
                             <td>
-                                <a th:href="|/itemRental/details/${itemRental.getId()}|"
+                                <a th:href="|/item/rental/details/${itemRental.getId()}|"
                                    class="btn btn-primary btn-sm">Details</a>
-                                <a th:href="|/itemRental/remove/${itemRental.getId()}|"
+                                <a th:href="|/item/rental/remove/${itemRental.getId()}|"
                                    class="btn btn-danger btn-sm">Remove</a>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                    <a class="btn btn-primary" href="/itemRental/new">New Item</a>
+                    <a class="btn btn-primary" href="/item/rental/new">New Item</a>
                 </div>
                 <div class="tab-pane fade" id="v-pills-borrowedItemRentals" role="tabpanel"
                      aria-labelledby="v-pills-messages-tab">
@@ -372,7 +372,7 @@
                 </div>
                 <div class="tab-pane fade" id="v-pills-userServices" role="tabpanel"
                      aria-labelledby="v-pills-newItemRental-tab">
-                    <a class="btn btn-primary" href="/itemRental/new">New Item</a>
+                    <a class="btn btn-primary" href="/item/rental/new">New Item</a>
                     <br>
                     <a style="margin-top:1em; " class="btn btn-info" href="/user/edit">Edit
                         Profile</a>

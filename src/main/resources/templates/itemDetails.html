@@ -102,7 +102,7 @@
                    th:href="|/offer/show/${itemRental.getId()}|">Show Requests</a>
                 <a th:unless="${ownItem} == false "
                    class="btn btn-outline-warning btn-block"
-                   th:href="|/itemRental/edit/${itemRental?.Id}|">Edit Item</a>
+                   th:href="|/item/rental/edit/${itemRental?.Id}|">Edit Item</a>
             </div>
         </div>
 
@@ -139,7 +139,7 @@
 
                         </ul>
                         <div class="card-body">
-                            <a th:href="|/itemRental/details/${itemRental.getId()}|"
+                            <a th:href="|/item/rental/details/${itemRental.getId()}|"
                                class="btn btn-outline-info btn-block">Details</a>
                             <a th:href="|/user/${itemRental.getOwner().getId()}|"
                                class="btn btn-outline-secondary btn-block">User Details</a>

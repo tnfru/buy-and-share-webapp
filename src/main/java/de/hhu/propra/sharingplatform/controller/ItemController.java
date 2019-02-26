@@ -32,7 +32,7 @@ public class ItemController {
         this.recommendationService = recommendationService;
     }
 
-    @GetMapping("/itemRental/details/{itemId}")
+    @GetMapping("/item/rental/details/{itemId}")
     public String detailPage(Model model, @PathVariable long itemId, Principal principal) {
         ItemRental itemRental = itemService.findItem(itemId);
         model.addAttribute("itemRental", itemRental);
@@ -44,7 +44,7 @@ public class ItemController {
         return "itemDetails";
     }
 
-    @GetMapping("/itemRental/new")
+    @GetMapping("/item/rental/new")
     public String newItem(Model model, Principal principal) {
         User user = userService.fetchUserByAccountName(principal.getName());
         model.addAttribute("itemRental", new ItemRental(user));
@@ -52,14 +52,14 @@ public class ItemController {
         return "itemForm";
     }
 
-    @PostMapping("/itemRental/new")
+    @PostMapping("/item/rental/new")
     public String inputItemData(Model model, ItemRental itemRental, Principal principal) {
         itemService
             .persistItem(itemRental, userService.fetchUserIdByAccountName(principal.getName()));
         return "redirect:/user/account/";
     }
 
-    @GetMapping("/itemRental/remove/{itemId}")
+    @GetMapping("/item/rental/remove/{itemId}")
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
         Principal principal) {
         itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
@@ -67,7 +67,7 @@ public class ItemController {
         return "redirect:/user/account/";
     }
 
-    @GetMapping("/itemRental/edit/{itemId}")
+    @GetMapping("/item/rental/edit/{itemId}")
     public String editItem(Model model, @PathVariable long itemId, Principal principal) {
         ItemRental itemRental = itemService.findItem(itemId);
         model.addAttribute("itemRental", itemRental);
@@ -78,7 +78,7 @@ public class ItemController {
         return "itemForm";
     }
 
-    @PostMapping("/itemRental/edit/{itemId}")
+    @PostMapping("/item/rental/edit/{itemId}")
     public String editItemData(Model model, ItemRental itemRental,
         @PathVariable long itemId,
         Principal principal) {
