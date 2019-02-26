@@ -8,10 +8,7 @@ import de.hhu.propra.sharingplatform.model.payments.BorrowPayment;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -29,7 +26,8 @@ public class BorrowContract extends Contract {
     private LocalDateTime start;
     private LocalDateTime expectedEnd;
     private LocalDateTime realEnd;
-    private BorrowPayment payment;
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private BorrowPayment borrowPayment;
 
     private BorrowContract() {
     }
@@ -54,8 +52,8 @@ public class BorrowContract extends Contract {
         long timespan = Math.max(start.until(expectedEnd, ChronoUnit.DAYS) + 1, 0);
         int amount = (int) Math.ceil(timespan * super.item.getPrice());
         int bail = super.item.getBail();
-        payment = new BorrowPayment(from, to, amount, bail);
-        payment.reserve(paymentApi);
+        borrowPayment = new BorrowPayment(from, to, amount, bail);
+        borrowPayment.reserve(paymentApi);
     }
 
     /**
@@ -66,7 +64,7 @@ public class BorrowContract extends Contract {
 
 
     public void freeBail(IPaymentApi paymentApi) {
-        payment.freeBail(paymentApi);
+        borrowPayment.freeBail(paymentApi);
     }
 
 
@@ -77,7 +75,7 @@ public class BorrowContract extends Contract {
      */
 
     public void punishBail(IPaymentApi paymentApi) {
-        payment.punishBail(paymentApi);
+        borrowPayment.punishBail(paymentApi);
     }
 
 
@@ -88,7 +86,7 @@ public class BorrowContract extends Contract {
         realEnd = LocalDateTime.now();
         long timespan = Math.max(start.until(realEnd, ChronoUnit.DAYS) + 1, 0);
         int amount = (int) Math.ceil(timespan * super.item.getPrice());
-        payment.setAmount(amount);
+        borrowPayment.setAmount(amount);
     }
 
     public List<Conflict> getOpenConflicts() {

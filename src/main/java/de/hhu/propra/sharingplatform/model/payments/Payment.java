@@ -24,7 +24,7 @@ public class Payment {
     Contract contract;
 
     @SuppressWarnings("unused")
-    private Payment() {
+    public Payment() {
         // used for jpa
     }
 
@@ -33,6 +33,7 @@ public class Payment {
         this.proPayIdSender = from;
         this.proPayIdRecipient = to;
     }
+
 
     public void pay(IPaymentApi paymentApi) {
         paymentApi.transferMoney(amount, proPayIdSender, proPayIdRecipient);

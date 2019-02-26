@@ -2,7 +2,12 @@ package de.hhu.propra.sharingplatform.model.payments;
 
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
+import lombok.Data;
 
+import javax.persistence.Entity;
+
+@Data
+@Entity
 public class BorrowPayment extends Payment {
 
     long amountProPayId;
@@ -22,6 +27,10 @@ public class BorrowPayment extends Payment {
         this.proPayIdSender = sender;
         this.proPayIdRecipient = recipient;
         this.bail = bail;
+    }
+
+    private BorrowPayment() {
+
     }
 
     /**
