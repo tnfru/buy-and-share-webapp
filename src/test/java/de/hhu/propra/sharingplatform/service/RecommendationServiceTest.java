@@ -21,6 +21,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class RecommendationServiceTest {
@@ -40,7 +41,7 @@ public class RecommendationServiceTest {
     @Test
     public void findBorrowedItem() {
         List<BorrowContract> contracts = createFakeContracts();
-        //when(borrowContractRepo.findAll()).thenReturn(contracts);
+        when(borrowContractRepo.findAll()).thenReturn(contracts);
         List<Item> items = recommendationService.findBorrowedItems(5L);
 
         assertEquals(1, items.size());
