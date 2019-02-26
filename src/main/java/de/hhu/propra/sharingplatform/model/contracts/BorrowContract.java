@@ -9,6 +9,7 @@ import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import lombok.Data;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Entity
 public class BorrowContract extends Contract {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},

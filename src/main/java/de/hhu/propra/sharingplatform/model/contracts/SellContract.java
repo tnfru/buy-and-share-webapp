@@ -4,7 +4,10 @@ import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.payments.Payment;
 import lombok.Data;
 
+import javax.persistence.Entity;
+
 @Data
+@Entity
 public class SellContract extends Contract {
 
     private SellContract() {
