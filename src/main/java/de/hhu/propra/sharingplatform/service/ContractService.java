@@ -1,6 +1,8 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
+import de.hhu.propra.sharingplatform.dto.Status;
+import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
@@ -12,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @Data
@@ -52,7 +55,7 @@ public class ContractService {
 
     public void acceptReturn(long contractId, String accountName) {
         Contract contract = contractRepo.findOneById(contractId);
-        if (!userIsContractOwner(contract, accountName)) {
+        if (!(userIsContractOwner(contract, accountName) || accountName.equals("admin"))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
         }
@@ -64,7 +67,16 @@ public class ContractService {
 
     public void openConflict(String description, String accountName, long contractId) {
         Contract contract = contractRepo.findOneById(contractId);
-        contract.setConflict(conflictService.createConflict(contract, accountName, description));
+        List<Conflict> conflicts = contract.getConflicts();
+        for (Conflict conflict : conflicts) {
+            if (conflict.getStatus().equals(Status.PENDING)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "There can only be one open conflict at a time");
+            }
+        }
+        conflicts.add(conflictService.createConflict(contract, accountName, description));
+        contract.setConflicts(conflicts);
+        contract.setRealEnd(LocalDateTime.now());
         contractRepo.save(contract);
     }
 
@@ -98,5 +110,15 @@ public class ContractService {
         Contract contract = conflictService.fetchConflictById(conflictId).getContract();
         contract.setFinished(true);
         contractRepo.save(contract);
+    }
+
+    public void continueContract(long conflictId) {
+        Contract contract = conflictService.fetchConflictById(conflictId).getContract();
+        contract.setRealEnd(null);
+        contractRepo.save(contract);
+    }
+
+    public Contract fetchContractById(long contractId) {
+        return contractRepo.findOneById(contractId);
     }
 }

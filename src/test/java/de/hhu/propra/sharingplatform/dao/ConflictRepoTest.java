@@ -27,12 +27,12 @@ public class ConflictRepoTest {
         pending1.setStatus(Status.PENDING);
         Conflict pending2 = new Conflict();
         pending2.setStatus(Status.PENDING);
-        Conflict rejected = new Conflict();
-        rejected.setStatus(Status.REJECTED);
+        Conflict punishedBail = new Conflict();
+        punishedBail.setStatus(Status.PUNISHED_BAIL);
 
         repo.save(pending1);
         repo.save(pending2);
-        repo.save(rejected);
+        repo.save(punishedBail);
 
         List<Conflict> conflicts = repo.findAllByStatus(Status.PENDING);
 
@@ -48,17 +48,17 @@ public class ConflictRepoTest {
         pending1.setStatus(Status.PENDING);
         Conflict pending2 = new Conflict();
         pending2.setStatus(Status.PENDING);
-        Conflict rejected = new Conflict();
-        rejected.setStatus(Status.REJECTED);
+        Conflict punishedBail = new Conflict();
+        punishedBail.setStatus(Status.PUNISHED_BAIL);
 
         repo.save(pending1);
         repo.save(pending2);
-        repo.save(rejected);
+        repo.save(punishedBail);
 
-        List<Conflict> conflicts = repo.findAllByStatus(Status.REJECTED);
+        List<Conflict> conflicts = repo.findAllByStatus(Status.PUNISHED_BAIL);
 
         for (Conflict conflict : conflicts) {
-            assertEquals(conflict.getStatus(), Status.REJECTED);
+            assertEquals(conflict.getStatus(), Status.PUNISHED_BAIL);
         }
         assertEquals(conflicts.size(), 1);
     }

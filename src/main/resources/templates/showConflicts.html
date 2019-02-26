@@ -9,35 +9,24 @@
                 <thead>
                 <tr>
                     <th scope="col">Borrower</th>
-                    <th scope="col">Borrower mail</th>
                     <th scope="col">Owner</th>
-                    <th scope="col">Owner mail</th>
                     <th scope="col">Status</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Options</th>
                 </tr>
                 </thead>
-                <tr th:each="conflict : ${openConflicts}">
+                <tr th:each="conflict : ${conflicts}">
                     <td th:text="${conflict.getContract().getBorrower().getName()}">Borrower name
                     </td>
-                    <td th:text="${conflict.getContract().getBorrower().getEmail()}">Borrower mail
-                    </td>
                     <td th:text="${conflict.getContract().getItem().getOwner().getName()}">Owner name</td>
-                    <td th:text="${conflict.getContract().getItem().getOwner().getEmail()}">Owner
-                        mail
-                    </td>
                     <td>
-                        <span class="badge badge-info" th:text="${conflict.getStatus()}"></span>
+                        <span class="badge badge-danger" th:text="${conflict.getStatus()}"></span>
                     </td>
                     <td th:text="${conflict.getDescription()}">Description</td>
-                    <td>
-                        <a class="btn btn-sm btn-primary btn-block" th:href="|/conflicts/${conflict.getId()}/details|">
-                            Conflict Details
-                        </a>
-                    </td>
                 </tr>
             </table>
         </div>
+
+        <a class="btn btn-primary btn-sm" th:href="|/openConflict/${contractId}|">New Conflict</a>
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
                 integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
