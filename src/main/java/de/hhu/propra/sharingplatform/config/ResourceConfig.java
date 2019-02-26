@@ -2,12 +2,15 @@ package de.hhu.propra.sharingplatform.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class ResourceConfig extends WebMvcConfigurerAdapter {
+public class ResourceConfig implements WebMvcConfigurer {
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/public/images/**").addResourceLocations("file:images/");
+        registry
+            .addResourceHandler("/public/images/**")
+            .addResourceLocations("file:images/");
     }
 }
