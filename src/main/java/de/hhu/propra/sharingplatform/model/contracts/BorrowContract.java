@@ -29,6 +29,7 @@ public class BorrowContract extends Contract {
     private LocalDateTime start;
     private LocalDateTime expectedEnd;
     private LocalDateTime realEnd;
+    private BorrowPayment payment;
 
     private BorrowContract() {
     }
@@ -54,7 +55,7 @@ public class BorrowContract extends Contract {
         int amount = (int) Math.ceil(timespan * super.item.getPrice());
         int bail = super.item.getBail();
         payment = new BorrowPayment(from, to, amount, bail);
-        ((BorrowPayment) payment).reserve(paymentApi);
+        payment.reserve(paymentApi);
     }
 
     /**
@@ -65,7 +66,7 @@ public class BorrowContract extends Contract {
 
 
     public void freeBail(IPaymentApi paymentApi) {
-        ((BorrowPayment) payment).freeBail(paymentApi);
+        payment.freeBail(paymentApi);
     }
 
 
@@ -76,7 +77,7 @@ public class BorrowContract extends Contract {
      */
 
     public void punishBail(IPaymentApi paymentApi) {
-        ((BorrowPayment) payment).punishBail(paymentApi);
+        payment.punishBail(paymentApi);
     }
 
 
