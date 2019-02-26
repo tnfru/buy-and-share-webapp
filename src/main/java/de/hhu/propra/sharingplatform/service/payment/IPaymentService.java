@@ -9,7 +9,6 @@ public interface IPaymentService {
      * Creates the payment information from a contract.
      *
      * @param contract contract for payment.
-     * @return The payment information.
      */
     void createPayment(Contract contract);
 

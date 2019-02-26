@@ -208,8 +208,7 @@ public class ItemRentalServiceTest {
 
     @Test(expected = NullPointerException.class)
     public void searchKeywordsNullString() {
-        String search = null;
-        itemService.searchKeywords(search);
+        itemService.searchKeywords(null);
     }
 
     @Test

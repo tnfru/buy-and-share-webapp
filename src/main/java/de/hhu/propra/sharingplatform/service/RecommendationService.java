@@ -57,7 +57,7 @@ public class RecommendationService {
      * @return array List of best suggestions
      */
 
-    List<Item> findBestItems(Map<Item, Integer> map, long itemId) {
+    private List<Item> findBestItems(Map<Item, Integer> map, long itemId) {
         List<Entry<Item, Integer>> entrys = findGreatest(map);
         List<Item> suggestions = new ArrayList<>();
 
@@ -97,7 +97,7 @@ public class RecommendationService {
     }
 
     List<Item> findBorrowedItems(long userId) {
-        List<BorrowContract> allContracts = borrowContractRepo.findAll();
+        List<BorrowContract> allContracts = (List<BorrowContract>) borrowContractRepo.findAll();
         List<Item> items = new ArrayList<>();
 
         for (BorrowContract contract : allContracts) {

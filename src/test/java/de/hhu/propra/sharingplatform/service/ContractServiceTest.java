@@ -31,10 +31,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @Import( {Offer.class, Contract.class, ContractService.class})
 public class ContractServiceTest {
 
-    private User owner;
-    private User borrower;
-    private ItemRental itemRental;
-    private Offer offer;
     private BorrowContract contract;
 
     @MockBean
@@ -48,14 +44,14 @@ public class ContractServiceTest {
 
     @Before
     public void setUpTests() {
-        owner = new User();
-        borrower = new User();
-        itemRental = new ItemRental(owner);
+        User owner = new User();
+        User borrower = new User();
+        ItemRental itemRental = new ItemRental(owner);
 
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now();
         end = end.plusDays(3);
-        offer = new Offer(itemRental, borrower, start, end);
+        Offer offer = new Offer(itemRental, borrower, start, end);
         contract = new BorrowContract(offer);
     }
 

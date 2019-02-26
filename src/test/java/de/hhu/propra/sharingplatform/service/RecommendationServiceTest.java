@@ -65,7 +65,7 @@ public class RecommendationServiceTest {
         assertEquals(itemOne, recommendationService.findGreatest(map).get(0).getKey());
     }
 
-    public List<User> createFakerUser() {
+    private List<User> createFakerUser() {
         List<User> users = new ArrayList<>();
         for (long i = 0; i < 20; i++) {
             User user = new User();

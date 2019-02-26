@@ -16,11 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ConflictController {
 
-    @Autowired
-    private ContractService contractService;
+    private final ContractService contractService;
+
+    private final ConflictService conflictService;
 
     @Autowired
-    private ConflictService conflictService;
+    public ConflictController(ContractService contractService, ConflictService conflictService) {
+        this.contractService = contractService;
+        this.conflictService = conflictService;
+    }
 
 
     /**

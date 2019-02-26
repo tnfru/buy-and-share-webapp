@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProPayApi implements IPaymentApi {
 
-    final PaymentRepo paymentRepo;
+    private final PaymentRepo paymentRepo;
     String host = "localhost";
 
     @Autowired

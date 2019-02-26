@@ -15,14 +15,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class SharingPlatformController {
 
-    @Autowired
-    private ItemRentalRepo itemRentalRepo;
+    private final ItemRentalRepo itemRentalRepo;
+
+    private final ItemSaleRepo itemSaleRepo;
+
+    private final ItemService itemService;
 
     @Autowired
-    private ItemSaleRepo itemSaleRepo;
-
-    @Autowired
-    private ItemService itemService;
+    public SharingPlatformController(ItemRentalRepo itemRentalRepo, ItemSaleRepo itemSaleRepo,
+        ItemService itemService) {
+        this.itemRentalRepo = itemRentalRepo;
+        this.itemSaleRepo = itemSaleRepo;
+        this.itemService = itemService;
+    }
 
     @GetMapping("/")
     public String mainPage(Model model, Principal principal) {

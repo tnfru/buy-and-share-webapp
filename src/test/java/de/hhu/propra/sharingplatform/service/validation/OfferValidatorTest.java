@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.server.ResponseStatusException;
 
-;
 
 public class OfferValidatorTest {
 

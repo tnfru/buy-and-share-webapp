@@ -270,8 +270,8 @@ public class OfferControllerTest {
 
         assertEquals(a1.getValue().longValue(), 1337);
         assertEquals(a2.getValue(), user);
-        assertTrue(a3.getValue().equals(LocalDateTime.of(2019, 2, 23, 0, 0, 0)));
-        assertTrue(a4.getValue().equals(LocalDateTime.of(2019, 2, 27, 23, 59, 59)));
+        assertEquals(a3.getValue(), LocalDateTime.of(2019, 2, 23, 0, 0, 0));
+        assertEquals(a4.getValue(), LocalDateTime.of(2019, 2, 27, 23, 59, 59));
     }
 
     @Test

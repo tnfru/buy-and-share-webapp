@@ -24,13 +24,13 @@ public class ApiService {
         StringBuilder urlBuilder = new StringBuilder(serverAddress);
         // append path variables
         for (String pathVar : pathVars) {
-            urlBuilder.append(pathVar + "/");
+            urlBuilder.append(pathVar).append("/");
         }
         urlBuilder.deleteCharAt(urlBuilder.lastIndexOf("/"));
         // append parameters
         urlBuilder.append("?");
         for (String parameter : parameters.keySet()) {
-            urlBuilder.append(parameter + "=" + parameters.get(parameter) + "&");
+            urlBuilder.append(parameter).append("=").append(parameters.get(parameter)).append("&");
         }
         urlBuilder.deleteCharAt(urlBuilder.lastIndexOf("&"));
         URL url;
@@ -51,7 +51,7 @@ public class ApiService {
         }
     }
 
-    public static String convertHttpResponse(InputStreamReader inStream) {
+    private static String convertHttpResponse(InputStreamReader inStream) {
         try {
             BufferedReader in = new BufferedReader(inStream);
             String input;

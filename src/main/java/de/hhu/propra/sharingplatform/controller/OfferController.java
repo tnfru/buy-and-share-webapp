@@ -23,14 +23,19 @@ import org.springframework.web.server.ResponseStatusException;
 @Controller
 public class OfferController {
 
-    @Autowired
-    private ItemService itemService;
+    private final ItemService itemService;
+
+    private final UserService userService;
+
+    private final OfferService offerService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private OfferService offerService;
+    public OfferController(ItemService itemService, UserService userService,
+        OfferService offerService) {
+        this.itemService = itemService;
+        this.userService = userService;
+        this.offerService = offerService;
+    }
 
     @GetMapping("/offer/request/{itemId}")
     public String gotOfferForm(@PathVariable long itemId, Model model) {
@@ -97,13 +102,9 @@ public class OfferController {
             String[] dates = formattedDateRange.split(" - ");
             DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             LocalDate date = LocalDate.parse(dates[index], format);
-            LocalDateTime dateTime = date.atStartOfDay();
-            return dateTime;
-        } catch (DateTimeParseException parseException) {
-            parseException.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong dateformat");
-        } catch (ArrayIndexOutOfBoundsException arrayBoundException) {
-            arrayBoundException.printStackTrace();
+            return date.atStartOfDay();
+        } catch (DateTimeParseException | ArrayIndexOutOfBoundsException exception) {
+            exception.printStackTrace();
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong dateformat");
         }
     }

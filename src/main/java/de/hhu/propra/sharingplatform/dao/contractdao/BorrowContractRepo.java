@@ -12,7 +12,4 @@ public interface BorrowContractRepo extends CrudRepository<BorrowContract, Long>
     List<BorrowContract> findAllByItem(Item item);
 
     List<BorrowContract> findAllByItemAndFinishedIsFalse(Item item);
-
-    List<BorrowContract> findAll();
-
 }

@@ -135,7 +135,7 @@ public class DataFaker implements ServletContextInitializer {
             LocalDateTime start = timeFaker.rndTime();
             LocalDateTime end = timeFaker.rndTimeAfter(start);
 
-            if (itemRental.getOwner().getId() != user.getId()) {
+            if (!itemRental.getOwner().getId().equals(user.getId())) {
                 try {
                     offerService.create(itemRental.getId(), user, start, end);
                 } catch (ResponseStatusException respException) {
