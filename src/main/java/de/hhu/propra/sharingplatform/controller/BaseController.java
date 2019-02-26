@@ -19,7 +19,7 @@ public  class BaseController {
     @Autowired
     private UserRepo userRepo;
 
-    @ModelAttribute("user")
+    @ModelAttribute("baseUser")
     public String getUser(Principal principal){
 
         return "test";
