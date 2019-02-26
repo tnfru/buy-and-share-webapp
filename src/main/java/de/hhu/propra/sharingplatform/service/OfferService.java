@@ -45,7 +45,7 @@ public class OfferService {
     }
 
     public void create(long itemId, User requester, LocalDateTime start, LocalDateTime end) {
-        ItemRental itemRental = itemService.findItem(itemId);
+        ItemRental itemRental = (ItemRental) itemService.findItem(itemId);
         validate(itemRental, requester, start, end);
 
         Offer offer = new Offer(itemRental, requester, start, end);

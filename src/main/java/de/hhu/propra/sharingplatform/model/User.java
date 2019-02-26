@@ -107,14 +107,15 @@ public class User {
     /**
      * @return all itemRentals the user has. Items that are marked as removed are not returned
      */
-    public Collection getItemsExcludeRemoved() {
-        ArrayList<ItemRental> notRemovedItemRentals = new ArrayList<>();
-        for (ItemRental itemRental : itemRentals) {
-            if (!itemRental.isDeleted()) {
-                notRemovedItemRentals.add(itemRental);
+
+    public Collection<Item> getNotRemovedItems(List<Item> list) {
+        ArrayList<Item> itemsActive = new ArrayList<>();
+        for (Item item : list) {
+            if (!item.isDeleted()) {
+                itemsActive.add(item);
             }
         }
-        return notRemovedItemRentals;
+        return itemsActive;
     }
 
     public List<Contract> getChosenContracts(boolean finished) {
