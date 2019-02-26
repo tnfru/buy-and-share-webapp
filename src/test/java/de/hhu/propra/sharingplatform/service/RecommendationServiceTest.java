@@ -54,15 +54,15 @@ public class RecommendationServiceTest {
     public void findGreatest() {
         this.recommendationService.setNumberOfItems(1);
         Map<Item, Integer> map = new HashMap<>();
-        Item ItemOne = new ItemRental(mock(User.class));
-        ItemOne.setId(1337L);
-        Item ItemTwo = new ItemRental(mock(User.class));
-        ItemTwo.setId(7331L);
-        map.put(ItemOne, 10);
-        map.put(ItemTwo, 2);
+        Item itemOne = new ItemRental(mock(User.class));
+        itemOne.setId(1337L);
+        Item itemTwo = new ItemRental(mock(User.class));
+        itemTwo.setId(7331L);
+        map.put(itemOne, 10);
+        map.put(itemTwo, 2);
 
         assertEquals(2, recommendationService.findGreatest(map).size());
-        assertEquals(ItemOne, recommendationService.findGreatest(map).get(0).getKey());
+        assertEquals(itemOne, recommendationService.findGreatest(map).get(0).getKey());
     }
 
     public List<User> createFakerUser() {
@@ -77,12 +77,12 @@ public class RecommendationServiceTest {
 
     public List<Item> createFakeItems() {
         List<User> users = createFakerUser();
-        List<Item> Items = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            Item Item = new ItemRental(users.get(i));
-            Items.add(Item);
+            Item item = new ItemRental(users.get(i));
+            items.add(item);
         }
-        return Items;
+        return items;
     }
 
     public List<BorrowContract> createFakeContracts() {
