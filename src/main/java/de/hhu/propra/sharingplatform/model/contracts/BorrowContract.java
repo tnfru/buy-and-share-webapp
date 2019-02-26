@@ -4,19 +4,20 @@ import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.payments.BorrowPayment;
-import de.hhu.propra.sharingplatform.model.payments.Payment;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 
 import javax.persistence.CascadeType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 public class BorrowContract extends Contract {
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private Conflict conflict;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+        mappedBy = "contract")
+    private List<Conflict> conflicts;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User borrower;
     private LocalDateTime start;

@@ -17,8 +17,7 @@ public class Conflict {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
-        mappedBy = "conflict")
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Contract contract;
 
 
