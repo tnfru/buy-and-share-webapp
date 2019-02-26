@@ -52,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(ItemController.class)
 @Import( {ItemService.class})
-@Ignore
+
 public class ItemControllerTest {
 
     @Autowired
@@ -110,9 +110,8 @@ public class ItemControllerTest {
 
 
     @Before
-    private void exclueBaseController() {
+    public void exclueBaseController() {
         when(userService.fetchUserByAccountName(anyString())).thenReturn(new User());
-        //when(testUser().getChosenContracts(any())).thenReturn(new List<Contract> );
     }
     /*
     NOT LOGGED in
