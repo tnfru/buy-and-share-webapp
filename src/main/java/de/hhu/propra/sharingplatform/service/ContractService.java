@@ -1,11 +1,12 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.ContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractDao.BorrowContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractDao.SellContractRepo;
 import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
+import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
-import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.contracts.SellContract;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import lombok.Data;
@@ -22,16 +23,19 @@ import java.util.List;
 @Data
 public class ContractService {
 
-    final ContractRepo contractRepo;
+    final BorrowContractRepo borrowContractRepo;
+
+    final SellContractRepo sellContractRepo;
 
     final IPaymentService paymentService;
 
     private ConflictService conflictService;
 
     @Autowired
-    public ContractService(ContractRepo contractRepo, IPaymentService paymentService,
-                           ConflictService conflictService) {
-        this.contractRepo = contractRepo;
+    public ContractService(BorrowContractRepo borrowContractRepo, SellContractRepo sellContractRepo,
+                           IPaymentService paymentService, ConflictService conflictService) {
+        this.borrowContractRepo = borrowContractRepo;
+        this.sellContractRepo = sellContractRepo;
         this.paymentService = paymentService;
         this.conflictService = conflictService;
     }
@@ -40,11 +44,11 @@ public class ContractService {
         BorrowContract contract = new BorrowContract(offer);
         // -> payment
         paymentService.createPayment(contract);
-        contractRepo.save(contract);
+        borrowContractRepo.save(contract);
     }
 
     public void returnItem(long contractId, String accountName) {
-        BorrowContract contract = (BorrowContract)contractRepo.findOneById(contractId);
+        BorrowContract contract = borrowContractRepo.findOneById(contractId);
         if (!userIsBorrower(contract, accountName)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
@@ -52,23 +56,23 @@ public class ContractService {
         LocalDateTime current = LocalDateTime.now();
         contract.setRealEnd(current);
         paymentService.transferPayment(contract);
-        contractRepo.save(contract);
+        borrowContractRepo.save(contract);
     }
 
     public void acceptReturn(long contractId, String accountName) {
-        BorrowContract contract = (BorrowContract)contractRepo.findOneById(contractId);
+        BorrowContract contract = borrowContractRepo.findOneById(contractId);
         if (!(userIsContractOwner(contract, accountName) || accountName.equals("admin"))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
         }
         paymentService.freeBailReservation(contract);
         contract.setFinished(true);
-        contractRepo.save(contract);
+        borrowContractRepo.save(contract);
     }
 
 
     public void openConflict(String description, String accountName, long contractId) {
-        BorrowContract contract = (BorrowContract)contractRepo.findOneById(contractId);
+        BorrowContract contract = borrowContractRepo.findOneById(contractId);
         List<Conflict> conflicts = contract.getConflicts();
         for (Conflict conflict : conflicts) {
             if (conflict.getStatus().equals(Status.PENDING)) {
@@ -79,15 +83,15 @@ public class ContractService {
         conflicts.add(conflictService.createConflict(contract, accountName, description));
         contract.setConflicts(conflicts);
         contract.setRealEnd(LocalDateTime.now());
-        contractRepo.save(contract);
+        borrowContractRepo.save(contract);
     }
 
     void calcPrice(long contractId) {
-        Contract contract = contractRepo.findOneById(contractId);
+        BorrowContract contract = borrowContractRepo.findOneById(contractId);
         paymentService.createPayment(contract);
     }
 
-    private boolean userIsBorrower(BorrowContract contract, String accountName){
+    private boolean userIsBorrower(BorrowContract contract, String accountName) {
         return contract.getBorrower().getAccountName().equals(accountName);
     }
 
@@ -101,7 +105,7 @@ public class ContractService {
     }
 
     public void validateOwner(long contractId, String accountName) {
-        BorrowContract contract = (BorrowContract)contractRepo.findOneById(contractId);
+        BorrowContract contract = borrowContractRepo.findOneById(contractId);
         if (!userIsContractOwner(contract, accountName)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "This contract does not involve you");
@@ -109,26 +113,27 @@ public class ContractService {
     }
 
     public void cancelContract(long conflictId) {
-        Contract contract = conflictService.fetchConflictById(conflictId).getContract();
+        BorrowContract contract =
+            (BorrowContract) conflictService.fetchConflictById(conflictId).getContract();
         contract.setFinished(true);
-        contractRepo.save(contract);
+        borrowContractRepo.save(contract);
     }
 
     public void continueContract(long conflictId) {
         BorrowContract contract = (BorrowContract) conflictService.fetchConflictById(conflictId).getContract();
         contract.setRealEnd(null);
-        contractRepo.save(contract);
+        borrowContractRepo.save(contract);
     }
 
     public Contract fetchContractById(long contractId) {
-        return contractRepo.findOneById(contractId);
+        return borrowContractRepo.findOneById(contractId);
     }
 
-    public BorrowContract fetchBorrowContractById(long contractId){
-        return contractRepo.findOneBorrowContractById(contractId);
+    public BorrowContract fetchBorrowContractById(long contractId) {
+        return borrowContractRepo.findOneById(contractId);
     }
 
-    public SellContract fetchSellContractById(long contractId){
-        return contractRepo.findOneSellContractById(contractId);
+    public SellContract fetchSellContractById(long contractId) {
+        return sellContractRepo.findOneById(contractId);
     }
 }
