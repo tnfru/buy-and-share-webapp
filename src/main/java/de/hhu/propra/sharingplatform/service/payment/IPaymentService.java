@@ -14,7 +14,7 @@ public interface IPaymentService {
      * @param contract contract for payment.
      * @return The payment information.
      */
-    Payment createPayment(Contract contract);
+    void createPayment(Contract contract);
 
     /**
      * Checks if the borrower in the contract is able to pay.

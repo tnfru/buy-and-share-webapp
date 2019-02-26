@@ -20,7 +20,7 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public Payment createPayment(Contract contract) {
+    public void createPayment(Contract contract) {
         contract.prepare(apiService);
     }
 

@@ -39,7 +39,7 @@ public class ContractService {
     public void create(Offer offer) {
         BorrowContract contract = new BorrowContract(offer);
         // -> payment
-        contract.setPayment(paymentService.createPayment(contract));
+        paymentService.createPayment(contract);
         contractRepo.save(contract);
     }
 
