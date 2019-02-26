@@ -53,4 +53,11 @@ public class BorrowContract extends Contract {
     public void punishBail(IPaymentApi paymentApi){
 
     }
+
+    public void returnItem(){
+        realEnd = LocalDateTime.now();
+        long timespan = Math.max(start.until(realEnd, ChronoUnit.DAYS) + 1, 0);
+        int amount = (int) Math.ceil(timespan * super.item.getPrice());
+        payment.setAmount(amount);
+    }
 }

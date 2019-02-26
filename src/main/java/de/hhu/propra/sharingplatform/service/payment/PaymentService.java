@@ -34,6 +34,7 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public void transferPayment(Contract contract) {
+        ((BorrowContract)contract).returnItem();
         contract.pay(apiService);
     }
 
