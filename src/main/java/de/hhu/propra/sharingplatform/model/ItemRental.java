@@ -1,12 +1,16 @@
 package de.hhu.propra.sharingplatform.model;
 
-import lombok.Data;
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = false)
 public class ItemRental extends Item {
 
     private Integer bail;

@@ -82,7 +82,7 @@ public class ItemService {
 
     public void allowOnlyOwner(Item item, long userId) {
         if (item.getOwner().getId() != userId) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your ItemRental");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your Item");
         }
     }
 

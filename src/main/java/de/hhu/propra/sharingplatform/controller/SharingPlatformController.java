@@ -36,7 +36,7 @@ public class SharingPlatformController {
     }
 
     @PostMapping("/")
-    public String mainPage(Model model, Principal principal, String search) {
+    public String salePage(Model model, Principal principal, String search) {
         User user = null;
         if (principal != null) {
             user = new User();
