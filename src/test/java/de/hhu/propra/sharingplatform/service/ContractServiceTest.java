@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
@@ -33,7 +34,7 @@ public class ContractServiceTest {
     private User borrower;
     private Item item;
     private Offer offer;
-    private Contract contract;
+    private BorrowContract contract;
 
     @MockBean
     ContractRepo contractRepo;
@@ -54,7 +55,7 @@ public class ContractServiceTest {
         LocalDateTime end = LocalDateTime.now();
         end = end.plusDays(3);
         offer = new Offer(item, borrower, start, end);
-        contract = new Contract(offer);
+        contract = new BorrowContract(offer);
     }
 
     @Test

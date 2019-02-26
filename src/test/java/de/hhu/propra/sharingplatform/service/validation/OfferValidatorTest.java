@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.ContractRepo;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
@@ -47,11 +48,11 @@ public class OfferValidatorTest {
 
         start = LocalDateTime.now().plusDays(3);
         end = start.plusDays(1);
-        Contract contractOne = new Contract(new Offer(item, borrower, start, end));
+        Contract contractOne = new BorrowContract(new Offer(item, borrower, start, end));
 
         LocalDateTime newStart = end.plusDays(3);
         LocalDateTime newEnd = start.plusDays(4);
-        Contract contractTwo = new Contract(new Offer(item, borrower, newStart, newEnd));
+        Contract contractTwo = new BorrowContract(new Offer(item, borrower, newStart, newEnd));
 
         List<Contract> contractList = new ArrayList<>();
         contractList.add(contractOne);
