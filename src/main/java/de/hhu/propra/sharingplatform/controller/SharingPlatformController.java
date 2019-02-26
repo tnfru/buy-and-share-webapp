@@ -36,7 +36,7 @@ public class SharingPlatformController {
     }
 
     @PostMapping("/")
-    public String salePage(Model model, Principal principal, String search) {
+    public String mainPageSearch(Model model, Principal principal, String search) {
         User user = null;
         if (principal != null) {
             user = new User();
@@ -49,7 +49,7 @@ public class SharingPlatformController {
     }
 
     @GetMapping("/sale")
-    public String SaleMainPage(Model model, Principal principal) {
+    public String saleMainPage(Model model, Principal principal) {
         User user = null;
         if (principal != null) {
             user = new User();
@@ -60,7 +60,7 @@ public class SharingPlatformController {
     }
 
     @PostMapping("/sale")
-    public String SaleMainPage(Model model, Principal principal, String search) {
+    public String saleMainPageSearch(Model model, Principal principal, String search) {
         User user = null;
         if (principal != null) {
             user = new User();
