@@ -45,4 +45,12 @@ public class BorrowPayment extends Payment {
         paymentApi.freeReservation(amountProPayId, proPayIdSender);
         paymentApi.transferMoney(super.amount, proPayIdSender, proPayIdRecipient);
     }
+
+    public void punishBail(IPaymentApi paymentApi) {
+        paymentApi.punishReservation(bailProPayId, proPayIdSender);
+    }
+
+    public void freeBail(IPaymentApi paymentApi) {
+        paymentApi.freeReservation(bailProPayId, proPayIdSender);
+    }
 }

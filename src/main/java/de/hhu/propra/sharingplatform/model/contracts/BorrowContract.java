@@ -63,7 +63,7 @@ public class BorrowContract extends Contract {
      * @param paymentApi
      */
     public void freeBail(IPaymentApi paymentApi) {
-
+        ((BorrowPayment)payment).freeBail(paymentApi);
     }
 
     /**
@@ -72,7 +72,7 @@ public class BorrowContract extends Contract {
      * @param paymentApi api for bail punishment.
      */
     public void punishBail(IPaymentApi paymentApi) {
-
+        ((BorrowPayment)payment).punishBail(paymentApi);
     }
 
     /**
