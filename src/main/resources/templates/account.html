@@ -46,9 +46,13 @@
                             <h4 th:text="${user.getName()}">User Name</h4>
                         </li>
                         <li class="list-group-item">
-                            <img th:src="@{${'/images/' + user?.imageFileName}}"
-                                 class="card-img-top"
-                                 style="max-height: 20em; max-width: 70em">
+                            <article class="photo">
+                                <div style="text-align: center">
+                                    <img th:src="@{${'/images/' + user?.imageFileName}}"
+                                         class="img-fluid"
+                                         style="max-height: 20em; max-width: 70em">
+                                </div>
+                            </article>
                         </li>
                         <li class="list-group-item">
                             <b>Username:</b>
