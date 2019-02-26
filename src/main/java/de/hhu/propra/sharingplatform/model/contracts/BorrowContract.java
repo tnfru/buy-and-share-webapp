@@ -39,7 +39,7 @@ public class BorrowContract extends Contract {
     public void prepare(IPaymentApi paymentApi) {
         String from = borrower.getPropayId();
         String to = super.item.getOwner().getPropayId();
-        long timespan = (long) start.until(expectedEnd, ChronoUnit.DAYS) + 1;
+        long timespan = Math.max(start.until(expectedEnd, ChronoUnit.DAYS) + 1, 0);
         int amount = (int) Math.ceil(timespan * super.item.getPrice());
         int bail = super.item.getBail();
         payment = new BorrowPayment(from, to, amount, bail);
