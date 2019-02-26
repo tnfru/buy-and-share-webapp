@@ -21,6 +21,7 @@
 
         <div class="card border-dark">
             <div th:if="${item?.imageFileName != null}">
+
                 <img th:src="@{${'/images/' + item?.imageFileName}}" style="width: content-box;
                      padding: 2rem;"
                      class="img-fluid"></div>
@@ -63,35 +64,49 @@
                 <li class="list-group-item">
                     <b>Availability:</b>
 
-                    <div id="my-calendar"></div>
+
+                    <style type="text/css">
+
+                        .jsCalendar tbody td.jsCalendar-selected {
+                            background-color: rgba(148, 0, 29, 0.71);
+                            border: unset;
+                        }
+                    </style>
+
+                    <div id="my-calendar" , class="jsCalendar"></div>
 
                     <script th:inline="javascript">
-                      var calendar = document.getElementById("my-calendar");
-                      var myCalendar = jsCalendar.new({
-                        target: calendar,
-                        monthFormat: "month YYYY"
-                      });
+                        var calendar = document.getElementById("my-calendar");
+                        var myCalendar = jsCalendar.new({
+                            target: calendar,
+                            monthFormat: "month YYYY"
+                        });
+
                     </script>
 
                     <div th:each="contract : ${item.getChosenContracts(false)}">
 
                         <script th:inline="javascript"
                                 th:with=
-                                    "start=${#temporals.format(contract.getStart(),'yyyy-MM-dd')},
+                                        "start=${#temporals.format(contract.getStart(),'yyyy-MM-dd')},
                       end=${#temporals.format(contract.getExpectedEnd(),'yyyy-MM-dd')}">
-                          var start = new Date([[${start}]]);
-                          var end = new Date([[${end}]]);
+                            var start = new Date([[${start}]]);
+                            var end = new Date([[${end}]]);
 
-                          for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
-                            myCalendar.select([
-                              date
-                            ]);
-                          }
+                            for (var date = start; date <= end; date.setDate(date.getDate() + 1)) {
+                                myCalendar.select(
+                                    [date]);
+                            }
 
                         </script>
                     </div>
+
+
                 </li>
+
+
             </ul>
+
             <div class="card-footer bg-white text-center">
                 <a th:if="${ownItem} == false " th:href="|/user/${item.getOwner().getId()}|"
                    class="btn btn-outline-secondary btn-block">User
@@ -107,6 +122,7 @@
         </div>
 
         <div>
+
             <b style="margin-left: 5rem;">Other Users who looked at this were also interested
                 in:</b>
             <div class="column">
@@ -132,6 +148,7 @@
                         <ul class="list-group list-group-flush">
 
                             <li class="list-group-item">
+
                                 <b>Rating:</b>
                                 <span th:text="|${item?.owner?.totalRatings()}|"></span>
                                 <span th:text="|(${item?.owner?.getRating()}|"></span> &#128077;)
@@ -141,6 +158,7 @@
                         <div class="card-body">
                             <a th:href="|/item/details/${item.getId()}|"
                                class="btn btn-outline-info btn-block">Details</a>
+
                             <a th:href="|/user/${item.getOwner().getId()}|"
                                class="btn btn-outline-secondary btn-block">User Details</a>
                         </div>
