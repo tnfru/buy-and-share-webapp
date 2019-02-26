@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.payments.Payment;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,7 @@ public interface IPaymentService {
      *
      * @param contract contract
      */
-    void transferPayment(Contract contract);
+    void transferPayment(BorrowContract contract);
 
     /**
      * Frees the reservation of the bail.
@@ -38,12 +39,14 @@ public interface IPaymentService {
      *
      * @param contract contract
      */
-    void freeBailReservation(Contract contract);
+    void freeBailReservation(BorrowContract contract);
 
     /**
      * Transfers the bail to the item owner.
      *
      * @param contract contract
      */
-    void punishBailReservation(Contract contract);
+    void punishBailReservation(BorrowContract contract);
+
+    void freeChargeReservation(BorrowContract contract);
 }

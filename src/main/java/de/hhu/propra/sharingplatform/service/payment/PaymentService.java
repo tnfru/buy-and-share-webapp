@@ -3,7 +3,6 @@ package de.hhu.propra.sharingplatform.service.payment;
 import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
-import de.hhu.propra.sharingplatform.model.payments.Payment;
 import org.springframework.stereotype.Service;
 
 
@@ -31,18 +30,23 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public void transferPayment(Contract contract) {
-        ((BorrowContract)contract).returnItem();
+    public void transferPayment(BorrowContract contract) {
+        contract.returnItem();
         contract.pay(apiService);
     }
 
     @Override
-    public void freeBailReservation(Contract contract) {
-        ((BorrowContract) contract).freeBail(apiService);
+    public void freeBailReservation(BorrowContract contract) {
+        contract.freeBail(apiService);
     }
 
     @Override
-    public void punishBailReservation(Contract contract) {
-        ((BorrowContract) contract).punishBail(apiService);
+    public void freeChargeReservation(BorrowContract contract) {
+        contract.freeCharge(apiService);
+    }
+
+    @Override
+    public void punishBailReservation(BorrowContract contract) {
+        contract.punishBail(apiService);
     }
 }
