@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
+import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.ItemRental;
@@ -57,7 +57,7 @@ public class OfferControllerTest {
     private UserRepo userRepo;
 
     @MockBean
-    private ItemRentalRepo itemRentalRepo;
+    private ItemRepo itemRepo;
 
     @MockBean
     private OfferRepo offerRepo;
@@ -220,7 +220,7 @@ public class OfferControllerTest {
     @Test
     @WithMockUser
     public void offerRequestLoggedInItemNotInDb() throws Exception {
-        when(itemRentalRepo.findById(anyLong())).thenReturn(Optional.empty());
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.empty());
 
         mvc.perform(get("/offer/request/10000")
             .contentType(MediaType.TEXT_HTML))
@@ -231,7 +231,7 @@ public class OfferControllerTest {
     @WithMockUser
     public void offerRequestLoggedInItemDeleted() throws Exception {
         itemRental.setDeleted(true);
-        when(itemRentalRepo.findById(anyLong())).thenReturn(Optional.of(itemRental));
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(itemRental));
 
         mvc.perform(get("/offer/request/10000")
             .contentType(MediaType.TEXT_HTML))
@@ -241,7 +241,7 @@ public class OfferControllerTest {
     @Test
     @WithMockUser
     public void offerRequestLoggedInValid() throws Exception {
-        when(itemRentalRepo.findById(anyLong())).thenReturn(Optional.of(itemRental));
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(itemRental));
 
         mvc.perform(get("/offer/request/10000")
             .contentType(MediaType.TEXT_HTML))
@@ -291,7 +291,7 @@ public class OfferControllerTest {
     @WithMockUser
     public void offerShowInvalidItem() throws Exception {
         when(userService.fetchUserByAccountName(any())).thenReturn(user);
-        when(itemRentalRepo.findById(anyLong())).thenReturn(Optional.empty());
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.empty());
 
         mvc.perform(get("/offer/show/10000")
             .contentType(MediaType.TEXT_HTML))
@@ -302,7 +302,7 @@ public class OfferControllerTest {
     @WithMockUser
     public void offerShowValidItem() throws Exception {
         when(userService.fetchUserByAccountName(any())).thenReturn(user);
-        when(itemRentalRepo.findById(anyLong())).thenReturn(Optional.of(itemRental));
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(itemRental));
         when(offerService.getItemOffers(anyLong(), any(), anyBoolean()))
             .thenReturn(new ArrayList<>());
 

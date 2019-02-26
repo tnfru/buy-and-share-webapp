@@ -10,8 +10,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
+import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
+import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ImageService;
@@ -43,7 +44,7 @@ public class ItemRentalControllerTest {
     private UserRepo userRepo;
 
     @MockBean
-    private ItemRentalRepo itemRentalRepo;
+    private ItemRepo itemRepo;
 
     @MockBean
     private UserService userService;
@@ -161,9 +162,8 @@ public class ItemRentalControllerTest {
         itemRental.setDailyRate(2);
         itemRental.setId(3L);
 
-        Optional<ItemRental> optI = Optional.of(itemRental);
-        when(itemRentalRepo.findOneById(3)).thenReturn(itemRental);
-        when(itemRentalRepo.findById(3)).thenReturn(optI);
+        Optional<Item> optI = Optional.of(itemRental);
+        when(itemRepo.findById(3L)).thenReturn(optI);
         when(userService.fetchUserByAccountName("accountname")).thenReturn(user);
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
 
@@ -193,8 +193,7 @@ public class ItemRentalControllerTest {
         Optional<ItemRental> optI = Optional.of(itemRental);
         Optional<User> optU2 = Optional.of(user2);
 
-        when(itemRentalRepo.findById(3)).thenReturn(optI);
-        when(itemRentalRepo.findOneById(3)).thenReturn(itemRental);
+        when(itemRepo.findById(3L)).thenReturn(optI);
         when(userRepo.findByAccountName("otheraccountname")).thenReturn(optU2);
 
         mvc.perform(get("/item/rental/details/3")
@@ -284,14 +283,13 @@ public class ItemRentalControllerTest {
         Optional<User> optU2 = Optional.of(user2);
 
         when(userRepo.findByAccountName("otheraccountname")).thenReturn(optU2);
-        when(itemRentalRepo.findById(3)).thenReturn(optI);
-        when(itemRentalRepo.findOneById(3)).thenReturn(itemRental);
+        when(itemRepo.findById(3L)).thenReturn(optI);
 
         mvc.perform(get("/item/rental/remove/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isForbidden());
 
-        verify(itemRentalRepo, times(0)).save(any());
+        verify(itemRepo, times(0)).save(any());
     }
 
     @Test
@@ -304,14 +302,13 @@ public class ItemRentalControllerTest {
         Optional<ItemRental> optI = Optional.of(itemRental);
 
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
-        when(itemRentalRepo.findById(3)).thenReturn(optI);
-        when(itemRentalRepo.findOneById(3)).thenReturn(itemRental);
+        when(itemRepo.findById(3L)).thenReturn(optI);
 
         mvc.perform(get("/item/rental/remove/3")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
 
-        verify(itemRentalRepo, times(1)).save(any());
+        verify(itemRepo, times(1)).save(any());
     }
 
     @Test
@@ -345,7 +342,7 @@ public class ItemRentalControllerTest {
         Optional<User> optU2 = Optional.of(user2);
 
         when(userRepo.findByAccountName("otheraccountname")).thenReturn(optU2);
-        when(itemRentalRepo.findById(3)).thenReturn(optI);
+        when(itemRepo.findById(3L)).thenReturn(optI);
 
         mvc.perform(get("/item/rental/edit/3")
             .contentType(MediaType.TEXT_HTML))
@@ -362,7 +359,7 @@ public class ItemRentalControllerTest {
         Optional<ItemRental> optI = Optional.of(itemRental);
 
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
-        when(itemRentalRepo.findById(3)).thenReturn(optI);
+        when(itemRepo.findById(3L)).thenReturn(optI);
 
         mvc.perform(get("/item/rental/edit/3")
             .contentType(MediaType.TEXT_HTML))
@@ -404,8 +401,7 @@ public class ItemRentalControllerTest {
         Optional<User> optU = Optional.of(user2);
 
         when(userRepo.findByAccountName("otheraccountname")).thenReturn(optU);
-        when(itemRentalRepo.findOneById(3L)).thenReturn(itemRental);
-        when(itemRentalRepo.findById(3L)).thenReturn(Optional.of(itemRental));
+        when(itemRepo.findById(3L)).thenReturn(Optional.of(itemRental));
 
         mvc.perform(post("/item/rental/edit/3")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -420,8 +416,7 @@ public class ItemRentalControllerTest {
 
         ItemRental itemRental = testItem(user);
 
-        when(itemRentalRepo.findOneById(3L)).thenReturn(itemRental);
-        when(itemRentalRepo.findById(3L)).thenReturn(Optional.of(itemRental));
+        when(itemRepo.findById(3L)).thenReturn(Optional.of(itemRental));
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
 
         mvc.perform(post("/item/rental/edit/3")
@@ -433,7 +428,7 @@ public class ItemRentalControllerTest {
             .param("description", "desc"))
             .andExpect(status().is3xxRedirection());
 
-        verify(itemRentalRepo, times(1)).save(any());
+        verify(itemRepo, times(1)).save(any());
     }
 
     @Test
@@ -443,8 +438,7 @@ public class ItemRentalControllerTest {
 
         ItemRental itemRental = testItem(user);
 
-        when(itemRentalRepo.findOneById(3L)).thenReturn(itemRental);
-        when(itemRentalRepo.findById(3L)).thenReturn(Optional.of(itemRental));
+        when(itemRepo.findById(3L)).thenReturn(Optional.of(itemRental));
         when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
 
         mvc.perform(post("/item/rental/edit/3")
@@ -454,6 +448,6 @@ public class ItemRentalControllerTest {
             .param("description", "desc"))
             .andExpect(status().isBadRequest());
 
-        verify(itemRentalRepo, times(0)).save(any());
+        verify(itemRepo, times(0)).save(any());
     }
 }

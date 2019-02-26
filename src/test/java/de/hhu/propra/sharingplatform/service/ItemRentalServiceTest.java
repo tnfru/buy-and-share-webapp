@@ -10,7 +10,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.ItemRental;
 import de.hhu.propra.sharingplatform.model.User;
@@ -31,9 +30,6 @@ public class ItemRentalServiceTest {
 
     @MockBean
     private UserService userService;
-
-    @MockBean
-    private ItemRentalRepo itemRentalRepo;
 
     @MockBean
     private ItemRepo itemRepo;
@@ -69,7 +65,7 @@ public class ItemRentalServiceTest {
 
         itemService.persistItem(itemRental, 1);
 
-        verify(itemRentalRepo, times(2)).save(argument.capture());
+        verify(itemRepo, times(2)).save(argument.capture());
         assertEquals(itemRental, argument.getValue());
         assertEquals(1, (long) argument.getValue().getOwner().getId());
     }
@@ -77,18 +73,18 @@ public class ItemRentalServiceTest {
     @Test
     public void removeOneItemValidUser() {
         Optional<ItemRental> optional = Optional.ofNullable(itemRental);
-        when(itemRentalRepo.findById(anyLong())).thenReturn(optional);
+        when(itemRepo.findById(anyLong())).thenReturn(optional);
 
         itemService.removeItem(1L, 1);
 
-        assertTrue(itemRentalRepo.findById(1L).get().isDeleted());
+        assertTrue(itemRental.isDeleted());
     }
 
     @Test
     public void removeOneItemInvalidUser() {
         boolean thrown = false;
         Optional<ItemRental> optional = Optional.ofNullable(itemRental);
-        when(itemRentalRepo.findById(anyLong())).thenReturn(optional);
+        when(itemRepo.findById(anyLong())).thenReturn(optional);
 
         try {
             itemService.removeItem(1L, 2);
@@ -96,7 +92,7 @@ public class ItemRentalServiceTest {
             thrown = true;
             assertEquals("403 FORBIDDEN \"Not your ItemRental\"", rse.getMessage());
         }
-        assertFalse(itemRentalRepo.findById(1L).get().isDeleted());
+        assertFalse(itemRental.isDeleted());
         assertTrue(thrown);
     }
 
@@ -111,7 +107,7 @@ public class ItemRentalServiceTest {
             thrown = true;
             assertEquals("400 BAD_REQUEST \"Invalid Location\"", rse.getMessage());
         }
-        verify(itemRentalRepo, times(0)).save(any());
+        verify(itemRepo, times(0)).save(any());
         assertTrue(thrown);
     }
 
@@ -127,11 +123,11 @@ public class ItemRentalServiceTest {
         ArgumentCaptor<ItemRental> argument = ArgumentCaptor.forClass(ItemRental.class);
         Optional<ItemRental> optional = Optional.ofNullable(itemRental);
 
-        when(itemRentalRepo.findById(1L)).thenReturn(optional);
+        when(itemRepo.findById(1L)).thenReturn(optional);
 
         itemService.editItem(editItemRental, 1L, 1L);
 
-        verify(itemRentalRepo, times(1)).save(argument.capture());
+        verify(itemRepo, times(1)).save(argument.capture());
         assertEquals(argument.getValue().getDescription(), editItemRental.getDescription());
     }
 
@@ -145,15 +141,15 @@ public class ItemRentalServiceTest {
         editItemRental.setBail(itemRental.getBail());
         editItemRental.setName(itemRental.getName());
 
-        when(itemRentalRepo.findOneById(1)).thenReturn(itemRental);
+        when(itemRepo.findById(1L)).thenReturn(Optional.empty());
         try {
             itemService.editItem(editItemRental, 1, 2);
         } catch (ResponseStatusException rse) {
             thrown = true;
-            assertEquals("404 NOT_FOUND \"ItemRental not Found\"", rse.getMessage());
+            assertEquals("404 NOT_FOUND \"Item not Found\"", rse.getMessage());
         }
 
-        verify(itemRentalRepo, times(0)).save(any());
+        verify(itemRepo, times(0)).save(any());
         assertTrue(thrown);
     }
 
@@ -167,7 +163,7 @@ public class ItemRentalServiceTest {
         editItemRental.setBail(itemRental.getBail());
         editItemRental.setName(itemRental.getName());
 
-        when(itemRentalRepo.findById(1)).thenReturn(Optional.of(itemRental));
+        when(itemRepo.findById(1L)).thenReturn(Optional.of(itemRental));
         try {
             itemService.editItem(editItemRental, 1, 1);
         } catch (ResponseStatusException rse) {
@@ -175,7 +171,7 @@ public class ItemRentalServiceTest {
             assertEquals("400 BAD_REQUEST \"Invalid Description\"", rse.getMessage());
         }
 
-        verify(itemRentalRepo, times(0)).save(any());
+        verify(itemRepo, times(0)).save(any());
         assertTrue(thrown);
     }
 
@@ -188,7 +184,7 @@ public class ItemRentalServiceTest {
         editItemRental.setDailyRate(itemRental.getDailyRate());
         editItemRental.setBail(itemRental.getBail());
         editItemRental.setName(itemRental.getName());
-        when(itemRentalRepo.findById(1)).thenReturn(Optional.of(itemRental));
+        when(itemRepo.findById(1L)).thenReturn(Optional.of(itemRental));
 
         try {
             itemService.editItem(editItemRental, 1, 2);
@@ -197,7 +193,7 @@ public class ItemRentalServiceTest {
             assertEquals("403 FORBIDDEN \"Not your ItemRental\"", rse.getMessage());
         }
 
-        verify(itemRentalRepo, times(0)).save(any());
+        verify(itemRepo, times(0)).save(any());
         assertTrue(thrown);
     }
 
@@ -270,8 +266,8 @@ public class ItemRentalServiceTest {
         List<ItemRental> dbAllItemRental = new ArrayList<>();
         dbAllItemRental.add(itemRental);
 
-        when(itemRentalRepo.findAllByNameContainsIgnoreCase(any())).thenReturn(dbNoItemRentals);
-        when(itemRentalRepo.findAll()).thenReturn(dbAllItemRental);
+        when(itemRepo.findAllByNameContainsIgnoreCase(any())).thenReturn(dbNoItemRentals);
+        when(itemRepo.findAll()).thenReturn(dbAllItemRental);
 
         List<ItemRental> itemRentals = itemService.filterRental(keywords);
 
@@ -292,9 +288,9 @@ public class ItemRentalServiceTest {
 
         List<ItemRental> dbAllItemRental = new ArrayList<>();
 
-        when(itemRentalRepo.findAllByNameContainsIgnoreCase("cool")).thenReturn(dbFilterParam1);
-        when(itemRentalRepo.findAllByNameContainsIgnoreCase("search")).thenReturn(dbFilterParam2);
-        when(itemRentalRepo.findAll()).thenReturn(dbAllItemRental);
+        when(itemRepo.findAllByNameContainsIgnoreCase("cool")).thenReturn(dbFilterParam1);
+        when(itemRepo.findAllByNameContainsIgnoreCase("search")).thenReturn(dbFilterParam2);
+        when(itemRepo.findAll()).thenReturn(dbAllItemRental);
 
         List<ItemRental> itemRentals = itemService.filterRental(keywords);
 
