@@ -1,11 +1,10 @@
 package de.hhu.propra.sharingplatform.dao;
 
 import de.hhu.propra.sharingplatform.model.ItemRental;
-import java.util.Optional;
 import java.util.List;
-import org.springframework.data.repository.CrudRepository;
+import java.util.Optional;
 
-public interface ItemRentalRepo extends CrudRepository<ItemRental, Long> {
+public interface ItemRentalRepo extends ItemRepo<ItemRental> {
     ItemRental findOneById(long id);
 
     Optional<ItemRental> findById(long id);

@@ -34,7 +34,7 @@ public class OfferController {
 
     @GetMapping("/offer/request/{itemId}")
     public String gotOfferForm(@PathVariable long itemId, Model model) {
-        ItemRental itemRental = itemService.findItem(itemId);
+        ItemRental itemRental = (ItemRental) itemService.findItem(itemId);
         model.addAttribute(itemRental);
         itemRental.getOwner().getAccountName();
         return "offerRequest";
