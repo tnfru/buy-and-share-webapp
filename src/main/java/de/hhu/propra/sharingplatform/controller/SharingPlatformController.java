@@ -1,6 +1,7 @@
 package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
+import de.hhu.propra.sharingplatform.dao.ItemSaleRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import java.security.Principal;
@@ -16,6 +17,9 @@ public class SharingPlatformController {
 
     @Autowired
     private ItemRentalRepo itemRentalRepo;
+
+    @Autowired
+    private ItemSaleRepo itemSaleRepo;
 
     @Autowired
     private ItemService itemService;
@@ -40,7 +44,31 @@ public class SharingPlatformController {
         List<String> keywords = itemService.searchKeywords(search);
         model.addAttribute("user", user);
         model.addAttribute("keywords", keywords);
-        model.addAttribute("itemRentals", itemService.filter(keywords));
+        model.addAttribute("itemRentals", itemService.filterRental(keywords));
         return "mainpage";
+    }
+
+    @GetMapping("/sale")
+    public String SaleMainPage(Model model, Principal principal) {
+        User user = null;
+        if (principal != null) {
+            user = new User();
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("itemSales", itemSaleRepo.findAll());
+        return "salepage";
+    }
+
+    @PostMapping("/sale")
+    public String SaleMainPage(Model model, Principal principal, String search) {
+        User user = null;
+        if (principal != null) {
+            user = new User();
+        }
+        List<String> keywords = itemService.searchKeywords(search);
+        model.addAttribute("user", user);
+        model.addAttribute("keywords", keywords);
+        model.addAttribute("itemSales", itemService.filterSale(keywords));
+        return "salepage";
     }
 }

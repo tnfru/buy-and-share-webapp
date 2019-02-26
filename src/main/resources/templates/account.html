@@ -71,11 +71,16 @@
                 </div>
                 <div class="tab-pane fade" id="v-pills-ownItems" role="tabpanel"
                      aria-labelledby="v-pills-ownItems-tab">
-                    <table class="table table-striped">
+
+                  <!-- Own Items -->
+
+                  <h3> Items for Rental </h3>
+
+                  <table class="table table-striped">
                         <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Price</th>
+                          <th scope="col">Daily Rate</th>
                             <th scope="col">Bail</th>
                             <th scope="col">Offers(Open)</th>
                             <th scope="col">Conflict</th>
@@ -83,7 +88,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="itemRental : ${user.getItemsExcludeRemoved()}">
+                        <tr th:each="itemRental : ${user.getNotRemovedItems(user.getItemRentals())}">
                             <td th:text="${itemRental.getName()}"> Test Name</td>
                             <td th:text="${itemRental.getDailyRate()}"> 33</td>
                             <td th:text="${itemRental.getBail()}"> 333</td>
@@ -114,7 +119,34 @@
                         </tr>
                         </tbody>
                     </table>
-                    <a class="btn btn-primary" href="/item/rental/new">New Item</a>
+
+                  <!-- Sale Items -->
+
+                  <h3> Items for Sale</h3>
+
+                  <table class="table table-striped">
+                    <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Price in €</th>
+                      <th scope="col">Conflict</th>
+                      <th scope="col" class="mx-auto">Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="itemSale : ${user.getNotRemovedItems(user.getItemSales())}">
+                      <td th:text="${itemSale.getName()}"> Test Name</td>
+                      <td th:text="${itemSale.getPrice()}"> 33€</td>
+                      <td> Is Conflict?</td>
+                      <td>
+                        <a th:href="|/item/sale/details/${itemSale.getId()}|"
+                           class="btn btn-primary btn-sm">Details</a>
+                        <a th:href="|/item/sale/remove/${itemSale.getId()}|"
+                           class="btn btn-danger btn-sm">Remove</a>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
                 </div>
                 <div class="tab-pane fade" id="v-pills-borrowedItemRentals" role="tabpanel"
                      aria-labelledby="v-pills-messages-tab">
@@ -164,8 +196,8 @@
                             <td th:if="${con.getOpenConflicts().size()} > 0">
                                 <span class="badge badge-danger">Conflict</span>
                             <td>
-                                <a href="#"
-                                   class="btn btn-info btn-sm">Item Owner</a>
+                              <a th:href="|/user/${con.getItemRental().getOwner().getId()}|"
+                                 class="btn btn-secondary btn-block">Item Owner</a>
                             </td>
                         </tr>
                         </tbody>
@@ -211,8 +243,8 @@
                                         <span class="badge badge-info">Finished</span>
                                     </td>
                                     <td>
-                                        <a href="#"
-                                           class="btn btn-info btn-sm">Item Owner</a>
+                                      <a th:href="|/user/${con.getItemRental().getOwner().getId()}|"
+                                         class="btn btn-secondary btn-block">Item Owner</a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -372,7 +404,10 @@
                 </div>
                 <div class="tab-pane fade" id="v-pills-userServices" role="tabpanel"
                      aria-labelledby="v-pills-newItemRental-tab">
-                    <a class="btn btn-primary" href="/item/rental/new">New Item</a>
+                  <a class="btn btn-primary" href="/item/rental/new">New Item For Rental</a>
+                  <br>
+                  <br>
+                  <a class="btn btn-primary" href="/item/sale/new">New Item For Sale</a>
                     <br>
                     <a style="margin-top:1em; " class="btn btn-info" href="/user/edit">Edit
                         Profile</a>

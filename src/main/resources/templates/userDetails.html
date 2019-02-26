@@ -41,7 +41,7 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">Item</th>
+                        <th scope="col">Item for Rental</th>
                         <th scope="col">Daily Price</th>
                         <th scope="col">Bail</th>
                         <th scope="col">Location</th>
@@ -49,13 +49,37 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="itemRental : ${user.getItemsExcludeRemoved()}">
+                    <tr th:each="itemRental : ${user.getNotRemovedItems(user.getItemRentals())}">
                         <td th:text="${itemRental.getName()}"></td>
                         <td th:text="${itemRental.getDailyRate()}"></td>
                         <td th:text="${itemRental.getBail()}"></td>
                         <td th:text="${itemRental.getLocation()}"></td>
                         <td>
                             <a th:href="|/item/rental/details/${itemRental.getId()}|"
+                               class="btn btn-primary btn-sm">Item Details</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
+
+            <li class="list-group-item">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Item for Sale</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Location</th>
+                        <th scope="col" class="mx-auto">Link</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="itemSale : ${user.getNotRemovedItems(user.getItemSales())}">
+                        <td th:text="${itemSale.getName()}"></td>
+                        <td th:text="${itemSale.getPrice()}"></td>
+                        <td th:text="${itemSale.getLocation()}"></td>
+                        <td>
+                            <a th:href="|/item/sale/details/${itemSale.getId()}|"
                                class="btn btn-primary btn-sm">Item Details</a>
                         </td>
                     </tr>
