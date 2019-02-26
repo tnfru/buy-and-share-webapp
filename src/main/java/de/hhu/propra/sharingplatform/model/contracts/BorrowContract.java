@@ -34,10 +34,6 @@ public class BorrowContract extends Contract {
         start = offer.getStart();
     }
 
-    public boolean isConflict() {
-        return conflict != null;
-    }
-
 
     @Override
     public void prepare(IPaymentApi paymentApi) {
@@ -48,5 +44,13 @@ public class BorrowContract extends Contract {
         int bail = super.item.getBail();
         payment = new BorrowPayment(from, to, amount, bail);
         ((BorrowPayment) payment).reserve(paymentApi);
+    }
+
+    public void freeBail(IPaymentApi paymentApi){
+
+    }
+
+    public void punishBail(IPaymentApi paymentApi){
+
     }
 }
