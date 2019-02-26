@@ -90,7 +90,7 @@ public class ItemRentalServiceTest {
             itemService.removeItem(1L, 2);
         } catch (ResponseStatusException rse) {
             thrown = true;
-            assertEquals("403 FORBIDDEN \"Not your ItemRental\"", rse.getMessage());
+            assertEquals("403 FORBIDDEN \"Not your Item\"", rse.getMessage());
         }
         assertFalse(itemRental.isDeleted());
         assertTrue(thrown);
@@ -190,7 +190,7 @@ public class ItemRentalServiceTest {
             itemService.editItem(editItemRental, 1, 2);
         } catch (ResponseStatusException rse) {
             thrown = true;
-            assertEquals("403 FORBIDDEN \"Not your ItemRental\"", rse.getMessage());
+            assertEquals("403 FORBIDDEN \"Not your Item\"", rse.getMessage());
         }
 
         verify(itemRepo, times(0)).save(any());
