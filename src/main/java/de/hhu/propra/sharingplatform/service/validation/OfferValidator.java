@@ -22,7 +22,8 @@ public class OfferValidator {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End date needs to be after"
                 + " Start date");
         }
-        int totalCost = (int)Math.ceil((start.until(end, ChronoUnit.DAYS) + 1) * item.getPrice());
+        int totalCost = (int)Math.ceil((start.until(end, ChronoUnit.DAYS) + 1) * item.getPrice()
+            + item.getBail());
         int available = apiService.getAccountBalanceLiquid(requester.getPropayId());
         if (totalCost > available) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough money");

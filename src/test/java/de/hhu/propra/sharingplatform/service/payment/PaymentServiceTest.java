@@ -7,7 +7,6 @@ import static org.mockito.Mockito.mock;
 
 import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 
-import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import org.junit.Before;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -26,7 +25,7 @@ public class PaymentServiceTest {
 
     @Before
     public void setUp() {
-        this.paymentService = new PaymentService(paymentRepo, proPayApi);
+        this.paymentService = new PaymentService(proPayApi);
         this.millisecondsInDay = 1000 * 60 * 60 * 24;
     }
 
@@ -85,7 +84,7 @@ public class PaymentServiceTest {
         int totalAmount = 1000 + paymentService.calculateTotalPrice(contract);
         when(apiService.isSolvent(fakeUser, totalAmount)).thenReturn(true);
 
-        assertTrue(paymentService.recipientSolvent(contract));
+        assertTrue(paymentService.senderSolvent(contract));
     }
 */
   /*
@@ -108,7 +107,7 @@ public class PaymentServiceTest {
         int totalAmount = 1000 + paymentService.calculateTotalPrice(contract);
         when(apiService.isSolvent(fakeUser, totalAmount)).thenReturn(false);
 
-        assertFalse(paymentService.recipientSolvent(contract));
+        assertFalse(paymentService.senderSolvent(contract));
     }
     */
 }
