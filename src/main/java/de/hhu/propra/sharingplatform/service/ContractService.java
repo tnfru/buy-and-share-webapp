@@ -115,6 +115,8 @@ public class ContractService {
     public void cancelContract(long conflictId) {
         BorrowContract contract =
             (BorrowContract) conflictService.fetchConflictById(conflictId).getContract();
+        paymentService.freeBailReservation(contract);
+        paymentService.freeChargeReservation(contract);
         contract.setFinished(true);
         borrowContractRepo.save(contract);
     }
