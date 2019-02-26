@@ -8,8 +8,10 @@
   <h1 th:unless="${user?.Id} == NUll" th:text="|Edit Account: ${user?.accountName}|"></h1>
   <br>
   <div class="container" style="margin-left: 1em;">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
       <dl>
+        <dt>Upload image:(*)</dt>
+        <dd><input type="file" name="image"/></dd>
         <dt>Name:(*)</dt>
         <dd><input type="text" name="name" th:value="${user?.name}" required></dd>
         <dt th:if="${user?.Id} == NULL">AccountName:(*)</dt>

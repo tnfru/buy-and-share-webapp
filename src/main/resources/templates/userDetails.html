@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{base}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.com">
+<head>
+    <meta charset="UTF-8">
+    <title>User Details</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Detail View</h1>
+
+    <div class="card border-dark">
+
+        <div th:if="${user?.imageFileName != null}">
+            <img th:src="@{${'/images/' + user?.imageFileName}}"
+                 style="width: content-box; padding:2rem;"
+                 class="img-fluid"></div>
+
+        <div th:if="${user?.imageFileName == null}">
+            <img src="/images/dummy.png" style="width: content-box; padding:2rem;"
+                 class="img-fluid"/></div>
+
+        <div class="card-body">
+            <h4 class="card-title" th:text="|AccountName: ${user.getAccountName()}|"></h4>
+        </div>
+        <ul class="list-group list-group-flush">
+
+            <li class="list-group-item">
+                <b>Email:</b>
+                <span th:text="${user?.email}"></span>
+            </li>
+
+            <li class="list-group-item">
+                <b>Ratings:</b>
+                <span th:text="|${user?.totalRatings()}|"></span>
+                <span th:text="|(${user?.getRating()}|"></span> &#128077;)
+            </li>
+
+            <li class="list-group-item">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Daily Price</th>
+                        <th scope="col">Bail</th>
+                        <th scope="col">Location</th>
+                        <th scope="col" class="mx-auto">Link</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${user.getItemsExcludeRemoved()}">
+                        <td th:text="${item.getName()}"></td>
+                        <td th:text="${item.getPrice()}"></td>
+                        <td th:text="${item.getBail()}"></td>
+                        <td th:text="${item.getLocation()}"></td>
+                        <td>
+                            <a th:href="|/item/details/${item.getId()}|"
+                               class="btn btn-primary btn-sm">Item Details</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

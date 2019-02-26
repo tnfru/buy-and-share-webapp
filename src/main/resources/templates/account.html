@@ -45,7 +45,7 @@
                             <h4 th:text="${user.getName()}">User Name</h4>
                         </li>
                         <li class="list-group-item">
-                            <img src="/images/bike-dummy.png" class="card-img-top"
+                            <img th:src="@{${'/images/' + user?.imageFileName}}" class="card-img-top"
                                  style="max-height: 20em; max-width: 70em">
                         </li>
                         <li class="list-group-item">
@@ -141,7 +141,9 @@
                                 <span style="color: red;">&#33;</span>
                             </td>
                             <td th:if="${con.isConflict()} == false">
-                                <span style="color: green;">&#45;</span>
+                                <a th:href="|/openConflict/${con.getId()}|" class="btn btn-primary btn-sm">
+                                    Open Conflict
+                                </a>
                             </td>
                             <td th:if="${con.getRealEnd()} == null and ${con.isConflict()} == false">
                                 <form method="post"
@@ -150,7 +152,7 @@
                                         Item
                                     </button>
                                 </form>
-                                <a href="#"
+                                <a th:href="|/user/${con.getItem().getOwner().getId()}|"
                                    class="btn btn-danger btn-sm">Item Owner</a>
                             </td>
                             <td th:if="${con.getRealEnd()} != null">
@@ -254,7 +256,7 @@
                                         </button>
                                     </form>
                                     <form method="post"
-                                          th:action="|/contract/${con.getId()}/openConflict|">
+                                          th:action="|/contract/${con.getId()}/openConflict?role=true|">
                                         <button type="submit" class="btn btn-danger btn-sm">
                                             Conflict
                                         </button>
@@ -358,7 +360,7 @@
                                 <span class="badge badge-info">Pending</span>
                             </td>
                             <td>
-                                <a th:href="|/user/visitor/${offer.getItem().getOwner().getId()}|"
+                                <a th:href="|/user/${offer.getItem().getOwner().getId()}|"
                                    class="btn btn-sm btn-primary btn-block">
                                     <span th:text="${offer.getItem().getOwner().getAccountName()}"></span>
                                 </a>
