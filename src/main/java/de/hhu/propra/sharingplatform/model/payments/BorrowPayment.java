@@ -24,13 +24,13 @@ public class BorrowPayment extends Payment {
         this.bail = bail;
     }
 
-    public void reserve(IPaymentApi paymentApi){
+    public void reserve(IPaymentApi paymentApi) {
         bailProPayId = paymentApi.reserveMoney(proPayIdSender, proPayIdRecipient, bail);
         amountProPayId = paymentApi.reserveMoney(proPayIdSender, proPayIdRecipient, super.amount);
     }
 
     @Override
-    public void pay(IPaymentApi paymentApi){
+    public void pay(IPaymentApi paymentApi) {
         paymentApi.freeReservation(amountProPayId, proPayIdSender);
         paymentApi.transferMoney(super.amount, proPayIdSender, proPayIdRecipient);
     }

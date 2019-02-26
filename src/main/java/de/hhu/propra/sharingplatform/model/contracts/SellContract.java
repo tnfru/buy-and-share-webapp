@@ -13,7 +13,7 @@ public class SellContract extends Contract {
     private SellContract() {
     }
 
-    public SellContract(Item item, String fromPropaiId, String toPropayId){
+    public SellContract(Item item, String fromPropaiId, String toPropayId) {
         super.item = item;
         //TODO: item sale price..
         int amount = item.getPrice();

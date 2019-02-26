@@ -1,7 +1,7 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.contractDao.BorrowContractRepo;
-import de.hhu.propra.sharingplatform.dao.contractDao.SellContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.SellContractRepo;
 import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.Offer;
@@ -120,7 +120,8 @@ public class ContractService {
     }
 
     public void continueContract(long conflictId) {
-        BorrowContract contract = (BorrowContract) conflictService.fetchConflictById(conflictId).getContract();
+        BorrowContract contract =
+            (BorrowContract) conflictService.fetchConflictById(conflictId).getContract();
         contract.setRealEnd(null);
         borrowContractRepo.save(contract);
     }

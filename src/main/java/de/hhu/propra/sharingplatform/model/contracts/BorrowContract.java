@@ -30,7 +30,8 @@ public class BorrowContract extends Contract {
     private LocalDateTime expectedEnd;
     private LocalDateTime realEnd;
 
-    private BorrowContract(){}
+    private BorrowContract() {
+    }
 
     public BorrowContract(Offer offer) {
         borrower = offer.getBorrower();
@@ -51,15 +52,15 @@ public class BorrowContract extends Contract {
         ((BorrowPayment) payment).reserve(paymentApi);
     }
 
-    public void freeBail(IPaymentApi paymentApi){
+    public void freeBail(IPaymentApi paymentApi) {
 
     }
 
-    public void punishBail(IPaymentApi paymentApi){
+    public void punishBail(IPaymentApi paymentApi) {
 
     }
 
-    public void returnItem(){
+    public void returnItem() {
         realEnd = LocalDateTime.now();
         long timespan = Math.max(start.until(realEnd, ChronoUnit.DAYS) + 1, 0);
         int amount = (int) Math.ceil(timespan * super.item.getPrice());

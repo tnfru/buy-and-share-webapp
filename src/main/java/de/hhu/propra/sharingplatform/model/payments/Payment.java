@@ -1,17 +1,11 @@
 package de.hhu.propra.sharingplatform.model.payments;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
-import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import lombok.Data;
 import lombok.ToString;
+
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -34,13 +28,13 @@ public class Payment {
         // used for jpa
     }
 
-    public Payment(int amount, String from, String to){
+    public Payment(int amount, String from, String to) {
         this.amount = amount;
         this.proPayIdSender = from;
         this.proPayIdRecipient = to;
     }
 
-    public void pay(IPaymentApi paymentApi){
+    public void pay(IPaymentApi paymentApi) {
         paymentApi.transferMoney(amount, proPayIdSender, proPayIdRecipient);
     }
 }

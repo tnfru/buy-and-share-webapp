@@ -1,6 +1,6 @@
 package de.hhu.propra.sharingplatform.service.validation;
 
-import de.hhu.propra.sharingplatform.dao.contractDao.BorrowContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;

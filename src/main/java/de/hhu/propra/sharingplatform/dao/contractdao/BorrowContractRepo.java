@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.dao.contractDao;
+package de.hhu.propra.sharingplatform.dao.contractdao;
 
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;

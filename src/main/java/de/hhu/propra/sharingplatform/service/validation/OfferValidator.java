@@ -1,7 +1,6 @@
 package de.hhu.propra.sharingplatform.service.validation;
 
-import de.hhu.propra.sharingplatform.dao.contractDao.BorrowContractRepo;
-import de.hhu.propra.sharingplatform.dao.contractDao.ContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
@@ -34,8 +33,8 @@ public class OfferValidator {
         }
     }
 
-    public static void periodIsAvailable(BorrowContractRepo contractRepo, Item item, LocalDateTime start,
-                                         LocalDateTime end) {
+    public static void periodIsAvailable(BorrowContractRepo contractRepo, Item item,
+                                         LocalDateTime start, LocalDateTime end) {
         List<BorrowContract> contracts = contractRepo.findAllByItemAndFinishedIsFalse(item);
         for (BorrowContract contract : contracts) {
             if (!(contract.getStart().isAfter(end) || contract.getExpectedEnd().isBefore(start))) {
