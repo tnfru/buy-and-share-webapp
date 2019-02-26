@@ -27,7 +27,7 @@
                      class="img-fluid"></div>
 
             <div th:if="${item?.imageFileName == null}">
-                <img src="/images/bike-dummy.png" style="width: content-box; padding: 2rem;"
+                <img src="/images/dummy.png" style="width: content-box; padding: 2rem;"
                      class="img-fluid"/></div>
 
             <div class="card-body">
@@ -136,7 +136,7 @@
                                     <img style="width: 200px; padding-top: 1rem;"
                                          th:src="@{${'/images/' + item?.imageFileName}}"/></div>
                                 <div th:if="${item?.imageFileName == null}">
-                                    <img class="img-fluid" src="/images/bike-dummy.png"
+                                    <img class="img-fluid" src="/images/dummy.png"
                                          style="width: 200px; padding-top: 1rem;"/>
                                 </div>
                             </div>
