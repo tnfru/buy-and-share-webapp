@@ -29,10 +29,21 @@ public abstract class Contract {
 
     private boolean finished;
 
+    /**
+     * Pays the itemowner. Called when contract should end and be paid.
+     *
+     * @param paymentApi api for payment.
+     */
     public void pay(IPaymentApi paymentApi) {
+        finished = true;
         payment.pay(paymentApi);
     }
 
+    /**
+     * Prepare the Contract payment. Check money available, reserve money...
+     *
+     * @param paymentApi api for payment.
+     */
     public void prepare(IPaymentApi paymentApi) {
     }
 }
