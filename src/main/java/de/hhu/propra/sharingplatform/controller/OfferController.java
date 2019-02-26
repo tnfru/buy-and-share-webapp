@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 @Controller
-public class OfferController {
+public class OfferController  extends BaseController{
 
     @Autowired
     private ItemService itemService;

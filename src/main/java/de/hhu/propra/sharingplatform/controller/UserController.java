@@ -14,7 +14,7 @@ import java.security.Principal;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class UserController {
+public class UserController extends BaseController {
 
     @Autowired
     private HttpServletRequest request;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.security.Principal;
 
 @Controller
-public class ConflictController {
+public class ConflictController extends BaseController{
 
     @Autowired
     private ContractService contractService;

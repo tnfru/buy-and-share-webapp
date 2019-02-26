@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
-public class SharingPlatformErrorController implements ErrorController {
+public class SharingPlatformErrorController extends BaseController implements ErrorController {
 
     @Override
     public String getErrorPath() {
