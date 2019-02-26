@@ -4,19 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.PaymentRepo;
-import de.hhu.propra.sharingplatform.model.Contract;
-import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.User;
-import java.time.LocalDateTime;
 
+import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
 //@RunWith(SpringRunner.class)
 public class PaymentServiceTest {
@@ -27,13 +20,13 @@ public class PaymentServiceTest {
     private PaymentRepo paymentRepo;
 
     @MockBean
-    private ApiService apiService;
+    private ProPayApi proPayApi;
 
     private PaymentService paymentService;
 
     @Before
     public void setUp() {
-        this.paymentService = new PaymentService(paymentRepo, apiService);
+        this.paymentService = new PaymentService(paymentRepo, proPayApi);
         this.millisecondsInDay = 1000 * 60 * 60 * 24;
     }
 

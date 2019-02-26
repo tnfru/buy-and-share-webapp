@@ -9,14 +9,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.hhu.propra.sharingplatform.dao.ContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import java.time.LocalDateTime;
 
-import de.hhu.propra.sharingplatform.service.payment.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
 import de.hhu.propra.sharingplatform.service.payment.PaymentService;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +42,13 @@ public class OfferServiceTest {
     private PaymentService paymentService;
 
     @MockBean
-    private ApiService apiService;
+    private ProPayApi proPayApi;
 
     @MockBean
     private ItemService itemService;
 
     @MockBean
-    private ContractRepo contractRepo;
+    private BorrowContractRepo borrowContractRepo;
 
     private OfferService offerService;
 
@@ -61,8 +61,8 @@ public class OfferServiceTest {
 
     @Before
     public void setUpTests() {
-        offerService = new OfferService(contractService, offerRepo, apiService, paymentService,
-            itemService, contractRepo);
+        offerService = new OfferService(contractService, offerRepo, proPayApi, paymentService,
+            itemService, borrowContractRepo);
         owner = new User();
         owner.setId(1L);
         borrower = new User();

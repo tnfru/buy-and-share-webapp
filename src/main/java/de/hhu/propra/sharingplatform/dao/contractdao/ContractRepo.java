@@ -1,7 +1,7 @@
-package de.hhu.propra.sharingplatform.dao;
+package de.hhu.propra.sharingplatform.dao.contractdao;
 
-import de.hhu.propra.sharingplatform.model.Contract;
 import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

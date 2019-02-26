@@ -1,8 +1,8 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.ContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
-import de.hhu.propra.sharingplatform.model.Contract;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
 public class RecommendationServiceTest {
     @MockBean
-    ContractRepo contractRepo;
+    BorrowContractRepo borrowContractRepo;
 
     @MockBean
     ItemRepo itemRepo;
@@ -35,13 +35,13 @@ public class RecommendationServiceTest {
 
     @Before
     public void setUp() {
-        this.recommendationService = new RecommendationService(contractRepo, itemRepo);
+        this.recommendationService = new RecommendationService(borrowContractRepo, itemRepo);
     }
 
     @Test
     public void findBorrowedItem() {
-        List<Contract> contracts = createFakeContracts();
-        when(contractRepo.findAll()).thenReturn(contracts);
+        List<BorrowContract> contracts = createFakeContracts();
+        when(borrowContractRepo.findAll()).thenReturn(contracts);
         List<Item> items = recommendationService.findBorrowedItems(5L);
 
         assertEquals(1, items.size());
@@ -85,16 +85,16 @@ public class RecommendationServiceTest {
         return items;
     }
 
-    public List<Contract> createFakeContracts() {
+    public List<BorrowContract> createFakeContracts() {
         List<User> users = createFakerUser();
         List<Item> items = createFakeItems();
-        List<Contract> contracts = new ArrayList<>();
+        List<BorrowContract> contracts = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
             LocalDateTime start = LocalDateTime.now();
             LocalDateTime end = start.plusDays(3);
             Offer offer = new Offer(items.get(i), users.get(i), start, end);
-            Contract contract = new Contract(offer);
+            BorrowContract contract = new BorrowContract(offer);
             contracts.add(contract);
         }
 
@@ -102,7 +102,7 @@ public class RecommendationServiceTest {
             LocalDateTime start = LocalDateTime.now();
             LocalDateTime end = start.plusDays(3);
             Offer offer = new Offer(items.get(i), users.get(4 - i), start, end);
-            Contract contract = new Contract(offer);
+            BorrowContract contract = new BorrowContract(offer);
             contracts.add(contract);
         }
 

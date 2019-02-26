@@ -1,8 +1,8 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.ContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
-import de.hhu.propra.sharingplatform.model.Contract;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
 import lombok.Data;
@@ -16,15 +16,15 @@ import java.util.Map.Entry;
 @Service
 public class RecommendationService {
 
-    private final ContractRepo contractRepo;
+    private final BorrowContractRepo borrowContractRepo;
 
     private final ItemRepo itemRepo;
 
     private int numberOfItems;
 
     @Autowired
-    public RecommendationService(ContractRepo contractRepo, ItemRepo itemRepo) {
-        this.contractRepo = contractRepo;
+    public RecommendationService(BorrowContractRepo borrowContractRepo, ItemRepo itemRepo) {
+        this.borrowContractRepo = borrowContractRepo;
         this.itemRepo = itemRepo;
         this.numberOfItems = 4;
     }
@@ -38,7 +38,7 @@ public class RecommendationService {
 
     public List<Item> findRecommendations(long itemId) {
         Item item = itemRepo.findOneById(itemId);
-        List<Contract> contracts = contractRepo.findAllByItem(item);
+        List<BorrowContract> contracts = borrowContractRepo.findAllByItem(item);
         List<User> otherBorrowers = findOtherBorrowers(contracts);
         Map<Item, Integer> map = fillMap(otherBorrowers);
 
@@ -92,10 +92,10 @@ public class RecommendationService {
     }
 
     List<Item> findBorrowedItems(long userId) {
-        List<Contract> allContracts = (List<Contract>) contractRepo.findAll();
+        List<BorrowContract> allContracts = borrowContractRepo.findAll();
         List<Item> items = new ArrayList<>();
 
-        for (Contract contract : allContracts) {
+        for (BorrowContract contract : allContracts) {
             if (contract.getBorrower().getId() == userId) {
                 items.add(contract.getItem());
             }
@@ -109,9 +109,9 @@ public class RecommendationService {
         }
     }
 
-    private List<User> findOtherBorrowers(List<Contract> contracts) {
+    private List<User> findOtherBorrowers(List<BorrowContract> contracts) {
         List<User> otherBorrowers = new ArrayList<>();
-        for (Contract contract : contracts) {
+        for (BorrowContract contract : contracts) {
             otherBorrowers.add(contract.getBorrower());
         }
         return otherBorrowers;

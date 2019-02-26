@@ -56,7 +56,7 @@ public class ConflictController {
                                     Principal principal, Model model) {
         contractService.validateOwner(contractId, principal.getName());
         model.addAttribute("conflicts",
-            contractService.fetchContractById(contractId).getConflicts());
+            contractService.fetchBorrowContractById(contractId).getConflicts());
         model.addAttribute("contractId", contractId);
         return "showConflicts";
     }

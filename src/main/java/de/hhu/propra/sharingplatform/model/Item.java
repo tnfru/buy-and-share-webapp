@@ -1,6 +1,7 @@
 package de.hhu.propra.sharingplatform.model;
 
 import com.google.common.io.Files;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;

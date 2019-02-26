@@ -1,11 +1,11 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.ContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.payment.ApiService;
+import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import de.hhu.propra.sharingplatform.service.validation.OfferValidator;
@@ -30,18 +30,18 @@ public class OfferService {
 
     private ItemService itemService;
 
-    private ContractRepo contractRepo;
+    private BorrowContractRepo borrowContractRepo;
 
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-        ApiService apiService, IPaymentService paymentService,
-        ItemService itemService, ContractRepo contractRepo) {
+                        ProPayApi proPayApi, IPaymentService paymentService,
+                        ItemService itemService, BorrowContractRepo borrowContractRepo) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
-        this.apiService = apiService;
+        this.apiService = proPayApi;
         this.paymentService = paymentService;
         this.itemService = itemService;
-        this.contractRepo = contractRepo;
+        this.borrowContractRepo = borrowContractRepo;
     }
 
     public void create(long itemId, User requester, LocalDateTime start, LocalDateTime end) {
@@ -56,7 +56,7 @@ public class OfferService {
 
     public void validate(Item item, User requester, LocalDateTime start, LocalDateTime end) {
         OfferValidator.validate(item, requester, start, end, paymentService, apiService);
-        OfferValidator.periodIsAvailable(contractRepo, item, start, end);
+        OfferValidator.periodIsAvailable(borrowContractRepo, item, start, end);
     }
 
     public List<Offer> getItemOffers(long itemId, User user, boolean onlyClosed) {
