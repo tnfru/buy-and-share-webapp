@@ -4,16 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.dto.ProPay;
 import de.hhu.propra.sharingplatform.dto.ProPayReservation;
-import de.hhu.propra.sharingplatform.model.Payment;
-import de.hhu.propra.sharingplatform.model.User;
-
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,7 +14,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 @Component
@@ -146,7 +141,7 @@ public class ApiService implements IPaymentApi {
 
 
     private String buildRequest(String requestType, String serverAddress, List<String> pathVars,
-                                Map<String, String> parameters) {
+        Map<String, String> parameters) {
         StringBuilder urlBuilder = new StringBuilder(serverAddress);
         // append path variables
         for (String pathVar : pathVars) {
@@ -171,9 +166,9 @@ public class ApiService implements IPaymentApi {
             conn.setRequestMethod(requestType);
             conn.setDoOutput(true);
             return convertHttpResponse(new InputStreamReader(conn.getInputStream()));
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-            return "-1";
+        } catch (Exception exception) {
+            throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
+                "Could not reach Propayserver.");
         }
     }
 
@@ -202,7 +197,7 @@ public class ApiService implements IPaymentApi {
             response = jsonResponse.getForObject(url, String.class);
         } catch (Exception exception) {
             throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
-                "Couldnt reach Propayserver.");
+                "Could not reach Propayserver.");
         }
         return response;
     }
