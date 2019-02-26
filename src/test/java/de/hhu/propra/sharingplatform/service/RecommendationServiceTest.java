@@ -1,6 +1,6 @@
 package de.hhu.propra.sharingplatform.service;
 
-import de.hhu.propra.sharingplatform.dao.ContractRepo;
+import de.hhu.propra.sharingplatform.dao.contractDao.ContractRepo;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
@@ -36,7 +36,7 @@ public class RecommendationServiceTest {
 
     @Before
     public void setUp() {
-        this.recommendationService = new RecommendationService(contractRepo, itemRepo);
+        this.recommendationService = new RecommendationService(contractRepo, borrowContractRepo, itemRepo);
     }
 
     @Test
