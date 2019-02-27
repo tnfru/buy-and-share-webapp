@@ -1,7 +1,6 @@
 package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.RecommendationService;
@@ -77,11 +76,11 @@ public class ItemSaleController {
     }
 
     @PostMapping("/item/sale/edit/{itemId}")
-    public String editItemData(Model model, ItemRental itemRental,
+    public String editItemData(Model model, ItemSale itemSale,
         @PathVariable long itemId,
         Principal principal) {
         long userId = userService.fetchUserIdByAccountName(principal.getName());
-        itemService.editItem(itemRental, itemId, userId);
+        itemService.editItem(itemSale, itemId, userId);
         return "redirect:/user/account";
     }
 }
