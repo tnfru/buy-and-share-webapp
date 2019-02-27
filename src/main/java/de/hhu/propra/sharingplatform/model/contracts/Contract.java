@@ -34,7 +34,6 @@ public abstract class Contract {
      * @param paymentApi api for payment.
      */
     public void pay(IPaymentApi paymentApi) {
-        finished = true;
         payment.pay(paymentApi);
     }
 

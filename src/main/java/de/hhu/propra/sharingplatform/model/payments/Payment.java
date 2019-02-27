@@ -42,4 +42,8 @@ public class Payment {
     public void pay(IPaymentApi paymentApi) {
         paymentApi.transferMoney(amount, proPayIdSender, proPayIdRecipient);
     }
+
+    public boolean isBalanced(IPaymentApi paymentApi) {
+        return paymentApi.getAccountBalance(proPayIdSender) >= amount;
+    }
 }

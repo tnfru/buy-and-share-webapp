@@ -1,8 +1,12 @@
 package de.hhu.propra.sharingplatform.model.contracts;
 
+import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import de.hhu.propra.sharingplatform.model.payments.Payment;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,14 +15,22 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class SellContract extends Contract {
 
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private User customer;
+
+    @SuppressWarnings("unused")
     private SellContract() {
+        // used by JPA
     }
 
-    public SellContract(ItemSale item, String fromPropaiId, String toPropayId) {
+    public SellContract(ItemSale item, User customer) {
         super.item = item;
-        //TODO: item sale price..
-        int amount = item.getPrice();
-        super.payment = new Payment(0, fromPropaiId, toPropayId);
+        this.customer = customer;
+        super.payment = new Payment(item.getPrice(), customer.getPropayId(),
+            item.getOwner().getPropayId());
     }
 
+    public boolean isBalanced(IPaymentApi apiService) {
+        return payment.isBalanced(apiService);
+    }
 }

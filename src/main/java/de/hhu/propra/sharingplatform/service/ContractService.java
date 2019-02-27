@@ -5,7 +5,11 @@ import de.hhu.propra.sharingplatform.dao.contractdao.SellContractRepo;
 import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.Offer;
+import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
+import de.hhu.propra.sharingplatform.model.contracts.SellContract;
+import de.hhu.propra.sharingplatform.model.items.Item;
+import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,14 +29,23 @@ public class ContractService {
 
     final IPaymentService paymentService;
 
+    final ItemService itemService;
+
+    final UserService userService;
+
     private ConflictService conflictService;
 
     @Autowired
     public ContractService(BorrowContractRepo borrowContractRepo, SellContractRepo sellContractRepo,
-        IPaymentService paymentService, ConflictService conflictService) {
+        IPaymentService paymentService,
+        ItemService itemService,
+        UserService userService,
+        ConflictService conflictService) {
         this.borrowContractRepo = borrowContractRepo;
         this.sellContractRepo = sellContractRepo;
         this.paymentService = paymentService;
+        this.itemService = itemService;
+        this.userService = userService;
         this.conflictService = conflictService;
     }
 
@@ -128,5 +141,15 @@ public class ContractService {
 
     public BorrowContract fetchBorrowContractById(long contractId) {
         return borrowContractRepo.findOneById(contractId);
+    }
+
+    public void buySaleItem(long itemId, String accountname) {
+        Item item = itemService.findItem(itemId);
+        User customer = userService.fetchUserByAccountName(accountname);
+
+        SellContract sellContract = new SellContract((ItemSale) item, customer);
+        paymentService.transferPayment(sellContract);
+        itemService.removeItem(itemId, item.getOwner().getId());
+        sellContractRepo.save(sellContract);
     }
 }
