@@ -11,7 +11,7 @@ public class ApiServiceTest {
     public void jsonMapped() {
         this.fakeJson = "{\"account\":\"foo\"," + "\"amount\":5000.0,\"reservations\":[{\"id\":4,"
             + "\"amount\":500.0}]}";
-        ApiService apiService = mock(ApiService.class);
+        ProPayNetworkInterface apiService = mock(ProPayNetworkInterface.class);
         when(apiService.fetchJson(anyString())).thenReturn(fakeJson);
         when(apiService.mapJson(anyString())).thenCallRealMethod();
 
@@ -29,7 +29,7 @@ public class ApiServiceTest {
     public void multipleReservations() {
         this.fakeJson = "{\"account\":\"foo\",\"amount\":5000.0,\"reservations\":[{\"id\":4,"
             + "\"amount\":500.0},{\"id\":5,\"amount\":1337.0}]}";
-        ApiService apiService = mock(ApiService.class);
+        ProPayNetworkInterface apiService = mock(ProPayNetworkInterface.class);
         when(apiService.fetchJson(anyString())).thenReturn(fakeJson);
         when(apiService.mapJson(anyString())).thenCallRealMethod();
 
@@ -54,7 +54,7 @@ public class ApiServiceTest {
         User fakeUser = mock(User.class);
         when(fakeUser.getPropayId()).thenReturn("foo");
 
-        ApiService apiService = mock(ApiService.class);
+        ProPayNetworkInterface apiService = mock(ProPayNetworkInterface.class);
         when(apiService.fetchJson(anyString())).thenReturn(fakeJson);
         when(apiService.mapJson(anyString())).thenCallRealMethod();
         when(apiService.isSolvent(any(), anyInt())).thenCallRealMethod();
@@ -72,7 +72,7 @@ public class ApiServiceTest {
         User fakeUser = mock(User.class);
         when(fakeUser.getPropayId()).thenReturn("foo");
 
-        ApiService apiService = mock(ApiService.class);
+        ProPayNetworkInterface apiService = mock(ProPayNetworkInterface.class);
         when(apiService.fetchJson(anyString())).thenReturn(fakeJson);
         when(apiService.mapJson(anyString())).thenCallRealMethod();
         when(apiService.isSolvent(any(), anyInt())).thenCallRealMethod();
@@ -90,7 +90,7 @@ public class ApiServiceTest {
         User fakeUser = mock(User.class);
         when(fakeUser.getPropayId()).thenReturn("foo");
 
-        ApiService apiService = mock(ApiService.class);
+        ProPayNetworkInterface apiService = mock(ProPayNetworkInterface.class);
         when(apiService.fetchJson(anyString())).thenReturn(fakeJson);
         when(apiService.mapJson(anyString())).thenCallRealMethod();
         when(apiService.isSolvent(any(), anyInt())).thenCallRealMethod();

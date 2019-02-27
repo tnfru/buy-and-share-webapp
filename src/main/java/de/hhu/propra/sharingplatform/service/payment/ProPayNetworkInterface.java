@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.service;
+package de.hhu.propra.sharingplatform.service.payment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class ApiService {
+public class ProPayNetworkInterface {
 
     private static final String host = "localhost";
 

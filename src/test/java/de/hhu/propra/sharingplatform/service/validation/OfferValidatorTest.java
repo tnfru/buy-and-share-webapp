@@ -178,7 +178,7 @@ public class OfferValidatorTest {
         boolean thrown = false;
 
         paymentService = mock(PaymentService.class);
-        apiService = mock(ApiService.class);
+        apiService = mock(ProPayNetworkInterface.class);
         when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(120);
         when(apiService.isSolvent(eq(borrower), anyInt())).thenReturn(false);
 
@@ -200,7 +200,7 @@ public class OfferValidatorTest {
         borrower.setBan(true);
 
         paymentService = mock(PaymentService.class);
-        apiService = mock(ApiService.class);
+        apiService = mock(ProPayNetworkInterface.class);
         when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(120);
         when(apiService.isSolvent(eq(borrower), anyInt())).thenReturn(true);
 
@@ -220,7 +220,7 @@ public class OfferValidatorTest {
         boolean thrown = false;
 
         paymentService = mock(PaymentService.class);
-        apiService = mock(ApiService.class);
+        apiService = mock(ProPayNetworkInterface.class);
         when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(234);
         when(apiService.isSolvent(eq(borrower), anyInt())).thenReturn(true);
 
