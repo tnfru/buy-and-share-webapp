@@ -56,7 +56,7 @@ public class BorrowContract extends Contract {
         String from = borrower.getPropayId();
         String to = super.item.getOwner().getPropayId();
         long timespan = Math.max(start.until(expectedEnd, ChronoUnit.DAYS) + 1, 0);
-        int amount = (int) Math.ceil(timespan * ((ItemRental) super.item).getDailyRate());
+        int amount = (int) timespan * ((ItemRental) super.item).getDailyRate();
         int bail = ((ItemRental) super.item).getBail();
         borrowPayment = new BorrowPayment(from, to, amount, bail);
         borrowPayment.reserve(paymentApi);
@@ -100,7 +100,7 @@ public class BorrowContract extends Contract {
     public void returnItem() {
         realEnd = LocalDateTime.now();
         long timespan = Math.max(start.until(realEnd, ChronoUnit.DAYS) + 1, 0);
-        int amount = (int) Math.ceil(timespan * ((ItemRental) super.item).getDailyRate());
+        int amount = (int) timespan * ((ItemRental) super.item).getDailyRate();
         borrowPayment.setAmount(amount);
     }
 
