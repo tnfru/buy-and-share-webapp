@@ -18,10 +18,11 @@ import org.springframework.stereotype.Service;
 public class ProPayApi implements IPaymentApi {
 
     ProPayNetworkInterface networkInterface;
+    String host = "localhost";
 
     @Autowired
     public ProPayApi() {
-        networkInterface = new ProPayNetworkInterface("localhost");
+        networkInterface = new ProPayNetworkInterface();
     }
 
     @Override

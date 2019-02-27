@@ -17,10 +17,9 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class ProPayNetworkInterface {
 
-    private String host;
+    private String host = "localhost";
 
-    public ProPayNetworkInterface(String host){
-        this.host = host;
+    public ProPayNetworkInterface(){
     }
 
     public String buildRequest(String requestType, String serverAddress,
