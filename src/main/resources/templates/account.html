@@ -152,8 +152,12 @@
                       <td>
                         <a th:href="|/item/sale/details/${itemSale.getId()}|"
                            class="btn btn-primary btn-sm">Details</a>
-                        <a th:href="|/item/sale/remove/${itemSale.getId()}|"
-                           class="btn btn-danger btn-sm">Remove</a>
+                        <form method="post" th:action="|/item/sale/remove/${itemSale.getId()}|">
+                          <button th:href="|/item/sale/remove/${itemSale.getId()}|"
+                                  class="btn btn-danger btn-sm" type="submit">Remove
+                          </button>
+                        </form>
+
                       </td>
                     </tr>
                     </tbody>
