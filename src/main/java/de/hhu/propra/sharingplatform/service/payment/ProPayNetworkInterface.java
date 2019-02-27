@@ -17,8 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class ProPayNetworkInterface {
 
-    private String host = "localhost";
-
     public ProPayNetworkInterface(){
     }
 
@@ -71,7 +69,7 @@ public class ProPayNetworkInterface {
         return null;
     }
 
-    public String fetchJson(String userName) {
+    public String fetchJson(String userName, String host) {
         String url = "http://" + host + ":8888/account/" + userName;
         RestTemplate jsonResponse = new RestTemplate();
 

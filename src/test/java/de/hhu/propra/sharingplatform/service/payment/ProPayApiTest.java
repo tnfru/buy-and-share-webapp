@@ -62,7 +62,7 @@ public class ProPayApiTest {
 
     @Test
     public void accountBalanceLiquid() {
-        when(networkInterface.fetchJson("foo"))
+        when(networkInterface.fetchJson("foo", "google"))
             .thenReturn("{\n"
                 + "  \"account\": \"string\",\n"
                 + "  \"amount\": 100,\n"
@@ -83,7 +83,7 @@ public class ProPayApiTest {
 
     @Test
     public void accountBalance() {
-        when(networkInterface.fetchJson("foo"))
+        when(networkInterface.fetchJson("foo", "google"))
             .thenReturn("{\n"
                 + "  \"account\": \"string\",\n"
                 + "  \"amount\": 100,\n"
