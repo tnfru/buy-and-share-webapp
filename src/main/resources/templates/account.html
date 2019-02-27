@@ -298,8 +298,8 @@
                                 <td th:if="${con.getConflicts().size()} == 0">
                                     <span style="color: green;">&#45;</span>
                                 </td>
-                                <td th:if="${con.getRealEnd()} != null and ${con.getConflicts().size() == 0}">
-                                    <form method="post"
+                                <td th:if="${con.getConflicts().size() == 0}">
+                                    <form th:if="${con.getRealEnd()} != null" method="post"
                                           th:action="|/contract/${con.getId()}/acceptReturn|">
                                         <button type="submit" class="btn btn-primary btn-sm">Accept
                                             Return
