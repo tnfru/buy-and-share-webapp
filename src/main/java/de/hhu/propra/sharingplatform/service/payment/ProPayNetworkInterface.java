@@ -9,6 +9,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,8 +21,8 @@ public class ProPayNetworkInterface {
     private static final String host = "localhost";
 
     public static String buildRequest(String requestType, String serverAddress,
-        List<String> pathVars,
-        Map<String, String> parameters) {
+                                      List<String> pathVars,
+                                      Map<String, String> parameters) {
         StringBuilder urlBuilder = new StringBuilder(serverAddress);
         // append path variables
         for (String pathVar : pathVars) {
