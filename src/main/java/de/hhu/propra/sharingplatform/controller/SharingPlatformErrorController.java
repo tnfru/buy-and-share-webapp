@@ -1,5 +1,6 @@
 package de.hhu.propra.sharingplatform.controller;
 
+import de.hhu.propra.sharingplatform.service.UserService;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
-public class SharingPlatformErrorController implements ErrorController {
+public class SharingPlatformErrorController extends BaseController implements ErrorController {
+
+    public SharingPlatformErrorController(
+        UserService userService) {
+        super(userService);
+    }
 
     @Override
     public String getErrorPath() {
