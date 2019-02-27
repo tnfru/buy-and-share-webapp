@@ -1,4 +1,4 @@
-package de.hhu.propra.sharingplatform.service;
+package de.hhu.propra.sharingplatform.service.payment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,15 +8,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class ApiService {
+public class ProPayNetworkInterface {
 
-    public static String buildRequest(String requestType, String serverAddress,
+    public ProPayNetworkInterface(){
+    }
+
+    public String buildRequest(String requestType, String serverAddress,
         List<String> pathVars,
         Map<String, String> parameters) {
         StringBuilder urlBuilder = new StringBuilder(serverAddress);
@@ -49,7 +53,7 @@ public class ApiService {
         }
     }
 
-    private static String convertHttpResponse(InputStreamReader inStream) {
+    private String convertHttpResponse(InputStreamReader inStream) {
         try {
             BufferedReader in = new BufferedReader(inStream);
             String input;
@@ -65,7 +69,7 @@ public class ApiService {
         return null;
     }
 
-    public static String fetchJson(String host, String userName) {
+    public String fetchJson(String userName, String host) {
         String url = "http://" + host + ":8888/account/" + userName;
         RestTemplate jsonResponse = new RestTemplate();
 
