@@ -1,20 +1,12 @@
 package de.hhu.propra.sharingplatform.model;
 
 import de.hhu.propra.sharingplatform.dto.Status;
-import de.hhu.propra.sharingplatform.model.Conflict;
-import de.hhu.propra.sharingplatform.model.Item;
-import de.hhu.propra.sharingplatform.model.Offer;
-import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.payments.BorrowPayment;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,17 +15,15 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
-@Import( {BorrowContract.class, BorrowPayment.class, IPaymentApi.class})
 public class BorrowContractPaymentTest {
 
-    @MockBean
     IPaymentApi paymentApi;
 
     BorrowContract borrowContract;
 
     @Before
     public void startup() {
+        paymentApi = mock(IPaymentApi.class);
         User user = new User();
         user.setName("Owner");
         user.setPropayId("Owner");
