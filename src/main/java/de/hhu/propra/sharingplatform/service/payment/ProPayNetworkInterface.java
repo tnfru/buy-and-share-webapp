@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +17,15 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class ProPayNetworkInterface {
 
-    private final String host = "localhost";
+    private String host;
+
+    public ProPayNetworkInterface(String host){
+        this.host = host;
+    }
 
     public String buildRequest(String requestType, String serverAddress,
-                                      List<String> pathVars,
-                                      Map<String, String> parameters) {
+        List<String> pathVars,
+        Map<String, String> parameters) {
         StringBuilder urlBuilder = new StringBuilder(serverAddress);
         // append path variables
         for (String pathVar : pathVars) {

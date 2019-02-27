@@ -45,4 +45,8 @@ public class Payment {
         }
         //TODO: ELSE: throw exception
     }
+
+    public boolean isBalanced(IPaymentApi paymentApi) {
+        return paymentApi.getAccountBalance(proPayIdSender) >= amount;
+    }
 }
