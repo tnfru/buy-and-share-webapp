@@ -43,6 +43,5 @@ public class OfferValidator {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid period");
             }
         }
-        // todo case: real end shifts
     }
 }

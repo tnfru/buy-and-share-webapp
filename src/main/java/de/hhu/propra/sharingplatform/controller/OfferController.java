@@ -72,14 +72,14 @@ public class OfferController {
         return "redirect:/user/account";
     }
 
-    @GetMapping("/offer/show/{offerId}/accept")// todo change to offer/accept/{id}
+    @GetMapping("/offer/show/{offerId}/accept")
     public String acceptOffer(@PathVariable long offerId, Principal principal) {
         User user = userService.fetchUserByAccountName(principal.getName());
         offerService.acceptOffer(offerId, user);
         return "redirect:/user/account";
     }
 
-    @GetMapping("/offer/show/{offerId}/decline")// todo change to offer/accept/{id}
+    @GetMapping("/offer/show/{offerId}/decline")
     public String declineOffer(@PathVariable long offerId, Principal principal) {
         User user = userService.fetchUserByAccountName(principal.getName());
         offerService.declineOffer(offerId, user);
