@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -24,13 +25,13 @@ public class ApiService {
         StringBuilder urlBuilder = new StringBuilder(serverAddress);
         // append path variables
         for (String pathVar : pathVars) {
-            urlBuilder.append(pathVar + "/");
+            urlBuilder.append(pathVar).append("/");
         }
         urlBuilder.deleteCharAt(urlBuilder.lastIndexOf("/"));
         // append parameters
         urlBuilder.append("?");
         for (String parameter : parameters.keySet()) {
-            urlBuilder.append(parameter + "=" + parameters.get(parameter) + "&");
+            urlBuilder.append(parameter).append("=").append(parameters.get(parameter)).append("&");
         }
         urlBuilder.deleteCharAt(urlBuilder.lastIndexOf("&"));
         URL url;
@@ -45,13 +46,13 @@ public class ApiService {
             conn.setRequestMethod(requestType);
             conn.setDoOutput(true);
             return convertHttpResponse(new InputStreamReader(conn.getInputStream()));
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-            return "-1";
+        } catch (Exception exception) {
+            throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
+                "Couldnt reach Propayserver!");
         }
     }
 
-    public static String convertHttpResponse(InputStreamReader inStream) {
+    private static String convertHttpResponse(InputStreamReader inStream) {
         try {
             BufferedReader in = new BufferedReader(inStream);
             String input;

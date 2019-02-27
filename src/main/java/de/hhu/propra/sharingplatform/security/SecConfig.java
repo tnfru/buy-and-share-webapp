@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecConfig extends WebSecurityConfigurerAdapter {
 
 
+    // this cannot be autowired in an constructor?!?!
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -25,7 +26,7 @@ public class SecConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/", "/css/**", "/images/**", "/public/images/*", "/h2/**",
+            .antMatchers("/", "/sale", "/css/**", "/images/**", "/public/images/*", "/h2/**",
                 "/user/register")
             .permitAll() // h2 has to be removed in production
             .antMatchers("/conflicts/**")
@@ -40,7 +41,6 @@ public class SecConfig extends WebSecurityConfigurerAdapter {
         // Later they should be removed again
         http.headers().frameOptions().disable();
         http.csrf().disable();
-
     }
 
 }

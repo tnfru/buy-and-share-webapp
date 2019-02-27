@@ -1,6 +1,7 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
+import de.hhu.propra.sharingplatform.dao.ItemSaleRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import java.security.Principal;
@@ -14,11 +15,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class SharingPlatformController {
 
-    @Autowired
-    private ItemRepo itemRepo;
+    private final ItemRentalRepo itemRentalRepo;
+
+    private final ItemSaleRepo itemSaleRepo;
+
+    private final ItemService itemService;
 
     @Autowired
-    private ItemService itemService;
+    public SharingPlatformController(ItemRentalRepo itemRentalRepo, ItemSaleRepo itemSaleRepo,
+        ItemService itemService) {
+        this.itemRentalRepo = itemRentalRepo;
+        this.itemSaleRepo = itemSaleRepo;
+        this.itemService = itemService;
+    }
 
     @GetMapping("/")
     public String mainPage(Model model, Principal principal) {
@@ -27,12 +36,12 @@ public class SharingPlatformController {
             user = new User();
         }
         model.addAttribute("user", user);
-        model.addAttribute("items", itemRepo.findAll());
+        model.addAttribute("itemRentals", itemRentalRepo.findAll());
         return "mainpage";
     }
 
     @PostMapping("/")
-    public String mainPage(Model model, Principal principal, String search) {
+    public String mainPageSearch(Model model, Principal principal, String search) {
         User user = null;
         if (principal != null) {
             user = new User();
@@ -40,7 +49,31 @@ public class SharingPlatformController {
         List<String> keywords = itemService.searchKeywords(search);
         model.addAttribute("user", user);
         model.addAttribute("keywords", keywords);
-        model.addAttribute("items", itemService.filter(keywords));
+        model.addAttribute("itemRentals", itemService.filterRental(keywords));
         return "mainpage";
+    }
+
+    @GetMapping("/sale")
+    public String saleMainPage(Model model, Principal principal) {
+        User user = null;
+        if (principal != null) {
+            user = new User();
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("itemSales", itemSaleRepo.findAll());
+        return "salepage";
+    }
+
+    @PostMapping("/sale")
+    public String saleMainPageSearch(Model model, Principal principal, String search) {
+        User user = null;
+        if (principal != null) {
+            user = new User();
+        }
+        List<String> keywords = itemService.searchKeywords(search);
+        model.addAttribute("user", user);
+        model.addAttribute("keywords", keywords);
+        model.addAttribute("itemSales", itemService.filterSale(keywords));
+        return "salepage";
     }
 }

@@ -1,20 +1,5 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
-import de.hhu.propra.sharingplatform.dto.ProPay;
-import de.hhu.propra.sharingplatform.dto.ProPayReservation;
-import de.hhu.propra.sharingplatform.model.User;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 //@RunWith(SpringRunner.class)
 public class ApiServiceTest {
 

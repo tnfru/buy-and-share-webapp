@@ -4,18 +4,24 @@ import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.model.payments.BorrowPayment;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
-import lombok.Data;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = false)
 public class BorrowContract extends Contract {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
@@ -34,7 +40,7 @@ public class BorrowContract extends Contract {
 
     public BorrowContract(Offer offer) {
         borrower = offer.getBorrower();
-        item = offer.getItem();
+        item = offer.getItemRental();
         expectedEnd = offer.getEnd();
         start = offer.getStart();
     }
@@ -50,8 +56,8 @@ public class BorrowContract extends Contract {
         String from = borrower.getPropayId();
         String to = super.item.getOwner().getPropayId();
         long timespan = Math.max(start.until(expectedEnd, ChronoUnit.DAYS) + 1, 0);
-        int amount = (int) Math.ceil(timespan * super.item.getPrice());
-        int bail = super.item.getBail();
+        int amount = (int) Math.ceil(timespan * ((ItemRental) super.item).getDailyRate());
+        int bail = ((ItemRental) super.item).getBail();
         borrowPayment = new BorrowPayment(from, to, amount, bail);
         borrowPayment.reserve(paymentApi);
     }
@@ -94,7 +100,7 @@ public class BorrowContract extends Contract {
     public void returnItem() {
         realEnd = LocalDateTime.now();
         long timespan = Math.max(start.until(realEnd, ChronoUnit.DAYS) + 1, 0);
-        int amount = (int) Math.ceil(timespan * super.item.getPrice());
+        int amount = (int) Math.ceil(timespan * ((ItemRental) super.item).getDailyRate());
         borrowPayment.setAmount(amount);
     }
 

@@ -1,8 +1,10 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
-import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.Item;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
+import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +20,11 @@ public class ItemService {
     private final UserService userService;
     private final ItemRepo itemRepo;
 
-    public ItemService(ItemRepo itemRepo, UserService userService, ImageService itemImageSaver) {
-        this.itemRepo = itemRepo;
+    public ItemService(UserService userService,
+        ImageService itemImageSaver, ItemRepo itemRepo) {
         this.userService = userService;
         this.itemImageSaver = itemImageSaver;
+        this.itemRepo = itemRepo;
     }
 
     public void persistItem(Item item, long userId) {
@@ -32,7 +35,8 @@ public class ItemService {
 
         String imagefilename = "bike-dummy.png";
         if (item.getImage() != null && item.getImage().getSize() > 0) {
-            imagefilename = "item-" + item.getId() + "." + item.getImageExtension();
+            imagefilename =
+                "itemRental-" + item.getId() + "." + item.getImageExtension();
             itemImageSaver.store(item.getImage(), imagefilename);
         }
 
@@ -67,12 +71,12 @@ public class ItemService {
     }
 
     public void editItem(Item newItem, long oldItemId, long userId) {
-        Item oldItem = findItem(oldItemId);
-        allowOnlyOwner(oldItem, userId);
+        Item oldItemRental = findItem(oldItemId);
+        allowOnlyOwner(oldItemRental, userId);
         validateItem(newItem);
 
-        newItem.setOwner(oldItem.getOwner());
-        newItem.setId(oldItem.getId());
+        newItem.setOwner(oldItemRental.getOwner());
+        newItem.setId(oldItemRental.getId());
         itemRepo.save(newItem);
     }
 
@@ -102,21 +106,33 @@ public class ItemService {
         search = search.trim().replaceAll(" +", " ");
         String[] split = search.split(" ");
         List<String> keywords = new ArrayList<>();
-        for (int i = 0; i < split.length; i++) {
-            if (!keywords.contains(split[i])) {
-                keywords.add(split[i]);
+        for (String word : split) {
+            if (!keywords.contains(word)) {
+                keywords.add(word);
             }
         }
         return keywords;
     }
 
-    public List<Item> filter(List<String> keywords) {
+    public List<ItemSale> filterSale(List<String> keywords) {
         if (keywords == null || keywords.size() == 0) {
-            return (List<Item>) itemRepo.findAll();
+            return (List<ItemSale>) itemRepo.findAll();
         }
-        List<Item> items = new ArrayList<>();
+        List<ItemSale> items = new ArrayList<>();
         for (String key : keywords) {
-            List<Item> searching = itemRepo.findAllByNameContainsIgnoreCase(key);
+            List<ItemSale> searching = itemRepo.findAllByNameContainsIgnoreCase(key);
+            items.addAll(searching);
+        }
+        return items;
+    }
+
+    public List<ItemRental> filterRental(List<String> keywords) {
+        if (keywords == null || keywords.size() == 0) {
+            return (List<ItemRental>) itemRepo.findAll();
+        }
+        List<ItemRental> items = new ArrayList<>();
+        for (String key : keywords) {
+            List<ItemRental> searching = itemRepo.findAllByNameContainsIgnoreCase(key);
             items.addAll(searching);
         }
         return items;

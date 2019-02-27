@@ -1,6 +1,5 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
-import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import org.springframework.stereotype.Service;
