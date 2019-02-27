@@ -28,7 +28,7 @@ public class Payment {
     Contract contract;
 
     @SuppressWarnings("unused")
-    public Payment() {
+    Payment() {
         // used for jpa
     }
 
