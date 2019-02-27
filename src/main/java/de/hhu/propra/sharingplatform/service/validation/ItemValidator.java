@@ -16,7 +16,7 @@ public class ItemValidator {
             || !Validator.isPrintable(item.getDescription())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Description");
         }
-        if (item.getClass().isInstance(ItemRental.class)) {
+        if (item instanceof ItemRental) {
             if (((ItemRental) item).getBail() == null) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Bail");
             }
