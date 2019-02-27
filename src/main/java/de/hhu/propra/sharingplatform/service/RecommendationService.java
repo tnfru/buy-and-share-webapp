@@ -1,10 +1,12 @@
 package de.hhu.propra.sharingplatform.service;
 
+import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.items.Item;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
+
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,13 +28,17 @@ public class RecommendationService {
 
     private final ItemRepo itemRepo;
 
+    private final ItemRentalRepo itemRentalRepo;
+
     private int numberOfItems;
 
     @Autowired
-    public RecommendationService(BorrowContractRepo borrowContractRepo, ItemRepo itemRepo) {
+    public RecommendationService(BorrowContractRepo borrowContractRepo, ItemRepo itemRepo,
+                                 ItemRentalRepo itemRentalRepo) {
         this.borrowContractRepo = borrowContractRepo;
         this.itemRepo = itemRepo;
-        this.numberOfItems = 4;
+        this.numberOfItems = 3;
+        this.itemRentalRepo = itemRentalRepo;
     }
 
     /**
@@ -75,10 +83,10 @@ public class RecommendationService {
     }
 
     List<Item> fillList(List<Item> suggestions) {
-        List<Item> allItems = (List<Item>) itemRepo.findAll();
+        List<ItemRental> allItems = (List<ItemRental>) itemRentalRepo.findAll();
         while (suggestions.size() < numberOfItems) {
-            Item randomSuggestion = allItems
-                .get((int) (Math.random() * allItems.size()));
+            Item randomSuggestion = allItems.get((int) (Math.random() * allItems.size()));
+
             if (!suggestions.contains(randomSuggestion)) {
                 suggestions.add(randomSuggestion);
             }
@@ -109,7 +117,7 @@ public class RecommendationService {
     }
 
     private void putBorrowedItems(Map<Item, Integer> map,
-        List<Item> borrowedItems) {
+                                  List<Item> borrowedItems) {
         for (Item borrowedItem : borrowedItems) {
             map.put(borrowedItem, map.getOrDefault(borrowedItem, 1));
         }

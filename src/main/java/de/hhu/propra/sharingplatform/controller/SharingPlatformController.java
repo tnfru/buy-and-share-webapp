@@ -4,6 +4,7 @@ import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
 import de.hhu.propra.sharingplatform.dao.ItemSaleRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.ItemService;
+import de.hhu.propra.sharingplatform.service.UserService;
 import java.security.Principal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +14,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class SharingPlatformController {
+public class SharingPlatformController extends BaseController {
+
+    private final ItemService itemService;
 
     private final ItemRentalRepo itemRentalRepo;
 
     private final ItemSaleRepo itemSaleRepo;
 
-    private final ItemService itemService;
-
     @Autowired
-    public SharingPlatformController(ItemRentalRepo itemRentalRepo, ItemSaleRepo itemSaleRepo,
-        ItemService itemService) {
+    public SharingPlatformController(UserService userService, ItemRentalRepo itemRentalRepo,
+        ItemSaleRepo itemSaleRepo, ItemService itemService) {
+        super(userService);
         this.itemRentalRepo = itemRentalRepo;
         this.itemSaleRepo = itemSaleRepo;
         this.itemService = itemService;

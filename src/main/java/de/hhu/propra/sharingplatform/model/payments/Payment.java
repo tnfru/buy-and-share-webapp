@@ -50,4 +50,8 @@ public class Payment {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough money");
         }
     }
+
+    public boolean isBalanced(IPaymentApi paymentApi) {
+        return paymentApi.getAccountBalance(proPayIdSender) >= amount;
+    }
 }

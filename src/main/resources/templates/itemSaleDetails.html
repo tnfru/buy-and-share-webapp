@@ -26,7 +26,7 @@
              class="img-fluid"></div>
 
       <div th:if="${itemSale?.imageFileName == null}">
-        <img src="/images/bike-dummy.png" style="width: content-box; padding: 2rem;"
+        <img src="/images/dummy.png" style="width: content-box; padding: 2rem;"
              class="img-fluid"/></div>
 
       <div class="card-body">
@@ -60,8 +60,10 @@
         <a th:if="${ownItem} == false " th:href="|/user/${itemSale.getOwner().getId()}|"
            class="btn btn-outline-secondary btn-block">User
           Details</a>
-        <a th:if="${ownItem} == false " class="btn btn-outline-success btn-block"
-           href="#">Purchase</a>
+        <form th:if="${ownItem} == false" method="post"
+              th:action="|/contract/sale/${itemSale.getId()}|">
+          <button class="btn btn-outline-success btn-block" type="submit">Purchase</button>
+        </form>
         <a th:unless="${ownItem} == false "
            class="btn btn-outline-warning btn-block"
            th:href="|/item/sale/edit/${itemSale?.Id}|">Edit Item</a>
@@ -82,7 +84,7 @@
                   <img style="width: 200px; padding-top: 1rem;"
                        th:src="@{${'/images/' + itemSale?.imageFileName}}"/></div>
                 <div th:if="${itemSale?.imageFileName == null}">
-                  <img class="img-fluid" src="/images/bike-dummy.png"
+                  <img class="img-fluid" src="/images/dummy.png"
                        style="width: 200px; padding-top: 1rem;"/>
                 </div>
               </div>
@@ -101,7 +103,7 @@
 
             </ul>
             <div class="card-body">
-              <a th:href="|/item/sale/details/${itemSale.getId()}|"
+              <a th:href="|/item/rental/details/${itemSale.getId()}|"
                  class="btn btn-outline-info btn-block">Details</a>
               <a th:href="|/user/${itemSale.getOwner().getId()}|"
                  class="btn btn-outline-secondary btn-block">User Details</a>
