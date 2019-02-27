@@ -77,9 +77,13 @@ public class ItemService {
         return item;
     }
 
+    public void itemIsFree(long itemId) {
+        Item item = findItem(itemId);
+        ItemValidator.validateItemIsFree(offerRepo, contractRepo, item);
+    }
+
     public void editItem(Item newItem, long oldItemId, long userId) {
         Item oldItemRental = findItem(oldItemId);
-        ItemValidator.validateItemIsFree(offerRepo, contractRepo, oldItemRental);
         allowOnlyOwner(oldItemRental, userId);
         validateItem(newItem);
 
