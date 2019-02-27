@@ -38,7 +38,6 @@ import org.springframework.test.web.servlet.MockMvc;
 @RunWith(SpringRunner.class)
 @WebMvcTest(ItemRentalController.class)
 @Import({ItemService.class})
-
 public class ItemRentalControllerTest {
 
     @Autowired
