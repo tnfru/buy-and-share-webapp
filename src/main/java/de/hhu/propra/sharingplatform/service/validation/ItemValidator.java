@@ -12,11 +12,15 @@ import static de.hhu.propra.sharingplatform.service.validation.Validator.validat
 
 public class ItemValidator {
 
-    public static void validateItemIsFree(OfferRepo offerRepo, ContractRepo contractRepo, Item item) {
+    public static void validateItemIsFree(OfferRepo offerRepo,
+                                          ContractRepo contractRepo, Item item) {
         if (item instanceof ItemRental
-            && (contractRepo.findAllByItemAndFinishedIsFalse((ItemRental) item).size() > 0
-            || offerRepo.findAllByItemRentalIdAndAcceptIsFalseAndDeclineIsFalse(item.getId()).size() > 0)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "There are active offers/contracts for this item");
+            && (contractRepo.findAllByItemAndFinishedIsFalse((ItemRental) item)
+            .size() > 0
+            || offerRepo.findAllByItemRentalIdAndAcceptIsFalseAndDeclineIsFalse(item.getId())
+            .size() > 0)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "There are active offers/contracts for this item");
         }
     }
 
