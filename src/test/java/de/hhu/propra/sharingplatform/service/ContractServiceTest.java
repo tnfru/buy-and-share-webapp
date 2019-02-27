@@ -28,7 +28,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @Ignore
 @RunWith(SpringRunner.class)
-@Import( {Offer.class, Contract.class, ContractService.class})
+@Import({Offer.class, Contract.class, ContractService.class})
 public class ContractServiceTest {
 
     private BorrowContract contract;

@@ -15,20 +15,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class ItemRentalController {
+public class ItemRentalController extends BaseController {
 
     private final ItemService itemService;
     private final OfferService offerService;
-    private final UserService userService;
     private final RecommendationService recommendationService;
 
 
     @Autowired
     public ItemRentalController(ItemService itemService, OfferService offerService,
         UserService userService, RecommendationService recommendationService) {
+        super(userService);
         this.itemService = itemService;
         this.offerService = offerService;
-        this.userService = userService;
         this.recommendationService = recommendationService;
     }
 
