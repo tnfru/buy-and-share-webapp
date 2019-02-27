@@ -1,6 +1,8 @@
 package de.hhu.propra.sharingplatform.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -14,10 +16,7 @@ import de.hhu.propra.sharingplatform.model.items.Item;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -47,7 +46,18 @@ public class RecommendationServiceTest {
             itemRentalRepo);
     }
 
-    //TODO returns 4 items tests
+    @Test
+    public void recommendsThreeItems() {
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(mock(ItemRental.class)));
+        List<BorrowContract> contracts = createFakeContracts();
+        when(borrowContractRepo.findAllByItem(any())).thenReturn(contracts);
+        List<ItemRental> allItems = createFakeItems();
+        when(itemRentalRepo.findAll()).thenReturn(allItems);
+
+        assertEquals(3, recommendationService.findRecommendations(1337L).size());
+    }
+
+    //TODO returns 3 items tests
 
     @Test
     public void findBorrowedItem() {
@@ -60,7 +70,6 @@ public class RecommendationServiceTest {
     }
 
 
-    @Ignore
     @Test
     public void findGreatest() {
         this.recommendationService.setNumberOfItems(1);
@@ -72,7 +81,7 @@ public class RecommendationServiceTest {
         map.put(itemOne, 10);
         map.put(itemTwo, 2);
 
-        assertEquals(2, recommendationService.findGreatest(map).size());
+        assertEquals(1, recommendationService.findGreatest(map).size());
         assertEquals(itemOne, recommendationService.findGreatest(map).get(0).getKey());
     }
 
@@ -86,11 +95,13 @@ public class RecommendationServiceTest {
         return users;
     }
 
-    public List<Item> createFakeItems() {
+    public List<ItemRental> createFakeItems() {
         List<User> users = createFakerUser();
-        List<Item> items = new ArrayList<>();
+        List<ItemRental> items = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            Item item = new ItemRental(users.get(i));
+            ItemRental item = new ItemRental(users.get(i));
+            item.setId((long) i);
+            item.setBail(10 * i);
             items.add(item);
         }
         return items;
@@ -98,13 +109,13 @@ public class RecommendationServiceTest {
 
     public List<BorrowContract> createFakeContracts() {
         List<User> users = createFakerUser();
-        List<Item> items = createFakeItems();
+        List<ItemRental> items = createFakeItems();
         List<BorrowContract> contracts = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
             LocalDateTime start = LocalDateTime.now();
             LocalDateTime end = start.plusDays(3);
-            Offer offer = new Offer((ItemRental) items.get(i), users.get(i), start, end);
+            Offer offer = new Offer(items.get(i), users.get(i), start, end);
             BorrowContract contract = new BorrowContract(offer);
             contracts.add(contract);
         }
@@ -112,7 +123,7 @@ public class RecommendationServiceTest {
         for (int i = 0; i < 4; i++) {
             LocalDateTime start = LocalDateTime.now();
             LocalDateTime end = start.plusDays(3);
-            Offer offer = new Offer((ItemRental) items.get(i), users.get(4 - i), start, end);
+            Offer offer = new Offer(items.get(i), users.get(4 - i), start, end);
             BorrowContract contract = new BorrowContract(offer);
             contracts.add(contract);
         }
