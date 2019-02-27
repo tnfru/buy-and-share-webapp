@@ -154,21 +154,58 @@ public class OfferValidatorTest {
 
     @Test
     public void validateEndSameAsStart() {
+        itemRental.setDailyRate(10);
+        IPaymentApi api = mock(IPaymentApi.class);
+        when(api.getAccountBalanceLiquid(any())).thenReturn(10000);
+        start = LocalDateTime.now();
+        end = LocalDateTime.now();
 
+        boolean thrown = false;
+        try {
+            OfferValidator.validate(itemRental, borrower, start, end, null, api);
+        } catch (ResponseStatusException responseException) {
+            thrown = true;
+        }
+
+        assertFalse(thrown);
     }
 
     @Test
     public void validateIsSolvent() {
+        itemRental.setDailyRate(10);
+        IPaymentApi api = mock(IPaymentApi.class);
+        when(api.getAccountBalanceLiquid(any())).thenReturn(0);
+        start = LocalDateTime.now();
+        end = LocalDateTime.now();
+        end = end.plusDays(1);
 
+        boolean thrown = false;
+        try {
+            OfferValidator.validate(itemRental, borrower, start, end, null, api);
+        } catch (ResponseStatusException responseException) {
+            thrown = true;
+        }
+
+        assertTrue(thrown);
     }
 
     @Test
     public void validateIsBanned() {
+        itemRental.setDailyRate(10);
+        IPaymentApi api = mock(IPaymentApi.class);
+        when(api.getAccountBalanceLiquid(any())).thenReturn(10000);
+        start = LocalDateTime.now();
+        end = LocalDateTime.now();
+        end = end.plusDays(1);
+        borrower.setBan(true);
 
-    }
+        boolean thrown = false;
+        try {
+            OfferValidator.validate(itemRental, borrower, start, end, null, api);
+        } catch (ResponseStatusException responseException) {
+            thrown = true;
+        }
 
-    @Test
-    public void validateValidInput() {
-
+        assertTrue(thrown);
     }
 }
