@@ -40,6 +40,9 @@ public class Payment {
 
 
     public void pay(IPaymentApi paymentApi) {
-        paymentApi.transferMoney(amount, proPayIdSender, proPayIdRecipient);
+        if (paymentApi.getAccountBalanceLiquid(proPayIdSender) >= amount) {
+            paymentApi.transferMoney(amount, proPayIdSender, proPayIdRecipient);
+        }
+        //TODO: ELSE: throw exception
     }
 }
