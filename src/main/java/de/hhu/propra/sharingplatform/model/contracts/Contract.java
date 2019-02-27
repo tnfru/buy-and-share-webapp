@@ -1,5 +1,8 @@
 package de.hhu.propra.sharingplatform.model.contracts;
 
+import de.hhu.propra.sharingplatform.model.items.Item;
+import de.hhu.propra.sharingplatform.model.payments.Payment;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,10 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-
-import de.hhu.propra.sharingplatform.model.*;
-import de.hhu.propra.sharingplatform.model.payments.Payment;
-import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import lombok.Data;
 
 @Data
