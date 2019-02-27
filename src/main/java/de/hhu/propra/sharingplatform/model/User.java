@@ -128,9 +128,9 @@ public class User {
         return itemsActive;
     }
 
-    public List<Contract> getChosenContracts(boolean finished) {
-        List<Contract> chosenContracts = new ArrayList<>();
-        for (Contract contract : borrowContracts) {
+    public List<BorrowContract> getChosenContracts(boolean finished) {
+        List<BorrowContract> chosenContracts = new ArrayList<>();
+        for (BorrowContract contract : contracts) {
             if (contract.isFinished() == finished) {
                 chosenContracts.add(contract);
             }

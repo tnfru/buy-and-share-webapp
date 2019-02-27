@@ -1,6 +1,7 @@
 package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.service.ContractService;
+import de.hhu.propra.sharingplatform.service.UserService;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,12 +9,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class ContractController {
+public class ContractController extends BaseController {
 
     private final ContractService contractService;
 
     @Autowired
-    public ContractController(ContractService contractService) {
+    public ContractController(UserService userService, ContractService contractService) {
+        super(userService);
         this.contractService = contractService;
     }
 

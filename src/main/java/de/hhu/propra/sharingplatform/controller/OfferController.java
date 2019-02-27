@@ -5,11 +5,13 @@ import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
+
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,19 +23,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 @Controller
-public class OfferController {
+public class OfferController extends BaseController {
 
     private final ItemService itemService;
-
-    private final UserService userService;
 
     private final OfferService offerService;
 
     @Autowired
-    public OfferController(ItemService itemService, UserService userService,
+    public OfferController(UserService userService, ItemService itemService,
         OfferService offerService) {
+        super(userService);
         this.itemService = itemService;
-        this.userService = userService;
         this.offerService = offerService;
     }
 
