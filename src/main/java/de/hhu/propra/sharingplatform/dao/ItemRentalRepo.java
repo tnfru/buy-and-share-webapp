@@ -7,6 +7,8 @@ import java.util.Optional;
 public interface ItemRentalRepo extends ItemRepo<ItemRental> {
     ItemRental findOneById(long id);
 
+    List<ItemRental> findAllByDeletedIsFalse();
+
     Optional<ItemRental> findById(long id);
 
     List<ItemRental> findAllByNameContainsIgnoreCase(String search);
