@@ -11,14 +11,11 @@ RUN ./gradlew build
 FROM openjdk:8-jdk-alpine
 
 WORKDIR /app
-ENV STATIC_DATA /app/static
 
 RUN apk add bash
 
 COPY ./src/main/resources/application-prod.properties .
 COPY ./wait-for-it.sh .
-RUN mkdir public
-COPY ./public ./public
 RUN chmod +x wait-for-it.sh
 
 COPY --from=build /app/build/libs/sharingplatform-0.0.1-SNAPSHOT.jar .
