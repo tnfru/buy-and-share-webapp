@@ -118,7 +118,7 @@ public class ItemService {
     }
 
     public List<ItemSale> filterSale(List<String> keywords) {
-        if (keywords == null || keywords.size() == 0) {
+        if (keywords == null || keywords.isEmpty()) {
             return (List<ItemSale>) itemRepo.findAll();
         }
         List<ItemSale> items = new ArrayList<>();
@@ -130,7 +130,7 @@ public class ItemService {
     }
 
     public List<ItemRental> filterRental(List<String> keywords) {
-        if (keywords == null || keywords.size() == 0) {
+        if (keywords == null || keywords.isEmpty()) {
             return (List<ItemRental>) itemRepo.findAll();
         }
         List<ItemRental> items = new ArrayList<>();

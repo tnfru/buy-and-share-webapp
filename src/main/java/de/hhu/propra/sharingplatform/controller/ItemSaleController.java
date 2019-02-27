@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ItemSaleController extends BaseController {
 
     private final ItemService itemService;
-    private final UserService userService;
     private final RecommendationService recommendationService;
 
 
@@ -29,7 +28,6 @@ public class ItemSaleController extends BaseController {
                               RecommendationService recommendationService) {
         super(userService);
         this.itemService = itemService;
-        this.userService = userService;
         this.recommendationService = recommendationService;
     }
 

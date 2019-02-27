@@ -6,7 +6,6 @@ import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
-import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
 import de.hhu.propra.sharingplatform.service.validation.OfferValidator;
 

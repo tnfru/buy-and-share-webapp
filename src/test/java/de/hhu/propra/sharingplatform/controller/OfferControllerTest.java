@@ -25,9 +25,11 @@ import de.hhu.propra.sharingplatform.service.ImageService;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +47,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(OfferController.class)
-@Import({ItemService.class})
+@Import( {ItemService.class})
 
 public class OfferControllerTest {
 
@@ -272,10 +274,14 @@ public class OfferControllerTest {
         verify(offerService, times(1))
             .create(a1.capture(), a2.capture(), a3.capture(), a4.capture());
 
-        assertEquals(a1.getValue().longValue(), 1337);
-        assertEquals(a2.getValue(), user);
-        assertEquals(a3.getValue(), LocalDateTime.of(2019, 2, 23, 0, 0, 0));
-        assertEquals(a4.getValue(), LocalDateTime.of(2019, 2, 27, 23, 59, 59));
+        assertEquals(1337, a1.getValue().longValue());
+        assertEquals(user, a2.getValue());
+        assertEquals(LocalDateTime
+                .of(2019, 2, 23, 0, 0, 0),
+            a3.getValue());
+        assertEquals(LocalDateTime
+                .of(2019, 2, 27, 23, 59, 59),
+            a4.getValue());
     }
 
     @Test

@@ -6,7 +6,6 @@ import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
-import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.stereotype.Service;
 
