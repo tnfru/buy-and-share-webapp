@@ -2,6 +2,7 @@ package de.hhu.propra.sharingplatform.model;
 
 import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.model.payments.BorrowPayment;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import org.junit.Assert;
@@ -30,8 +31,8 @@ public class BorrowContractPaymentTest {
         User user2 = new User();
         user2.setName("Borrower");
         user2.setPropayId("Borrower");
-        Item item = new Item(user);
-        item.setPrice(100);
+        ItemRental item = new ItemRental(user);
+        item.setDailyRate(100);
         item.setBail(1000);
         Offer offer = new Offer(item, user2, LocalDateTime.now(), LocalDateTime.now().plusDays(2));
         borrowContract = new BorrowContract(offer);
