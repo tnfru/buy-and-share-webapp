@@ -47,7 +47,7 @@ public abstract class Item {
     @Transient
     private MultipartFile image;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private User owner;
 
     public String getImageExtension() {

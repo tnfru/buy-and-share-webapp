@@ -439,7 +439,7 @@ public class ItemRentalControllerTest {
             .param("description", "desc"))
             .andExpect(status().is3xxRedirection());
 
-        verify(itemRepo, times(1)).save(any());
+        verify(itemRepo, times(2)).save(any());
     }
 
     @Test
