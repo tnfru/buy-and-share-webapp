@@ -82,7 +82,7 @@ public class RecommendationService {
         return suggestions.size() < numberOfItems ? fillList(suggestions) : suggestions;
     }
 
-    List<Item> fillList(List<Item> suggestions) {
+    private List<Item> fillList(List<Item> suggestions) {
         List<ItemRental> allItems = (List<ItemRental>) itemRentalRepo.findAll();
         while (suggestions.size() < numberOfItems) {
             Item randomSuggestion = allItems.get((int) (Math.random() * allItems.size()));
@@ -94,7 +94,7 @@ public class RecommendationService {
         return suggestions;
     }
 
-    Map<Item, Integer> fillMap(List<User> otherBorrowers) {
+    private Map<Item, Integer> fillMap(List<User> otherBorrowers) {
         // Maps the Items with the values of their frequency
         Map<Item, Integer> map = new HashMap<>();
         for (User otherBorrower : otherBorrowers) {
