@@ -30,4 +30,10 @@ public class ContractController extends BaseController {
         contractService.returnItem(contractId, principal.getName());
         return "redirect:/user/account";
     }
+
+    @PostMapping("/contract/sale/{itemId}")
+    public String purchaseItemSale(@PathVariable long itemId, Principal principal) {
+        contractService.buySaleItem(itemId, principal.getName());
+        return "redirect:/sale";
+    }
 }

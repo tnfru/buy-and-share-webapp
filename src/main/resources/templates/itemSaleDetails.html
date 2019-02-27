@@ -60,8 +60,10 @@
         <a th:if="${ownItem} == false " th:href="|/user/${itemSale.getOwner().getId()}|"
            class="btn btn-outline-secondary btn-block">User
           Details</a>
-        <a th:if="${ownItem} == false " class="btn btn-outline-success btn-block"
-           href="#">Purchase</a>
+        <form th:if="${ownItem} == false" method="post"
+              th:action="|/contract/sale/${itemSale.getId()}|">
+          <button class="btn btn-outline-success btn-block" type="submit">Purchase</button>
+        </form>
         <a th:unless="${ownItem} == false "
            class="btn btn-outline-warning btn-block"
            th:href="|/item/sale/edit/${itemSale?.Id}|">Edit Item</a>
