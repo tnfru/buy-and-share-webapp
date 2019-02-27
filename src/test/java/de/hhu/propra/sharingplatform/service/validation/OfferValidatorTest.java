@@ -3,6 +3,7 @@ package de.hhu.propra.sharingplatform.service.validation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,9 +12,11 @@ import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import de.hhu.propra.sharingplatform.service.payment.PaymentService;
 import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
@@ -130,106 +133,42 @@ public class OfferValidatorTest {
         assertFalse(thrown);
     }
 
-
-    /*
-    // alte tests
     @Test
     public void validateEndIsBeforeStart() {
-        LocalDateTime wrongEnd = start.minusDays(1);
+        itemRental.setDailyRate(10);
+        IPaymentApi api = mock(IPaymentApi.class);
+        when(api.getAccountBalanceLiquid(any())).thenReturn(10000);
+        start = LocalDateTime.now();
+        end = LocalDateTime.now();
+        end = end.minusDays(1);
+
         boolean thrown = false;
-
-        paymentService = mock(PaymentService.class);
-        when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(120);
-
         try {
-            OfferValidator.validate(itemRental, borrower, start, wrongEnd, paymentService,
-            apiService);
+            OfferValidator.validate(itemRental, borrower, start, end, null, api);
         } catch (ResponseStatusException responseException) {
             thrown = true;
-            assertEquals("400 BAD_REQUEST \"End date needs to be after Start date\"",
-                responseException.getMessage());
         }
+
         assertTrue(thrown);
     }
-*/
-    /*
-    @Ignore
+
     @Test
     public void validateEndSameAsStart() {
-        boolean thrown = false;
 
-        paymentService = mock(PaymentService.class);
-        when(paymentService.calculateTotalPrice(itemRental, start, start)).thenReturn(120);
-
-        try {
-            OfferValidator.validate(itemRental, borrower, start, start, paymentService, apiService);
-        } catch (ResponseStatusException responseException) {
-            thrown = true;
-            assertEquals("400 BAD_REQUEST \"End date needs to be after Start date\"",
-                responseException.getMessage());
-        }
-        assertTrue(thrown);
     }
-    */
 
-    /*
     @Test
     public void validateIsSolvent() {
-        boolean thrown = false;
 
-        paymentService = mock(PaymentService.class);
-        apiService = mock(ApiService.class);
-        when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(120);
-        when(apiService.isSolvent(eq(borrower), anyInt())).thenReturn(false);
-
-        try {
-            OfferValidator.validate(itemRental, borrower, start, end, paymentService, apiService);
-        } catch (ResponseStatusException responseException) {
-            thrown = true;
-            assertEquals("400 BAD_REQUEST \"Not enough money\"",
-                responseException.getMessage());
-        }
-        assertTrue(thrown);
     }
-*/
-    /*
+
     @Test
     public void validateIsBanned() {
-        boolean thrown = false;
 
-        borrower.setBan(true);
-
-        paymentService = mock(PaymentService.class);
-        apiService = mock(ApiService.class);
-        when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(120);
-        when(apiService.isSolvent(eq(borrower), anyInt())).thenReturn(true);
-
-        try {
-            OfferValidator.validate(itemRental, borrower, start, end, paymentService, apiService);
-        } catch (ResponseStatusException responseException) {
-            thrown = true;
-            assertEquals("400 BAD_REQUEST \"Account currently suspended\"",
-                responseException.getMessage());
-        }
-        assertTrue(thrown);
     }
-*/
-    /*
+
     @Test
     public void validateValidInput() {
-        boolean thrown = false;
 
-        paymentService = mock(PaymentService.class);
-        apiService = mock(ApiService.class);
-        when(paymentService.calculateTotalPrice(itemRental, start, end)).thenReturn(234);
-        when(apiService.isSolvent(eq(borrower), anyInt())).thenReturn(true);
-
-        try {
-            OfferValidator.validate(itemRental, borrower, start, end, paymentService, apiService);
-        } catch (ResponseStatusException responseException) {
-            thrown = true;
-        }
-        assertFalse(thrown);
     }
-*/
 }
