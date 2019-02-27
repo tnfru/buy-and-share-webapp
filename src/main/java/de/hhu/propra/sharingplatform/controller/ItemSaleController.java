@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class ItemSaleController {
+public class ItemSaleController extends BaseController {
 
     private final ItemService itemService;
     private final UserService userService;
@@ -27,6 +27,7 @@ public class ItemSaleController {
     public ItemSaleController(ItemService itemService,
                               UserService userService,
                               RecommendationService recommendationService) {
+        super(userService);
         this.itemService = itemService;
         this.userService = userService;
         this.recommendationService = recommendationService;
@@ -79,8 +80,8 @@ public class ItemSaleController {
 
     @PostMapping("/item/sale/edit/{itemId}")
     public String editItemData(Model model, ItemSale itemSale,
-        @PathVariable long itemId,
-        Principal principal) {
+                               @PathVariable long itemId,
+                               Principal principal) {
         long userId = userService.fetchUserIdByAccountName(principal.getName());
         itemService.editItem(itemSale, itemId, userId);
         return "redirect:/user/account";
