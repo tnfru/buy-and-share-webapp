@@ -4,6 +4,7 @@ package de.hhu.propra.sharingplatform.model;
 import com.google.common.io.Files;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
+import de.hhu.propra.sharingplatform.model.contracts.SellContract;
 import de.hhu.propra.sharingplatform.model.items.Item;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.model.items.ItemSale;
@@ -50,7 +51,11 @@ public class User {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
-    private List<BorrowContract> contracts = new ArrayList<>();
+    private List<BorrowContract> borrowContracts = new ArrayList<>();
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+        CascadeType.REFRESH}, mappedBy = "customer")
+    private List<SellContract> sellContracts = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "owner")
@@ -123,15 +128,34 @@ public class User {
         return itemsActive;
     }
 
-    public List<Contract> getChosenContracts(boolean finished) {
-        List<Contract> chosenContracts = new ArrayList<>();
-        for (Contract contract : contracts) {
+    public List<BorrowContract> getChosenContracts(boolean finished) {
+        List<BorrowContract> chosenContracts = new ArrayList<>();
+        for (BorrowContract contract : borrowContracts) {
             if (contract.isFinished() == finished) {
                 chosenContracts.add(contract);
             }
         }
         return chosenContracts;
     }
+
+    public List<ItemSale> getSoldItems() {
+        List<ItemSale> soldItems = new ArrayList<>();
+        for (ItemSale item : itemSales) {
+            if (item.getContracts().size() > 0) {
+                soldItems.add(item);
+            }
+        }
+        return soldItems;
+    }
+
+    public List<ItemSale> getBoughtItems() {
+        List<ItemSale> boughtItems = new ArrayList<>();
+        for (Contract contract : sellContracts) {
+            boughtItems.add((ItemSale) contract.getItem());
+        }
+        return boughtItems;
+    }
+
 
     public String getImageExtension() {
         return Files.getFileExtension(image.getOriginalFilename());

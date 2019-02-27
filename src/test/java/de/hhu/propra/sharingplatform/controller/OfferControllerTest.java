@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -45,6 +46,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RunWith(SpringRunner.class)
 @WebMvcTest(OfferController.class)
 @Import({ItemService.class})
+
 public class OfferControllerTest {
 
     @Autowired
@@ -88,6 +90,8 @@ public class OfferControllerTest {
         itemRental.setDailyRate(20);
         itemRental.setDescription("This is a test");
         itemRental.setLocation("Test-Location");
+
+        when(userService.fetchUserByAccountName(anyString())).thenReturn(new User());
     }
 
     @Test

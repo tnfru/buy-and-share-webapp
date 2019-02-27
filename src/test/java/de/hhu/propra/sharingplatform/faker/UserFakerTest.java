@@ -42,7 +42,8 @@ public class UserFakerTest {
         assertFalse(user.isBan());
         assertFalse(user.isDeleted());
         assertNotEquals(null, user.getItemRentals());
-        assertNotEquals(null, user.getContracts());
+        assertNotEquals(null, user.getSellContracts());
+        assertNotEquals(null, user.getBorrowContracts());
         assertNotEquals(null, user.getOffers());
     }
 

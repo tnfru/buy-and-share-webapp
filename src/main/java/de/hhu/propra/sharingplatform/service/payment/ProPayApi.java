@@ -129,7 +129,7 @@ public class ProPayApi implements IPaymentApi {
     }
 
     private ProPay mapJsonToPropay(String userName) {
-        String jsonResponse = ApiService.fetchJson(userName);
+        String jsonResponse = ApiService.fetchJson(host, userName);
         ObjectMapper mapper = new ObjectMapper();
 
         try {

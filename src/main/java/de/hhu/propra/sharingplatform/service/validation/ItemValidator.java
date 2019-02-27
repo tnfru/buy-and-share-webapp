@@ -16,12 +16,12 @@ public class ItemValidator {
             || !Validator.isPrintable(item.getDescription())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Description");
         }
-        if (item.getClass().toString().contains("ItemRental")) {
+        if (item instanceof ItemRental) {
             if (((ItemRental) item).getBail() == null) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Bail");
             }
             if (((ItemRental) item).getDailyRate() == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Price");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Daily Rate");
             }
         } else {
             if (((ItemSale) item).getPrice() == null) {
