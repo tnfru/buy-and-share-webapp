@@ -6,11 +6,8 @@ import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
-import de.hhu.propra.sharingplatform.model.contracts.Contract;
-import de.hhu.propra.sharingplatform.model.contracts.SellContract;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,10 +96,6 @@ public class ContractService {
             || contract.getBorrower().getAccountName().equals(userName);
     }
 
-    public Collection<Contract> getContractsWithOpenConflicts() {
-        return conflictService.getAllContractsWithOpenConflict();
-    }
-
     public void validateOwner(long contractId, String accountName) {
         BorrowContract contract = borrowContractRepo.findOneById(contractId);
         if (!userIsContractOwner(contract, accountName)) {
@@ -133,15 +126,7 @@ public class ContractService {
         contract.setFinished(true);
     }
 
-    public Contract fetchContractById(long contractId) {
-        return borrowContractRepo.findOneById(contractId);
-    }
-
     public BorrowContract fetchBorrowContractById(long contractId) {
         return borrowContractRepo.findOneById(contractId);
-    }
-
-    public SellContract fetchSellContractById(long contractId) {
-        return sellContractRepo.findOneById(contractId);
     }
 }
