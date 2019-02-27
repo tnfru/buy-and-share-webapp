@@ -95,7 +95,7 @@ public class UserServiceTest {
         boolean thrown = false;
         User user = createUser("name", "accName", "address", "e@mail.de");
         try {
-            userService.updatePassword(user,"wrongOld", "new", "new");
+            userService.updatePassword(user, "wrongOld", "new", "new");
             when(encoder.matches(anyString(), anyString())).thenReturn(false);
         } catch (ResponseStatusException rse) {
             thrown = true;

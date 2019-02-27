@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class ItemController extends BaseController {
+public class ItemRentalController extends BaseController {
 
     private final ItemService itemService;
     private final OfferService offerService;

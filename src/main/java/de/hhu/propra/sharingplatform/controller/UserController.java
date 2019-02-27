@@ -11,20 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
-
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class UserController extends BaseController {
 
     private final HttpServletRequest request;
-
-    private final HttpServletRequest request;
-
-    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService, HttpServletRequest request) {

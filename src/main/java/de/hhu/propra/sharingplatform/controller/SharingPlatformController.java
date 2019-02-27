@@ -23,8 +23,8 @@ public class SharingPlatformController extends BaseController {
     private final ItemSaleRepo itemSaleRepo;
 
     @Autowired
-    public SharingPlatformController(UserService userService, ItemRepo itemRepo,
-        ItemService itemService) {
+    public SharingPlatformController(UserService userService, ItemRentalRepo itemRentalRepo,
+        ItemSaleRepo itemSaleRepo, ItemService itemService) {
         super(userService);
         this.itemRentalRepo = itemRentalRepo;
         this.itemSaleRepo = itemSaleRepo;

@@ -25,13 +25,10 @@ import de.hhu.propra.sharingplatform.service.ImageService;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -48,7 +45,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(OfferController.class)
-@Import( {ItemService.class})
+@Import({ItemService.class})
 
 public class OfferControllerTest {
 
