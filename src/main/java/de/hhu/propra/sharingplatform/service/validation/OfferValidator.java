@@ -5,7 +5,6 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
-import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -15,8 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 public class OfferValidator {
 
     public static void validate(ItemRental itemRental, User requester, LocalDateTime start,
-        LocalDateTime end,
-        IPaymentService paymentService, IPaymentApi apiService) {
+                                LocalDateTime end,
+                                IPaymentApi apiService) {
 
         if ((start.until(end, ChronoUnit.DAYS) + 1) < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End date needs to be after"

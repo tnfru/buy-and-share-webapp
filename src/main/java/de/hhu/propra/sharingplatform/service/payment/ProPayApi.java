@@ -1,7 +1,6 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.dto.ProPay;
 import de.hhu.propra.sharingplatform.dto.ProPayReservation;
 import de.hhu.propra.sharingplatform.service.ApiService;
@@ -10,19 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProPayApi implements IPaymentApi {
 
-    private final PaymentRepo paymentRepo;
-    String host = "localhost";
-
-    @Autowired
-    public ProPayApi(PaymentRepo paymentRepo) {
-        this.paymentRepo = paymentRepo;
-    }
+    private String host = "localhost";
 
     @Override
     public void addMoney(String proPayId, int amount) {

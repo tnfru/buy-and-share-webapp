@@ -56,7 +56,7 @@ public class OfferService {
 
     public void validate(ItemRental itemRental, User requester, LocalDateTime start,
         LocalDateTime end) {
-        OfferValidator.validate(itemRental, requester, start, end, paymentService, apiService);
+        OfferValidator.validate(itemRental, requester, start, end, apiService);
         OfferValidator.periodIsAvailable(borrowContractRepo, itemRental, start, end);
     }
 
