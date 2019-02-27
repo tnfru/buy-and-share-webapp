@@ -39,7 +39,7 @@ public class ItemSaleController {
         boolean ownItem = itemService.userIsOwner(itemSale.getId(),
             userService.fetchUserIdByAccountName(principal.getName()));
         model.addAttribute("ownItem", ownItem);
-        model.addAttribute("recItems", new ArrayList<>());
+        model.addAttribute("recItems", recommendationService.findRecommendations(itemId));
         return "itemSaleDetails";
     }
 

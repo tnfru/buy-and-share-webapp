@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import de.hhu.propra.sharingplatform.dao.ItemRentalRepo;
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.model.Offer;
@@ -11,15 +12,18 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.items.Item;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -31,12 +35,18 @@ public class RecommendationServiceTest {
     @MockBean
     ItemRepo itemRepo;
 
+    @MockBean
+    ItemRentalRepo itemRentalRepo;
+
     private RecommendationService recommendationService;
 
     @Before
     public void setUp() {
-        this.recommendationService = new RecommendationService(borrowContractRepo, itemRepo);
+        this.recommendationService = new RecommendationService(borrowContractRepo, itemRepo,
+            itemRentalRepo);
     }
+
+    //TODO returns 4 items tests
 
     @Test
     public void findBorrowedItem() {
