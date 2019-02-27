@@ -135,7 +135,7 @@ public class ItemRentalServiceTest {
 
         itemService.editItem(editItemRental, 1L, 1L);
 
-        verify(itemRepo, times(1)).save(argument.capture());
+        verify(itemRepo, times(2)).save(argument.capture());
         assertEquals(argument.getValue().getDescription(), editItemRental.getDescription());
     }
 
