@@ -77,6 +77,7 @@ public class DataFaker implements ServletContextInitializer {
         if (userRepo.count() != 0) {
             log.info("Database already initialized.");
             log.info("Skipping database faking");
+            return;
         }
         int dataSize = 75;
 

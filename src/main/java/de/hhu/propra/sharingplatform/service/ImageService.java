@@ -17,7 +17,7 @@ public class ImageService {
         String contenttype = file.getContentType();
         if (contenttype.equals("image/png") || contenttype.equals("image/jpeg")) {
             try {
-                File out = ResourceUtils.getFile("public/images/" + filename);
+                File out = ResourceUtils.getFile("static/images/" + filename);
                 out.createNewFile();
                 FileOutputStream fos = new FileOutputStream(out);
                 fos.write(file.getBytes());

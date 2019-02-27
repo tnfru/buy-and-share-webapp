@@ -3,18 +3,26 @@ package de.hhu.propra.sharingplatform.service.payment;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.hhu.propra.sharingplatform.dto.ProPay;
 import de.hhu.propra.sharingplatform.dto.ProPayReservation;
-import de.hhu.propra.sharingplatform.service.ApiService;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProPayApi implements IPaymentApi {
 
-    private String host = "localhost";
+    ProPayNetworkInterface networkInterface;
+    String host = "localhost";
+
+    @Autowired
+    public ProPayApi() {
+        networkInterface = new ProPayNetworkInterface();
+    }
 
     @Override
     public void addMoney(String proPayId, int amount) {
@@ -31,7 +39,7 @@ public class ProPayApi implements IPaymentApi {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("amount", Integer.toString(amount));
 
-        ApiService.buildRequest("POST", "http://" + host + ":8888/",
+        networkInterface.buildRequest("POST", "http://" + host + ":8888/",
             path, parameters);
     }
 
@@ -62,7 +70,7 @@ public class ProPayApi implements IPaymentApi {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("amount", Integer.toString(amount));
 
-        String response = ApiService.buildRequest("POST", "http://" + host + ":8888/",
+        String response = networkInterface.buildRequest("POST", "http://" + host + ":8888/",
             pathVariables, parameters);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -86,7 +94,7 @@ public class ProPayApi implements IPaymentApi {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("reservationId", Long.toString(amountProPayId));
 
-        ApiService.buildRequest("POST", "http://" + host + ":8888/",
+        networkInterface.buildRequest("POST", "http://" + host + ":8888/",
             path, parameters);
     }
 
@@ -99,7 +107,7 @@ public class ProPayApi implements IPaymentApi {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("reservationId", Long.toString(bailProPayId));
 
-        ApiService.buildRequest("POST", "http://" + host + ":8888/",
+        networkInterface.buildRequest("POST", "http://" + host + ":8888/",
             path, parameters);
 
     }
@@ -116,12 +124,12 @@ public class ProPayApi implements IPaymentApi {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("amount", Integer.toString(amount));
 
-        ApiService.buildRequest("POST", "http://" + host + ":8888/",
+        networkInterface.buildRequest("POST", "http://" + host + ":8888/",
             pathVariables, parameters);
     }
 
     private ProPay mapJsonToPropay(String userName) {
-        String jsonResponse = ApiService.fetchJson(host, userName);
+        String jsonResponse = networkInterface.fetchJson(userName, host);
         ObjectMapper mapper = new ObjectMapper();
 
         try {

@@ -1,6 +1,8 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.OfferRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.items.Item;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
@@ -21,12 +23,17 @@ public class ItemService {
     private ImageService itemImageSaver;
     private final UserService userService;
     private final ItemRepo itemRepo;
+    private final ContractRepo contractRepo;
+    private final OfferRepo offerRepo;
 
     public ItemService(UserService userService,
-                       ImageService itemImageSaver, ItemRepo itemRepo) {
+                       ImageService itemImageSaver, ItemRepo itemRepo,
+                       ContractRepo contractRepo, OfferRepo offerRepo) {
         this.userService = userService;
         this.itemImageSaver = itemImageSaver;
         this.itemRepo = itemRepo;
+        this.contractRepo = contractRepo;
+        this.offerRepo = offerRepo;
     }
 
     public void persistItem(Item item, long userId) {
@@ -35,15 +42,7 @@ public class ItemService {
         item.setOwner(owner);
         itemRepo.save(item);
 
-        String imagefilename = "bike-dummy.png";
-        if (item.getImage() != null && item.getImage().getSize() > 0) {
-            imagefilename =
-                "itemRental-" + item.getId() + "." + item.getImageExtension();
-            itemImageSaver.store(item.getImage(), imagefilename);
-        }
-
-        item.setImageFileName(imagefilename);
-        itemRepo.save(item);
+        saveImage(item);
     }
 
     public void removeItem(long itemId, long userId) {
@@ -72,6 +71,11 @@ public class ItemService {
         return item;
     }
 
+    public void itemIsFree(long itemId) {
+        Item item = findItem(itemId);
+        ItemValidator.validateItemIsFree(offerRepo, contractRepo, item);
+    }
+
     public void editItem(Item newItem, long oldItemId, long userId) {
         Item oldItemRental = findItem(oldItemId);
         allowOnlyOwner(oldItemRental, userId);
@@ -80,6 +84,8 @@ public class ItemService {
         newItem.setOwner(oldItemRental.getOwner());
         newItem.setId(oldItemRental.getId());
         itemRepo.save(newItem);
+
+        saveImage(newItem);
     }
 
     public void allowOnlyOwner(Item item, long userId) {
@@ -139,5 +145,16 @@ public class ItemService {
             items.addAll(searching);
         }
         return items;
+    }
+
+    private void saveImage(Item item) {
+        String imagefilename = "dummy.png";
+        if (item.getImage() != null && item.getImage().getSize() > 0) {
+            imagefilename = "item-" + item.getId() + "." + item.getImageExtension();
+            itemImageSaver.store(item.getImage(), imagefilename);
+        }
+
+        item.setImageFileName(imagefilename);
+        itemRepo.save(item);
     }
 }

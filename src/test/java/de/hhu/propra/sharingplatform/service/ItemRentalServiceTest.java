@@ -11,6 +11,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.OfferRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
 
@@ -36,6 +38,12 @@ public class ItemRentalServiceTest {
     @MockBean
     private ItemRepo itemRepo;
 
+    @MockBean
+    ContractRepo contractRepo;
+
+    @MockBean
+    OfferRepo offerRepo;
+
     private ItemRental itemRental;
     private User user;
     private ItemService itemService;
@@ -44,7 +52,7 @@ public class ItemRentalServiceTest {
     @Before
     public void init() {
         imageService = mock(ImageService.class);
-        itemService = new ItemService(userService, imageService, itemRepo);
+        itemService = new ItemService(userService, imageService, itemRepo, contractRepo, offerRepo);
 
         user = new User();
         user.setName("Test");
@@ -129,7 +137,7 @@ public class ItemRentalServiceTest {
 
         itemService.editItem(editItemRental, 1L, 1L);
 
-        verify(itemRepo, times(1)).save(argument.capture());
+        verify(itemRepo, times(2)).save(argument.capture());
         assertEquals(argument.getValue().getDescription(), editItemRental.getDescription());
     }
 

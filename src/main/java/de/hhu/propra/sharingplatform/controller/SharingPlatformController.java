@@ -38,7 +38,7 @@ public class SharingPlatformController extends BaseController {
             user = new User();
         }
         model.addAttribute("user", user);
-        model.addAttribute("itemRentals", itemRentalRepo.findAll());
+        model.addAttribute("itemRentals", itemRentalRepo.findAllByDeletedIsFalse());
         return "mainpage";
     }
 
@@ -62,7 +62,7 @@ public class SharingPlatformController extends BaseController {
             user = new User();
         }
         model.addAttribute("user", user);
-        model.addAttribute("itemSales", itemSaleRepo.findAll());
+        model.addAttribute("itemSales", itemSaleRepo.findAllByDeletedIsFalse());
         return "salepage";
     }
 
