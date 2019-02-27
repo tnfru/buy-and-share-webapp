@@ -6,8 +6,10 @@ import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.RecommendationService;
 import de.hhu.propra.sharingplatform.service.UserService;
+
 import java.security.Principal;
 import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +27,8 @@ public class ItemSaleController {
 
     @Autowired
     public ItemSaleController(ItemService itemService,
-        UserService userService, RecommendationService recommendationService) {
+                              UserService userService,
+                              RecommendationService recommendationService) {
         this.itemService = itemService;
         this.userService = userService;
         this.recommendationService = recommendationService;
@@ -60,7 +63,7 @@ public class ItemSaleController {
 
     @GetMapping("/item/sale/remove/{itemId}")
     public String markItemAsRemoved(Model model, @PathVariable long itemId,
-        Principal principal) {
+                                    Principal principal) {
         itemService.removeItem(itemId, userService.fetchUserIdByAccountName(principal.getName()));
         return "redirect:/user/account/";
     }
@@ -78,8 +81,8 @@ public class ItemSaleController {
 
     @PostMapping("/item/sale/edit/{itemId}")
     public String editItemData(Model model, ItemRental itemRental,
-        @PathVariable long itemId,
-        Principal principal) {
+                               @PathVariable long itemId,
+                               Principal principal) {
         long userId = userService.fetchUserIdByAccountName(principal.getName());
         itemService.editItem(itemRental, itemId, userId);
         return "redirect:/user/account";

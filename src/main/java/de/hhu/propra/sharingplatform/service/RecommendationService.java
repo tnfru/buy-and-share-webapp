@@ -37,7 +37,7 @@ public class RecommendationService {
                                  ItemRentalRepo itemRentalRepo) {
         this.borrowContractRepo = borrowContractRepo;
         this.itemRepo = itemRepo;
-        this.numberOfItems = 4;
+        this.numberOfItems = 3;
         this.itemRentalRepo = itemRentalRepo;
     }
 
