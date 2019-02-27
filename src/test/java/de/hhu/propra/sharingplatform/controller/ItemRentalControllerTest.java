@@ -26,6 +26,7 @@ import de.hhu.propra.sharingplatform.service.RecommendationService;
 import de.hhu.propra.sharingplatform.service.UserService;
 import java.util.Optional;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -233,7 +234,8 @@ public class ItemRentalControllerTest {
     }
 
     //TODO: Add image upload
-    //@Test
+    @Test
+    @Ignore
     @WithMockUser("accountname")
     public void postNewItemWrongLoggedIn() throws Exception {
         User user = testUser();
@@ -250,7 +252,8 @@ public class ItemRentalControllerTest {
 
 
     //TODO: Add image upload
-    //@Test
+    @Test
+    @Ignore
     @WithMockUser("accountname")
     public void postNewItemCorrectLoggedIn() throws Exception {
         User user = testUser();

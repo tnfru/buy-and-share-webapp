@@ -12,9 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.items.Item;
 import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import de.hhu.propra.sharingplatform.service.ImageService;
@@ -64,7 +65,10 @@ public class ItemSaleControllerTest {
     private RecommendationService recommendationService;
 
     @MockBean
-    private Contract contract;
+    private ContractRepo contractRepo;
+
+    @MockBean
+    private OfferRepo offerRepo;
 
 
     private User testUser() {

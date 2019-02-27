@@ -10,7 +10,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
@@ -61,6 +63,12 @@ public class ContractControllerTest {
 
     @MockBean
     private ContractService contractService;
+
+    @MockBean
+    private ContractRepo contractRepo;
+
+    @MockBean
+    private OfferRepo offerRepo;
 
     @MockBean
     private RecommendationService recommendationService;
