@@ -6,9 +6,11 @@ import de.hhu.propra.sharingplatform.model.items.Item;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,7 +23,7 @@ public class ItemService {
     private final ItemRepo itemRepo;
 
     public ItemService(UserService userService,
-        ImageService itemImageSaver, ItemRepo itemRepo) {
+                       ImageService itemImageSaver, ItemRepo itemRepo) {
         this.userService = userService;
         this.itemImageSaver = itemImageSaver;
         this.itemRepo = itemRepo;
@@ -91,7 +93,7 @@ public class ItemService {
         return item.getOwner().getId() == userId;
     }
 
-    public void validateItem(Item item) {
+    private void validateItem(Item item) {
         ItemValidator.validateItem(item);
     }
 
@@ -99,12 +101,13 @@ public class ItemService {
         if (search.equals("")) {
             return new ArrayList<>();
         }
-        search = search.toLowerCase();
-        search = search.replace(",", " ");
-        search = search.replace("-", " ");
-        search = search.replace("_", " ");
-        search = search.trim().replaceAll(" +", " ");
-        String[] split = search.split(" ");
+        String[] split = search.toLowerCase()
+            .replace(",", " ")
+            .replace("-", " ")
+            .replace("_", " ")
+            .trim().replaceAll(" +", " ")
+            .split(" ");
+
         List<String> keywords = new ArrayList<>();
         for (String word : split) {
             if (!keywords.contains(word)) {
