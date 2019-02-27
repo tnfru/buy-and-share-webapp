@@ -135,7 +135,7 @@ public class ItemService {
     private void saveImage(Item item) {
         String imagefilename = "dummy.png";
         if (item.getImage() != null && item.getImage().getSize() > 0) {
-            imagefilename = "itemRental-" + item.getId() + "." + item.getImageExtension();
+            imagefilename = "item-" + item.getId() + "." + item.getImageExtension();
             itemImageSaver.store(item.getImage(), imagefilename);
         }
 
