@@ -2,6 +2,8 @@ package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.UserService;
+import java.security.Principal;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -9,19 +11,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class UserController {
 
-    @Autowired
-    private HttpServletRequest request;
+    private final HttpServletRequest request;
+
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public UserController(HttpServletRequest request, UserService userService) {
+        this.request = request;
+        this.userService = userService;
+    }
 
     @GetMapping("/user/register")
     public String registerPage(Model model) {

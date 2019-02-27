@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{base}"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+
+<body>
+<div layout:fragment="content">
+
+  <div th:if="${keywords != null}">
+    <h4> Search Keywords</h4>
+    <span class="badge badge-info mr-1 mb-2" th:each="word : ${keywords}"
+          th:text="${word}"></span>
+  </div>
+
+  <div class="card-deck" style="column-count: auto;">
+    <div class="card border-primary" th:each="itemSale : ${itemSales}"
+         style="min-width: 15rem; max-width: 17rem;margin-bottom: 1rem;">
+      <div th:if="${itemSale?.imageFileName != null}"><img
+          th:src="@{${'/images/' + itemSale?.imageFileName}}" style="padding: 1rem;"/></div>
+      <div th:if="${itemSale?.imageFileName == null}"><img src="images/bike-dummy.png"
+                                                           class="card-img-top"
+                                                           style="padding: 1rem;"/></div>
+
+      <div class="card-body">
+        <h4 class="card-title" th:text="${itemSale.getName()}">Item Name</h4>
+        <p class="card-text" th:text="${itemSale.getDescription()}">Some quick example text to
+          build on
+          the card title and make up the bulk of the card's content.</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <b>Sale Price:</b>
+          <span th:text="|${itemSale.getPrice()}€|">5€</span>
+        </li>
+      </ul>
+      <div class="card-footer bg-white text-center">
+        <a th:href="|/item/sale/details/${itemSale.getId()}|"
+           class="btn btn-outline-info btn-block">Details</a>
+        <a th:href="|/user/${itemSale.getOwner().getId()}|"
+           class="btn btn-outline-secondary btn-block">User Details</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+
+</html>

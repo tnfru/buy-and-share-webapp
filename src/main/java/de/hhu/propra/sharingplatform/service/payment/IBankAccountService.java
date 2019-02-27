@@ -1,7 +1,5 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
-import org.springframework.stereotype.Component;
-
 public interface IBankAccountService {
     /**
      * Get the total available Money on the account.
