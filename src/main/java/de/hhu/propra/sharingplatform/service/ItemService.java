@@ -102,9 +102,9 @@ public class ItemService {
             return new ArrayList<>();
         }
         String[] split = search.toLowerCase()
-            .replace(",", " ")
-            .replace("-", " ")
-            .replace("_", " ")
+            .replaceAll(",", " ")
+            .replaceAll("-", " ")
+            .replaceAll("_", " ")
             .trim().replaceAll(" +", " ")
             .split(" ");
 

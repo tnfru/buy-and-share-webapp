@@ -9,8 +9,10 @@ import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
 import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
 import de.hhu.propra.sharingplatform.service.validation.OfferValidator;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,20 +28,17 @@ public class OfferService {
 
     private IPaymentApi apiService;
 
-    private IPaymentService paymentService;
-
     private ItemService itemService;
 
     private BorrowContractRepo borrowContractRepo;
 
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-        ProPayApi proPayApi, IPaymentService paymentService,
-        ItemService itemService, BorrowContractRepo borrowContractRepo) {
+                        ProPayApi proPayApi,
+                        ItemService itemService, BorrowContractRepo borrowContractRepo) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
         this.apiService = proPayApi;
-        this.paymentService = paymentService;
         this.itemService = itemService;
         this.borrowContractRepo = borrowContractRepo;
     }
@@ -55,7 +54,7 @@ public class OfferService {
     }
 
     public void validate(ItemRental itemRental, User requester, LocalDateTime start,
-        LocalDateTime end) {
+                         LocalDateTime end) {
         OfferValidator.validate(itemRental, requester, start, end, apiService);
         OfferValidator.periodIsAvailable(borrowContractRepo, itemRental, start, end);
     }
