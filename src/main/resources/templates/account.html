@@ -174,9 +174,9 @@
                         </thead>
                         <tbody>
                         <tr th:each="con : ${user.getChosenContracts(false)}">
-                            <td th:text="${con.getItemRental().getName()}"> Item Name</td>
-                            <td th:text="${con.getItemRental().getDailyRate()}"> Item Price</td>
-                            <td th:text="${con.getItemRental().getBail()}"> Item Bail</td>
+                            <td th:text="${con.getItem().getName()}"> Item Name</td>
+                            <td th:text="${con.getItem().getDailyRate()}"> Item Price</td>
+                            <td th:text="${con.getItem().getBail()}"> Item Bail</td>
                             <td th:text="${con.getStart()}"> Start Date</td>
                             <td th:text="${con.getExpectedEnd()}"> Expected End Date</td>
                             <td th:if="${con.getConflicts().size()} > 0 ">
@@ -206,7 +206,7 @@
                             <td th:if="${con.getOpenConflicts().size()} > 0">
                                 <span class="badge badge-danger">Conflict</span>
                             <td>
-                              <a th:href="|/user/${con.getItemRental().getOwner().getId()}|"
+                              <a th:href="|/user/${con.getItem().getOwner().getId()}|"
                                  class="btn btn-secondary btn-block">Item Owner</a>
                             </td>
                         </tr>
@@ -236,9 +236,9 @@
                                 </thead>
                                 <tbody>
                                 <tr th:each="con : ${user.getChosenContracts(true)}">
-                                    <td th:text="${con.getItemRental().getName()}"> Item Name</td>
-                                    <td th:text="${con.getItemRental().getDailyRate()}"> Item Price</td>
-                                    <td th:text="${con.getItemRental().getBail()}"> Item Bail</td>
+                                    <td th:text="${con.getItem().getName()}"> Item Name</td>
+                                    <td th:text="${con.getItem().getDailyRate()}"> Item Price</td>
+                                    <td th:text="${con.getItem().getBail()}"> Item Bail</td>
                                     <td th:text="${con.getStart()}"> Contract Start Date</td>
                                     <td th:text="${con.getExpectedEnd()}"> Contract Expected End
                                         Date
@@ -254,7 +254,7 @@
                                         <span class="badge badge-info">Finished</span>
                                     </td>
                                     <td>
-                                      <a th:href="|/user/${con.getItemRental().getOwner().getId()}|"
+                                      <a th:href="|/user/${con.getItem().getOwner().getId()}|"
                                          class="btn btn-secondary btn-block">Item Owner</a>
                                     </td>
                                 </tr>
@@ -282,9 +282,9 @@
                         <div th:each="itemRental : ${user.getItemRentals()}">
                             <tr th:each="con : ${itemRental.getChosenContracts(false)}">
                                 <td th:text="${con.getBorrower().getName()}">Borrowed by</td>
-                                <td th:text="${con.getItemRental().getName()}">Item Name</td>
-                                <td th:text="${con.getItemRental().getDailyRate()}"> Item Price</td>
-                                <td th:text="${con.getItemRental().getBail()}"> Item Bail</td>
+                                <td th:text="${con.getItem().getName()}">Item Name</td>
+                                <td th:text="${con.getItem().getDailyRate()}"> Item Price</td>
+                                <td th:text="${con.getItem().getBail()}"> Item Bail</td>
                                 <td th:text="${con.getStart()}"> Contract Start Date</td>
                                 <td th:text="${con.getExpectedEnd()}"> Contract Expected End Date
                                 </td>
@@ -347,9 +347,9 @@
                                     <tr th:each="con : ${itemRental.getChosenContracts(true)}">
                                         <td th:text="${con.getBorrower().getName()}">Borrowed by
                                         </td>
-                                        <td th:text="${con.getItemRental().getName()}">Item Name</td>
-                                        <td th:text="${con.getItemRental().getDailyRate()}"> Item Price</td>
-                                        <td th:text="${con.getItemRental().getBail()}"> Item Bail</td>
+                                        <td th:text="${con.getItem().getName()}">Item Name</td>
+                                        <td th:text="${con.getItem().getDailyRate()}"> Item Price</td>
+                                        <td th:text="${con.getItem().getBail()}"> Item Bail</td>
                                         <td th:text="${con.getStart()}"> Contract Start Date</td>
                                         <td th:text="${con.getExpectedEnd()}"> Contract Expected End
                                             Date
