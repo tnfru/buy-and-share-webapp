@@ -130,7 +130,7 @@ public class User {
 
     public List<BorrowContract> getChosenContracts(boolean finished) {
         List<BorrowContract> chosenContracts = new ArrayList<>();
-        for (BorrowContract contract : contracts) {
+        for (BorrowContract contract : borrowContracts) {
             if (contract.isFinished() == finished) {
                 chosenContracts.add(contract);
             }
