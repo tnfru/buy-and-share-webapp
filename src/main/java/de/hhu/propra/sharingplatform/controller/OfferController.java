@@ -41,7 +41,6 @@ public class OfferController extends BaseController {
     public String gotOfferForm(@PathVariable long itemId, Model model) {
         ItemRental itemRental = (ItemRental) itemService.findItem(itemId);
         model.addAttribute(itemRental);
-        itemRental.getOwner().getAccountName();
         return "offerRequest";
     }
 
@@ -72,14 +71,14 @@ public class OfferController extends BaseController {
         return "redirect:/user/account";
     }
 
-    @GetMapping("/offer/show/{offerId}/accept")// todo change to offer/accept/{id}
+    @GetMapping("/offer/show/{offerId}/accept")
     public String acceptOffer(@PathVariable long offerId, Principal principal) {
         User user = userService.fetchUserByAccountName(principal.getName());
         offerService.acceptOffer(offerId, user);
         return "redirect:/user/account";
     }
 
-    @GetMapping("/offer/show/{offerId}/decline")// todo change to offer/accept/{id}
+    @GetMapping("/offer/show/{offerId}/decline")
     public String declineOffer(@PathVariable long offerId, Principal principal) {
         User user = userService.fetchUserByAccountName(principal.getName());
         offerService.declineOffer(offerId, user);
