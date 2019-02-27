@@ -73,7 +73,7 @@ public class ConflictController {
     @PostMapping("/conflicts/{conflictId}/punishBail")
     public String punishBail(@PathVariable long conflictId) {
         conflictService.punish(conflictId);
-        contractService.cancelContract(conflictId);
+        contractService.endContract(conflictId);
         return "redirect:/conflicts/show";
     }
 

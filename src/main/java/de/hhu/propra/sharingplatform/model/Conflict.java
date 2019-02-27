@@ -33,6 +33,4 @@ public class Conflict {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private User requester;
 
-    private boolean finished = false;
-
 }
