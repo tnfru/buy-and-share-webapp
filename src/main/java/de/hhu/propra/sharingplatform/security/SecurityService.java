@@ -2,9 +2,7 @@ package de.hhu.propra.sharingplatform.security;
 
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
-
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,9 +12,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class SecurityService implements UserDetailsService {
 
-    @Autowired
-    private UserRepo users;
+    private final UserRepo users;
 
+    @Autowired
+    public SecurityService(UserRepo users) {
+        this.users = users;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String accountName) throws UsernameNotFoundException {
@@ -24,13 +25,11 @@ public class SecurityService implements UserDetailsService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
 
-
-            UserDetails userdetails = org.springframework.security.core.userdetails.User.builder()
+            return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getAccountName())
                 .password(user.getPasswordHash())
                 .roles(user.getRole())
                 .build();
-            return userdetails;
         }
         throw new UsernameNotFoundException("Invalid Username");
 

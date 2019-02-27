@@ -1,10 +1,17 @@
 package de.hhu.propra.sharingplatform.controller;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.UserService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +23,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
@@ -37,6 +38,11 @@ public class UserControllerTest {
 
     @MockBean
     UserService userService;
+
+    @Before
+    public void before() {
+        when(userService.fetchUserByAccountName(anyString())).thenReturn(new User());
+    }
 
     // Not logged-in
 
@@ -191,7 +197,6 @@ public class UserControllerTest {
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Confirm Password")));
-        ;
     }
 
     @Test

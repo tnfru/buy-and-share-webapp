@@ -4,15 +4,25 @@ package de.hhu.propra.sharingplatform.model;
 import com.google.common.io.Files;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import javax.persistence.*;
+import de.hhu.propra.sharingplatform.model.contracts.SellContract;
+import de.hhu.propra.sharingplatform.model.items.Item;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
+import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
@@ -41,11 +51,19 @@ public class User {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
-    private List<BorrowContract> contracts = new ArrayList<>();
+    private List<BorrowContract> borrowContracts = new ArrayList<>();
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+        CascadeType.REFRESH}, mappedBy = "customer")
+    private List<SellContract> sellContracts = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "owner")
-    private List<Item> items = new ArrayList<>();
+    private List<ItemRental> itemRentals = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+        CascadeType.REFRESH}, mappedBy = "owner")
+    private List<ItemSale> itemSales = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
@@ -97,27 +115,47 @@ public class User {
     }
 
     /**
-     * @return all items the user has. Items that are marked as removed are not returned
+     * @return all itemRentals the user has. Items that are marked as removed are not returned
      */
-    public Collection getItemsExcludeRemoved() {
-        ArrayList<Item> notRemovedItems = new ArrayList<>();
-        for (Item item : items) {
+
+    public Collection<Item> getNotRemovedItems(List<Item> list) {
+        ArrayList<Item> itemsActive = new ArrayList<>();
+        for (Item item : list) {
             if (!item.isDeleted()) {
-                notRemovedItems.add(item);
+                itemsActive.add(item);
             }
         }
-        return notRemovedItems;
+        return itemsActive;
     }
 
-    public List<Contract> getChosenContracts(boolean finished) {
-        List<Contract> chosenContracts = new ArrayList<>();
-        for (Contract contract : contracts) {
+    public List<BorrowContract> getChosenContracts(boolean finished) {
+        List<BorrowContract> chosenContracts = new ArrayList<>();
+        for (BorrowContract contract : borrowContracts) {
             if (contract.isFinished() == finished) {
                 chosenContracts.add(contract);
             }
         }
         return chosenContracts;
     }
+
+    public List<ItemSale> getSoldItems() {
+        List<ItemSale> soldItems = new ArrayList<>();
+        for (ItemSale item : itemSales) {
+            if (item.getContracts().size() > 0) {
+                soldItems.add(item);
+            }
+        }
+        return soldItems;
+    }
+
+    public List<ItemSale> getBoughtItems() {
+        List<ItemSale> boughtItems = new ArrayList<>();
+        for (Contract contract : sellContracts) {
+            boughtItems.add((ItemSale) contract.getItem());
+        }
+        return boughtItems;
+    }
+
 
     public String getImageExtension() {
         return Files.getFileExtension(image.getOriginalFilename());

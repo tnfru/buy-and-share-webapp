@@ -1,8 +1,5 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
-import org.springframework.stereotype.Component;
-
-
 public interface IPaymentApi {
 
     /**

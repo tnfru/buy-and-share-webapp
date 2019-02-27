@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import de.hhu.propra.sharingplatform.model.User;
 import java.util.List;
 
-public class UserFaker {
+class UserFaker {
 
     private Faker faker;
 

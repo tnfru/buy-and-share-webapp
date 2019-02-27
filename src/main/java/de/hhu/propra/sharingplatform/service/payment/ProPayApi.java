@@ -4,21 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.dto.ProPay;
 import de.hhu.propra.sharingplatform.dto.ProPayReservation;
-
 import de.hhu.propra.sharingplatform.service.ApiService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ProPayApi implements IPaymentApi {
 
-    final PaymentRepo paymentRepo;
+    private final PaymentRepo paymentRepo;
     String host = "localhost";
 
     @Autowired
@@ -49,8 +47,10 @@ public class ProPayApi implements IPaymentApi {
     public int getAccountReservations(String account) {
         ProPay borrowerProPay = mapJsonToPropay(account);
         int reservationAmount = 0;
-        for (ProPayReservation reservation : borrowerProPay.getReservations()) {
-            reservationAmount += reservation.getAmount();
+        if (borrowerProPay != null) {
+            for (ProPayReservation reservation : borrowerProPay.getReservations()) {
+                reservationAmount += reservation.getAmount();
+            }
         }
         return reservationAmount;
     }
@@ -129,7 +129,7 @@ public class ProPayApi implements IPaymentApi {
     }
 
     private ProPay mapJsonToPropay(String userName) {
-        String jsonResponse = ApiService.fetchJson(userName);
+        String jsonResponse = ApiService.fetchJson(host, userName);
         ObjectMapper mapper = new ObjectMapper();
 
         try {

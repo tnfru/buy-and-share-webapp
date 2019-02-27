@@ -16,21 +16,19 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class ApiService {
 
-    private static final String host = "localhost";
-
     public static String buildRequest(String requestType, String serverAddress,
         List<String> pathVars,
         Map<String, String> parameters) {
         StringBuilder urlBuilder = new StringBuilder(serverAddress);
         // append path variables
         for (String pathVar : pathVars) {
-            urlBuilder.append(pathVar + "/");
+            urlBuilder.append(pathVar).append("/");
         }
         urlBuilder.deleteCharAt(urlBuilder.lastIndexOf("/"));
         // append parameters
         urlBuilder.append("?");
         for (String parameter : parameters.keySet()) {
-            urlBuilder.append(parameter + "=" + parameters.get(parameter) + "&");
+            urlBuilder.append(parameter).append("=").append(parameters.get(parameter)).append("&");
         }
         urlBuilder.deleteCharAt(urlBuilder.lastIndexOf("&"));
         URL url;
@@ -45,13 +43,13 @@ public class ApiService {
             conn.setRequestMethod(requestType);
             conn.setDoOutput(true);
             return convertHttpResponse(new InputStreamReader(conn.getInputStream()));
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-            return "-1";
+        } catch (Exception exception) {
+            throw new ResponseStatusException(HttpStatus.REQUEST_TIMEOUT,
+                "Couldnt reach Propayserver!");
         }
     }
 
-    public static String convertHttpResponse(InputStreamReader inStream) {
+    private static String convertHttpResponse(InputStreamReader inStream) {
         try {
             BufferedReader in = new BufferedReader(inStream);
             String input;
@@ -67,7 +65,7 @@ public class ApiService {
         return null;
     }
 
-    public static String fetchJson(String userName) {
+    public static String fetchJson(String host, String userName) {
         String url = "http://" + host + ":8888/account/" + userName;
         RestTemplate jsonResponse = new RestTemplate();
 

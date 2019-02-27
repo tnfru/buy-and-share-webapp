@@ -11,6 +11,8 @@ services:
       - h2DB
     ports:
       - "8080:8080"
+    volumes:
+      - ./static:/app/static
 
   propay:
     image: propra/propay:latest

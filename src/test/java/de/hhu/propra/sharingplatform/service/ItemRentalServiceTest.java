@@ -1,29 +1,32 @@
 package de.hhu.propra.sharingplatform.service;
 
-import static org.junit.Assert.*;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
-import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static junit.framework.TestCase.assertTrue;
-import static org.mockito.Mockito.*;
-
 @RunWith(SpringRunner.class)
-public class ItemServiceTest {
+public class ItemRentalServiceTest {
 
     @MockBean
     private UserService userService;
@@ -31,7 +34,7 @@ public class ItemServiceTest {
     @MockBean
     private ItemRepo itemRepo;
 
-    private Item item;
+    private ItemRental itemRental;
     private User user;
     private ItemService itemService;
     private ImageService imageService;
@@ -39,48 +42,48 @@ public class ItemServiceTest {
     @Before
     public void init() {
         imageService = mock(ImageService.class);
-        itemService = new ItemService(itemRepo, userService, imageService);
+        itemService = new ItemService(userService, imageService, itemRepo);
 
         user = new User();
         user.setName("Test");
         user.setId((long) 1);
 
-        item = new Item(user);
-        item.setId((long) 1);
-        item.setName("TestItem");
-        item.setOwner(user);
-        item.setBail(100);
-        item.setPrice(20);
-        item.setDescription("This is a test");
-        item.setLocation("Test-Location");
+        itemRental = new ItemRental(user);
+        itemRental.setId((long) 1);
+        itemRental.setName("TestItem");
+        itemRental.setOwner(user);
+        itemRental.setBail(100);
+        itemRental.setDailyRate(20);
+        itemRental.setDescription("This is a test");
+        itemRental.setLocation("Test-Location");
     }
 
     @Test
     public void persistOneValidItem() {
-        ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
+        ArgumentCaptor<ItemRental> argument = ArgumentCaptor.forClass(ItemRental.class);
         when(userService.fetchUserById(1L)).thenReturn(user);
 
-        itemService.persistItem(item, 1);
+        itemService.persistItem(itemRental, 1);
 
         verify(itemRepo, times(2)).save(argument.capture());
-        assertEquals(item, argument.getValue());
+        assertEquals(itemRental, argument.getValue());
         assertEquals(1, (long) argument.getValue().getOwner().getId());
     }
 
     @Test
     public void removeOneItemValidUser() {
-        Optional<Item> optional = Optional.ofNullable(item);
+        Optional<ItemRental> optional = Optional.ofNullable(itemRental);
         when(itemRepo.findById(anyLong())).thenReturn(optional);
 
         itemService.removeItem(1L, 1);
 
-        assertTrue(itemRepo.findById(1L).get().isDeleted());
+        assertTrue(itemRental.isDeleted());
     }
 
     @Test
     public void removeOneItemInvalidUser() {
         boolean thrown = false;
-        Optional<Item> optional = Optional.ofNullable(item);
+        Optional<ItemRental> optional = Optional.ofNullable(itemRental);
         when(itemRepo.findById(anyLong())).thenReturn(optional);
 
         try {
@@ -89,17 +92,17 @@ public class ItemServiceTest {
             thrown = true;
             assertEquals("403 FORBIDDEN \"Not your Item\"", rse.getMessage());
         }
-        assertFalse(itemRepo.findById(1L).get().isDeleted());
+        assertFalse(itemRental.isDeleted());
         assertTrue(thrown);
     }
 
     @Test
     public void dontPersistInvalidItem() {
         boolean thrown = false;
-        item.setLocation(null);
+        itemRental.setLocation(null);
         when(userService.fetchUserById(1L)).thenReturn(user);
         try {
-            itemService.persistItem(item, 1);
+            itemService.persistItem(itemRental, 1);
         } catch (ResponseStatusException rse) {
             thrown = true;
             assertEquals("400 BAD_REQUEST \"Invalid Location\"", rse.getMessage());
@@ -110,37 +113,37 @@ public class ItemServiceTest {
 
     @Test
     public void editItemValidItemAndUser() {
-        Item editItem = new Item(user);
-        editItem.setDescription("This is edited");
-        editItem.setLocation(item.getLocation());
-        editItem.setPrice(item.getPrice());
-        editItem.setBail(item.getBail());
-        editItem.setName(item.getName());
-        editItem.setOwner(user);
-        ArgumentCaptor<Item> argument = ArgumentCaptor.forClass(Item.class);
-        Optional<Item> optional = Optional.ofNullable(item);
+        ItemRental editItemRental = new ItemRental(user);
+        editItemRental.setDescription("This is edited");
+        editItemRental.setLocation(itemRental.getLocation());
+        editItemRental.setDailyRate(itemRental.getDailyRate());
+        editItemRental.setBail(itemRental.getBail());
+        editItemRental.setName(itemRental.getName());
+        editItemRental.setOwner(user);
+        ArgumentCaptor<ItemRental> argument = ArgumentCaptor.forClass(ItemRental.class);
+        Optional<ItemRental> optional = Optional.ofNullable(itemRental);
 
         when(itemRepo.findById(1L)).thenReturn(optional);
 
-        itemService.editItem(editItem, 1L, 1L);
+        itemService.editItem(editItemRental, 1L, 1L);
 
-        verify(itemRepo, times(1)).save(argument.capture());
-        assertEquals(argument.getValue().getDescription(), editItem.getDescription());
+        verify(itemRepo, times(2)).save(argument.capture());
+        assertEquals(argument.getValue().getDescription(), editItemRental.getDescription());
     }
 
     @Test
     public void editItemValidItemAndInvalidUser() {
         boolean thrown = false;
-        Item editItem = new Item(user);
-        editItem.setDescription("This is edited");
-        editItem.setLocation(item.getLocation());
-        editItem.setPrice(item.getPrice());
-        editItem.setBail(item.getBail());
-        editItem.setName(item.getName());
+        ItemRental editItemRental = new ItemRental(user);
+        editItemRental.setDescription("This is edited");
+        editItemRental.setLocation(itemRental.getLocation());
+        editItemRental.setDailyRate(itemRental.getDailyRate());
+        editItemRental.setBail(itemRental.getBail());
+        editItemRental.setName(itemRental.getName());
 
-        when(itemRepo.findOneById(1)).thenReturn(item);
+        when(itemRepo.findById(1L)).thenReturn(Optional.empty());
         try {
-            itemService.editItem(editItem, 1, 2);
+            itemService.editItem(editItemRental, 1, 2);
         } catch (ResponseStatusException rse) {
             thrown = true;
             assertEquals("404 NOT_FOUND \"Item not Found\"", rse.getMessage());
@@ -153,16 +156,16 @@ public class ItemServiceTest {
     @Test
     public void editItemInvalidItemAndValidUser() {
         boolean thrown = false;
-        Item editItem = new Item(user);
-        editItem.setDescription(null);
-        editItem.setLocation(item.getLocation());
-        editItem.setPrice(item.getPrice());
-        editItem.setBail(item.getBail());
-        editItem.setName(item.getName());
+        ItemRental editItemRental = new ItemRental(user);
+        editItemRental.setDescription(null);
+        editItemRental.setLocation(itemRental.getLocation());
+        editItemRental.setDailyRate(itemRental.getDailyRate());
+        editItemRental.setBail(itemRental.getBail());
+        editItemRental.setName(itemRental.getName());
 
-        when(itemRepo.findById(1)).thenReturn(Optional.of(item));
+        when(itemRepo.findById(1L)).thenReturn(Optional.of(itemRental));
         try {
-            itemService.editItem(editItem, 1, 1);
+            itemService.editItem(editItemRental, 1, 1);
         } catch (ResponseStatusException rse) {
             thrown = true;
             assertEquals("400 BAD_REQUEST \"Invalid Description\"", rse.getMessage());
@@ -175,16 +178,16 @@ public class ItemServiceTest {
     @Test
     public void editItemInvalidItemAndInvalidUser() {
         boolean thrown = false;
-        Item editItem = new Item(user);
-        editItem.setDescription(null);
-        editItem.setLocation(item.getLocation());
-        editItem.setPrice(item.getPrice());
-        editItem.setBail(item.getBail());
-        editItem.setName(item.getName());
-        when(itemRepo.findById(1)).thenReturn(Optional.of(item));
+        ItemRental editItemRental = new ItemRental(user);
+        editItemRental.setDescription(null);
+        editItemRental.setLocation(itemRental.getLocation());
+        editItemRental.setDailyRate(itemRental.getDailyRate());
+        editItemRental.setBail(itemRental.getBail());
+        editItemRental.setName(itemRental.getName());
+        when(itemRepo.findById(1L)).thenReturn(Optional.of(itemRental));
 
         try {
-            itemService.editItem(editItem, 1, 2);
+            itemService.editItem(editItemRental, 1, 2);
         } catch (ResponseStatusException rse) {
             thrown = true;
             assertEquals("403 FORBIDDEN \"Not your Item\"", rse.getMessage());
@@ -205,8 +208,7 @@ public class ItemServiceTest {
 
     @Test(expected = NullPointerException.class)
     public void searchKeywordsNullString() {
-        String search = null;
-        itemService.searchKeywords(search);
+        itemService.searchKeywords(null);
     }
 
     @Test
@@ -259,16 +261,16 @@ public class ItemServiceTest {
     @Test
     public void filterEmptyList() {
         List<String> keywords = new ArrayList<>();
-        List<Item> dbNoItems = new ArrayList<>();
-        List<Item> dbAllItem = new ArrayList<>();
-        dbAllItem.add(item);
+        List<ItemRental> dbNoItemRentals = new ArrayList<>();
+        List<ItemRental> dbAllItemRental = new ArrayList<>();
+        dbAllItemRental.add(itemRental);
 
-        when(itemRepo.findAllByNameContainsIgnoreCase(any())).thenReturn(dbNoItems);
-        when(itemRepo.findAll()).thenReturn(dbAllItem);
+        when(itemRepo.findAllByNameContainsIgnoreCase(any())).thenReturn(dbNoItemRentals);
+        when(itemRepo.findAll()).thenReturn(dbAllItemRental);
 
-        List<Item> items = itemService.filter(keywords);
+        List<ItemRental> itemRentals = itemService.filterRental(keywords);
 
-        assertEquals(1, items.size());
+        assertEquals(1, itemRentals.size());
     }
 
     @Test
@@ -277,20 +279,20 @@ public class ItemServiceTest {
         keywords.add("cool");
         keywords.add("search");
 
-        List<Item> dbFilterParam1 = new ArrayList<>();
-        List<Item> dbFilterParam2 = new ArrayList<>();
-        dbFilterParam1.add(item);
-        dbFilterParam1.add(item);
-        dbFilterParam2.add(item);
+        List<ItemRental> dbFilterParam1 = new ArrayList<>();
+        List<ItemRental> dbFilterParam2 = new ArrayList<>();
+        dbFilterParam1.add(itemRental);
+        dbFilterParam1.add(itemRental);
+        dbFilterParam2.add(itemRental);
 
-        List<Item> dbAllItem = new ArrayList<>();
+        List<ItemRental> dbAllItemRental = new ArrayList<>();
 
         when(itemRepo.findAllByNameContainsIgnoreCase("cool")).thenReturn(dbFilterParam1);
         when(itemRepo.findAllByNameContainsIgnoreCase("search")).thenReturn(dbFilterParam2);
-        when(itemRepo.findAll()).thenReturn(dbAllItem);
+        when(itemRepo.findAll()).thenReturn(dbAllItemRental);
 
-        List<Item> items = itemService.filter(keywords);
+        List<ItemRental> itemRentals = itemService.filterRental(keywords);
 
-        assertEquals(3, items.size());
+        assertEquals(3, itemRentals.size());
     }
 }

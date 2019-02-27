@@ -1,9 +1,9 @@
 package de.hhu.propra.sharingplatform.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -95,7 +95,7 @@ public class UserServiceTest {
         boolean thrown = false;
         User user = createUser("name", "accName", "address", "e@mail.de");
         try {
-            userService.updatePassword(user,"wrongOld", "new", "new");
+            userService.updatePassword(user, "wrongOld", "new", "new");
             when(encoder.matches(anyString(), anyString())).thenReturn(false);
         } catch (ResponseStatusException rse) {
             thrown = true;

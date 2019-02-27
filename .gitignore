@@ -22,4 +22,7 @@ data/*
 *.ipr
 /out/
 
-public/images/*
+static/images/*
+!static/images/dummy.png
+!static/images/Logo_Square_small.png
+!static/images/OneDoesNotSimplyJens.png

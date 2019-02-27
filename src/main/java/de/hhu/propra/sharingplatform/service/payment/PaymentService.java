@@ -1,9 +1,11 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
-import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
+import de.hhu.propra.sharingplatform.model.contracts.SellContract;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @Service
@@ -25,6 +27,15 @@ public class PaymentService implements IPaymentService {
     public void transferPayment(BorrowContract contract) {
         contract.returnItem();
         contract.pay(apiService);
+    }
+
+    @Override
+    public void transferPayment(SellContract sellContract) {
+        if (!sellContract.isBalanced(apiService)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "Not enough money");
+        }
+        sellContract.pay(apiService);
     }
 
     @Override

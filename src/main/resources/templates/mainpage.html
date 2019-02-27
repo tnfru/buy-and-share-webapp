@@ -12,35 +12,35 @@
     </div>
 
     <div class="card-deck" style="column-count: auto;">
-        <div class="card border-dark" th:each="item : ${items}"
+        <div class="card border-dark" th:each="itemRental : ${itemRentals}"
              style="min-width: 15rem; max-width: 17rem;margin-bottom: 1rem;">
-            <div th:if="${item?.imageFileName != null}"><img
-                th:src="@{${'/images/' + item?.imageFileName}}" style="padding: 1rem;"/></div>
-            <div th:if="${item?.imageFileName == null}"><img src="images/bike-dummy.png"
+            <div th:if="${itemRental?.imageFileName != null}"><img
+                th:src="@{${'/images/' + itemRental?.imageFileName}}" class="card-img-top" style="padding: 1rem;"/></div>
+            <div th:if="${itemRental?.imageFileName == null}"><img th:src="@{'/images/' + 'dummy.png'}"
                                                              class="card-img-top"
                                                              style="padding: 1rem;"/></div>
 
             <div class="card-body">
-                <h4 class="card-title" th:text="${item.getName()}">Item Name</h4>
-                <p class="card-text" th:text="${item.getDescription()}">Some quick example text to
+                <h4 class="card-title" th:text="${itemRental.getName()}">Item Name</h4>
+                <p class="card-text" th:text="${itemRental.getDescription()}">Some quick example text to
                     build on
                     the card title and make up the bulk of the card's content.</p>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    <b>Price:</b>
-                    <span th:text="|${item.getPrice()}€|">5€</span>
+                    <b>Daily Rate:</b>
+                    <span th:text="|${itemRental.getDailyRate()}€|">5€</span>
                 </li>
 
                 <li class="list-group-item">
                     <b>Bail:</b>
-                    <span th:text="|${item.getBail()}€|">50€</span>
+                    <span th:text="|${itemRental.getBail()}€|">50€</span>
                 </li>
             </ul>
             <div class="card-footer bg-white text-center">
-                <a th:href="|/item/details/${item.getId()}|"
+                <a th:href="|/item/rental/details/${itemRental.getId()}|"
                    class="btn btn-outline-info btn-block">Details</a>
-                <a th:href="|/user/${item.getOwner().getId()}|"
+                <a th:href="|/user/${itemRental.getOwner().getId()}|"
                    class="btn btn-outline-secondary btn-block">User Details</a>
             </div>
         </div>

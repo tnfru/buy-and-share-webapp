@@ -11,6 +11,7 @@ RUN ./gradlew build
 FROM openjdk:8-jdk-alpine
 
 WORKDIR /app
+ENV STATIC_DATA /app/static
 
 RUN apk add bash
 
