@@ -17,7 +17,7 @@ public class SellContract extends Contract {
         super.item = item;
         //TODO: item sale price..
         int amount = item.getPrice();
-        super.payment = new Payment(0, fromPropaiId, toPropayId);
+        super.payment = new Payment(amount, fromPropaiId, toPropayId);
     }
 
 }
