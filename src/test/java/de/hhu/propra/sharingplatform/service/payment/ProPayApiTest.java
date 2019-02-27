@@ -60,4 +60,45 @@ public class ProPayApiTest {
         assertEquals(id, 0);
     }
 
+    @Test
+    public void accountBalanceLiquid() {
+        when(networkInterface.fetchJson("foo"))
+            .thenReturn("{\n" +
+                "  \"account\": \"string\",\n" +
+                "  \"amount\": 100,\n" +
+                "  \"reservations\": [\n" +
+                "    {\n" +
+                "      \"amount\": 5,\n" +
+                "      \"id\": 1\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"amount\": 1,\n" +
+                "      \"id\": 2\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}");
+
+        assertEquals(94, api.getAccountBalanceLiquid("foo"));
+    }
+
+    @Test
+    public void accountBalance() {
+        when(networkInterface.fetchJson("foo"))
+            .thenReturn("{\n" +
+                "  \"account\": \"string\",\n" +
+                "  \"amount\": 100,\n" +
+                "  \"reservations\": [\n" +
+                "    {\n" +
+                "      \"amount\": 5,\n" +
+                "      \"id\": 1\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"amount\": 1,\n" +
+                "      \"id\": 2\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}");
+
+        assertEquals(100, api.getAccountBalance("foo"));
+    }
 }
