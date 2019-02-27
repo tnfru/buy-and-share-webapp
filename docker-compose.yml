@@ -11,6 +11,8 @@ services:
       - propay
     ports:
       - "8080:8080"
+    volumes:
+      - ./static:/app/static
 
   sharingDB:
     image: postgres
