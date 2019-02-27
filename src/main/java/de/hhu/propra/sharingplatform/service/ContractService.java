@@ -9,15 +9,14 @@ import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.contracts.SellContract;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
 
 @Service
 @Data
@@ -33,7 +32,7 @@ public class ContractService {
 
     @Autowired
     public ContractService(BorrowContractRepo borrowContractRepo, SellContractRepo sellContractRepo,
-                           IPaymentService paymentService, ConflictService conflictService) {
+        IPaymentService paymentService, ConflictService conflictService) {
         this.borrowContractRepo = borrowContractRepo;
         this.sellContractRepo = sellContractRepo;
         this.paymentService = paymentService;
@@ -126,6 +125,12 @@ public class ContractService {
             (BorrowContract) conflictService.fetchConflictById(conflictId).getContract();
         contract.setRealEnd(null);
         borrowContractRepo.save(contract);
+    }
+
+    public void endContract(long conflictId) {
+        BorrowContract contract =
+            (BorrowContract) conflictService.fetchConflictById(conflictId).getContract();
+        contract.setFinished(true);
     }
 
     public Contract fetchContractById(long contractId) {

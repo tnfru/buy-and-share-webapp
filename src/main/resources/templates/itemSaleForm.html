@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" layout:decorate="~{base}"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+  <title>New Item for Sale</title>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div layout:fragment="content">
+  <h1 th:if="${itemSale?.Id} == NULL">Create new Item for Sale</h1>
+  <h1 th:unless="${itemSale?.Id} == NULL" th:text="|Edit ${itemSale?.name}|"></h1>
+  <br>
+
+  <form form method="post" style="margin-left: 1em;" th:object="${itemSale}"
+        enctype="multipart/form-data">
+    <div class="form-group row">
+      <label class="col-2 col-form-label" for="name">Designation:(*)</label>
+      <div class="col-4">
+        <input id="name" type="text" name="name" th:value="${itemSale?.name}" class="form-control"
+               required="required">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="price" class="col-2 col-form-label">Price:(*)</label>
+      <div class="col-2">
+        <div class="input-group">
+          <input id="price" type="number" min="0" name="price"
+                 th:value="${itemSale?.price}" class="form-control"
+                 required="required">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <i class="fa fa-euro"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="location" class="col-2 col-form-label">Location:(*)</label>
+      <div class="col-4">
+        <input id="location" input type="text" name="location" th:value="${itemSale?.location}"
+               class="form-control"
+               required="required">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="description" class="col-2 col-form-label">Description</label>
+      <div class="col-4">
+                <textarea id="description" name="description" th:field="*{description}" cols="80"
+                          rows="10"
+                          class="form-control"></textarea>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="description" class="col-2 col-form-label">Upload image</label>
+      <div class="col-4">
+        <input type="file" name="image"/>
+      </div>
+    </div>
+    <p>All (*) Fields are required!</p>
+    <div class="form-group row">
+      <div class="offset-4 col-4">
+        <button name="submit" type="submit" class="btn btn-primary" action="POST">Save</button>
+      </div>
+    </div>
+  </form>
+  <br>
+</div>
+</body>
+</html>

@@ -2,12 +2,13 @@ package de.hhu.propra.sharingplatform.model.payments;
 
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
-import lombok.Data;
-
 import javax.persistence.Entity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = false)
 public class BorrowPayment extends Payment {
 
     long amountProPayId;
@@ -45,8 +46,7 @@ public class BorrowPayment extends Payment {
     }
 
     /**
-     * Frees the reserved money for payment, pays the recipient.
-     * Does not free the bail!
+     * Frees the reserved money for payment, pays the recipient. Does not free the bail!
      *
      * @param paymentApi api for payment.
      */

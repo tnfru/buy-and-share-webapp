@@ -18,8 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
-import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.ImageService;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
@@ -72,7 +72,7 @@ public class OfferControllerTest {
     private OfferController offerController;
 
     private User user;
-    private Item item;
+    private ItemRental itemRental;
 
     @Before
     public void init() {
@@ -80,14 +80,14 @@ public class OfferControllerTest {
         user.setName("Test");
         user.setId((long) 1);
 
-        item = new Item(user);
-        item.setId((long) 1);
-        item.setName("TestItem");
-        item.setOwner(user);
-        item.setBail(100);
-        item.setPrice(20);
-        item.setDescription("This is a test");
-        item.setLocation("Test-Location");
+        itemRental = new ItemRental(user);
+        itemRental.setId((long) 1);
+        itemRental.setName("TestItem");
+        itemRental.setOwner(user);
+        itemRental.setBail(100);
+        itemRental.setDailyRate(20);
+        itemRental.setDescription("This is a test");
+        itemRental.setLocation("Test-Location");
     }
 
     @Test
@@ -230,8 +230,8 @@ public class OfferControllerTest {
     @Test
     @WithMockUser
     public void offerRequestLoggedInItemDeleted() throws Exception {
-        item.setDeleted(true);
-        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(item));
+        itemRental.setDeleted(true);
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(itemRental));
 
         mvc.perform(get("/offer/request/10000")
             .contentType(MediaType.TEXT_HTML))
@@ -241,7 +241,7 @@ public class OfferControllerTest {
     @Test
     @WithMockUser
     public void offerRequestLoggedInValid() throws Exception {
-        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(item));
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(itemRental));
 
         mvc.perform(get("/offer/request/10000")
             .contentType(MediaType.TEXT_HTML))
@@ -270,8 +270,8 @@ public class OfferControllerTest {
 
         assertEquals(a1.getValue().longValue(), 1337);
         assertEquals(a2.getValue(), user);
-        assertTrue(a3.getValue().equals(LocalDateTime.of(2019, 2, 23, 0, 0, 0)));
-        assertTrue(a4.getValue().equals(LocalDateTime.of(2019, 2, 27, 23, 59, 59)));
+        assertEquals(a3.getValue(), LocalDateTime.of(2019, 2, 23, 0, 0, 0));
+        assertEquals(a4.getValue(), LocalDateTime.of(2019, 2, 27, 23, 59, 59));
     }
 
     @Test
@@ -302,7 +302,7 @@ public class OfferControllerTest {
     @WithMockUser
     public void offerShowValidItem() throws Exception {
         when(userService.fetchUserByAccountName(any())).thenReturn(user);
-        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(item));
+        when(itemRepo.findById(anyLong())).thenReturn(Optional.of(itemRental));
         when(offerService.getItemOffers(anyLong(), any(), anyBoolean()))
             .thenReturn(new ArrayList<>());
 
