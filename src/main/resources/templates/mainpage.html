@@ -15,8 +15,8 @@
         <div class="card border-dark" th:each="itemRental : ${itemRentals}"
              style="min-width: 15rem; max-width: 17rem;margin-bottom: 1rem;">
             <div th:if="${itemRental?.imageFileName != null}"><img
-                th:src="@{${'/images/' + itemRental?.imageFileName}}" style="padding: 1rem;"/></div>
-            <div th:if="${itemRental?.imageFileName == null}"><img src="images/bike-dummy.png"
+                th:src="@{${'/images/' + itemRental?.imageFileName}}" class="card-img-top" style="padding: 1rem;"/></div>
+            <div th:if="${itemRental?.imageFileName == null}"><img th:src="@{'/images/' + 'dummy.png'}"
                                                              class="card-img-top"
                                                              style="padding: 1rem;"/></div>
 

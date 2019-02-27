@@ -40,15 +40,7 @@ public class ItemService {
         item.setOwner(owner);
         itemRepo.save(item);
 
-        String imagefilename = "bike-dummy.png";
-        if (item.getImage() != null && item.getImage().getSize() > 0) {
-            imagefilename =
-                "itemRental-" + item.getId() + "." + item.getImageExtension();
-            itemImageSaver.store(item.getImage(), imagefilename);
-        }
-
-        item.setImageFileName(imagefilename);
-        itemRepo.save(item);
+        saveImage(item);
     }
 
     public void removeItem(long itemId, long userId) {
@@ -90,6 +82,8 @@ public class ItemService {
         newItem.setOwner(oldItemRental.getOwner());
         newItem.setId(oldItemRental.getId());
         itemRepo.save(newItem);
+
+        saveImage(newItem);
     }
 
     public void allowOnlyOwner(Item item, long userId) {
@@ -148,5 +142,16 @@ public class ItemService {
             items.addAll(searching);
         }
         return items;
+    }
+
+    private void saveImage(Item item) {
+        String imagefilename = "dummy.png";
+        if (item.getImage() != null && item.getImage().getSize() > 0) {
+            imagefilename = "item-" + item.getId() + "." + item.getImageExtension();
+            itemImageSaver.store(item.getImage(), imagefilename);
+        }
+
+        item.setImageFileName(imagefilename);
+        itemRepo.save(item);
     }
 }
