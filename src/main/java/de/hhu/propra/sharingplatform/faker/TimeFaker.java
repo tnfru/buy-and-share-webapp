@@ -3,7 +3,7 @@ package de.hhu.propra.sharingplatform.faker;
 import com.github.javafaker.Faker;
 import java.time.LocalDateTime;
 
-public class TimeFaker {
+class TimeFaker {
 
     private Faker faker;
 

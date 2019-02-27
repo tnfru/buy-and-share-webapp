@@ -1,7 +1,7 @@
 package de.hhu.propra.sharingplatform.controller;
 
-import de.hhu.propra.sharingplatform.model.Item;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.ItemService;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.UserService;
@@ -25,9 +25,9 @@ import org.springframework.web.server.ResponseStatusException;
 @Controller
 public class OfferController extends BaseController {
 
-    final ItemService itemService;
+    private final ItemService itemService;
 
-    final OfferService offerService;
+    private final OfferService offerService;
 
     @Autowired
     public OfferController(UserService userService, ItemService itemService,
@@ -39,9 +39,9 @@ public class OfferController extends BaseController {
 
     @GetMapping("/offer/request/{itemId}")
     public String gotOfferForm(@PathVariable long itemId, Model model) {
-        Item item = itemService.findItem(itemId);
-        model.addAttribute(item);
-        item.getOwner().getAccountName();
+        ItemRental itemRental = (ItemRental) itemService.findItem(itemId);
+        model.addAttribute(itemRental);
+        itemRental.getOwner().getAccountName();
         return "offerRequest";
     }
 
@@ -57,7 +57,7 @@ public class OfferController extends BaseController {
     @GetMapping("/offer/show/{itemId}")
     public String showAllOffers(@PathVariable long itemId, Principal principal, Model model) {
         User user = userService.fetchUserByAccountName(principal.getName());
-        model.addAttribute("item", itemService.findItem(itemId));
+        model.addAttribute("itemRental", itemService.findItem(itemId));
         model.addAttribute("closedOffers",
             offerService.getItemOffers(itemId, user, true));
         model.addAttribute("openOffers",
@@ -102,13 +102,9 @@ public class OfferController extends BaseController {
             String[] dates = formattedDateRange.split(" - ");
             DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             LocalDate date = LocalDate.parse(dates[index], format);
-            LocalDateTime dateTime = date.atStartOfDay();
-            return dateTime;
-        } catch (DateTimeParseException parseException) {
-            parseException.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong dateformat");
-        } catch (ArrayIndexOutOfBoundsException arrayBoundException) {
-            arrayBoundException.printStackTrace();
+            return date.atStartOfDay();
+        } catch (DateTimeParseException | ArrayIndexOutOfBoundsException exception) {
+            exception.printStackTrace();
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong dateformat");
         }
     }

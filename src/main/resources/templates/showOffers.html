@@ -8,7 +8,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1 th:text="${item?.name}"></h1>
+    <h1 th:text="${itemRental?.name}"></h1>
     <br>
     <table class="table table-striped">
         <thead>
@@ -24,8 +24,8 @@
         <tbody>
         <tr th:each="offer : ${openOffers}">
             <td th:text="${offer.getBorrower().getName()}"> Requester</td>
-            <td th:text="${offer.getItem().getPrice()}"> Item Price</td>
-            <td th:text="${offer.getItem().getBail()}"> Item Bail</td>
+            <td th:text="${offer.getItemRental().getDailyRate()}"> Item Price</td>
+            <td th:text="${offer.getItemRental().getBail()}"> Item Bail</td>
             <td th:text="${offer.getStart()}"> Offer start date</td>
             <td th:text="${offer.getEnd()}"> Offer end date</td>
             <td>
@@ -58,8 +58,8 @@
                 <tbody>
                 <tr th:each="offer : ${closedOffers}">
                     <td th:text="${offer.getBorrower().getName()}"> Requester</td>
-                    <td th:text="${offer.getItem().getPrice()}"> Item Price</td>
-                    <td th:text="${offer.getItem().getBail()}"> Item Bail</td>
+                    <td th:text="${offer.getItemRental().getDailyRate()}"> Item Price</td>
+                    <td th:text="${offer.getItemRental().getBail()}"> Item Bail</td>
                     <td th:text="${offer.getStart()}"> Offer start date</td>
                     <td th:text="${offer.getEnd()}"> Offer end date</td>
                     <td th:if="${offer.isAccept()} == true">

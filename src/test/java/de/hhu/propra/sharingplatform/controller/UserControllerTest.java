@@ -1,6 +1,11 @@
 package de.hhu.propra.sharingplatform.controller;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
@@ -199,7 +204,6 @@ public class UserControllerTest {
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Confirm Password")));
-        ;
     }
 
     @Test

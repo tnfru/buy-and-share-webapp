@@ -2,12 +2,11 @@ package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.service.ContractService;
 import de.hhu.propra.sharingplatform.service.UserService;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.security.Principal;
 
 @Controller
 public class ContractController extends BaseController {

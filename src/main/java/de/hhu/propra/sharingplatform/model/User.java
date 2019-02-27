@@ -2,15 +2,26 @@ package de.hhu.propra.sharingplatform.model;
 
 
 import com.google.common.io.Files;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import javax.persistence.*;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
+import de.hhu.propra.sharingplatform.model.contracts.Contract;
+import de.hhu.propra.sharingplatform.model.items.Item;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
+import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
@@ -39,11 +50,15 @@ public class User {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
-    private List<Contract> contracts = new ArrayList<>();
+    private List<BorrowContract> contracts = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "owner")
-    private List<Item> items = new ArrayList<>();
+    private List<ItemRental> itemRentals = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+        CascadeType.REFRESH}, mappedBy = "owner")
+    private List<ItemSale> itemSales = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST,
         CascadeType.REFRESH}, mappedBy = "borrower")
@@ -95,16 +110,17 @@ public class User {
     }
 
     /**
-     * @return all items the user has. Items that are marked as removed are not returned
+     * @return all itemRentals the user has. Items that are marked as removed are not returned
      */
-    public Collection getItemsExcludeRemoved() {
-        ArrayList<Item> notRemovedItems = new ArrayList<>();
-        for (Item item : items) {
+
+    public Collection<Item> getNotRemovedItems(List<Item> list) {
+        ArrayList<Item> itemsActive = new ArrayList<>();
+        for (Item item : list) {
             if (!item.isDeleted()) {
-                notRemovedItems.add(item);
+                itemsActive.add(item);
             }
         }
-        return notRemovedItems;
+        return itemsActive;
     }
 
     public List<Contract> getChosenContracts(boolean finished) {
