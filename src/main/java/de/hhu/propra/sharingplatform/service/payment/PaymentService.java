@@ -31,7 +31,7 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public void transferPayment(SellContract sellContract) {
-        if(!sellContract.isBalanced(apiService)) {
+        if (!sellContract.isBalanced(apiService)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "Not enough money");
         }
