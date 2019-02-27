@@ -74,6 +74,7 @@ public class ItemRentalController extends BaseController {
         long userId = userService.fetchUserIdByAccountName(principal.getName());
         model.addAttribute("userId", userId);
         itemService.allowOnlyOwner(itemRental, userId);
+        itemService.itemIsFree(itemId);
         return "itemRentalForm";
     }
 
