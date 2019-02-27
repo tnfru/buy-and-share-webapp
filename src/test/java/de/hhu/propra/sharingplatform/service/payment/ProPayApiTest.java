@@ -48,10 +48,10 @@ public class ProPayApiTest {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("amount", "1");
         when(networkInterface.buildRequest(any(), any(), anyList(), anyMap()))
-            .thenReturn("{\n" +
-                "  \"amount\": 0,\n" +
-                "  \"id\": 0\n" +
-                "}");
+            .thenReturn("{\n"
+                + "  \"amount\": 0,\n"
+                + "  \"id\": 0\n"
+                + "}");
 
         long id = api.reserveMoney("foo", "bar", 1);
 
@@ -63,20 +63,20 @@ public class ProPayApiTest {
     @Test
     public void accountBalanceLiquid() {
         when(networkInterface.fetchJson("foo"))
-            .thenReturn("{\n" +
-                "  \"account\": \"string\",\n" +
-                "  \"amount\": 100,\n" +
-                "  \"reservations\": [\n" +
-                "    {\n" +
-                "      \"amount\": 5,\n" +
-                "      \"id\": 1\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"amount\": 1,\n" +
-                "      \"id\": 2\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}");
+            .thenReturn("{\n"
+                + "  \"account\": \"string\",\n"
+                + "  \"amount\": 100,\n"
+                + "  \"reservations\": [\n"
+                + "    {\n"
+                + "      \"amount\": 5,\n"
+                + "      \"id\": 1\n"
+                + "    },\n"
+                + "    {\n"
+                + "      \"amount\": 1,\n"
+                + "      \"id\": 2\n"
+                + "    }\n"
+                + "  ]\n"
+                + "}");
 
         assertEquals(94, api.getAccountBalanceLiquid("foo"));
     }
@@ -84,20 +84,20 @@ public class ProPayApiTest {
     @Test
     public void accountBalance() {
         when(networkInterface.fetchJson("foo"))
-            .thenReturn("{\n" +
-                "  \"account\": \"string\",\n" +
-                "  \"amount\": 100,\n" +
-                "  \"reservations\": [\n" +
-                "    {\n" +
-                "      \"amount\": 5,\n" +
-                "      \"id\": 1\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"amount\": 1,\n" +
-                "      \"id\": 2\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}");
+            .thenReturn("{\n"
+                + "  \"account\": \"string\",\n"
+                + "  \"amount\": 100,\n"
+                + "  \"reservations\": [\n"
+                + "    {\n"
+                + "      \"amount\": 5,\n"
+                + "      \"id\": 1\n"
+                + "    },\n"
+                + "    {\n"
+                + "      \"amount\": 1,\n"
+                + "      \"id\": 2\n"
+                + "    }\n"
+                + "  ]\n"
+                + "}");
 
         assertEquals(100, api.getAccountBalance("foo"));
     }
