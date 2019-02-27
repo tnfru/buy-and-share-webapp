@@ -18,7 +18,7 @@ public class OfferValidator {
         LocalDateTime end,
         IPaymentService paymentService, IPaymentApi apiService) {
 
-        if ((start.until(end, ChronoUnit.DAYS) + 1) < 1) {
+        if (end.isBefore(start)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End date needs to be after"
                 + " Start date");
         }
@@ -43,6 +43,5 @@ public class OfferValidator {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid period");
             }
         }
-        // todo case: real end shifts
     }
 }
