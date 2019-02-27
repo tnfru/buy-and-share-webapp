@@ -47,8 +47,10 @@ public class ProPayApi implements IPaymentApi {
     public int getAccountReservations(String account) {
         ProPay borrowerProPay = mapJsonToPropay(account);
         int reservationAmount = 0;
-        for (ProPayReservation reservation : borrowerProPay.getReservations()) {
-            reservationAmount += reservation.getAmount();
+        if (borrowerProPay != null) {
+            for (ProPayReservation reservation : borrowerProPay.getReservations()) {
+                reservationAmount += reservation.getAmount();
+            }
         }
         return reservationAmount;
     }
