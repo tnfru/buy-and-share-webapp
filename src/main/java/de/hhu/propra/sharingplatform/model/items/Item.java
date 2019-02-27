@@ -53,8 +53,4 @@ public abstract class Item {
     public String getImageExtension() {
         return Files.getFileExtension(image.getOriginalFilename());
     }
-
-    public boolean isRental() {
-        return this.getClass().isInstance(ItemRental.class);
-    }
 }
