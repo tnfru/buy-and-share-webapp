@@ -2,6 +2,7 @@ package de.hhu.propra.sharingplatform.service.payment;
 
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
+import de.hhu.propra.sharingplatform.model.contracts.SellContract;
 
 public interface IPaymentService {
 
@@ -18,6 +19,8 @@ public interface IPaymentService {
      * @param contract contract
      */
     void transferPayment(BorrowContract contract);
+
+    void transferPayment(SellContract contract);
 
     /**
      * Frees the reservation of the bail.
