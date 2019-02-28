@@ -279,4 +279,73 @@ public class ContractServiceTest {
 
     }
 
+    @Test
+    public void cancelContractTest() {
+
+        User owner = new User();
+        owner.setAccountName("owner");
+        User borrower = new User();
+        borrower.setAccountName("borrower");
+        borrower.setId((long) 1);
+        ItemRental itemRental = new ItemRental(owner);
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now();
+        end = end.plusDays(3);
+        Offer offer = new Offer(itemRental, borrower, start, end);
+        borrowContract = new BorrowContract(offer);
+        borrowContract.setBorrower(borrower);
+        borrowContract.setId((long) 1);
+        List<Conflict> conflicts = new ArrayList<>();
+        borrowContract.setConflicts(conflicts);
+        borrowContract.setFinished(false);
+
+        Conflict conflict = new Conflict();
+        conflict.setContract(borrowContract);
+        conflict.setId(1);
+
+
+        when(conflictService.fetchConflictById(conflict.getId())).thenReturn(conflict);
+
+        ArgumentCaptor<BorrowContract> argument = ArgumentCaptor.forClass(BorrowContract.class);
+
+        contractService.cancelContract(1);
+
+        verify(borrowContractRepo, times(1)).save(argument.capture());
+
+    }
+
+    @Test
+    public void continiueContract() {
+        User owner = new User();
+        owner.setAccountName("owner");
+        User borrower = new User();
+        borrower.setAccountName("borrower");
+        borrower.setId((long) 1);
+        ItemRental itemRental = new ItemRental(owner);
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now();
+        end = end.plusDays(3);
+        Offer offer = new Offer(itemRental, borrower, start, end);
+        borrowContract = new BorrowContract(offer);
+        borrowContract.setBorrower(borrower);
+        borrowContract.setId((long) 1);
+        List<Conflict> conflicts = new ArrayList<>();
+        borrowContract.setConflicts(conflicts);
+        borrowContract.setFinished(false);
+
+        Conflict conflict = new Conflict();
+        conflict.setContract(borrowContract);
+        conflict.setId(1);
+
+
+        when(conflictService.fetchConflictById(conflict.getId())).thenReturn(conflict);
+
+        ArgumentCaptor<BorrowContract> argument = ArgumentCaptor.forClass(BorrowContract.class);
+
+        contractService.continueContract(1);
+
+        verify(borrowContractRepo, times(1)).save(argument.capture());
+
+    }
+
 }
