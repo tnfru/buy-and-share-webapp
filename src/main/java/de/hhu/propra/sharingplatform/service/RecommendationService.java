@@ -7,13 +7,8 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.items.Item;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.PriorityQueue;
 
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import lombok.Data;
@@ -66,6 +61,7 @@ public class RecommendationService {
      */
 
     private List<Item> findBestItems(Map<Item, Integer> map, long itemId) {
+
         List<Entry<Item, Integer>> entrys = findGreatest(map);
         List<Item> suggestions = new ArrayList<>();
 
@@ -84,9 +80,11 @@ public class RecommendationService {
 
     private List<Item> fillList(List<Item> suggestions) {
         List<ItemRental> allItems = (List<ItemRental>) itemRentalRepo.findAll();
+        Random random = new Random();
         while (suggestions.size() < numberOfItems) {
-            Item randomSuggestion = allItems.get((int) (Math.random() * allItems.size()));
-
+            int index = random.nextInt() & Integer.MAX_VALUE; // zero out the sign bit
+            index %= allItems.size(); // get index in range
+            ItemRental randomSuggestion = allItems.get(index);
             if (!suggestions.contains(randomSuggestion)) {
                 suggestions.add(randomSuggestion);
             }
