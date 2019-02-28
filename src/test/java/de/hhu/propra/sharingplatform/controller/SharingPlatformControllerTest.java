@@ -93,7 +93,7 @@ public class SharingPlatformControllerTest {
             .thenReturn(Collections
             .singletonList(stuff));
 
-        mvc.perform(post("/sale")
+        mvc.perform(post("/")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .param("search", "stuff")
             .param("btn", "sale"))

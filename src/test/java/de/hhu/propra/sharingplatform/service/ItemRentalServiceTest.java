@@ -295,21 +295,25 @@ public class ItemRentalServiceTest {
         keywords.add("cool");
         keywords.add("search");
 
-        Item item1 = new ItemRental(new User());
-        Item item2 = new ItemRental(new User());
-        Item item3 = new ItemRental(new User());
-        Item item4 = new ItemRental(new User());
+        ItemRental item1 = new ItemRental(new User());
+        ItemRental item2 = new ItemRental(new User());
+        ItemRental item3 = new ItemRental(new User());
+        ItemRental item4 = new ItemRental(new User());
 
+        item1.setId(1L);
+        item2.setId(2L);
+        item3.setId(3L);
+        item4.setId(4L);
         item1.setName("cool Cool");
         item2.setName("cool Search");
         item3.setName("Search wfkfwo");
         item4.setName("cdwdwdwool dwd");
 
-        List<Item> dbFilterParam1 = new ArrayList<>();
-        dbFilterParam1.add(itemRental);
-        dbFilterParam1.add(item1);
-        dbFilterParam1.add(item2);
-        dbFilterParam1.add(item3);
+        List<Item> allList = new ArrayList<>();
+        allList.add(itemRental);
+        allList.add(item1);
+        allList.add(item2);
+        allList.add(item3);
 
         List<Item> coolList = new ArrayList<>();
         coolList.add(item1);
@@ -319,16 +323,17 @@ public class ItemRentalServiceTest {
         searchList.add(item2);
         searchList.add(item3);
 
+        when(itemRepo.findAllByDeletedIsFalse()).thenReturn(allList);
         when(itemRepo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse("cool"))
             .thenReturn(coolList);
         when(itemRepo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse("search"))
             .thenReturn(searchList);
 
-        List<Item> itemRentals = itemService.filterKeywords(itemRepo, keywords);
+        List<Item> filterResult = itemService.filterKeywords(itemRepo, keywords);
 
-        assertEquals(3, itemRentals.size());
-        assertEquals(item1, itemRentals.get(0));
-        assertEquals(item2, itemRentals.get(1));
-        assertEquals(item2, itemRentals.get(2));
+        assertEquals(3, filterResult.size());
+        assertEquals(item1, filterResult.get(0));
+        assertEquals(item2, filterResult.get(1));
+        assertEquals(item3, filterResult.get(2));
     }
 }

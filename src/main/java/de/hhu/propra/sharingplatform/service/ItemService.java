@@ -119,6 +119,15 @@ public class ItemService {
         return keywords;
     }
 
+    private boolean itemIdInList(List<Item> items, long id) {
+        for (Item item : items) {
+            if (item.getId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Item> filterKeywords(ItemRepo repo, List<String> keywords) {
         if (keywords == null || keywords.isEmpty()) {
             return repo.findAllByDeletedIsFalse();
@@ -127,7 +136,7 @@ public class ItemService {
         for (String key : keywords) {
             List<Item> foundItems = repo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse(key);
             for (Item found : foundItems) {
-                if (!items.contains(found)) {
+                if (!itemIdInList(items, found.getId())) {
                     items.add(found);
                 }
             }
