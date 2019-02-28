@@ -24,11 +24,11 @@
 							   Payment System. Ebenfalls ist Anpassung auf ein
 							   anderes Payment System relativ simple, da die
 							   Struktur auf Änderungen ausgelegt ist.
-|5  | Ansprechende View | Um eine halbwegs anständige View zu gewährleisten
+|5  | Ansprechende View | Um eine schöne View für User und Admin zu bieten, 
 						  haben wir uns für **Bootstrap** entschieden.
-						  Ebenfalls hat sich jeder mit Bootstrap kurz
-						  auseinandergesetzt und so ist eine anständige und
-						  teilweise **responsive** View entstanden
+						  Im zuge dessen hat sich jeder mit Bootstrap 			  auseinandergesetzt und so ist eine anständige und
+						  teilweise **responsive** View entstanden.
+              
 |=======
 
 [role="arc42help"]
