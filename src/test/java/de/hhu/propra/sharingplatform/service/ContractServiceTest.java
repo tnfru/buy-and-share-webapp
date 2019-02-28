@@ -40,8 +40,6 @@ public class ContractServiceTest {
 
     private BorrowContract borrowContract;
 
-    private SellContract sellContract;
-
     @MockBean
     ContractRepo contractRepo;
 
@@ -57,9 +55,6 @@ public class ContractServiceTest {
     @MockBean
     ConflictService conflictService;
 
-    /*@MockBean
-    Conflict conflict;*/
-
     @MockBean
     ItemService itemService;
 
@@ -72,12 +67,11 @@ public class ContractServiceTest {
     @Before
     public void setUpTests() {
 
-        /*
         User owner = new User();
         owner.setAccountName("owner");
         User borrower = new User();
         borrower.setAccountName("borrower");
-        borrower.setId((long)1);
+        borrower.setId((long) 1);
         ItemRental itemRental = new ItemRental(owner);
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now();
@@ -85,17 +79,22 @@ public class ContractServiceTest {
         Offer offer = new Offer(itemRental, borrower, start, end);
         borrowContract = new BorrowContract(offer);
         borrowContract.setBorrower(borrower);
-        borrowContract.setId((long)1);
+        borrowContract.setId((long) 1);
         List<Conflict> conflicts = new ArrayList<>();
-        borrowContract.setConflicts(conflicts);*/
+        borrowContract.setConflicts(conflicts);
+        borrowContract.setFinished(false);
 
-        /*
-        conflictService = mock(ConflictService.class);
-        conflict = mock(Conflict.class);*/
+        Conflict conflict = new Conflict();
+        conflict.setContract(borrowContract);
+        conflict.setId(1);
+
     }
 
     @Test
     public void createContractTest() {
+
+        setUpTests();
+
         User owner = new User();
         User borrower = new User();
         ItemRental itemRental = new ItemRental(owner);
@@ -195,7 +194,7 @@ public class ContractServiceTest {
     public void calcPriceTest() {
         ArgumentCaptor<Contract> argument = ArgumentCaptor.forClass(Contract.class);
 
-        when(contractRepo.findOneById(anyLong())).thenReturn(borrowContract);
+        when(borrowContractRepo.findOneById(anyLong())).thenReturn(borrowContract);
 
         contractService.calcPrice(anyLong());
 
@@ -279,13 +278,5 @@ public class ContractServiceTest {
         verify(borrowContractRepo, times(1)).save(argument.capture());
 
     }
-
-    @Test(expected = NullPointerException.class)
-    public void endContractNotInDbTest() {
-        when(contractRepo.findOneById(anyLong())).thenReturn(null);
-
-        contractService.returnItem(anyLong(), anyString());
-    }
-
 
 }
