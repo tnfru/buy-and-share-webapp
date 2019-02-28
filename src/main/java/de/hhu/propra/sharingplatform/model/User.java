@@ -39,8 +39,8 @@ public class User {
     private String email;
     private String propayId;
     private String role = "user";
-    private boolean ban;
-    private boolean deleted;
+    private boolean ban = false;
+    private boolean deleted = false;
     private String passwordHash;
     private int positiveRating;
     private int negativeRating;
@@ -141,7 +141,7 @@ public class User {
     public List<ItemSale> getSoldItems() {
         List<ItemSale> soldItems = new ArrayList<>();
         for (ItemSale item : itemSales) {
-            if (item.getContracts().size() > 0) {
+            if (!item.getContracts().isEmpty()) {
                 soldItems.add(item);
             }
         }

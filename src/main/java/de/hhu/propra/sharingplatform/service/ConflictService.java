@@ -6,7 +6,6 @@ import de.hhu.propra.sharingplatform.model.Conflict;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentService;
-import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.stereotype.Service;
 
@@ -28,17 +27,7 @@ public class ConflictService {
         return conflictRepo.findAllByStatus(Status.PENDING);
     }
 
-    public ArrayList<Contract> getAllContractsWithOpenConflict() {
-        Collection<Conflict> conflictsPending = conflictRepo.findAllByStatus(Status.PENDING);
-        ArrayList<Contract> contractsWithOpenConflict = new ArrayList<>();
-        for (Conflict conflict : conflictsPending) {
-            contractsWithOpenConflict.add(conflict.getContract());
-        }
-        return contractsWithOpenConflict;
-    }
-
-
-    public Conflict createConflict(Contract contract, String accountName, String description) {
+    Conflict createConflict(Contract contract, String accountName, String description) {
         Conflict conflict = new Conflict();
         conflict.setStatus(Status.PENDING);
         conflict.setContract(contract);
@@ -58,9 +47,9 @@ public class ConflictService {
         paymentService.punishBailReservation((BorrowContract) conflict.getContract());
     }
 
-    public void setStatus(Status canceled, long conflictId) {
+    public void setStatus(Status status, long conflictId) {
         Conflict conflict = conflictRepo.findOneById(conflictId);
-        conflict.setStatus(canceled);
+        conflict.setStatus(status);
         conflictRepo.save(conflict);
     }
 }

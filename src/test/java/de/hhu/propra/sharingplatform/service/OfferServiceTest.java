@@ -16,9 +16,11 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.payment.PaymentService;
 import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,7 +62,7 @@ public class OfferServiceTest {
 
     @Before
     public void setUpTests() {
-        offerService = new OfferService(contractService, offerRepo, proPayApi, paymentService,
+        offerService = new OfferService(contractService, offerRepo, proPayApi,
             itemService, borrowContractRepo);
         owner = new User();
         owner.setId(1L);

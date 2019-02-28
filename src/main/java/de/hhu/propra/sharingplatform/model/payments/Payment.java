@@ -12,6 +12,8 @@ import javax.persistence.OneToOne;
 
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Data
 @Entity
@@ -30,7 +32,7 @@ public class Payment {
     Contract contract;
 
     @SuppressWarnings("unused")
-    public Payment() {
+    Payment() {
         // used for jpa
     }
 
@@ -44,8 +46,9 @@ public class Payment {
     public void pay(IPaymentApi paymentApi) {
         if (paymentApi.getAccountBalanceLiquid(proPayIdSender) >= amount) {
             paymentApi.transferMoney(amount, proPayIdSender, proPayIdRecipient);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough money");
         }
-        //TODO: ELSE: throw exception
     }
 
     public boolean isBalanced(IPaymentApi paymentApi) {
