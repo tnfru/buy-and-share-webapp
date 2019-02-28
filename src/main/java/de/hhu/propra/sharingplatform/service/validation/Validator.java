@@ -7,7 +7,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO annotations?
 public class Validator {
 
     /**

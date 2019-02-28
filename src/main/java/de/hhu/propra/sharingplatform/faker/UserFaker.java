@@ -38,20 +38,9 @@ class UserFaker {
     }
 
     public User createAdmin() {
-        User user = new User();
-        user.setName(faker.name().fullName());
-        user.setAddress(faker.address().fullAddress());
-        String username = faker.name().username();
-        user.setAccountName(username);
-        user.setEmail(username + "@example.com");
-        user.setPropayId(faker.name().lastName());
-        user.setRole("admin");
-        user.setPositiveRating(faker.number().numberBetween(0, 40));
-        user.setNegativeRating(faker.number().numberBetween(0, 20));
-        user.setPassword("123");
-        user.setBan(false);
-        user.setDeleted(false);
+        User admin = create();
+        admin.setRole("admin");
 
-        return user;
+        return admin;
     }
 }

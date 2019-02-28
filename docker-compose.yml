@@ -4,25 +4,26 @@ services:
     image: sharing
     build: .
     links:
-      - sharingDB
       - propay
+      - h2DB
     depends_on:
-      - sharingDB
       - propay
+      - h2DB
     ports:
       - "8080:8080"
     volumes:
       - ./static:/app/static
 
-  sharingDB:
-    image: postgres
-    environment:
-      - POSTGRES_USER=sharingDB
-      - POSTGRES_PASSWORD=secret
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-
   propay:
     image: propra/propay:latest
     volumes:
-      - ./data/propay:/code/data
+      - propay:/code/data
+
+  h2DB:
+    image: oscarfonts/h2
+    volumes:
+      - h2-data:/opt/h2-data
+
+volumes:
+  h2-data:
+  propay:

@@ -152,8 +152,12 @@
                       <td>
                         <a th:href="|/item/sale/details/${itemSale.getId()}|"
                            class="btn btn-primary btn-sm">Details</a>
-                        <a th:href="|/item/sale/remove/${itemSale.getId()}|"
-                           class="btn btn-danger btn-sm">Remove</a>
+                        <form method="post" th:action="|/item/sale/remove/${itemSale.getId()}|">
+                          <button th:href="|/item/sale/remove/${itemSale.getId()}|"
+                                  class="btn btn-danger btn-sm" type="submit">Remove
+                          </button>
+                        </form>
+
                       </td>
                     </tr>
                     </tbody>
@@ -298,8 +302,8 @@
                                 <td th:if="${con.getConflicts().size()} == 0">
                                     <span style="color: green;">&#45;</span>
                                 </td>
-                                <td th:if="${con.getRealEnd()} != null and ${con.getConflicts().size() == 0}">
-                                    <form method="post"
+                                <td th:if="${con.getConflicts().size() == 0}">
+                                    <form th:if="${con.getRealEnd()} != null" method="post"
                                           th:action="|/contract/${con.getId()}/acceptReturn|">
                                         <button type="submit" class="btn btn-primary btn-sm">Accept
                                             Return

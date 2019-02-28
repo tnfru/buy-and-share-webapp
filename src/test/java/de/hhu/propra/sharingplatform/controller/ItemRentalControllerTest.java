@@ -12,7 +12,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import de.hhu.propra.sharingplatform.dao.ItemRepo;
+import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.dao.UserRepo;
+import de.hhu.propra.sharingplatform.dao.contractdao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.model.items.Item;
@@ -24,6 +26,7 @@ import de.hhu.propra.sharingplatform.service.RecommendationService;
 import de.hhu.propra.sharingplatform.service.UserService;
 import java.util.Optional;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +34,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ItemRentalController.class)
 @Import({ItemService.class})
-
 public class ItemRentalControllerTest {
 
     @Autowired
@@ -49,6 +53,12 @@ public class ItemRentalControllerTest {
 
     @MockBean
     private ItemRepo itemRepo;
+
+    @MockBean
+    private OfferRepo offerRepo;
+
+    @MockBean
+    private ContractRepo contractRepo;
 
     @MockBean
     private UserService userService;
@@ -225,8 +235,7 @@ public class ItemRentalControllerTest {
             .andExpect(content().string(containsString("New Item")));
     }
 
-    //TODO: Add image upload
-    //@Test
+    @Test
     @WithMockUser("accountname")
     public void postNewItemWrongLoggedIn() throws Exception {
         User user = testUser();
@@ -241,9 +250,7 @@ public class ItemRentalControllerTest {
             .andExpect(status().is4xxClientError());
     }
 
-
-    //TODO: Add image upload
-    //@Test
+    @Test
     @WithMockUser("accountname")
     public void postNewItemCorrectLoggedIn() throws Exception {
         User user = testUser();
@@ -441,6 +448,32 @@ public class ItemRentalControllerTest {
             .andExpect(status().is3xxRedirection());
 
         verify(itemRepo, times(2)).save(any());
+        verify(imageService, times(0)).store(any(), any());
+    }
+
+    @Test
+    @WithMockUser("accountname")
+    public void postEditItemExistLoggedInIsOwnerWithImage() throws Exception {
+        MockMultipartFile image = new MockMultipartFile("image", "image.png", "image/png",
+            "image".getBytes());
+        User user = testUser();
+
+        ItemRental itemRental = testItem(user);
+
+        when(itemRepo.findById(3L)).thenReturn(Optional.of(itemRental));
+        when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
+
+        mvc.perform(MockMvcRequestBuilders.multipart("/item/rental/edit/3")
+            .file(image)
+            .param("name", "name")
+            .param("dailyRate", "1")
+            .param("bail", "2")
+            .param("location", "loc")
+            .param("description", "desc"))
+            .andExpect(status().is3xxRedirection());
+
+        verify(itemRepo, times(2)).save(any());
+        verify(imageService, times(1)).store(any(), any());
     }
 
     @Test
