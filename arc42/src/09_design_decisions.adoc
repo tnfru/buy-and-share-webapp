@@ -48,7 +48,7 @@ Unsere anfängliche Analyse (Entity-Relation-Model) hat klare Struktur von Items
 
 Durch das Framework ist viel Funktionalität für User-Management bereits vorhanden. Das Ziel der Designphase war die Applikation möglichst schlank und einfach zu halten (wenig Kommunikation zwischen Prozessen). Daraus ging hervor, die User Domäne mit in die vorher erwähnte Architektur aufzunehmen. Gefahren sahen wir insbesondere bei dem Umgang mit der Authentifizierung und einem ggf. daraus resultierenden Reverse Proxy.
 
-In diesem halten wir MVC für die beste Architektur um das gewünschte Produkt in der
+Aus diesen Gründen halten wir MVC für die beste Architektur um das gewünschte Produkt in der
 gegebenen Zeit umzusetzen.
 
 
@@ -64,8 +64,7 @@ Controller weiterzugeben.
 ## Datenbank
 
 Im Development Prozess haben wir einen großen Teil unserer Funktionalität auf einer H2 Datenbank getestet.
-Da wir H2 auch als persistente Datenbank nutzen können und sie nativ kompatibel mit SpringBoot,
+Da wir H2 auch als persistente Datenbank nutzen können und sie nativ kompatibel mit SpringBoot und insbesondere mit dessen Typensystem harmoniert,
 haben wir uns dazu entschieden diese zu behalten.
-Eine Postgres Datenbank wäre eine Alternative, allerdings wollten wir Seiteneffekte mit dem Postgres
-Dialekt vermeiden. 
+Eine Postgres Datenbank wäre eine von vielen Alternative, allerdings wollten wir Seiteneffekte mit anderen SQL Dialekt bzw. auftretenden Typkonvertierungen vermeiden. 
 

@@ -8,7 +8,7 @@
 
 |Contract
 |Eine Beziehung zweier User über ein Item. Ein Contract dient
-dazu ein Kauf- oder Leihverhältnis zu persisitieren.
+dazu ein Kauf- oder Leihverhältnis zu speichern.
 
 
 |Borrower
