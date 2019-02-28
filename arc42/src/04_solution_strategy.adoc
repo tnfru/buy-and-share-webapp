@@ -16,7 +16,7 @@ Gebaut wird die Anwendung mit Gradle. +
 
 = Top-Level Zerlegung
 
-Wir nutzen eine Three-Level MVC architecture (genaueres Kapitel 5/9)
+Wir nutzen eine Three-Level MVC architecture (genaueres Kapitel 9)
 
 = Organisationsentscheidungen
 
