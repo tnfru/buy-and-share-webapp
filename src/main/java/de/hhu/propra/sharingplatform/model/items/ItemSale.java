@@ -23,7 +23,7 @@ public class ItemSale extends Item {
     private List<SellContract> contracts = new ArrayList<>();
 
     @SuppressWarnings("unused")
-    private ItemSale() {
+    public ItemSale() {
         // used for jpa
     }
 

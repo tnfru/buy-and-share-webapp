@@ -19,7 +19,7 @@ public class SellContract extends Contract {
     private User customer;
 
     @SuppressWarnings("unused")
-    private SellContract() {
+    public SellContract() {
         // used by JPA
     }
 
