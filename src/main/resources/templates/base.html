@@ -58,8 +58,15 @@
 
             <form method="post" action="/" class="form-inline my-2 my-lg-0 mx-auto w-50">
                 <input class="form-control mr-sm-2 w-50" type="search" placeholder="Search for Item"
-                       aria-label="Search" name="search">
-                <button class="btn btn-warning my-2 my-sm-0" type="submit">Search</button>
+                       aria-label="Search" name="search" th:value="${search?.toString()}">
+              <div class="btn-group" role="group">
+                <button class="btn btn-warning my-2 my-sm-0" type="submit" value="rental"
+                        name="btn">Rental
+                </button>
+                <button class="btn btn-warning my-2 my-sm-0" type="submit" value="sale" name="btn">
+                  Sale
+                </button>
+              </div>
             </form>
 
             <div th:switch="${#authorization.expression('isAuthenticated()')}">

@@ -6,6 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ItemRepo<T extends Item> extends CrudRepository<T, Long> {
 
-    List<T> findAllByNameContainsIgnoreCase(String key);
+    List<T> findAllByNameContainsIgnoreCaseAndDeletedIsFalse(String key);
+
+    List<T> findAllByDeletedIsFalse();
 
 }
