@@ -13,6 +13,38 @@ berücksichtigen müssen. Dazu gehören die
 * relevante Stakeholder und deren Erwartungshaltung
 ****
 
+Bei dem vorliegenden Projekt soll eine Webanwendung im Rahmen eines
+Universitären Praktikums erstellt werden.
+Die Bearbeiter/Entwickler sind hierbei die Mitglieder der achter-Gruppe
+bugrog-morgoth-ush-parse
+namentlich(in alphabetischer Reihenfolge)
+Christian, Ingo, Jonathan, Lars, Markus, Philipp, Sami und Stefan.
+
+Die Stakeholder im Rahmen des Projekts sind die Aufgaben/Projektsteller.
+
+Mindest "Geschäftsziel" ist es hierbei die in der gegebenen Aufgabenstellung mitgelieferten
+User-Stories, Use-Caseses und genannten Mindestanforderungen zu erfüllen.
+
+Die Aufgabenstellung ist dabei die Erstellung einer Webanwendung welche
+es registrierten und angemeldeten Nutzern ermöglichen soll eigene Gegenstände
+einzustellen und dadurch anderen Nutzern zum Verleih anzubieten. Ebenso möglich
+muss es sein eine Leihe über die Detailseite des eingestellten Gegenstandes anzufragen.
+
+Ferner soll es eine Konfliktlösestelle durch einen Admin der Seite geben welcher
+bei Problemen mit den geliehenen Gegenständen über die Seite eingeschaltet werden
+können soll.
+
+Zusätzlich zu der gegegbenen Aufgabenstellung ist durch Modifikation in der letzten
+Woche noch hinzu gekommen, dass die Webanwendung neben Verleih auch Kauf von Gegenständen
+ermöglichen soll. Hierdurch ist auch ein weiterer Aspekt der Aufgabenstellung
+deutlich geworden. Die gewählte Softwarearchietektur soll/muss nämlich leicht wart/-und
+erweiterbar sein.
+
+Weitere generelle Ziele sind eine gute Benutzbarkeit der Oberfläche. Dies
+inkudiert eine aufgeräumte, übersichtliche und schnell reagierende Oberfläche.
+
+
+
 === Aufgabenstellung
 
 [role="arc42help"]
@@ -79,5 +111,5 @@ Tabelle mit Rollen- oder Personennamen, sowie deren Erwartungshaltung bezüglich
 |===
 |Rolle |Kontakt |Erwartungshaltung
 | _<Rolle-1>_ | _<Kontakt-1>_ | _<Erwartung-1>_
-| _<Rolle-2>_ | _<Kontakt-2>_ | _<Erwartung-2>_ 
+| _<Rolle-2>_ | _<Kontakt-2>_ | _<Erwartung-2>_
 |===
