@@ -33,9 +33,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RunWith(SpringRunner.class)
@@ -69,6 +74,9 @@ public class ItemSaleControllerTest {
 
     @MockBean
     private OfferRepo offerRepo;
+
+    @Autowired
+    private WebApplicationContext context;
 
 
     private User testUser() {
@@ -232,9 +240,7 @@ public class ItemSaleControllerTest {
             .andExpect(status().is4xxClientError());
     }
 
-    // todo image upload
     @Test
-    @Ignore
     @WithMockUser("accountname")
     public void postNewItemLoggedIn() throws Exception {
         User user = testUser();
@@ -248,15 +254,35 @@ public class ItemSaleControllerTest {
             .param("name", "name")
             .param("price", "1")
             .param("location", "loc")
-            .param("image", "")
             .param("description", "desc"))
-            .andExpect(status().isOk());
+            .andExpect(status().is3xxRedirection());
+
+        verify(imageService, times(0)).store(any(), any());
+    }
+
+    @Test
+    @WithMockUser("accountname")
+    public void postNewItemLoggedInWithPicture() throws Exception {
+        User user = testUser();
+        MockMultipartFile image = new MockMultipartFile("image", "image.png", "image/png",
+            "image".getBytes());
+        Optional<User> optU = Optional.of(user);
+
+        when(userRepo.findByAccountName("accountname")).thenReturn(optU);
+
+        mvc.perform(MockMvcRequestBuilders.multipart("/item/sale/new")
+            .file(image)
+            .param("name", "name")
+            .param("price", "1")
+            .param("location", "loc")
+            .param("description", "desc"))
+            .andExpect(status().is3xxRedirection());
+
+        verify(imageService, times(1)).store(any(), any());
     }
 
 
-    //TODO: Add image upload
     @Test
-    @Ignore
     @WithMockUser("accountname")
     public void postNewItemCorrectLoggedIn() throws Exception {
         User user = testUser();
@@ -270,7 +296,6 @@ public class ItemSaleControllerTest {
             .param("name", "name")
             .param("price", "1")
             .param("location", "loc")
-            .param("image", "")
             .param("description", "desc"))
             .andExpect(status().is3xxRedirection());
     }
@@ -435,9 +460,7 @@ public class ItemSaleControllerTest {
     }
 
 
-    // todo image upload
     @Test
-    @Ignore
     @WithMockUser("accountname")
     public void postEditItemExistLoggedInIsOwner() throws Exception {
         User user = testUser();
@@ -455,7 +478,30 @@ public class ItemSaleControllerTest {
             .param("description", "desc"))
             .andExpect(status().is3xxRedirection());
 
-        verify(itemRepo, times(1)).save(any());
+        verify(itemRepo, times(2)).save(any());
+    }
+
+    @Test
+    @WithMockUser("accountname")
+    public void postEditItemDontExistLoggedInWithPicture() throws Exception {
+        MockMultipartFile image = new MockMultipartFile("image", "image.png", "image/png",
+            "image".getBytes());
+        User user = testUser();
+
+        ItemSale itemSale = testItem(user);
+
+        when(itemRepo.findById(3L)).thenReturn(Optional.of(itemSale));
+        when(userService.fetchUserIdByAccountName("accountname")).thenReturn(1L);
+
+        mvc.perform(MockMvcRequestBuilders.multipart("/item/sale/edit/3")
+            .file(image)
+            .param("name", "name")
+            .param("price", "1")
+            .param("location", "loc")
+            .param("description", "desc"))
+            .andExpect(status().is3xxRedirection());
+
+        verify(imageService, times(1)).store(any(), any());
     }
 
     @Test

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PropayAccountService implements IBankAccountService {
 
-    final IPaymentApi api;
+    private final IPaymentApi api;
 
     @Autowired
     public PropayAccountService(IPaymentApi api) {

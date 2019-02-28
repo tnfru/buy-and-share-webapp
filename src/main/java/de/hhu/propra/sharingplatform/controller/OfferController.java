@@ -41,7 +41,6 @@ public class OfferController extends BaseController {
     public String gotOfferForm(@PathVariable long itemId, Model model) {
         ItemRental itemRental = (ItemRental) itemService.findItem(itemId);
         model.addAttribute(itemRental);
-        itemRental.getOwner().getAccountName();
         return "offerRequest";
     }
 
