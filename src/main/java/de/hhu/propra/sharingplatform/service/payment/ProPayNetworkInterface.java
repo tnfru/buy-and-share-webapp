@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,8 @@ public class ProPayNetworkInterface {
     }
 
     public String buildRequest(String requestType, String serverAddress,
-        List<String> pathVars,
-        Map<String, String> parameters) {
+                                      List<String> pathVars,
+                                      Map<String, String> parameters) {
         StringBuilder urlBuilder = new StringBuilder(serverAddress);
         // append path variables
         for (String pathVar : pathVars) {
@@ -31,9 +32,14 @@ public class ProPayNetworkInterface {
         urlBuilder.deleteCharAt(urlBuilder.lastIndexOf("/"));
         // append parameters
         urlBuilder.append("?");
-        for (String parameter : parameters.keySet()) {
-            urlBuilder.append(parameter).append("=").append(parameters.get(parameter)).append("&");
+
+        for (Entry<String, String> parameter : parameters.entrySet()) {
+            urlBuilder.append(parameter.getKey())
+                .append("=")
+                .append(parameter.getValue())
+                .append("&");
         }
+
         urlBuilder.deleteCharAt(urlBuilder.lastIndexOf("&"));
         URL url;
         try {

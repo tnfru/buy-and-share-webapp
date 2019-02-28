@@ -333,7 +333,6 @@ public class ItemRentalControllerTest {
     @Test
     @WithMockUser("accountname")
     public void editItemDontExistsLoggedIn() throws Exception {
-        User user = testUser();
 
         mvc.perform(get("/item/rental/edit/3")
             .contentType(MediaType.TEXT_HTML))

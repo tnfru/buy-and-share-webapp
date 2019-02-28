@@ -15,10 +15,11 @@ import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import de.hhu.propra.sharingplatform.service.payment.PaymentService;
 import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
+
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -144,7 +145,7 @@ public class OfferValidatorTest {
 
         boolean thrown = false;
         try {
-            OfferValidator.validate(itemRental, borrower, start, end, null, api);
+            OfferValidator.validate(itemRental, borrower, start, end, api);
         } catch (ResponseStatusException responseException) {
             thrown = true;
         }
@@ -162,7 +163,7 @@ public class OfferValidatorTest {
 
         boolean thrown = false;
         try {
-            OfferValidator.validate(itemRental, borrower, start, end, null, api);
+            OfferValidator.validate(itemRental, borrower, start, end, api);
         } catch (ResponseStatusException responseException) {
             thrown = true;
         }
@@ -181,7 +182,7 @@ public class OfferValidatorTest {
 
         boolean thrown = false;
         try {
-            OfferValidator.validate(itemRental, borrower, start, end, null, api);
+            OfferValidator.validate(itemRental, borrower, start, end, api);
         } catch (ResponseStatusException responseException) {
             thrown = true;
         }
@@ -201,7 +202,7 @@ public class OfferValidatorTest {
 
         boolean thrown = false;
         try {
-            OfferValidator.validate(itemRental, borrower, start, end, null, api);
+            OfferValidator.validate(itemRental, borrower, start, end, api);
         } catch (ResponseStatusException responseException) {
             thrown = true;
         }
