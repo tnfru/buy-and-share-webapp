@@ -12,21 +12,21 @@ dazu ein Kauf- oder Leihverhältnis zu persisitieren.
 
 
 |Borrower
-|Ein User, der ein Item ausleiht.
+|Ein User der ein Item ausleiht.
 
 |Owner
-|Der User, dem ein Item gehört.
+|Der User dem ein Item gehört.
 
 |Item
-|Eine Representation eines realen Gegenstandes, der über die Plattform zum
+|Die Representation eines realen Gegenstandes, der über die Plattform zum
 Leihen oder Kaufen angeboten wird.
 
 |ProPay
-|Ein aus der nächsten Generation an Bezahlsystem stammendes Bezahlsystem.
+|Ein aus der nächsten Generation an Bezahlsystemen stammendes Bezahlsystem.
 
 |Offer
-|Wird erzeugt sobald ein User ein Item zur Leihe anfragt. Der Besitzer des Item kann
-das Angebot annehmen oder Ablehnen.
+|Wird erzeugt sobald ein User ein Item zur Leihe anfragt. Der Besitzer des Items kann
+das Offer annehmen oder Ablehnen.
 
 |User
 |Nutzt das System als Käufer, Verkäufer, Leihender oder Verleiher. (Mehrere gleichzeitig möglich)
