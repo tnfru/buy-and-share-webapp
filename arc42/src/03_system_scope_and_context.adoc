@@ -1,0 +1,91 @@
+[[section-system-scope-and-context]]
+
+== Kontextabgrenzung
+
+
+[role="arc42help"]
+****
+.Inhalt
+Die Kontextabgrenzung grenzt das System von allen Kommunikationspartnern
+(Nachbarsystemen und Benutzerrollen) ab. Sie legt damit die
+externen Schnittstellen fest.
+
+Differenzieren Sie fachlichen Kontext (fachliche Ein- und Ausgaben) und
+technischen Kontext (Kanäle, Protokolle, Hardware), falls nötig.
+
+
+.Motivation
+Die fachlichen und technischen Schnittstellen zu Kommunikationspartnern gehören
+zu den kritischsten Aspekten eines Systems.
+Stellen Sie sicher, dass Sie diese komplett verstanden haben.
+
+.Form
+Verschiedene Optionen:
+
+* Diverse Kontextdiagramme
+* Listen von Kommunikationspartnern mit deren Schnittstellen
+
+****
+
+
+=== Fachlicher Kontext
+
+[role="arc42help"]
+****
+.Inhalt
+Festlegung *aller* Kommunikationspartner (Nutzer, IT-Systeme, ...) mit Erklärung der
+fachlichen Ein- und Ausgabedaten oder Schnittstellen. Zusätzlich bei Bedarf fachliche Datenformate
+oder Protokolle der Kommunikation mit den Nachbarsystemen.
+
+.Motivation
+Alle Beteiligten müssen verstehen, welche fachlichen Informationen mit der Umwelt
+ausgetauscht werden.
+
+
+.Form
+Alle Diagrammarten, die das System als Black Box
+darstellen und die fachlichen Schnittstellen zu den Nachbarn beschreiben.
+
+Alternativ oder ergänzend können Sie eine Tabelle verwenden.
+Der Titel gibt den Namen Ihres Systems wieder; die drei Spalten sind: Kommunikationspartner, Eingabe, Ausgabe.
+****
+
+|=======
+|Titel|Kommunikationsbeziehung|Eingabe|Ausgabe
+|Admin User| Kümmert sich um Klärung sämtlicher Konflikte die im System zwischen Benutzern der Plattform eröffnet werden. Ist ein "normaler" User mit erweiterten Rechten, kann also Gegenstände anbieten.|Die Freigabe / Bearbeitung des Konflikts können direkt über die Plattform vorgenommen werden, sollten Rückfragen nötig sein, muss dies über E-Mail geklärt werden (sichtbar über die Profile der User)|Kommunikation mit Usern über Mail; Anzeige der Konflikte (mit aktuellen Stand) über Plattform
+|Normaler User| Kann über die Plattform Produkte zum Verleih oder Verkauf anbieten. Andere User können unter bestimmten Bedingungen diese Produkte kaufen oder leihen. Der Verleiher kann hierbei entscheiden wem ein Produkt anbieten möchte. Konflikte können von jedem Vertragspartner jederzeit eröffnet werden| über die Plattform werden sämtliche Prozesse abgebildet | anzeige der Stati über die Plattform
+|"Text"-Kommunikation zwischen User| Bei Fragen oder vor einem Konflikt können User über E-Mail kommunizieren. Eine direkte Kommunikation über die Plattform ist nicht möglich| über Mail | über Mail
+|Bezahlung| alle Prozesse die Geld voraussetzen oder benötigen werden über Propay abgewickelt| Änderung von Propay-Einstellung können über die Plattform vorgenommen werden. Teilweise werde Prozesse die Propay involvieren im Hintergrund ausgeführt| Anzeige und Stati von Propay sind über die Plattform einsehbar
+|=======
+
+=== Technischer Kontext
+
+[role="arc42help"]
+****
+.Inhalt
+Technische Schnittstellen (Kanäle, Übertragungsmedien)
+zwischen dem System und seiner Umwelt. Zusätzlich eine Erklärung (_mapping_),
+welche fachlichen Ein- und Ausgaben über welche technischen Kanäle fließen.
+
+
+.Motivation
+Viele Stakeholder treffen Architekturentscheidungen auf Basis
+der technischen Schnittstellen des Systems zu seinem Kontext.
+
+Insbesondere Infrastruktur- oder Hardwareentwickler entscheiden auch über
+diese technischen Schnittstellen.
+
+.Form
+Beispielsweise UML Deployment-Diagramme mit den Kanälen zu Nachbarsystemen,
+begleitet von einer Tabelle, die Kanäle auf Ein-/Ausgaben abbildet.
+
+****
+
+|=======
+|Titel|Kommunikationsbeziehung|Protokoll|Übertragungsdetail
+|Datenbank | Datenbank der SharingApplication |JDBC| interner Service (nur im Docker Container erreichbar)
+|ProPay | Bezahlsystem das für die Reservierung von Kautionen und den weiteren Bezahlvorgang zuständig ist|http (*Schnittstellenbeschreibung unten)| Eigenständige Instanz von Propay (nur im Docker Container erreichbar)
+|Docker|Mittels docker wird eine jar der Plattform gebaut und diese mit der Datenbank und Propay verbunden| alle vorher genannten + docker interne Kommunikation| hauptsächlich interne Dockerkommunikation 
+|SharingApp|FrontEnd der Datenbank und Kommunikation mit Propay; User und Admin werden hiermit ihre Prozesse verarbeiten| bereits genannt|
+|Hardware| Spezielle Hardware ist nicht nötig da die Plattform komplett über docker virtualisiert wird|linux interne Kommunikation||
+|=======

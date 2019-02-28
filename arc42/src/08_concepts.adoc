@@ -1,0 +1,26 @@
+[[section-concepts]]
+== Querschnittliche Konzepte
+
+
+=== User Experience
+
+Für die User-experience war es uns sehr wichtig, dass der User eine
+zentrale Übersicht für alle seine Transaktionen und Informationen hat. +
+Bei uns stellt dies die "user-view" (account.html) dar. Hier findet
+er alle offenen und abgeschlossenen Transaktionen, ProPay-Informationen,
+eigene Items und Account Optionen. +
+Dadurch wird zwar die account.html sehr voll und teils unübersichtlich,
+allerdings war es uns diesen Trade-Off wert um dem Nutzer ein besseres Menü
+zu bieten. +
+
+
+=== Security
+
+Ein weiterer sehr wichtiger Aspekt ist die Sicherheit. Spring Security
+nimmt uns hier zwar einiges an Arbeit ab, jedoch validieren wir jede Nutzereingabe
+und jede zustandsverändernde Aktion auch im Controller. +
+Damit stellen wir sicher, dass böswillige Nutzer nicht durch
+das ausprobieren von anderen Id's in der URL Contracts oder Items von
+anderen Nutzern beeinflussen können. +
+Einzig ausgenommen von diesem Konzept ist der Admin, diesem sprechen wir die 
+Berechtigung zu alles aufzurufen.

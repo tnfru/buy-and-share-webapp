@@ -1,0 +1,70 @@
+[[section-design-decisions]]
+
+== Entwurfsentscheidungen
+
+
+[role="arc42help"]
+****
+.Inhalt
+Wichtige, teure, große oder riskante
+Architektur- oder Entwurfsentscheidungen inklusive der jeweiligen
+Begründungen.
+Mit "Entscheidungen" meinen wir hier die Auswahl einer von mehreren
+Alternativen unter vorgegebenen Kriterien.
+
+Wägen Sie ab, inwiefern Sie Entscheidungen hier zentral
+beschreiben, oder wo eine lokale Beschreibung
+(z.B. in der Whitebox-Sicht von Bausteinen) sinnvoller ist.
+Vermeiden Sie Redundanz. Verweisen Sie evtl. auf Abschnitt 4, wo schon
+grundlegende strategische Entscheidungen beschrieben wurden.
+
+.Motivation
+Stakeholder des Systems sollten wichtige Entscheidungen verstehen und
+nachvollziehen können.
+
+
+.Form
+Verschiedene Möglichkeiten:
+
+* Liste oder Tabelle, nach Wichtigkeit und Tragweite der Entscheidungen geordnet
+* ausführlicher in Form einzelner Unterkapitel je Entscheidung
+* ADR (http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions[Architecture Decision Record])
+für jede wichtige Entscheidung
+
+****
+
+# MVC Architektur
+
+Wir haben uns für eine Model-View-Controller Architektur entschieden, da durch die Trennung der Schichten 
+und die schwache Bindung der Klassen Änderungen leichter vorgenommen werden können.
+Deswegen bietet uns MVC Skalierbarkeit und Flexibilität.
+Flexibilität ist unter anderem auch dadurch gegeben, dass beispielsweise am Frontend Änderungen
+vorgenommen werden können, ohne dass die Business Logik geändert werden muss. 
+
+Microservices / SCS bieten diese Vorteile auch, würden unserer Aufwandsabschätzung nach allerdings das Scope
+unseres Projekts sprengen.
+
+Unsere anfängliche Analyse (Entity-Relation-Model) hat klare Struktur von Items, User und Conctracts ergeben. Während der Analyse haben wir bereits festgestellt, dass vor allem Contracts und Items eine enge Beziehung haben und daher der Aufwand um diese Domains in separate Systeme auszulagern (Microservice, SCS, etc.) sehr hoch wäre. Weiter haben wir uns für ein MVC-Architektur entschieden, um eine möglichst einfache Kommunikation dieser Domänen zu realisieren. Um das System flexibel zu halten, haben wir im späteren Verlauf, diese Entitys in Interfaces extrahiert. 
+
+Durch das Framework ist viel Funktionalität für User-Management bereits vorhanden. Das Ziel der Designphase war die Applikation möglichst schlank und einfach zu halten (wenig Kommunikation zwischen Prozessen). Daraus ging hervor, die User Domäne mit in die vorher erwähnte Architektur aufzunehmen. Gefahren sahen wir insbesondere bei dem Umgang mit der Authentifizierung und einem ggf. daraus resultierenden Reverse Proxy.
+
+Aus diesen Gründen halten wir MVC für die beste Architektur um das gewünschte Produkt in der
+gegebenen Zeit umzusetzen.
+
+
+## Vererbung 
+
+Wir verwenden gezielt Vererbung, um die Skalierbarkeit weiterhin zu verbessern.
+Erweiterungen können so ohne großen Aufwand implementiert werden. Abstrakte Eltern-Klassen
+werden benutzt um beispielsweise sowohl Kaufverträge wie auch Leihverträge zu speichern.
+Auch in unseren Controllern benutzen wir Vererbung, um den angemeldeten User an alle 
+Controller weiterzugeben.
+
+
+## Datenbank
+
+Im Development Prozess haben wir einen großen Teil unserer Funktionalität auf einer H2 Datenbank getestet.
+Da wir H2 auch als persistente Datenbank nutzen können und sie nativ kompatibel mit SpringBoot und insbesondere mit dessen Typensystem harmoniert,
+haben wir uns dazu entschieden diese zu behalten.
+Eine Postgres Datenbank wäre eine von vielen Alternative, allerdings wollten wir Seiteneffekte mit anderen SQL Dialekt bzw. auftretenden Typkonvertierungen vermeiden. 
+
