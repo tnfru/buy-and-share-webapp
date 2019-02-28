@@ -26,7 +26,7 @@ public class PaymentServiceTest {
     User taker;
 
     @Before
-    public void prepare(){
+    public void prepare() {
         api = mock(IPaymentApi.class);
         paymentService = new PaymentService(api);
 
@@ -47,7 +47,7 @@ public class PaymentServiceTest {
     }
 
     @Test
-    public void createPaymentRent(){
+    public void createPaymentRent() {
         when(api.getAccountBalanceLiquid("bar")).thenReturn(1000);
         paymentService.createPayment(borrowContract);
 
@@ -56,7 +56,7 @@ public class PaymentServiceTest {
     }
 
     @Test
-    public void paySell(){
+    public void paySell() {
         when(api.getAccountBalanceLiquid("bar")).thenReturn(1000);
         paymentService.transferPayment(sellContract);
 
@@ -64,7 +64,7 @@ public class PaymentServiceTest {
     }
 
     @Test
-    public void payBorrow(){
+    public void payBorrow() {
         when(api.getAccountBalanceLiquid("bar")).thenReturn(1000);
         when(api.reserveMoney(anyString(), anyString(), anyInt()))
             .thenReturn((long) 1)
@@ -78,7 +78,7 @@ public class PaymentServiceTest {
     }
 
     @Test
-    public void freeCharge(){
+    public void freeCharge() {
         when(api.getAccountBalanceLiquid("bar")).thenReturn(1000);
         when(api.reserveMoney(anyString(), anyString(), anyInt()))
             .thenReturn((long) 1)
@@ -90,7 +90,7 @@ public class PaymentServiceTest {
     }
 
     @Test
-    public void punish(){
+    public void punish() {
         when(api.getAccountBalanceLiquid("bar")).thenReturn(1000);
         when(api.reserveMoney(anyString(), anyString(), anyInt()))
             .thenReturn((long) 2)

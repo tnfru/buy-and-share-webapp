@@ -2,12 +2,14 @@ package de.hhu.propra.sharingplatform.model.payments;
 
 import de.hhu.propra.sharingplatform.model.contracts.Contract;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+
 import lombok.Data;
 import lombok.ToString;
 
