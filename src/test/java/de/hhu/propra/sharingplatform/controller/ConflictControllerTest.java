@@ -60,7 +60,7 @@ public class ConflictControllerTest {
     //get
 
     @Test
-    public void getShowConflicNotLoggedIn() throws Exception {
+    public void getShowConflictNotLoggedIn() throws Exception {
         mvc.perform(get("/conflicts/show")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
@@ -68,7 +68,7 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "user")
-    public void getShowConflicNotAdmin() throws Exception {
+    public void getShowConflictNotAdmin() throws Exception {
         mvc.perform(get("/conflicts/show")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().isForbidden());
@@ -77,7 +77,7 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "admin")
-    public void getShowConflicAdmin() throws Exception {
+    public void getShowConflictAdmin() throws Exception {
 
         User requester = new User();
         List<Conflict> conflicts = new ArrayList<Conflict>();
@@ -131,7 +131,7 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "admin")
-    public void getConflicsDetailsAsAdmin() throws Exception {
+    public void getConflictsDetailsAsAdmin() throws Exception {
 
 
         Conflict conflict = new Conflict();
@@ -234,7 +234,7 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "admin")
-    public void postConflictCancleBailAsAdmin() throws Exception {
+    public void postConflictCancelBailAsAdmin() throws Exception {
 
         User requester = new User();
         List<Conflict> conflicts = new ArrayList<Conflict>();
@@ -251,7 +251,7 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "user")
-    public void postConflicCancleNotAdmin() throws Exception {
+    public void postConflictCancelNotAdmin() throws Exception {
         mvc.perform(post("/conflicts/1/cancel")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED))
             .andExpect(status().isForbidden());
@@ -285,7 +285,7 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "admin")
-    public void postConflicFreeBailAsAdmin() throws Exception {
+    public void postConflictFreeBailAsAdmin() throws Exception {
 
         User requester = new User();
         Conflict conflict = new Conflict();
@@ -318,7 +318,7 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "user")
-    public void postConflicFreeBailNotAdmin() throws Exception {
+    public void postConflictFreeBailNotAdmin() throws Exception {
         mvc.perform(post("/conflicts/1/freeBail")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED))
             .andExpect(status().isForbidden());
