@@ -50,10 +50,13 @@ Alternativ oder ergänzend können Sie eine Tabelle verwenden.
 Der Titel gibt den Namen Ihres Systems wieder; die drei Spalten sind: Kommunikationspartner, Eingabe, Ausgabe.
 ****
 
-**<Diagramm und/oder Tabelle>**
-
-**<optional: Erläuterung der externen fachlichen Schnittstellen>**
-
+|=======
+|Titel|Kommunikationsbeziehung|Eingabe|Ausgabe
+|Admin User| Kümmert sich um Klärung sämtlicher Konflikte die im System zwischen Benutzern der Plattform eröffnet werden. Ist ein "normaler" User mit erweiterten Rechten, kann also Gegenstände anbieten.|Die Freigabe / Bearbeitung des Konflikts können direkt über die Plattform vorgenommen werden, sollten Rückfragen nötig sein, muss dies über E-Mail geklärt werden (sichtbar über die Profile der User)|Kommunikation mit Usern über Mail; Anzeige der Konflikte (mit aktuellen Stand) über Plattform
+|Normaler User| Kann über die Plattform Produkte zum Verleih oder Verkauf anbieten. Andere User können unter bestimmten Bedingungen dann diese Produkte kaufen oder anleihen. Der Verleiher kann hierbei entscheiden wem ein Produkt anbieten möchte. Konflikte können von jedem Vertragspartner jederzeit eröffnet werden| über die Plattform werden sämtliche Prozesse abgebildet | anzeige der Stati über die Plattform
+|"Text"-Kommunikation zwischen User| Bei Fragen oder vor einem Konflikt können User über E-Mail kontakt aufnehmen. Eine direkte Kommunikation über die Plattform ist nicht möglich| über Mail | über Mail
+|Bezahlung| alle Prozesse die Geld voraussetzen oder benötigen werden über Propay abgewickelt| Änderung von Propay-Einstellung können über die Plattform vorgenommen werden. Teilweise werde Prozesse die Propay involvieren im Hintergrund ausgeführt| Anzeige und Stati von Propay sind über die Plattform einsehbar
+|=======
 
 === Technischer Kontext
 
@@ -78,8 +81,11 @@ begleitet von einer Tabelle, die Kanäle auf Ein-/Ausgaben abbildet.
 
 ****
 
-**<Diagramm oder Tabelle>**
-
-**<optional: Erläuterung der externen technischen Schnittstellen>**
-
-**<Mapping fachliche auf technische Schnittstellen>**
+|=======
+|Titel|Kommunikationsbeziehung|Protokoll|Übertragungsdetail
+|Datenbank | Datenbank der SharingApplication |JDBC| interner Service (nur im Docker Container erreichbar)
+|ProPay | Bezahlsystem das für die Reservierung von Kautionen und den weiteren Bezahlvorgang zuständig ist|http (*Schnittstellenbeschreibung unten)| Eigenständige Instanz von Propay (nur im Docker Container erreichbar)
+|Docker|Mittels docker wird eine jar der Plattform gebaut und diese mit der Datenbank und Propay verbunden| alle vorher genannten + docker interne Kommunikation| hauptsächlich interne Dockerkommunikation 
+|SharingApp|FrontEnd der Datenbank und Kommunikation mit Propay; User und Admin werden hiermit ihre Prozesse verarbeiten| bereits genannt|
+|Hardware| Spezielle Hardware ist nicht nötig da die Plattform komplett über docker virtualisiert wird|linux interne Kommunikation||
+|=======
