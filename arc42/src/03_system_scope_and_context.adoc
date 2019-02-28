@@ -53,8 +53,8 @@ Der Titel gibt den Namen Ihres Systems wieder; die drei Spalten sind: Kommunikat
 |=======
 |Titel|Kommunikationsbeziehung|Eingabe|Ausgabe
 |Admin User| Kümmert sich um Klärung sämtlicher Konflikte die im System zwischen Benutzern der Plattform eröffnet werden. Ist ein "normaler" User mit erweiterten Rechten, kann also Gegenstände anbieten.|Die Freigabe / Bearbeitung des Konflikts können direkt über die Plattform vorgenommen werden, sollten Rückfragen nötig sein, muss dies über E-Mail geklärt werden (sichtbar über die Profile der User)|Kommunikation mit Usern über Mail; Anzeige der Konflikte (mit aktuellen Stand) über Plattform
-|Normaler User| Kann über die Plattform Produkte zum Verleih oder Verkauf anbieten. Andere User können unter bestimmten Bedingungen dann diese Produkte kaufen oder anleihen. Der Verleiher kann hierbei entscheiden wem ein Produkt anbieten möchte. Konflikte können von jedem Vertragspartner jederzeit eröffnet werden| über die Plattform werden sämtliche Prozesse abgebildet | anzeige der Stati über die Plattform
-|"Text"-Kommunikation zwischen User| Bei Fragen oder vor einem Konflikt können User über E-Mail kontakt aufnehmen. Eine direkte Kommunikation über die Plattform ist nicht möglich| über Mail | über Mail
+|Normaler User| Kann über die Plattform Produkte zum Verleih oder Verkauf anbieten. Andere User können unter bestimmten Bedingungen diese Produkte kaufen oder leihen. Der Verleiher kann hierbei entscheiden wem ein Produkt anbieten möchte. Konflikte können von jedem Vertragspartner jederzeit eröffnet werden| über die Plattform werden sämtliche Prozesse abgebildet | anzeige der Stati über die Plattform
+|"Text"-Kommunikation zwischen User| Bei Fragen oder vor einem Konflikt können User über E-Mail kommunizieren. Eine direkte Kommunikation über die Plattform ist nicht möglich| über Mail | über Mail
 |Bezahlung| alle Prozesse die Geld voraussetzen oder benötigen werden über Propay abgewickelt| Änderung von Propay-Einstellung können über die Plattform vorgenommen werden. Teilweise werde Prozesse die Propay involvieren im Hintergrund ausgeführt| Anzeige und Stati von Propay sind über die Plattform einsehbar
 |=======
 

@@ -1,6 +1,6 @@
 [[section-runtime-view]]
 == Laufzeitsicht
-Die während der Laufzeit benötigten Daten werden den views von den zuständigen Controllern
+Die während der Laufzeit benötigten Daten werden den Views von den zuständigen Controllern
 übergeben. Diese greifen wiederum auf die jeweiligen Services zu, welche für die Logik
 zuständig sind. Im Folgenden werden ein paar beispielhafte Laufzeit-Interaktionen skizziert
 um dies beispielhaft zu verdeutlichen.
@@ -9,18 +9,18 @@ image:images/06_Overview.png["FIG_1"]
 
 === _Registrierung als neuer Nutzer_
 
-* Damit Besucher der Platform auf eine andere Seite zugreifen können als die Hauptseite,
+* Damit Besucher der Plattform auf eine andere Seite zugreifen können als die Hauptseite,
 müssen sie sich registrieren
 
-* Es existiert ein gut sichtbarer "Sign Up" button, der das Formular zur Registrierung
+* Es existiert ein gut sichtbarer "Sign Up" Button, der das Formular zur Registrierung
 neuer Benutzer öffnet
 
-* In der View wird mit Thymeleaf im Formular auf die Felder des Model-objekts "User" verwiesen
+* In der View wird mit Thymeleaf im Formular auf die Felder des Model-Objekts "User" verwiesen
 
 * Bestätigt der User seine Eingaben, erhält der UserController ein neues Objekt der Klasse
 User mit den angegebenen Werten, welches über den Userservice validiert und im UserRepo persistiert wird
 
-* Hat der Nutzer keine ProPayId angegeben, wird ihm später ein Konto erstellt
+* Hat der Nutzer keine ProPayId angegeben, wird ihm automatisch ein Konto erstellt
 
 * Bei erfolgreicher Erstellung des Users wird er über SpringSecurity automatisch eingeloggt
 
@@ -39,17 +39,17 @@ dem ItemRepo ausgelesen werden und öffnet die Detailseite eines Gegenstands.
 * Der ItemRentalController überprüft ob das Item dem Nutzer gehört, und übergibt diese Information
 an die View
 
-* Auf der Detailseite kann der Nutzer in einem Kalender sehen, in was für einem Zeitraum
-der Gegenstand vorrausichtlich verfügbar ist. Dies wird dadurch erreicht, dass die geplanten Laufzeiten der
+* Auf der Detailseite kann der Nutzer in einem Kalender sehen, in welchem Zeitraum
+der Gegenstand vo­r­aus­sicht­lich verfügbar ist. Dies wird dadurch erreicht, dass die geplanten Laufzeiten der
 bestehenden "Contracts" des Gegenstands auf dem Kalender markiert werden
 
 * Der Nutzer erfragt eine Ausleihe über einen Button im unteren Teil der Ansicht
 
-* Der Offercontroller liefert die Anfrageseite und erlaubt dem Nutzer die Festlegung seines bevorzugten
+* Der OfferController liefert die Anfrageseite und erlaubt dem Nutzer die Festlegung seines bevorzugten
 Zeitraums
 
 * Nach der Bestätigung des Nutzers wird die benötigte Kaution und die zu erwartende Leihgebühr bei ProPay
-reserviert und über den Offerservice eine Offer erstellt
+reserviert und über den OfferService eine Offer erstellt
 
 === _Annahme einer Anfrage_
 
@@ -104,14 +104,14 @@ und verrechnet wird
 * Die View erkennt über Thymeleaf ob sie ein bestehendes Objekt erhalten hat und passt dementsprechend
 die angezeigten Felder an
 
-* Der Nutzer kann alle Felder bis auf Passwort und AccounName nach Belieben ändern und die Änderungen
+* Der Nutzer kann alle Felder bis auf Passwort und Accountname nach Belieben ändern und die Änderungen
 bestätigen. Die Änderungen werden vom Controller mithilfe des UserService persistiert
 
 === _Items ändern_
 
 * Der Nutzer sieht auf seiner Accountseite eine Auflistung seiner angebotenen Items
 
-* Durch einen Klick auf den button "Details" wird er auf die bereits bekannte Detailansicht geleitet
+* Durch einen Klick auf den Button "Details" wird er auf die bereits bekannte Detailansicht geleitet
 
 * Der ItemController erkennt dass der eingeloggte Benutzer der Besitzer ist und gibt diese Information an die View
 weiter

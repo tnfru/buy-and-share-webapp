@@ -34,14 +34,14 @@ Ferner soll es eine Konfliktlösestelle durch einen Admin der Seite geben welche
 bei Problemen mit den geliehenen Gegenständen über die Seite eingeschaltet werden
 können soll.
 
-Zusätzlich zu der gegegbenen Aufgabenstellung ist durch Modifikation in der letzten
+Zusätzlich zu der gegebenen Aufgabenstellung ist durch Modifikation in der letzten
 Woche noch hinzu gekommen, dass die Webanwendung neben Verleih auch Kauf von Gegenständen
 ermöglichen soll. Hierdurch ist auch ein weiterer Aspekt der Aufgabenstellung
-deutlich geworden. Die gewählte Softwarearchietektur soll/muss nämlich leicht wart/-und
+deutlich geworden. Die gewählte Softwarearchitektur soll/muss nämlich leicht wart/-und
 erweiterbar sein.
 
 Weitere generelle Ziele sind eine gute Benutzbarkeit der Oberfläche. Dies
-inkudiert eine aufgeräumte, übersichtliche und schnell reagierende Oberfläche.
+inkludiert eine aufgeräumte, übersichtliche und schnell reagierende Oberfläche.
 
 
 

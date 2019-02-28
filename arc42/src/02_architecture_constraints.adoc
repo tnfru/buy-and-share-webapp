@@ -5,7 +5,7 @@
 
 |=======
 |Randbedingung                   |Hintergrund und Erläuterungen
-|Muss auf allen gängigen  Betriebsystemen und Webbrowsern laufen
+|Muss auf allen gängigen  Betriebssystemen und Webbrowsern laufen
         |Gemeint: Linux, Mac, Windows Chome/ium, Firefox, Safari, Edge (wünschenswert, nicht zwingend)
         Grund: Alle potentiellen Interessenten sollen Zugriff haben können
 
@@ -19,11 +19,11 @@
                                    Nicht aber für die Hauptlogik
 
 |Ausführbar mit docker-compose up |Grund: unabhängig von System und
-                 Konfiguaration ausführbar
+                 Konfiguration ausführbar
 |=======
 
 
-2 Organisatorische Randbedingnungen
+2 Organisatorische Randbedingungen
 
 |=======
 
@@ -35,9 +35,9 @@
 
 |Zeitplan               |3 Wochen
 
-|Entwicklungswerkzeuge  |Tafel und Kreide, IntelliJ, Webbrowser
+|Entwicklungswerkzeuge  |Tafel und Kreide, IntelliJ, Webbrowser, gradle
 
-|Versionsverwaltung     |Git + TravisCi
+|Versionsverwaltung     |Git/-hub + TravisCi
 
 |=======
 
@@ -51,11 +51,11 @@
 
 |Sprache Englisch|  Bis auf die Dokumentation soll alles auf Englisch sein +
                      Grund: Englisch ist prägnanter und viele Begriffe
-                     sind sowiso auf Englisch
+                     sind sowieso auf Englisch
 
-|Google Codestyle|  Wir nuzten Java typischen Codestyle (CamelCasing etc.)
+|Google Codestyle|  Wir nutzen Java typischen Codestyle (CamelCasing etc.)
                      mit 4 Spaces. +
-                     Um unseren Code durch TaravisCi automatisch darauf
+                     Um unseren Code durch TarvisCi automatisch darauf
                      testen zu können, haben wir uns auf Googles Codestyle
                      geeinigt. Dieser enthält nämlich solche typischen Konventionen
 
