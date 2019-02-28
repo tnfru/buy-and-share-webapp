@@ -32,3 +32,33 @@ Verschiedene Möglichkeiten:
 für jede wichtige Entscheidung
 
 ****
+
+# MVC Architektur
+
+Wir haben uns für eine Model-View-Controller Architektur entschieden, da durch die Trennung der Schichten 
+und die schwache Bindung der Klassen Änderungen leichter vorgenommen werden können.
+Deswegen bietet uns MVC Skalierbarkeit und Flexiblität.
+Flexibilität ist unter anderem auch dadurch gegeben, dass beispielsweise am Frontend Änderungen
+vorgenommen werden können, ohne dass die Business Logik geändert werden muss. 
+
+Microservices / SCS bieten diese Vorteile auch, würden unserer Aufwandsabschätzung nach allerdings das Scope
+unseres Projekts sprengen.
+
+
+## Vererbung 
+
+Wir verwenden gezielt Vererbung, um die Skalierbarkeit weiterhin zu verbessern.
+Erweiterungen können so ohne großen Aufwand implmentiert werden. Abstrakte Eltern-Klassen
+werden benutzt um beispielsweise sowohl Kaufverträge wie auch Leihverträge zu speichern.
+Auch in unseren Controllern benutzen wir Vererbung, um den angemeldeten User an alle 
+Controller weiterzugeben.
+
+
+## Datenbank
+
+Im Development Prozess haben wir einen großen Teil unserer Funktionalität auf einer H2 Datenbank getestet.
+Da wir H2 auch als persistente Datenbank nutzen können und sie nativ kompatibel mit SpringBoot,
+haben wir uns dazu entschieden diese zu behalten.
+Eine Postgres Datenbank wäre eine Alternative, allerdings wollten wir Seiteneffekte mit dem Postgres
+Dialekt vermeiden. 
+
