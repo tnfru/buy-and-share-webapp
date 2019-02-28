@@ -56,6 +56,7 @@ public class SharingPlatformControllerTest {
         user.setAccountName("user");
 
         ItemRental stuff = new ItemRental(user);
+        stuff.setId(1L);
         when(itemRentalRepo.findAll()).thenReturn(Collections.singleton(stuff));
 
         when(itemRentalRepo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse("stuff"))
@@ -87,6 +88,7 @@ public class SharingPlatformControllerTest {
         user.setAccountName("user");
 
         ItemSale stuff = new ItemSale(user);
+        stuff.setId(1L);
         when(itemSaleRepo.findAll()).thenReturn(Collections.singleton(stuff));
 
         when(itemSaleRepo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse("stuff"))
