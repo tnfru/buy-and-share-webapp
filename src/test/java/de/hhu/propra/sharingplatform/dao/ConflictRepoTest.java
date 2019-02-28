@@ -4,7 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import de.hhu.propra.sharingplatform.dto.Status;
 import de.hhu.propra.sharingplatform.model.Conflict;
+
 import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +40,9 @@ public class ConflictRepoTest {
         List<Conflict> conflicts = repo.findAllByStatus(Status.PENDING);
 
         for (Conflict conflict : conflicts) {
-            assertEquals(conflict.getStatus(), Status.PENDING);
+            assertEquals(Status.PENDING, conflict.getStatus());
         }
-        assertEquals(conflicts.size(), 2);
+        assertEquals(2, conflicts.size());
     }
 
     @Test
@@ -59,8 +61,8 @@ public class ConflictRepoTest {
         List<Conflict> conflicts = repo.findAllByStatus(Status.PUNISHED_BAIL);
 
         for (Conflict conflict : conflicts) {
-            assertEquals(conflict.getStatus(), Status.PUNISHED_BAIL);
+            assertEquals(Status.PUNISHED_BAIL, conflict.getStatus());
         }
-        assertEquals(conflicts.size(), 1);
+        assertEquals(1, conflicts.size());
     }
 }

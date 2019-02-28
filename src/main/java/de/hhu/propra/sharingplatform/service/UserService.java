@@ -141,7 +141,6 @@ public class UserService {
     public void updateProPay(User user, String account, String inputAmount) {
         if (account.length() > 0) {
             user.setPropayId(account);
-            //UserValidator.validateUser(user, userRepo);
             userRepo.save(user);
         }
         if (inputAmount.length() > 0) {

@@ -2,8 +2,10 @@ package de.hhu.propra.sharingplatform.controller;
 
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.UserService;
+
 import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -78,7 +80,7 @@ public class UserController extends BaseController {
 
     @PostMapping("/user/changePassword")
     public String changePassword(Model model, Principal principal, String oldPassword,
-        String newPassword, String confirm) {
+                                 String newPassword, String confirm) {
         User user = userService.fetchUserByAccountName(principal.getName());
         userService.updatePassword(user, oldPassword, newPassword, confirm);
         return "redirect:/user/account";

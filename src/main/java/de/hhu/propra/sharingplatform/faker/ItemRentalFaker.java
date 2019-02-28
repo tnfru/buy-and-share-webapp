@@ -3,13 +3,14 @@ package de.hhu.propra.sharingplatform.faker;
 import com.github.javafaker.Faker;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
+
 import java.util.List;
 
 public class ItemRentalFaker {
 
     private Faker faker;
 
-    public ItemRentalFaker(Faker faker) {
+    ItemRentalFaker(Faker faker) {
         this.faker = faker;
     }
 
@@ -26,7 +27,7 @@ public class ItemRentalFaker {
         return itemRental;
     }
 
-    public void createItems(List<ItemRental> itemRentals, User owner, int count) {
+    void createItems(List<ItemRental> itemRentals, User owner, int count) {
         for (int i = 0; i < count; i++) {
             itemRentals.add(create(owner));
         }

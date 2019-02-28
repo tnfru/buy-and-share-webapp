@@ -18,6 +18,8 @@ import lombok.Data;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Objects;
+
 @Data
 @Entity
 @ToString(exclude = "owner")
@@ -51,6 +53,6 @@ public abstract class Item {
     private User owner;
 
     public String getImageExtension() {
-        return Files.getFileExtension(image.getOriginalFilename());
+        return Files.getFileExtension(Objects.requireNonNull(image.getOriginalFilename()));
     }
 }
