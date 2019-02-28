@@ -16,5 +16,6 @@ Es ist dem Betreiber überlassen, ob er den zugrunde liegenden Payment-Service
 auf einem anderen laufen lässt. +
 Bei Nutzung eines anderen Payment-Service als ProPay, muss eventuell das
 Api Interface entsprechend implementiert werden. +
-Die Datenbank läuft im gleichen Docker-Container wie die Hauptanwendung und
-ist von außen nicht erreichbar. +
+Die Datenbank, Propay und die Anwendung selbst laufen jeweils in eigenen Docker-Containern. 
+Startet man die Anwendung mit Docker-Compose up, werden alle drei Container gestartet und über ein 
+virtuelles Netzwerk miteinander verbunden. Nach außen geben wir nur den Port 8080 der Anwendung frei.
