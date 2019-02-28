@@ -3,13 +3,16 @@
 
 === Skalierbarkeit
 
-Aufgrund der Architektur eines Monolithen ist die Anwendung sehr schwer in
+Aufgrund von fehlenden Abstraktionsebenen ist die Anwendung sehr schwer in
 großen Ausmaß zu skalieren. Gewisse Bereiche wie Userverwaltung und
 Itemverwaltung nehmen einen großen Teil der Rechenleistung ein, sind jedoch
 nur erweiterbar, indem man ein weiteres System aufsetzt. Generell werden der
 Entität **User** viel zu viele Aufgaben zu Teil, welche eigentlich in andere
 Bereiche ausgelagert werden sollten. Hierbei handelt es sich um Verweise zu fast
 jeder anderen Entität welche in der Anwendung existiert.
+
+Eine Entkopplung der User bzw. Services ist z.B. durch eine Implementierung
+von einem System Integration Service möglich.
 
 === ProPay Abhängigkeit
 

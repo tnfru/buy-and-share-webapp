@@ -8,14 +8,18 @@
 
 === Infrastruktur
 
-Die Anwendung ist für einen Server geschrieben. +
+Die Anwendung ist für einen Server geschrieben. 
+
 Das Deployment läuft über Docker und ist von der eingesetzten Hardware und dem
-installierten Betriebssystem unabhängig (natürlich muss genug Leistung vorhanden sein). +
+installierten Betriebssystem unabhängig (natürlich muss genug Leistung vorhanden sein).
+
 Es ist dem Betreiber überlassen, ob er den zugrunde liegenden Payment-Service
 (in unserem default Fall ProPay) mit auf dem gleichen Server oder aber
-auf einem anderen laufen lässt. +
+auf einem anderen laufen lässt.
+
 Bei Nutzung eines anderen Payment-Service als ProPay, muss eventuell das
-Api Interface entsprechend implementiert werden. +
-Die Datenbank, Propay und die Anwendung selbst laufen jeweils in eigenen Docker-Containern. 
-Startet man die Anwendung mit Docker-Compose up, werden alle drei Container gestartet und über ein 
+Api Interface entsprechend implementiert werden.
+
+Die Datenbank, Propay und die Anwendung selbst laufen jeweils in eigenen Docker-Containern.
+Startet man die Anwendung mit Docker-Compose up, werden alle drei Container gestartet und über ein
 virtuelles Netzwerk miteinander verbunden. Nach außen geben wir nur den Port 8080 der Anwendung frei.

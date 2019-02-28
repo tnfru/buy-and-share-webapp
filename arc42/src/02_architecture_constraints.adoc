@@ -1,7 +1,7 @@
 [[section-architecture-constraints]]
 == Randbedingungen
 
-1 Technische Randbedingungen
+### 11 Technische Randbedingungen
 
 |=======
 |Randbedingung                   |Hintergrund und Erläuterungen
@@ -23,14 +23,14 @@
 |=======
 
 
-2 Organisatorische Randbedingungen
+### 2. Organisatorische Randbedingungen
 
 |=======
 
 |Randbedingung          |Hintergrund und Erläuterungen
 |Team                   |Christian Laußmann,   Jonathan Bobak,
-                          Markus Günther, Sami Hamdan
-                          Ingo Kral, Lars Müller
+                          Markus Günther, Sami Hamdan,
+                          Ingo Kral, Lars Müller,
                           Phillip Krause,  Stefan Matz
 
 |Zeitplan               |3 Wochen
@@ -42,21 +42,29 @@
 |=======
 
 
-3 Konventionen
+### 3. Konventionen
 
 |=======
 
 |Konvention| Hintergrund und Erläuterungen
 |Dokumentation |arc42
 
-|Sprache Englisch|  Bis auf die Dokumentation soll alles auf Englisch sein +
-                     Grund: Englisch ist prägnanter und viele Begriffe
-                     sind sowieso auf Englisch
+|Sprache Englisch|Bis auf die Dokumentation soll alles auf Englisch sein +
+                  Grund: Englisch ist prägnanter und viele Begriffe
+                  sind sowieso auf Englisch
 
-|Google Codestyle|  Wir nutzen Java typischen Codestyle (CamelCasing etc.)
-                     mit 4 Spaces. +
-                     Um unseren Code durch TarvisCi automatisch darauf
-                     testen zu können, haben wir uns auf Googles Codestyle
-                     geeinigt. Dieser enthält nämlich solche typischen Konventionen
+|Checkstyle|Wir nutzen Java typischen Codestyle (CamelCasing etc.)
+            und halten uns an Clean Code Conventions.
+
+            Um unseren Code durch TarvisCi automatisch darauf
+            testen zu können, haben wir uns darauf geeinigt Checkstyle
+            zu benutzen. Wir benutzen als Vorlage die Google Java
+            Configuration für Checkstyle und haben daran einige Änderungen
+            vorgenommen.
+
+|Git Hooks|Wir haben git pre-push hooks für checkstyle und das starten aller
+           Tests. Diese nutzen wir um sicher zu gehen dass unserer Code richtig
+           ist und um TravisCI zu entlasten.
+
 
 |=======
