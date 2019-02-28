@@ -1,28 +1,36 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.hhu.propra.sharingplatform.dao.PaymentRepo;
 import de.hhu.propra.sharingplatform.dto.ProPay;
 import de.hhu.propra.sharingplatform.dto.ProPayReservation;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProPayApi implements IPaymentApi {
 
     ProPayNetworkInterface networkInterface;
-    String host = "localhost";
+    String host;
+
+    final Environment env;
 
     @Autowired
-    public ProPayApi() {
+    public ProPayApi(Environment env) {
         networkInterface = new ProPayNetworkInterface();
+        this.env = env;
+
+        if (Arrays.asList(env.getActiveProfiles()).contains("dev")) {
+            host = env.getProperty("propay.server.address");
+        } else {
+            host = env.getProperty("propay.server.address");
+        }
     }
 
     @Override
