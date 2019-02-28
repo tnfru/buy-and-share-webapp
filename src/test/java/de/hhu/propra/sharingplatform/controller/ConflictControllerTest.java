@@ -182,7 +182,7 @@ public class ConflictControllerTest {
 
 
         mvc.perform(post("/openConflict/1")
-            .param("description", "descripttion")
+            .param("description", "description")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is3xxRedirection());
     }
@@ -200,7 +200,7 @@ public class ConflictControllerTest {
 
 
         mvc.perform(post("/openConflict/1")
-            .param("ss", "descripttion")
+            .param("ss", "description")
             .contentType(MediaType.TEXT_HTML))
             .andExpect(status().is4xxClientError());
     }
