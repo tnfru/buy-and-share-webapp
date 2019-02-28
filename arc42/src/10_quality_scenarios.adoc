@@ -4,7 +4,7 @@
 [cols="5%,20%,75%",frame="topbot",options="header"]
 |=======
 |Nr | Qualitätsmerkmal | Umsetzung
-|1  | Benutzerfreundlichkeit |  Sollte ein Benutzer was falsch machen oder z.B.
+|1  | Benutzerfreundlichkeit |  Sollte ein Benutzer etwas falsch machen oder z.B.
 								der ProPay Server nicht erreichbar sein, dann
 								soll der Benutzer eine Aussagekräftige
 								Fehlermeldung bekommen.
@@ -12,7 +12,7 @@
 						kritisch analysiert, damit der Code einfach und
 						Strukturiert bleibt. Ebenfalls ist es durch die
 						Vererbung der **Item** und **Contract** Klassen
-						einfach sinnvolle Erweiterungen zu implememntieren.
+						einfach sinnvolle Erweiterungen zu implementieren.
 |3  | Security | Um gute Security zu gewährleisten haben wir auf eigene
 				 Implementierung verzichtet und **Spring Security** verwendet.
 				 Hinter **Spring Security** steht eine große Community, deshalb
@@ -26,7 +26,7 @@
 							   Struktur auf Änderungen ausgelegt ist.
 |5  | Ansprechende View | Um eine schöne View für User und Admin zu bieten, 
 						  haben wir uns für **Bootstrap** entschieden.
-						  Im zuge dessen hat sich jeder mit Bootstrap 			  auseinandergesetzt und so ist eine anständige und
+						  Im Zuge dessen hat sich jeder mit Bootstrap 			  auseinandergesetzt und so ist eine anständige und
 						  teilweise **responsive** View entstanden.
               
 |=======
