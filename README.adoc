@@ -1,117 +1,79 @@
-= Softwareentwicklung im Team: Blockpraktikum
-WS18/19
-:icons: font
-:icon-set: octicon
+== ProPra Abschlussprojekt
 
-== Änderung an der `gruppe.json`-Datei
+=== Anmerkungen zum Programm
 
-Wir haben nur beschränkt Plätze zur Verfügung. Daher ist es notwendig, dass
-einige Gruppen mit ihren eigenen Notebooks arbeiten und so keine Plätze in den
-Praktikumsräumen der HHU benötigen. Sie bekommen dann einen Seminarraum als
-Arbeitsraum zur Verfügung gestellt.
+==== Starten
 
-[IMPORTANT]
-====
-Bitte fügen Sie zur `gruppe.json` folgenden Key mit hinzu und setzen
-Sie den Wert auf `true`, wenn Ihre Gruppe vollständig mit eigenen Geräten
-auskommt. Andernfalls setzen Sie bitte `false`.
+Die Anwendung kann mit 'docker-compose up --build' gebaut werden,
+danach mit 'docker-compose up' gestartet werden.
 
-Beispiel:
+==== Data-Faker
 
-[source,json]
-----
-{
-    // ...
-    "isNotebookGroup": true,
-    // ...
-}
-----
-====
+Beim ersten Start des Programms wird die Datenbank mit Dummy-Daten
+gefüllt um den Initialprozess abzukürzen. +
+Das Passwort für alle Dummy Nutzer ist: 123 +
+Mögliche Usernames mit Role user: jackeline.rath, annamae.mohr, cora.cartwright
+Admin-Account: admin , Admin-Password: 123
 
-== Termine
+Es werden zudem Contracts zwischen Usern erstellt.
+Bei jackeline.rath findet man zudem eine seit langem fällige
+Abgabe, bei der man auch das Banner sehen kann.
+Sollte ProPay zum Programmstart nicht gestartet sein, so werden
+zwar die Fake-User erstellt, allerdings wird ihnen kein Guthaben hinzugefügt
+und es werden keine Contracts erstellt.
 
-Das Praktikum findet in der Zeit vom 11.02.2019 bis 01.03.2019 statt. In dieser
-Zeit werden Sie täglich in der Zeit von 9:30 Uhr bis 15:30 Uhr in Gruppen an
-einer Webanwendung mit Datenbankanbindung arbeiten. Es besteht
-Anwesenheitspflicht für *alle* Tage.
+==== User-Erstellung
 
-== Verhaltenscodex
+Es können neue Nutzer erstellt werden, dies geschieht über den 'Sign up'
+Button.
 
-=== Umgang miteinander
+==== Main Page
 
-Wir erwarten von Ihnen, dass Sie einen höflichen und respektvollen Umgang
-miteinander pflegen. Meinungsverschiedenheiten (besonders in einem Team) können
-vorkommen, sollten aber nicht in einen Streit ausufern, sondern konstruktiv
-gelöst werden.
+Auf der main-Page werden alle ausleihbaren Items angezeigt.
+Über einen Button links oben kann man auf die Seite
+der kaufbaren Items gelangen.
+Hier kommt der User auch auf sein Profil und es gibt die Navbar.
 
-Das Praktikum soll eine freundliche, sichere und einladende Umgebung sein,
-unabhängig von Geschlecht, Aussehen, sexueller Orientierung, Herkunft, Religion
-oder gesellschaftlichem und wirtschaftlichem Status.
+==== Profile page
 
-Wir erwarten von Ihnen,
+Die Profile Page des Users enthält alle Infos zu jeglichen:
 
-* dass Sie ein respektvolles Verhalten an den Tag legen und respektvoll
-  miteinander kommunizieren. Insbesondere erniedrigendes, diskriminierendes oder
-  belästigendes Verhalten oder Sprache wird nicht geduldet.
-* dass Sie Rücksicht auf Andere nehmen.
-* dass Sie auf Andere aufpassen. Machen Sie uns darauf aufmerksam, wenn Sie
-  Verletzungen dieses Verhaltenskodexes bemerken, selbst wenn sie zunächst
-  belanglos erscheinen.
+* User Details = Profilbild und Details zum Nutzer
+* Own Items = eigene Items (offene Anfragen akzeptieren)
+* Borrowed Items = vom User ausgeliehene Items
+* Lent Items = Items vom User, welche verliehen sind
+* Sold/Bought = verkaufte/gekaufte Items
+* Requests = vom User gestellt Anfragen
+* Options = erstellen neuer Items, bearbeiten der Kontodaten
+* ProPay Settings = Details zu Propay Guthaben und Auflademöglichkeit
 
-=== Verhalten in den Räumlichkeiten
+* (only admin) Admin = Button zur Overview aller offenen Konflikte
 
-Während des Praktikums müssen Sie (sowohl innerhalb der Gruppe als auch zwischen
-Gruppen) aufeinander Rücksicht nehmen und niemanden bei der Arbeit stören. Neben
-der
-https://www.uni-duesseldorf.de/home/fileadmin/redaktion/Oeffentliche_Medien/ZUV/Dezernat_6/Hausordnung/16-12-06_Hausordnung_HHU_A4.pdf[Hausordnung
-der Universität] gelten insbesondere folgende Regeln:
+==== Konflikte
 
-* In den Praktikumsräumen ist das Essen verboten.
-* Sie dürfen Getränke zu sich nehmen, aber nicht in der Nähe von Computern.
-* Musik darf nur leise per Kopfhörer gehört werden, sofern niemand belästigt 
-  wird.
-* Den Anweisungen der Aufsicht ist Folge zu leisten.
+Konflikte werden nicht vom Data-Faker erstellt. Diese werden über die
+Profile Page eröffnet, indem man auf den entsprechenden Contract klickt. +
+Die anzeigen verändern sich entsprechend vorliegender Konflikte.
+Der Admin bekommt alle offenen Konflikte angezeigt, sobald er in seinem
+Profil den Button dafür klickt. Er kann dann jeden einzelnen Konflikt
+resolven:
 
-IMPORTANT: Verstöße gegen die Verhaltens- oder Praktikumsregeln können zum
-Ausschluss von der Veranstaltung führen. Sie können dann den Schein in diesem
-Semester nicht mehr bekommen.
+* Free Bail = befreie Kaution, beende Contract
+* Punish Bail = behalte Kaution ein, beende Contract
+* Cancel Contract = beende Contract, keine Zahlungen erfolgen,
+Reservierungen werden frei gegeben
+* Continue Contract = contract läuft ganz normal weiter
 
-== Regeln für Fehlzeiten
+Der Admin hat für jeden Konflikt alle Möglichkeiten, da ihm vertraut wird,
+zu wissen was er tun muss.
 
-=== Urlaub
+==== Bilder hochladen
 
-Für die Teilnahme an den Umfragen während des Semesters können Sie Urlaub
-bekommen. Insgesamt haben Sie einen Urlaubstag. Sie können den Urlaub
-stundenweise (mind. eine Stunde) nehmen oder auch am Stück einen Tag frei
-machen. Sie müssen den Urlaub mit Ihrem Team absprechen und bei der Aufsicht
-vorher anmelden.
+Der Nutzer kann Profil-/Itembilder hochladen. Technische Schulden
+siehe arc42 Doku.
 
-=== Krankheit
+==== Haupt Dokumentation
 
-Bei krankheitsbedingtem Fehlen müssen Sie ein ärztliches Attest vorlegen.
-Sollten Sie länger als 3 Tage in der gesamten Zeit fehlen, ist ein Bestehen des
-Praktikums nur noch in sehr gut begründbaren Ausnahmen möglich. Ein Beispiel:
-Sie fehlen in der letzten Woche, das Projekt hat Ihre Gruppe aber schon nach der
-Woche praktisch fertiggestellt und es fehlt nur noch der Feinschliff.
+Die Haupt Dokumentation befindet sich im arc42 Ordner des Github-Rpositories.
 
-Wenn Sie sichtbar krank zum Praktikum erscheinen, behalten wir uns vor, Sie zu
-Ihrem eigenen und dem Schutz der anderen TeilnehmerInnen auszuschließen.
 
-=== Prüfungstermine
-
-Wenn Sie Prüfungstermine in den Praktikumszeiten haben, sind Sie bei vorheriger
-Ankündigung (mind. ein Tag vor der Prüfung) für die Dauer der Prüfung Entschuldigt.
-
-=== Pünktlichkeit
-
-Wir erwarten von Ihnen, dass Sie pünktlich um 9:30 Uhr da sind. Wir werden
-Verspätungen dokumentieren. Falls Sie sich deutlich verspäten oder häufig
-fehlen, werden wir die Verspätungen von Ihrem Urlaub abziehen. Falls Sie keinen
-Urlaub mehr haben, kann es passieren, dass wir Sie vom Praktikum ausschließen.
-
-== Gruppenbildung
-
-Am Praktikum dürfen nur Studierende teilnehmen, die alle Projekte im Semester
-bestanden haben. Die Gruppengröße soll 6 nicht unterschreiten und darf 8 nicht
-überschreiten. Die Bildung der Gruppen erfolgt durch die Studierenden selbst, es
-gibt keine Zuweisungen. Das Ilias Forum kann zur Gruppenfindung benutzt werden.

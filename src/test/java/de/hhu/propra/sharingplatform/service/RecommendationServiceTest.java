@@ -14,15 +14,12 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.items.Item;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
-
 import java.time.LocalDateTime;
 import java.util.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 

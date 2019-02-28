@@ -43,6 +43,6 @@ public class ItemValidator {
             }
         }
         validateName(item.getLocation(), "Invalid Location");
-        validateName(item.getName(), "Invalid ItemRental Name");
+        validateName(item.getName(), "Invalid Item Name");
     }
 }
