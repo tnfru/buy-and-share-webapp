@@ -26,10 +26,14 @@ public class ProPayApi implements IPaymentApi {
         networkInterface = new ProPayNetworkInterface();
         this.env = env;
 
-        if (Arrays.asList(env.getActiveProfiles()).contains("dev")) {
-            host = env.getProperty("propay.server.address");
+        if (env != null) {
+            if (Arrays.asList(env.getActiveProfiles()).contains("dev")) {
+                host = env.getProperty("propay.server.address");
+            } else {
+                host = env.getProperty("propay.server.address");
+            }
         } else {
-            host = env.getProperty("propay.server.address");
+            host = "";
         }
     }
 
