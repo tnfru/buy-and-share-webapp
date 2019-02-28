@@ -47,6 +47,14 @@ bei Spring Security Probleme auftreten/entdeckt werden, dann sind wir
 offensichtlich auch betroffen, jedoch ist auch dies relativ unwahrscheinlich, da
 hinter Spring eine recht große Community steht.
 
+=== Image Upload
+
+Bei der aktuellen Version der Anwendung gibt es eine Maximalgröße der Bilder.
+(Welche vermutlich bei 1Mb liegt)
+Sollte diese Größe überschritten werden, dann entsteht ein Fehler.
+Die Lösung dieses Fehlers wurde aus Zeitgründen nicht mehr Implementiert, wäre
+aber ohne größeren Zeitaufwand implementierbar.
+
 [role="arc42help"]
 ****
 .Inhalt
