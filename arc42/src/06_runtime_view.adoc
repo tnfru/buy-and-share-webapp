@@ -26,10 +26,10 @@ User mit den angegebenen Werten, welches über den Userservice validiert und im 
 
 === _Als Bestehender Nutzer anmelden/abmelden_
 
-* Über den login Button im Banner gelangt der nicht angemeldete Benutzer auf die loginseite von Spring Security
+* Über den Login Button in der Navigation Bar gelangt der nicht angemeldete Benutzer auf die Loginseite von Spring Security
 
 * Durch die Eingabe und Bestätigung des bei der Registrierung festgelegten Accountnamen und Passworts kann sich
-der Nutzer auf der Nutzer anmelden, worauf er auf seine Accountseite weitergeleitet wird
+der Nutzer auf der Seite anmelden, worauf er auf seine Accountseite weitergeleitet wird
 
 === _Ausleihe eines Items anfragen_
 
@@ -37,9 +37,9 @@ der Nutzer auf der Nutzer anmelden, worauf er auf seine Accountseite weitergelei
 dem ItemRepo ausgelesen werden und öffnet die Detailseite eines Gegenstands.
 
 * Der ItemRentalController überprüft ob das Item dem Nutzer gehört, und übergibt diese Information
-an die view
+an die View
 
-* Auf der Detailseite erhält kann der Nutzer in einem Kalender sehen, in was für einem Zeitraum
+* Auf der Detailseite kann der Nutzer in einem Kalender sehen, in was für einem Zeitraum
 der Gegenstand vorrausichtlich verfügbar ist. Dies wird dadurch erreicht, dass die geplanten Laufzeiten der
 bestehenden "Contracts" des Gegenstands auf dem Kalender markiert werden
 
@@ -81,6 +81,8 @@ in dem der Nutzer die wichtigen Daten für den Gegenstand eintragen kann
 * Durch die Bestätigung wird dem Controller das Objekt der jeweiligen Klasse übergeben, welcher den ItemService
 verwendet um es zu persistieren
 
+* Danach ist das Item in der jeweiligen "Mainpage" und im Profil unter "Own Items" zu sehen
+
 === _Item kaufen_
 
 * Im Banner der Weboberfläche lässt sich jederzeit die SalePage aufrufen, auf der die zum Verkauf angebotenen
@@ -91,13 +93,15 @@ Gegenstände aufgelistet werden
 * Hierfür ist es nicht nötig eine Anfrage zu erstellen, da mit der Bestätigung direkt ein SellContract erstellt
 und verrechnet wird
 
+* Das hierdurch gekaufte Item kann in der Accountpage unter "Items Sold/Bought" eingesehen werden
+
 === _Benutzerdaten ändern_
 
 * Der Benutzer kann auf der Accountseite seine Accountdaten ändern
 
 * Der Controller holt sich das passende Userobjekt und übergibt es der UserForm
 
-* Die view erkennt über Thymeleaf ob sie ein bestehendes Objekt erhalten hat und passt dementsprechend
+* Die View erkennt über Thymeleaf ob sie ein bestehendes Objekt erhalten hat und passt dementsprechend
 die angezeigten Felder an
 
 * Der Nutzer kann alle Felder bis auf Passwort und AccounName nach Belieben ändern und die Änderungen
@@ -109,14 +113,14 @@ bestätigen. Die Änderungen werden vom Controller mithilfe des UserService pers
 
 * Durch einen Klick auf den button "Details" wird er auf die bereits bekannte Detailansicht geleitet
 
-* Der ItemController erkennt dass der eingeloggte Benutzer der Besitzer ist und gibt diese Information an die view
+* Der ItemController erkennt dass der eingeloggte Benutzer der Besitzer ist und gibt diese Information an die View
 weiter
 
 * Auf der Detailseite sieht der Besitzer des Items einen Button zum editieren ebendieses, anstelle
 der Buttons zum ausleihen oder kaufen des Items
 
 * Der Button zum bearbeiten verlinkt auf die bereits bekannten Formularseiten, allerdings fügt der
-jeweilige ItemContoller das zu bearbeitende Item-Objekt der view hinzu
+jeweilige ItemContoller das zu bearbeitende Item-Objekt der View hinzu
 
 * Bei der Bestätigung der Änderungen werden die Objekte vom Controller zwecks Speicherung an den ItemService
 übergeben
