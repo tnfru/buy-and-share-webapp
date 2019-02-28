@@ -43,6 +43,8 @@ class UserFaker {
     }
 
     public User createAdmin() {
-        return createUserRole("admin");
+        User admin =  createUserRole("admin");
+        admin.setAccountName("admin");
+        return admin;
     }
 }
