@@ -37,20 +37,25 @@ für jede wichtige Entscheidung
 
 Wir haben uns für eine Model-View-Controller Architektur entschieden, da durch die Trennung der Schichten 
 und die schwache Bindung der Klassen Änderungen leichter vorgenommen werden können.
-Deswegen bietet uns MVC Skalierbarkeit und Flexiblität.
+Deswegen bietet uns MVC Skalierbarkeit und Flexibilität.
 Flexibilität ist unter anderem auch dadurch gegeben, dass beispielsweise am Frontend Änderungen
 vorgenommen werden können, ohne dass die Business Logik geändert werden muss. 
-Zu den Technologieentscheidungen im Bezug auf Spring Boot und ähnliches siehe Kapitel 5.
 
 Microservices / SCS bieten diese Vorteile auch, würden unserer Aufwandsabschätzung nach allerdings das Scope
-unseres Projekts sprengen. Wir halten MVC in diesem Kontext für die beste Architektur um das gewünschte
-Produkt in der gegeben Zeit umzusetzen. 
+unseres Projekts sprengen.
+
+Unsere anfängliche Analyse (Entity-Relation-Model) hat klare Struktur von Items, User und Conctracts ergeben. Während der Analyse haben wir bereits festgestellt, dass vor allem Contracts und Items eine enge Beziehung haben und daher der Aufwand um diese Domains in separate Systeme auszulagern (Microservice, SCS, etc.) sehr hoch wäre. Weiter haben wir uns für ein MVC-Architektur entschieden, um eine möglichst einfache Kommunikation dieser Domänen zu realisieren. Um das System flexibel zu halten, haben wir im späteren Verlauf, diese Entitys in Interfaces extrahiert. 
+
+Durch das Framework ist viel Funktionalität für User-Management bereits vorhanden. Das Ziel der Designphase war die Applikation möglichst schlank und einfach zu halten (wenig Kommunikation zwischen Prozessen). Daraus ging hervor, die User Domäne mit in die vorher erwähnte Architektur aufzunehmen. Gefahren sahen wir insbesondere bei dem Umgang mit der Authentifizierung und einem ggf. daraus resultierenden Reverse Proxy.
+
+In diesem halten wir MVC für die beste Architektur um das gewünschte Produkt in der
+gegebenen Zeit umzusetzen.
 
 
 ## Vererbung 
 
 Wir verwenden gezielt Vererbung, um die Skalierbarkeit weiterhin zu verbessern.
-Erweiterungen können so ohne großen Aufwand implmentiert werden. Abstrakte Eltern-Klassen
+Erweiterungen können so ohne großen Aufwand implementiert werden. Abstrakte Eltern-Klassen
 werden benutzt um beispielsweise sowohl Kaufverträge wie auch Leihverträge zu speichern.
 Auch in unseren Controllern benutzen wir Vererbung, um den angemeldeten User an alle 
 Controller weiterzugeben.
