@@ -132,12 +132,15 @@ verkauft wurde
 
 === _Konflikte erstellen_
 
-*
+* In der Auflistung der aktiven Contracts kann der Nutzer, unabhängig davon ob er Itembesitzer ist oder nicht,
+einen Konflikt eröffnen
 
 === _Konflikte lösen_
 
 *
 
-=== _ProPay Konto aufladen_
+=== _ProPay Konto verwalten_
 
-*
+* Auf seiner Accountseite kann der Nutzer seine PropayId ändern und sein Guthaben aufladen
+
+* Die Kommunikation mit Propay erfolgt hier über die ProPayApi
