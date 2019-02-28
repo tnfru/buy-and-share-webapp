@@ -1,6 +1,59 @@
 [[section-technical-risks]]
 == Risiken und technische Schulden
 
+=== Skalierbarkeit
+
+Aufgrund der Architektur eines Monolithen ist die Anwendung sehr schwer in
+großen Ausmaß zu skalieren. Gewisse Bereiche wie Userverwaltung und
+Itemverwaltung nehmen einen großen Teil der Rechenleistung ein, sind jedoch
+nur erweiterbar, indem man ein weiteres System aufsetzt. Generell werden der
+Entität **User** viel zu viele Aufgaben zu Teil, welche eigentlich in andere
+Bereiche ausgelagert werden sollten. Hierbei handelt es sich um Verweise zu fast
+jeder anderen Entität welche in der Anwendung existiert.
+
+=== ProPay Abhängigkeit
+
+In unsere Anwendung ist es nicht möglich jegliche **Offer** zu erstellen
+solange ProPay nicht erreichbar ist. Dies ist
+ein Architektur Fehler, da für solche Aktionen keine Events generiert werden,
+welche dann ggf. später ausgeführt werden.
+Bei **Contract** und **Item Purchases** Aktionen bekommt man auch einen Fehler,
+jedoch ist dieser Vertretbar, da es hier wirklich auf die Zahlung ankommt.
+
+=== Performance
+
+Einige Bereiche des Programms sind nicht gut Performance optimiert und
+verlangsamen die Anwendung bei größeren Datenmengen.
+
+==== HTML Rendering
+
+Bereits bei die einer Anzahl von mehr als 100 Items brauchen die **Mainpage** und
+**Salepage** länger zum laden. Dies hängt hauptsächlich damit zusammen, dass
+Serverseitig das HTML gerendert wird und dies für viele Items lange dauert.
+Lösung hierfür wäre über Javascript **continuous loading** der Item Liste oder
+einfacher **Pagination** über HTML.
+
+==== Offers/Contracts
+
+Bei dem Fall das ein Item sehr viele **Offers** und **Contracts** haben sollte, dann
+entstehen auch hohe Rechenaufwände und es kann zu Wartezeiten kommen. Da dieses
+Problem in der Realität jedoch quasi nicht auftritt kann es vorerst ignoriert
+werden.
+
+==== Spring Security
+
+Als Security System nehmen wir das von Spring gelieferte Security Pack. Sollte
+bei Spring Security Probleme auftreten/entdeckt werden, dann sind wir
+offensichtlich auch betroffen, jedoch ist auch dies relativ unwahrscheinlich, da
+hinter Spring eine recht große Community steht.
+
+=== Image Upload
+
+Bei der aktuellen Version der Anwendung gibt es eine Maximalgröße der Bilder.
+(Welche vermutlich bei 1Mb liegt)
+Sollte diese Größe überschritten werden, dann entsteht ein Fehler.
+Die Lösung dieses Fehlers wurde aus Zeitgründen nicht mehr Implementiert, wäre
+aber ohne größeren Zeitaufwand implementierbar.
 
 [role="arc42help"]
 ****
@@ -23,4 +76,3 @@ eventuell mit vorgeschlagenen Maßnahmen zur Risikovermeidung, Risikominimierung
 oder dem Abbau der technischen Schulden.
 
 ****
-

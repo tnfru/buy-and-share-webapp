@@ -1,11 +1,5 @@
 [[section-architecture-constraints]]
 == Randbedingungen
-[role="arc42help"]
-****
-
-.Inhalt
-Fesseln und Vorgaben, die ihre Freiheiten bezüglich Entwurf, Implementierung oder Ihres Entwicklungsprozesses einschränken.
-Diese Randbedingungen gelten manchmal organisations- oder firmenweit über die Grenzen einzelner Systeme hinweg.
 
 1 Technische Randbedingungen
 
@@ -13,11 +7,11 @@ Diese Randbedingungen gelten manchmal organisations- oder firmenweit über die G
 |Randbedingung                   |Hintergrund und Erläuterungen
 |Muss auf allen gängigen  Betriebsystemen und Webbrowsern laufen
         |Gemeint: Linux, Mac, Windows Chome/ium, Firefox, Safari, Edge (wünschenswert, nicht zwingend)
-        Grund: Alle potentiellen interessenten sollen Zugriff haben können
+        Grund: Alle potentiellen Interessenten sollen Zugriff haben können
 
 |Implementierung in Java(8) als Spring Boot App |Dies gehört zu den universitären
                 Randbedingungen des Praktikums in dem
-                                   diese Aplikation entstanden ist.
+                                   diese Applikation entstanden ist.
                                    Grund: Gemeinsamer Standard von allen
                                    Studierenden und Korrektoren.
 
@@ -41,9 +35,9 @@ Diese Randbedingungen gelten manchmal organisations- oder firmenweit über die G
 
 |Zeitplan               |3 Wochen
 
-|Entwicklungswerkzeuge  |Tafel und Kreide, IntelliJ
+|Entwicklungswerkzeuge  |Tafel und Kreide, IntelliJ, Webbrowser
 
-|Versionsverwaltung     |Git + TraviCi
+|Versionsverwaltung     |Git + TravisCi
 
 |=======
 
@@ -55,11 +49,12 @@ Diese Randbedingungen gelten manchmal organisations- oder firmenweit über die G
 |Konvention| Hintergrund und Erläuterungen
 |Dokumentation |arc42
 
-|Sprache Englisch|  Bis auf die Dokumentation soll alles auf Englisch sein
+|Sprache Englisch|  Bis auf die Dokumentation soll alles auf Englisch sein +
                      Grund: Englisch ist prägnanter und viele Begriffe
                      sind sowiso auf Englisch
 
 |Google Codestyle|  Wir nuzten Java typischen Codestyle (CamelCasing etc.)
+                     mit 4 Spaces. +
                      Um unseren Code durch TaravisCi automatisch darauf
                      testen zu können, haben wir uns auf Googles Codestyle
                      geeinigt. Dieser enthält nämlich solche typischen Konventionen

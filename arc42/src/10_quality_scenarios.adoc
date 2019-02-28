@@ -1,6 +1,35 @@
 [[section-quality-scenarios]]
 == Qualitätsanforderungen
 
+[cols="5%,20%,75%",frame="topbot",options="header"]
+|=======
+|Nr | Qualitätsmerkmal | Umsetzung
+|1  | Benutzerfreundlichkeit |  Sollte ein Benutzer was falsch machen oder z.B.
+								der ProPay Server nicht erreichbar sein, dann
+								soll der Benutzer eine Aussagekräftige
+								Fehlermeldung bekommen.
+|2  | Erweiterbarkeit | Wir haben oft unseren Code gerefactored und selbst
+						kritisch analysiert, damit der Code einfach und
+						Strukturiert bleibt. Ebenfalls ist es durch die
+						Vererbung der **Item** und **Contract** Klassen
+						einfach sinnvolle Erweiterungen zu implememntieren.
+|3  | Security | Um gute Security zu gewährleisten haben wir auf eigene
+				 Implementierung verzichtet und **Spring Security** verwendet.
+				 Hinter **Spring Security** steht eine große Community, deshalb
+				 ist eine bessere Security gegeben als eine eigene
+				 Implementierung
+|4  | Allgemeines Pay System | Es war das Payment System **ProPay** vorgegeben,
+ 							   allerdings wollte wir unsere Anwendung flexible
+							   halten und haben ein Interface definiert für das
+							   Payment System. Ebenfalls ist Anpassung auf ein
+							   anderes Payment System relativ simple, da die
+							   Struktur auf Änderungen ausgelegt ist.
+|5  | Ansprechende View | Um eine halbwegs anständige View zu gewährleisten
+						  haben wir uns für **Bootstrap** entschieden.
+						  Ebenfalls hat sich jeder mit Bootstrap kurz
+						  auseinandergesetzt und so ist eine anständige und
+						  teilweise **responsive** View entstanden
+|=======
 
 [role="arc42help"]
 ****
