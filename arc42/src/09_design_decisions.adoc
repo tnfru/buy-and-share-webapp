@@ -40,9 +40,11 @@ und die schwache Bindung der Klassen Änderungen leichter vorgenommen werden kö
 Deswegen bietet uns MVC Skalierbarkeit und Flexiblität.
 Flexibilität ist unter anderem auch dadurch gegeben, dass beispielsweise am Frontend Änderungen
 vorgenommen werden können, ohne dass die Business Logik geändert werden muss. 
+Zu den Technologieentscheidungen im Bezug auf Spring Boot und ähnliches siehe Kapitel 5.
 
 Microservices / SCS bieten diese Vorteile auch, würden unserer Aufwandsabschätzung nach allerdings das Scope
-unseres Projekts sprengen.
+unseres Projekts sprengen. Wir halten MVC in diesem Kontext für die beste Architektur um das gewünschte
+Produkt in der gegeben Zeit umzusetzen. 
 
 
 ## Vererbung 

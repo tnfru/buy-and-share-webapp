@@ -24,6 +24,13 @@ User mit den angegebenen Werten, welches über den Userservice validiert und im 
 
 * Bei erfolgreicher Erstellung des Users wird er über SpringSecurity automatisch eingeloggt
 
+=== _Als Bestehender Nutzer anmelden/abmelden_
+
+* Über den login Button im Banner gelangt der nicht angemeldete Benutzer auf die loginseite von Spring Security
+
+* Durch die Eingabe und Bestätigung des bei der Registrierung festgelegten Accountnamen und Passworts kann sich
+der Nutzer auf der Nutzer anmelden, worauf er auf seine Accountseite weitergeleitet wird
+
 === _Ausleihe eines Items anfragen_
 
 * Der angemeldete Benutzer sieht auf der Hauptseite die angebotenen Gegenstände, welche aus
@@ -63,10 +70,74 @@ kann er über den Button "Return Item" den Gegenstand zurückgeben
 * Diese Aktion löst auch die Verrechnung des BorrowContracts aus. Er berechnet die benötigten Transaktionen
 und initialisiert die Zahlung über die PropayApi
 
-=== __
+=== _Item zum Verleih oder Verkauf anbieten_
 
-=== _<Bezeichnung Laufzeitszenario n>_
+* Der Interessent findet auf der Accountseite unter dem Reiter "Options" die Möglichkeit einen Gegenstand
+einzustellen
 
-=== _<Bezeichnung Laufzeitszenario n>_
+* Die jeweilige Formularseite bereitet über Thymeleaf ein Objekt der Klasse ItemRental, beziehungsweise ItemSale vor,
+in dem der Nutzer die wichtigen Daten für den Gegenstand eintragen kann
 
-...
+* Durch die Bestätigung wird dem Controller das Objekt der jeweiligen Klasse übergeben, welcher den ItemService
+verwendet um es zu persistieren
+
+=== _Item kaufen_
+
+* Im Banner der Weboberfläche lässt sich jederzeit die SalePage aufrufen, auf der die zum Verkauf angebotenen
+Gegenstände aufgelistet werden
+
+* Über die jeweilige Detailseite kann der angemeldete Benutzer Items Kaufen, die ihm nicht gehören
+
+* Hierfür ist es nicht nötig eine Anfrage zu erstellen, da mit der Bestätigung direkt ein SellContract erstellt
+und verrechnet wird
+
+=== _Benutzerdaten ändern_
+
+* Der Benutzer kann auf der Accountseite seine Accountdaten ändern
+
+* Der Controller holt sich das passende Userobjekt und übergibt es der UserForm
+
+* Die view erkennt über Thymeleaf ob sie ein bestehendes Objekt erhalten hat und passt dementsprechend
+die angezeigten Felder an
+
+* Der Nutzer kann alle Felder bis auf Passwort und AccounName nach Belieben ändern und die Änderungen
+bestätigen. Die Änderungen werden vom Controller mithilfe des UserService persistiert
+
+=== _Items ändern_
+
+* Der Nutzer sieht auf seiner Accountseite eine Auflistung seiner angebotenen Items
+
+* Durch einen Klick auf den button "Details" wird er auf die bereits bekannte Detailansicht geleitet
+
+* Der ItemController erkennt dass der eingeloggte Benutzer der Besitzer ist und gibt diese Information an die view
+weiter
+
+* Auf der Detailseite sieht der Besitzer des Items einen Button zum editieren ebendieses, anstelle
+der Buttons zum ausleihen oder kaufen des Items
+
+* Der Button zum bearbeiten verlinkt auf die bereits bekannten Formularseiten, allerdings fügt der
+jeweilige ItemContoller das zu bearbeitende Item-Objekt der view hinzu
+
+* Bei der Bestätigung der Änderungen werden die Objekte vom Controller zwecks Speicherung an den ItemService
+übergeben
+
+=== _Transaktionen einsehen_
+
+* Der eingeloggte Benutzer kann auf der Accountseite seine aktiven und vergangenen Transaktionen anzeigen lassen
+
+* Die aktiven BorrowContracts werden in der Übersicht oben angezeigt, die vergangenen unten
+
+* Abgeschlossene SellContracts werden in einem anderen Reiter aufgelistet und danach geordnet, ob etwas ge- oder
+verkauft wurde
+
+=== _Konflikte erstellen_
+
+*
+
+=== _Konflikte lösen_
+
+*
+
+=== _ProPay Konto aufladen_
+
+*
