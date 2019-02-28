@@ -1,0 +1,174 @@
+[[section-runtime-view]]
+== Laufzeitsicht
+Die während der Laufzeit benötigten Daten werden den Views von den zuständigen Controllern
+übergeben. Diese greifen wiederum auf die jeweiligen Services zu, welche für die Logik
+zuständig sind. Im Folgenden werden ein paar beispielhafte Laufzeit-Interaktionen skizziert
+um dies beispielhaft zu verdeutlichen.
+
+image:images/06_Overview.png["FIG_1"]
+
+=== _Registrierung als neuer Nutzer_
+
+* Damit Besucher der Plattform auf eine andere Seite zugreifen können als die Hauptseite,
+müssen sie sich registrieren
+
+* Es existiert ein gut sichtbarer "Sign Up" Button, der das Formular zur Registrierung
+neuer Benutzer öffnet
+
+* In der View wird mit Thymeleaf im Formular auf die Felder des Model-Objekts "User" verwiesen
+
+* Bestätigt der User seine Eingaben, erhält der UserController ein neues Objekt der Klasse
+User mit den angegebenen Werten, welches über den Userservice validiert und im UserRepo persistiert wird
+
+* Hat der Nutzer keine ProPayId angegeben, wird ihm automatisch ein Konto erstellt
+
+* Bei erfolgreicher Erstellung des Users wird er über SpringSecurity automatisch eingeloggt
+
+=== _Als Bestehender Nutzer anmelden/abmelden_
+
+* Über den Login Button in der Navigation Bar gelangt der nicht angemeldete Benutzer auf die Loginseite von Spring Security
+
+* Durch die Eingabe und Bestätigung des bei der Registrierung festgelegten Accountnamen und Passworts kann sich
+der Nutzer auf der Seite anmelden, worauf er auf seine Accountseite weitergeleitet wird
+
+=== _Ausleihe eines Items anfragen_
+
+* Der angemeldete Benutzer sieht auf der Hauptseite die angebotenen Gegenstände, welche aus
+dem ItemRepo ausgelesen werden und öffnet die Detailseite eines Gegenstands.
+
+* Der ItemRentalController überprüft ob das Item dem Nutzer gehört, und übergibt diese Information
+an die View
+
+* Auf der Detailseite kann der Nutzer in einem Kalender sehen, in welchem Zeitraum
+der Gegenstand vo­r­aus­sicht­lich verfügbar ist. Dies wird dadurch erreicht, dass die geplanten Laufzeiten der
+bestehenden "Contracts" des Gegenstands auf dem Kalender markiert werden
+
+* Der Nutzer erfragt eine Ausleihe über einen Button im unteren Teil der Ansicht
+
+* Der OfferController liefert die Anfrageseite und erlaubt dem Nutzer die Festlegung seines bevorzugten
+Zeitraums
+
+* Nach der Bestätigung des Nutzers wird die benötigte Kaution und die zu erwartende Leihgebühr bei ProPay
+reserviert und über den OfferService eine Offer erstellt
+
+=== _Annahme einer Anfrage_
+
+* Der Besitzer eines angefragten Items kann auf seiner Accountseite eine Liste seiner erstellten Items sehen.
+
+* Für jedes Item wird die Anzahl der offenen Anfragen angezeigt und durch einen Klick auf diese Anzeige
+sieht der Besitzer eine Auflistung ebendieser
+
+* Mit Hilfe zweier Schaltflächen kann der Besitzer diese annehmen, beziehungsweise ablehnen
+
+* Durch die Annahme wird ein BorrowContract initialisiert
+
+=== _Rückgabe eines ausgeliehenen Items_
+
+* Der Ausleihende findet auf der Accountseite eine Übersicht seiner ausgeliehenen Items. An dieser Stelle
+kann er über den Button "Return Item" den Gegenstand zurückgeben
+
+* Diese Aktion löst auch die Verrechnung des BorrowContracts aus. Er berechnet die benötigten Transaktionen
+und initialisiert die Zahlung über die PropayApi
+
+=== _Item zum Verleih oder Verkauf anbieten_
+
+* Der Interessent findet auf der Accountseite unter dem Reiter "Options" die Möglichkeit einen Gegenstand
+einzustellen
+
+* Die jeweilige Formularseite bereitet über Thymeleaf ein Objekt der Klasse ItemRental, beziehungsweise ItemSale vor,
+in dem der Nutzer die wichtigen Daten für den Gegenstand eintragen kann
+
+* Durch die Bestätigung wird dem Controller das Objekt der jeweiligen Klasse übergeben, welcher den ItemService
+verwendet um es zu persistieren
+
+* Danach ist das Item in der jeweiligen "Mainpage" und im Profil unter "Own Items" zu sehen
+
+=== _Item kaufen_
+
+* Im Banner der Weboberfläche lässt sich jederzeit die SalePage aufrufen, auf der die zum Verkauf angebotenen
+Gegenstände aufgelistet werden
+
+* Über die jeweilige Detailseite kann der angemeldete Benutzer Items Kaufen, die ihm nicht gehören
+
+* Hierfür ist es nicht nötig eine Anfrage zu erstellen, da mit der Bestätigung direkt ein SellContract erstellt
+und verrechnet wird
+
+* Das hierdurch gekaufte Item kann in der Accountpage unter "Items Sold/Bought" eingesehen werden
+
+=== _Benutzerdaten ändern_
+
+* Der Benutzer kann auf der Accountseite seine Accountdaten ändern
+
+* Der Controller holt sich das passende Userobjekt und übergibt es der UserForm
+
+* Die View erkennt über Thymeleaf ob sie ein bestehendes Objekt erhalten hat und passt dementsprechend
+die angezeigten Felder an
+
+* Der Nutzer kann alle Felder bis auf Passwort und Accountname nach Belieben ändern und die Änderungen
+bestätigen. Die Änderungen werden vom Controller mithilfe des UserService persistiert
+
+=== _Items ändern_
+
+* Der Nutzer sieht auf seiner Accountseite eine Auflistung seiner angebotenen Items
+
+* Durch einen Klick auf den Button "Details" wird er auf die bereits bekannte Detailansicht geleitet
+
+* Der ItemController erkennt dass der eingeloggte Benutzer der Besitzer ist und gibt diese Information an die View
+weiter
+
+* Auf der Detailseite sieht der Besitzer des Items einen Button zum editieren ebendieses, anstelle
+der Buttons zum ausleihen oder kaufen des Items
+
+* Der Button zum bearbeiten verlinkt auf die bereits bekannten Formularseiten, allerdings fügt der
+jeweilige ItemContoller das zu bearbeitende Item-Objekt der View hinzu
+
+* Bei der Bestätigung der Änderungen werden die Objekte vom Controller zwecks Speicherung an den ItemService
+übergeben
+
+=== _Transaktionen einsehen_
+
+* Der eingeloggte Benutzer kann auf der Accountseite seine aktiven und vergangenen Transaktionen anzeigen lassen
+
+* Die aktiven BorrowContracts werden in der Übersicht oben angezeigt, die vergangenen unten
+
+* Abgeschlossene SellContracts werden in einem anderen Reiter aufgelistet und danach geordnet, ob etwas ge- oder
+verkauft wurde
+
+=== _Konflikte erstellen_
+
+* Der Ausleihende kann bis zu dem Punkt einen Konflikt erstellen,
+indem er das Item zurückgibt. Dies geschieht über die Ansicht
+"Borrowed Items".
+
+* Der Verleiher kann bis zu dem Punkt einen Konflikt erstellen,
+indem er die Rückgabe akzeptiert. Dies geschieht über die Ansicht
+"Lent Items"
+
+* Es kann immer nur ein Konflikt gleichzeitig aktiv sein. Die Konflikte
+werden an gleicher Stelle wie die Erstellung angezeigt, sobald einer
+existiert.
+
+* Sobald es einen Konflikt gibt, ändert sich auch die Status anzeige
+
+=== _Konflikte lösen_
+
+* Der Admin hat in seiner Profilansicht einen Reiter "Admin"
+
+* Wenn er dort den Button klickt, kommt er auf eine Übersicht über alle
+offenen Konflikte.
+
+* In der Detailansicht eines Konflikts werden die Namen und Mails der
+Beteiligten angezeigt, zudem der Konfliktersteller.
+
+* Die vier Optionen, welche der Admin hat, sind:
+** Punish Bail: Contract wird beendet und Kaution einbehalten
+** Free Bail: Contract wird beendet und Kaution befreit
+** Cancel Contract: Contract wird beendet, es gibt keine Zahlung, alle
+Reservierungen werden befreit
+** Continue Contract: Contract läuft normal weiter
+
+=== _ProPay Konto verwalten_
+
+* Auf seiner Accountseite kann der Nutzer seine PropayId ändern und sein Guthaben aufladen
+
+* Die Kommunikation mit Propay erfolgt hier über die ProPayApi

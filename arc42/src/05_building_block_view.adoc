@@ -1,0 +1,25 @@
+[[section-building-block-view]]
+
+
+== Bausteinsicht
+
+=== Grobe Übersicht
+
+Unsere Anwendung besteht im wesentlichen aus den Controllern, Services und einem Modell, welches
+die Realität von Beziehungen zwischen Usern und Items abbilden soll. +
+Dieses Modell wird wiederum in der Datenbank abgebildet und persistiert. +
+Im Betrieb der Anwendung landen Anfragen über den Webbrowser zunächst beim Controller.
+
+==== Formulare
+
+Im Falle von Formularen wandelt der Controller die Formulardaten nun in Objekte des Modells um.
+Diese Objekte werden von den Services weiter verarbeitet und schließlich in der Datenbank gespeichert.
+
+==== GET-Anfragen
+
+Im Falle des klassischen GET-Mappings, in denen der Nutzer Daten anfragt, wandelt der Controller
+mit Hilfe von Thymeleaf die Objekte des Modells in HTML-Darstellungen um. Diese Objekte erhält
+der Controller wiederum durch anfragen auf die Services, welche die Daten beispielsweise aus der
+Datenbank holen oder aus dem Datenbestand generieren.
+
+image:images/05_Ueberblick.png["FIG_1"]

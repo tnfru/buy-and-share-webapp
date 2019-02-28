@@ -1,0 +1,42 @@
+[[section-solution-strategy]]
+== Lösungsstrategie
+
+
+= Technologieentscheidungen
+
+Die Anwendung ist den Anforderungen entsprechend eine Spring-Boot Webapplikation. +
+Der Code im Back-End ist vollständig in Java geschrieben, das Front-End in HTML,
+wobei wir hier zur Anbindung der Views an das Back-End Thymeleaf als Framework
+nutzen. +
+Um die Lauffähigkeit auf möglichst vielen Systemen zu gewährleisten, nutzen wir
+zum Deploy Docker (bzw. docker-compose). Schon während des Entwicklungsprozesses
+wird die Kompatibilität auf verschiedenen Endgeräten, durch Das Continous-Integration
+System Travis-CI sichergestellt. +
+Gebaut wird die Anwendung mit Gradle. +
+
+= Top-Level Zerlegung
+
+Wir nutzen eine Three-Level MVC architecture (genaueres Kapitel 9)
+
+= Organisationsentscheidungen
+
+Von vorn herein haben wir uns dazu entschieden die von Github bereitgestellten
+Möglichkeiten zur Strukturierung zu nutzen. Dazu gehören: +
+
+* Issue/Milestone-System: +
+Da nicht jeder alle Probleme sofort bearbeiten kann, bzw. andere Personen für
+die jeweilige Funktionalität zuständig sind, werden für alle Änderungen, die nicht sofort
+bearbeitet werden Issues erstellt. +
+
+* Feature-Branches/Pull-Requests: +
+Wir haben uns dazu entschieden, dass sowohl der "dev"-Branch, als auch der "master"-Branch
+stable sind. Somit werden alle Änderungen auf Feature-Branches gemacht und dann nur reviewed
+gemerged.
+
+* Projects: +
+Die auf Github erstellten Projects dienen schlicht der Übersicht über den aktuellen Fortschritt.
+
+Zusätzlich haben wir beschlossen jeden Tag zu Beginn und Ende der Arbeitszeit
+eine Art Scrum zu machen, um alle auf den aktuellsten Stand zu bringen und
+anstehende Änderungen durchzusprechen und zu priorisieren. +
+Ansonsten läuft alles über direkte Kommunikation untereinander.

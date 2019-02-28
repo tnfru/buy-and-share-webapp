@@ -10,6 +10,6 @@ import java.util.List;
 public class ProPay {
 
     private String account;
-    private double amount;
+    private int amount;
     List<ProPayReservation> reservations;
 }

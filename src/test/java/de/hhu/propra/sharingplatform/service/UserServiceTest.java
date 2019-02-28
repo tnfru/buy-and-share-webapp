@@ -1,26 +1,20 @@
 package de.hhu.propra.sharingplatform.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
-import org.junit.Assert;
+import de.hhu.propra.sharingplatform.service.payment.IBankAccountService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -33,7 +27,13 @@ public class UserServiceTest {
     private UserRepo userRepo;
 
     @MockBean
+    private IBankAccountService bankAccountService;
+
+    @MockBean
     private PasswordEncoder encoder;
+
+    @MockBean
+    private ImageService imageSaver;
 
     private UserService userService;
 
@@ -48,7 +48,7 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
-        userService = new UserService(userRepo, encoder);
+        userService = new UserService(userRepo, encoder, bankAccountService, imageSaver);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class UserServiceTest {
 
         userService.persistUser(user, "foo", "foo");
 
-        verify(userRepo, times(1)).save(argument.capture());
+        verify(userRepo, times(2)).save(argument.capture());
         assertEquals(user, argument.getValue());
     }
 
@@ -86,7 +86,7 @@ public class UserServiceTest {
 
         userService.updatePassword(user, "123", newPassword, confirm);
 
-        verify(userRepo, times(2)).save(argument.capture());
+        verify(userRepo, times(3)).save(argument.capture());
 
     }
 
@@ -95,7 +95,7 @@ public class UserServiceTest {
         boolean thrown = false;
         User user = createUser("name", "accName", "address", "e@mail.de");
         try {
-            userService.updatePassword(user,"wrongOld", "new", "new");
+            userService.updatePassword(user, "wrongOld", "new", "new");
             when(encoder.matches(anyString(), anyString())).thenReturn(false);
         } catch (ResponseStatusException rse) {
             thrown = true;

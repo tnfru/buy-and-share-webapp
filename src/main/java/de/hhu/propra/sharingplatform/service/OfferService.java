@@ -1,12 +1,17 @@
 package de.hhu.propra.sharingplatform.service;
 
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.model.Offer;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
+import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
 import de.hhu.propra.sharingplatform.service.validation.OfferValidator;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,96 +23,90 @@ public class OfferService {
 
     private OfferRepo offerRepo;
 
-
     private ContractService contractService;
 
-    private ApiService apiService;
-
-    private PaymentService paymentService;
+    private IPaymentApi apiService;
 
     private ItemService itemService;
 
+    private BorrowContractRepo borrowContractRepo;
+
     @Autowired
     public OfferService(ContractService contractService, OfferRepo offerRepo,
-                        ApiService apiService, PaymentService paymentService,
-                        ItemService itemService) {
+                        ProPayApi proPayApi,
+                        ItemService itemService, BorrowContractRepo borrowContractRepo) {
         this.contractService = contractService;
         this.offerRepo = offerRepo;
-        this.apiService = apiService;
-        this.paymentService = paymentService;
+        this.apiService = proPayApi;
         this.itemService = itemService;
+        this.borrowContractRepo = borrowContractRepo;
     }
 
     public void create(long itemId, User requester, LocalDateTime start, LocalDateTime end) {
-        Item item = itemService.findItem(itemId);
-        validate(item, requester, start, end);
+        ItemRental itemRental = (ItemRental) itemService.findItem(itemId);
+        validate(itemRental, requester, start, end);
 
-        Offer offer = new Offer(item, requester, start, end);
-        item.getOffers().add(offer);
+        Offer offer = new Offer(itemRental, requester, start, end);
+        itemRental.getOffers().add(offer);
         requester.getOffers().add(offer);
         offerRepo.save(offer);
     }
 
-    public void validate(Item item, User requester, LocalDateTime start, LocalDateTime end) {
-        OfferValidator.validate(item, requester, start, end, paymentService, apiService);
+    public void validate(ItemRental itemRental, User requester, LocalDateTime start,
+                         LocalDateTime end) {
+        OfferValidator.validate(itemRental, requester, start, end, apiService);
+        OfferValidator.periodIsAvailable(borrowContractRepo, itemRental, start, end);
     }
 
     public List<Offer> getItemOffers(long itemId, User user, boolean onlyClosed) {
         if (itemService.userIsOwner(itemId, user.getId())) {
             if (!onlyClosed) {
-                return offerRepo.findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
+                return offerRepo.findAllByItemRentalIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
             } else {
-                return offerRepo.findAllByItemIdAndAcceptIsTrueOrDeclineIsTrue(itemId);
+                return offerRepo.findAllByItemRentalIdAndAcceptIsTrueOrDeclineIsTrue(itemId);
             }
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-                "This item does not belong to you");
+                "This itemRental does not belong to you");
         }
     }
 
-    public void acceptOffer(long offerId, User user) {
+    public void acceptOffer(long offerId, User owner) {
         Offer offer = offerRepo.findOneById(offerId);
-        if (itemService.userIsOwner(offer.getItem().getId(), user.getId())) {
+        validate(offer.getItemRental(), offer.getBorrower(), offer.getStart(), offer.getEnd());
+
+        if (itemService.userIsOwner(offer.getItemRental().getId(), owner.getId())) {
             offer.setAccept(true);
-            removeOverlappingOffer(offer);
             offerRepo.save(offer);
-            //TODO: create contract needs ProPay Api
-            // contractService.create(offer);
+            removeOverlappingOffer(offer); // todo test this
+            contractService.create(offer);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-                "This item does not belong to you");
+                "This itemRental does not belong to you");
         }
     }
 
-    private void removeOverlappingOffer(Offer offer) {
-        Item item = offer.getItem();
-        List<Offer> offersWithSameItem = offerRepo.findAllByItemId(item.getId());
-        for (Offer offerToTest : offersWithSameItem) {
-            if (offer.getId().equals(offerToTest.getId())) {
-                continue;
-            }
-            if (offer.getStart().isAfter(offerToTest.getStart())) {
-                if (offerToTest.getEnd().isAfter(offer.getStart())) {
-                    offerToTest.setDecline(true);
-                    offerRepo.save(offerToTest);
-                }
-            } else {
-                if (offer.getEnd().isAfter(offerToTest.getStart())) {
-                    offerToTest.setDecline(true);
-                    offerRepo.save(offerToTest);
-                }
+    void removeOverlappingOffer(Offer acceptedOffer) {
+        ItemRental itemRental = acceptedOffer.getItemRental();
+        List<Offer> itemOffers = offerRepo
+            .findAllByItemRentalIdAndDeclineIsFalseAndAcceptIsFalse(itemRental.getId());
+        for (Offer offer : itemOffers) {
+            if (!(acceptedOffer.getStart().isAfter(offer.getEnd()) || acceptedOffer.getEnd()
+                .isBefore(offer.getStart()))) {
+                offer.setDecline(true);
+                offerRepo.save(offer);
             }
         }
     }
 
     public void declineOffer(long offerId, User user) {
         Offer offer = offerRepo.findOneById(offerId);
-        if (itemService.userIsOwner(offer.getItem().getId(), user.getId())) {
+        if (itemService.userIsOwner(offer.getItemRental().getId(), user.getId())) {
             offer.setDecline(true);
             offerRepo.save(offer);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-                "This item does not belong to you");
+                "This itemRental does not belong to you");
         }
     }
 
@@ -127,7 +126,7 @@ public class OfferService {
 
     public void removeOffersFromDeletedItem(long itemId) {
         List<Offer> toBeDeleted =
-            offerRepo.findAllByItemIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
+            offerRepo.findAllByItemRentalIdAndAcceptIsFalseAndDeclineIsFalse(itemId);
         for (Offer offer :
             toBeDeleted) {
             offer.setDecline(true);

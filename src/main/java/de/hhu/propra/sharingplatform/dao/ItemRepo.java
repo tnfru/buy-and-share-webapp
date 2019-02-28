@@ -1,14 +1,13 @@
 package de.hhu.propra.sharingplatform.dao;
 
-import de.hhu.propra.sharingplatform.model.Item;
-import java.util.Optional;
+import de.hhu.propra.sharingplatform.model.items.Item;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ItemRepo extends CrudRepository<Item, Long> {
-    Item findOneById(long id);
+public interface ItemRepo<T extends Item> extends CrudRepository<T, Long> {
 
-    Optional<Item> findById(long id);
+    List<T> findAllByNameContainsIgnoreCaseAndDeletedIsFalse(String key);
 
-    List<Item> findAllByNameContainsIgnoreCase(String search);
+    List<T> findAllByDeletedIsFalse();
+
 }

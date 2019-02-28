@@ -41,8 +41,10 @@ public class UserFakerTest {
         assertTrue(0 < user.getPositiveRating() && 0 < user.getNegativeRating());
         assertFalse(user.isBan());
         assertFalse(user.isDeleted());
-        assertNotEquals(null, user.getItems());
-        assertNotEquals(null, user.getContracts());
+        assertTrue(user.getPasswordHash().length() >= 32);
+        assertNotEquals(null, user.getItemRentals());
+        assertNotEquals(null, user.getSellContracts());
+        assertNotEquals(null, user.getBorrowContracts());
         assertNotEquals(null, user.getOffers());
     }
 
@@ -67,5 +69,14 @@ public class UserFakerTest {
 
         assertEquals(5, user1.size());
         assertEquals(13, user2.size());
+    }
+
+    @Test
+    public void createAdmin() {
+        User admin = userFaker.createAdmin();
+
+        assertEquals("admin", admin.getRole());
+        assertFalse(admin.isBan());
+        assertFalse(admin.isDeleted());
     }
 }

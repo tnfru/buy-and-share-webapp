@@ -1,35 +1,114 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml"
       layout:decorate="~{base}">
+<head>
+  <title>UserForm</title>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
 <body>
 
 <div layout:fragment="content">
   <h1 th:if="${user?.Id} == NULL">New Profile</h1>
   <h1 th:unless="${user?.Id} == NUll" th:text="|Edit Account: ${user?.accountName}|"></h1>
   <br>
-  <form method="post">
-    <label>
-      <span>Name:(*)</span>
-      <p><input type="text" name="name" th:value="${user?.name}" required></p>
-      <span>Address:(*)</span>
-      <p><input type="text" name="address" th:value="${user?.address}" required></p>
-      <span th:if="${user?.Id} == NULL">AccountName:(*)</span>
-      <p th:if="${user?.Id} == NULL"><input type="text" name="accountName"
-                                            th:value="${user?.accountName}" required></p>
-      <span>Email:(*)</span>
-      <p><input type="text" name="email" th:value="${user?.email}" required></p>
-      <span>PropayID:</span>
-      <p><input type="text" name="propayId" th:value="${user?.propayId}"></p>
-      <span th:if="${user?.Id} == NULL">Password:(*)</span>
-      <p th:if="${user?.Id} == NULL"><input type="password" name="password" required></p>
-      <span th:if="${user?.Id} == NULL">Confirm Password:(*)</span>
-      <p th:if="${user?.Id} == NULL"><input type="password" name="confirm" required></p>
-      <br>
-      <p>All Fields marked with * are required!</p>
-      <br>
-      <button type="submit" class="btn btn-primary" action="POST">Send</button>
-    </label>
-  </form>
+  <div class="container" style="margin-left: 1em;">
+
+    <form method="post" enctype="multipart/form-data">
+      <div class="form-group row">
+        <label for="text" class="col-2 col-form-label">Name:*</label>
+        <div class="col-4">
+          <input id="text" th:value="${user?.name}" name="name" type="text" class="form-control" required="required">
+        </div>
+      </div>
+      <div th:if="${user?.Id} == NULL" class="form-group row">
+        <label for="accountName" class="col-2 col-form-label">Account Name:*</label>
+        <div class="col-4">
+          <input id="accountName" th:value="${user?.accountName}" name="accountName" placeholder="Cannot be changed later!" type="text" required="required" class="form-control">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="address" class="col-2 col-form-label">Address:*</label>
+        <div class="col-4">
+          <div class="input-group">
+            <input id="address" name="address" type="text" th:value="${user?.address}" required="required" class="form-control">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="fa fa-address-book"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="email" class="col-2 col-form-label">Email:*</label>
+        <div class="col-4">
+          <div class="input-group">
+            <input id="email" name="email" type="text" th:value="${user?.email}" required="required" class="form-control">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="fa fa-envelope-o"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="propayId" class="col-2 col-form-label">ProPayID:</label>
+        <div class="col-4">
+          <input id="propayId" name="propayId" type="text" th:value="${user?.propayId}" class="form-control">
+        </div>
+      </div>
+      <div th:if="${user?.Id} == NULL" class="form-group row">
+        <label for="password" class="col-2 col-form-label">Password:</label>
+        <div class="col-4">
+          <div class="input-group">
+            <input id="password" name="password" type="password" required="required" class="form-control" aria-describedby="passwordHelpBlock">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="fa fa-key"></i>
+              </div>
+            </div>
+          </div>
+          <span id="passwordHelpBlock" class="form-text text-muted">Password must be at least 2 characters long</span>
+        </div>
+      </div>
+      <div th:if="${user?.Id} == NULL" class="form-group row">
+        <label for="confirm" class="col-2 col-form-label">Confirm Password:</label>
+        <div class="col-4">
+          <div class="input-group">
+            <input id="confirm" name="confirm" type="password" required="required" class="form-control">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="fa fa-key"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="image" class="col-2 col-form-label">Upload image:</label>
+        <div class="col-2">
+          <input id="image" type="file" name="image"/>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="offset-2 col-4">
+          <p>All Fields marked with * are required!</p>
+          <button type="submit" class="btn btn-primary" action="POST">Send</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <br>
 
 </div>
 

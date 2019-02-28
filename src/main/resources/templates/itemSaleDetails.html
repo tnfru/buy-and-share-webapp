@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{base}"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.com">
+<head>
+  <meta charset="UTF-8">
+  <title>Item Details</title>
+  <script src="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.3/source/jsCalendar.min.js"
+          integrity="sha384-JqNLUzAxpw7zEu6rKS/TNPZ5ayCWPUY601zaig7cUEVfL+pBoLcDiIEkWHjl07Ot"
+          crossorigin="anonymous"></script>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/simple-jscalendar@1.4.3/source/jsCalendar.min.css"
+        integrity="sha384-+OB2CadpqXIt7AheMhNaVI99xKH8j8b+bHC8P5m2tkpFopGBklD3IRvYjPekeWIJ"
+        crossorigin="anonymous">
+</head>
+<body>
+<div layout:fragment="content">
+  <h1 th:text="${itemSale?.name}"></h1>
+
+  <div class="card-deck">
+
+    <div class="card border-dark">
+      <div th:if="${itemSale?.imageFileName != null}">
+        <img th:src="@{${'/images/' + itemSale?.imageFileName}}" style="width: content-box;
+                     padding: 2rem;"
+             class="img-fluid"></div>
+
+      <div th:if="${itemSale?.imageFileName == null}">
+        <img src="/images/dummy.png" style="width: content-box; padding: 2rem;"
+             class="img-fluid"/></div>
+
+      <div class="card-body">
+        <h4 class="card-title" th:text="${itemSale.getName()}">Item Name</h4>
+        <p class="card-text" th:text="${itemSale.getDescription()}"></p>
+      </div>
+      <ul class="list-group list-group-flush">
+
+        <li class="list-group-item">
+          <b>Item Price:</b>
+          <span th:text="|${itemSale.getPrice()}€|"></span>
+        </li>
+
+        <li class="list-group-item">
+          <b>Location:</b>
+          <span th:text="${itemSale?.location}"></span>
+        </li>
+
+        <li class="list-group-item">
+          <b>Supplier:</b>
+          <span th:text="${itemSale?.owner?.accountName}"></span>
+        </li>
+
+        <li class="list-group-item">
+          <b>Ratings:</b>
+          <span th:text="|${itemSale?.owner?.totalRatings()}|"></span>
+          <span th:text="|(${itemSale?.owner?.getRating()}|"></span> &#128077;)
+        </li>
+      </ul>
+      <div class="card-footer bg-white text-center">
+        <a th:if="${ownItem} == false " th:href="|/user/${itemSale.getOwner().getId()}|"
+           class="btn btn-outline-secondary btn-block">User
+          Details</a>
+        <form th:if="${ownItem} == false" method="post"
+              th:action="|/contract/sale/${itemSale.getId()}|">
+          <button class="btn btn-outline-success btn-block" type="submit">Purchase</button>
+        </form>
+        <a th:unless="${ownItem} == false "
+           class="btn btn-outline-warning btn-block"
+           th:href="|/item/sale/edit/${itemSale?.Id}|">Edit Item</a>
+      </div>
+    </div>
+
+    <div>
+      <b style="margin-left: 5rem;">Other Users who looked at this were also interested
+        in:</b>
+      <div class="column">
+        <br>
+        <div class="col" th:each="itemSale : ${recItems}">
+          <div class="card border-dark" style="margin-left: 6rem;">
+
+            <article class="photo">
+              <div style="text-align: center">
+                <div th:if="${itemSale?.imageFileName != null}">
+                  <img style="width: 200px; padding-top: 1rem;"
+                       th:src="@{${'/images/' + itemSale?.imageFileName}}"/></div>
+                <div th:if="${itemSale?.imageFileName == null}">
+                  <img class="img-fluid" src="/images/dummy.png"
+                       style="width: 200px; padding-top: 1rem;"/>
+                </div>
+              </div>
+            </article>
+
+            <div class="card-body">
+              <h5 class="card-title" th:text="${itemSale.getName()}">Item Name</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+
+              <li class="list-group-item">
+                <b>Rating:</b>
+                <span th:text="|${itemSale?.owner?.totalRatings()}|"></span>
+                <span th:text="|(${itemSale?.owner?.getRating()}|"></span> &#128077;)
+              </li>
+
+            </ul>
+            <div class="card-body">
+              <a th:href="|/item/rental/details/${itemSale.getId()}|"
+                 class="btn btn-outline-info btn-block">Details</a>
+              <a th:href="|/user/${itemSale.getOwner().getId()}|"
+                 class="btn btn-outline-secondary btn-block">User Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+</div>
+</body>
+</html>

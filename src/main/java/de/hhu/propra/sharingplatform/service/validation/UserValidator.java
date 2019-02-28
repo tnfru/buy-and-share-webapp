@@ -1,22 +1,26 @@
 package de.hhu.propra.sharingplatform.service.validation;
 
+import static de.hhu.propra.sharingplatform.service.validation.Validator.validateAccountName;
+import static de.hhu.propra.sharingplatform.service.validation.Validator.validateAdress;
+import static de.hhu.propra.sharingplatform.service.validation.Validator.validateName;
+
 import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-
-import static de.hhu.propra.sharingplatform.service.validation.Validator.validateName;
 
 
 public class UserValidator {
 
     public static void validateUser(User user, UserRepo userRepo) {
         validateMail(user);
-        validateName(user.getAddress(), "Invalid Address");
-        validateName(user.getName(), "Invalid Name");
 
-        validateName(user.getAccountName(), "Invalid Account name");
-        if (userRepo.findByAccountName(user.getAccountName()).isPresent()) {
+        validateName(user.getName(), "Invalid Name");
+        validateAdress(user.getAddress(), "Invalid Address");
+        validateAccountName(user.getAccountName(), "Invalid Account name");
+        if (userRepo.findByAccountName(user.getAccountName()).isPresent()
+            && !userRepo.findByAccountName(user.getAccountName()).get().getId()
+            .equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                 "Account Name already exists");
         }

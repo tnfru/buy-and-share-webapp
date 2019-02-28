@@ -1,35 +1,47 @@
 package de.hhu.propra.sharingplatform.service.validation;
 
-import de.hhu.propra.sharingplatform.model.Item;
+import de.hhu.propra.sharingplatform.dao.contractdao.BorrowContractRepo;
 import de.hhu.propra.sharingplatform.model.User;
-import de.hhu.propra.sharingplatform.service.ApiService;
-import de.hhu.propra.sharingplatform.service.PaymentService;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
+import de.hhu.propra.sharingplatform.model.items.ItemRental;
+import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 public class OfferValidator {
 
-    public static void validate(Item item, User requester, LocalDateTime start, LocalDateTime end,
-                                PaymentService paymentService, ApiService apiService) {
-        double totalCost = paymentService.calculateTotalPrice(item, start, end) + item.getBail();
+    public static void validate(ItemRental itemRental, User requester, LocalDateTime start,
+                                LocalDateTime end,
+                                IPaymentApi apiService) {
 
-        if (start.until(end, ChronoUnit.DAYS) < 1) {
+        if (end.isBefore(start)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End date needs to be after"
                 + " Start date");
         }
-        if (!item.isAvailable()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Item unavailable at given "
-                + "time");
-        }
-        if (!(apiService.isSolventFake(requester, totalCost))) {
+        int totalCost = (int) (start.until(end, ChronoUnit.DAYS) + 1) * itemRental.getDailyRate()
+            + itemRental.getBail();
+        int available = apiService.getAccountBalanceLiquid(requester.getPropayId());
+        if (totalCost > available) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough money");
         }
         if (requester.isBan()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account currently "
                 + "suspended");
+        }
+    }
+
+    public static void periodIsAvailable(BorrowContractRepo contractRepo, ItemRental itemRental,
+                                         LocalDateTime start, LocalDateTime end) {
+        List<BorrowContract> contracts = contractRepo.findAllByItemAndFinishedIsFalse(itemRental);
+        for (BorrowContract contract : contracts) {
+            if (!(contract.getStart().isAfter(end) || contract.getExpectedEnd().isBefore(start))) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid period");
+            }
         }
     }
 }

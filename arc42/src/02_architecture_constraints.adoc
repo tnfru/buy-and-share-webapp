@@ -1,0 +1,70 @@
+[[section-architecture-constraints]]
+== Randbedingungen
+
+### 11 Technische Randbedingungen
+
+|=======
+|Randbedingung                   |Hintergrund und Erläuterungen
+|Muss auf allen gängigen  Betriebssystemen und Webbrowsern laufen
+        |Gemeint: Linux, Mac, Windows Chome/ium, Firefox, Safari, Edge (wünschenswert, nicht zwingend)
+        Grund: Alle potentiellen Interessenten sollen Zugriff haben können
+
+|Implementierung in Java(8) als Spring Boot App |Dies gehört zu den universitären
+                Randbedingungen des Praktikums in dem
+                                   diese Applikation entstanden ist.
+                                   Grund: Gemeinsamer Standard von allen
+                                   Studierenden und Korrektoren.
+
+                                   Zusätzlich ist JavaScript erlaubt.
+                                   Nicht aber für die Hauptlogik
+
+|Ausführbar mit docker-compose up |Grund: unabhängig von System und
+                 Konfiguration ausführbar
+|=======
+
+
+### 2. Organisatorische Randbedingungen
+
+|=======
+
+|Randbedingung          |Hintergrund und Erläuterungen
+|Team                   |Christian Laußmann,   Jonathan Bobak,
+                          Markus Günther, Sami Hamdan,
+                          Ingo Kral, Lars Müller,
+                          Phillip Krause,  Stefan Matz
+
+|Zeitplan               |3 Wochen
+
+|Entwicklungswerkzeuge  |Tafel und Kreide, IntelliJ, Webbrowser, gradle
+
+|Versionsverwaltung     |Git/-hub + TravisCi
+
+|=======
+
+
+### 3. Konventionen
+
+|=======
+
+|Konvention| Hintergrund und Erläuterungen
+|Dokumentation |arc42
+
+|Sprache Englisch|Bis auf die Dokumentation soll alles auf Englisch sein +
+                  Grund: Englisch ist prägnanter und viele Begriffe
+                  sind sowieso auf Englisch
+
+|Checkstyle|Wir nutzen Java typischen Codestyle (CamelCasing etc.)
+            und halten uns an Clean Code Conventions.
+
+            Um unseren Code durch TarvisCi automatisch darauf
+            testen zu können, haben wir uns darauf geeinigt Checkstyle
+            zu benutzen. Wir benutzen als Vorlage die Google Java
+            Configuration für Checkstyle und haben daran einige Änderungen
+            vorgenommen.
+
+|Git Hooks|Wir haben git pre-push hooks für checkstyle und das starten aller
+           Tests. Diese nutzen wir um sicher zu gehen dass unserer Code richtig
+           ist und um TravisCI zu entlasten.
+
+
+|=======

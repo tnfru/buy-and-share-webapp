@@ -1,0 +1,40 @@
+[[section-glossary]]
+== Glossar
+
+[cols="1,5" options="header"]
+|===
+|Begriff
+|Definition
+
+|Contract
+|Eine Beziehung zweier User über ein Item. Ein Contract dient
+dazu ein Kauf- oder Leihverhältnis zu speichern.
+
+
+|Borrower
+|Ein User der ein Item ausleiht.
+
+|Owner
+|Der User dem ein Item gehört.
+
+|Item
+|Die Representation eines realen Gegenstandes, der über die Plattform zum
+Leihen oder Kaufen angeboten wird.
+
+|ProPay
+|Ein aus der nächsten Generation an Bezahlsystemen stammendes Bezahlsystem.
+
+|Offer
+|Wird erzeugt sobald ein User ein Item zur Leihe anfragt. Der Besitzer des Items kann
+das Offer annehmen oder Ablehnen.
+
+|User
+|Nutzt das System als Käufer, Verkäufer, Leihender oder Verleiher. (Mehrere gleichzeitig möglich)
+
+|Lent Items
+|Items die ein User an andere User verliehen hat.
+
+|Borrowed Items
+|Items die ein User sich geliehen hat.
+
+|===
