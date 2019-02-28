@@ -3,6 +3,7 @@ package de.hhu.propra.sharingplatform.service;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.mock;
@@ -14,12 +15,11 @@ import de.hhu.propra.sharingplatform.dao.ItemRepo;
 import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.dao.contractdao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.User;
+import de.hhu.propra.sharingplatform.model.items.Item;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -277,14 +277,14 @@ public class ItemRentalServiceTest {
     @Test
     public void filterEmptyList() {
         List<String> keywords = new ArrayList<>();
-        List<ItemRental> dbNoItemRentals = new ArrayList<>();
-        List<ItemRental> dbAllItemRental = new ArrayList<>();
-        dbAllItemRental.add(itemRental);
+        List<Item> dbFilterParam1 = new ArrayList<>();
+        dbFilterParam1.add(itemRental);
 
-        when(itemRepo.findAllByNameContainsIgnoreCase(any())).thenReturn(dbNoItemRentals);
-        when(itemRepo.findAll()).thenReturn(dbAllItemRental);
+        when(itemRepo.findAllByDeletedIsFalse()).thenReturn(dbFilterParam1);
+        when(itemRepo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse(anyString()))
+            .thenReturn(new ArrayList());
 
-        List<ItemRental> itemRentals = itemService.filterRental(keywords);
+        List<Item> itemRentals = itemService.filterKeywords(itemRepo, keywords);
 
         assertEquals(1, itemRentals.size());
     }
@@ -295,20 +295,40 @@ public class ItemRentalServiceTest {
         keywords.add("cool");
         keywords.add("search");
 
-        List<ItemRental> dbFilterParam1 = new ArrayList<>();
-        List<ItemRental> dbFilterParam2 = new ArrayList<>();
+        Item item1 = new ItemRental(new User());
+        Item item2 = new ItemRental(new User());
+        Item item3 = new ItemRental(new User());
+        Item item4 = new ItemRental(new User());
+
+        item1.setName("cool Cool");
+        item2.setName("cool Search");
+        item3.setName("Search wfkfwo");
+        item4.setName("cdwdwdwool dwd");
+
+        List<Item> dbFilterParam1 = new ArrayList<>();
         dbFilterParam1.add(itemRental);
-        dbFilterParam1.add(itemRental);
-        dbFilterParam2.add(itemRental);
+        dbFilterParam1.add(item1);
+        dbFilterParam1.add(item2);
+        dbFilterParam1.add(item3);
 
-        List<ItemRental> dbAllItemRental = new ArrayList<>();
+        List<Item> coolList = new ArrayList<>();
+        coolList.add(item1);
+        coolList.add(item2);
 
-        when(itemRepo.findAllByNameContainsIgnoreCase("cool")).thenReturn(dbFilterParam1);
-        when(itemRepo.findAllByNameContainsIgnoreCase("search")).thenReturn(dbFilterParam2);
-        when(itemRepo.findAll()).thenReturn(dbAllItemRental);
+        List<Item> searchList = new ArrayList<>();
+        searchList.add(item2);
+        searchList.add(item3);
 
-        List<ItemRental> itemRentals = itemService.filterRental(keywords);
+        when(itemRepo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse("cool"))
+            .thenReturn(coolList);
+        when(itemRepo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse("search"))
+            .thenReturn(searchList);
+
+        List<Item> itemRentals = itemService.filterKeywords(itemRepo, keywords);
 
         assertEquals(3, itemRentals.size());
+        assertEquals(item1, itemRentals.get(0));
+        assertEquals(item2, itemRentals.get(1));
+        assertEquals(item2, itemRentals.get(2));
     }
 }
