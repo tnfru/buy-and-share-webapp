@@ -26,7 +26,7 @@ public class SecConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/", "/sale", "/css/**", "/images/**", "/static/images/*", "/h2/**",
+            .antMatchers("/", "/sale", "/css/**", "/images/**", "/static/images/*",
                 "/user/register")
             .permitAll() // h2 has to be removed in production
             .antMatchers("/conflicts/**")
@@ -37,9 +37,6 @@ public class SecConfig extends WebSecurityConfigurerAdapter {
 
         http.userDetailsService(userDetailsService);
 
-        // to be able to use the faker we need these options.
-        // Later they should be removed again
-        http.headers().frameOptions().disable();
         http.csrf().disable();
     }
 
