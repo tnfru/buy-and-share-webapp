@@ -37,7 +37,7 @@ public class User {
     private String accountName;
     private String address;
     private String email;
-    private String propayId;
+    private String propayId = "";
     private String role = "user";
     private boolean ban = false;
     private boolean deleted = false;

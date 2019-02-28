@@ -1,24 +1,33 @@
 package de.hhu.propra.sharingplatform.service.payment;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyList;
+import static org.mockito.Mockito.anyMap;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 public class ProPayApiTest {
 
     ProPayApi api;
     ProPayNetworkInterface networkInterface;
 
+    @Autowired
+    Environment env;
+
     @Before
     public void setup() {
-        api = new ProPayApi();
+        api = new ProPayApi(env);
         api.host = "google";
         networkInterface = mock(ProPayNetworkInterface.class);
         api.networkInterface = networkInterface;
