@@ -4,16 +4,15 @@ import de.hhu.propra.sharingplatform.dao.UserRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.service.payment.IBankAccountService;
 import de.hhu.propra.sharingplatform.service.validation.UserValidator;
+import java.util.Optional;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -28,7 +27,7 @@ public class UserService {
 
     @Autowired
     public UserService(UserRepo userRepo, PasswordEncoder encoder,
-                       IBankAccountService bankAccountService, ImageService imageSaver) {
+        IBankAccountService bankAccountService, ImageService imageSaver) {
         this.userRepo = userRepo;
         this.encoder = encoder;
         this.bank = bankAccountService;
@@ -39,6 +38,11 @@ public class UserService {
         validateUser(user);
         String hashPassword = generatePassword(password, confirm);
         user.setPasswordHash(hashPassword);
+
+        if (user.getPropayId().isEmpty()) {
+            user.setPropayId(user.getAccountName() + "-propay");
+        }
+
         userRepo.save(user);
 
         String imagefilename = "dummy.png";
@@ -84,7 +88,7 @@ public class UserService {
     }
 
     public void updatePassword(User oldUser, String oldPassword, String newPassword,
-                               String confirm) {
+        String confirm) {
         if (!encoder.matches(oldPassword, oldUser.getPasswordHash())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
         }
