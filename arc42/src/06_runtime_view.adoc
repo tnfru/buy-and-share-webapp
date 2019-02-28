@@ -1,55 +1,71 @@
 [[section-runtime-view]]
 == Laufzeitsicht
+Die während der Laufzeit benötigten Daten werden den views von den zuständigen Controllern
+übergeben. Diese greifen wiederum auf die jeweiligen Services zu, welche für die Logik
+zuständig sind. Im Folgenden werden ein paar beispielhafte Laufzeit-Interaktionen skizziert
+um dies beispielhaft zu verdeutlichen.
 
+image:images/06_Overview.png["FIG_1"]
 
-[role="arc42help"]
-****
-.Inhalt
-Diese Sicht erklärt konkrete Abläufe und Beziehungen zwischen Bausteinen
-in Form von Szenarien aus folgenden Bereichen:
+=== _Registrierung als neuer Nutzer_
 
-*  Wichtige Abläufe oder _Features_:
-Wie führen die Bausteine der Architektur die wichtigsten Abläufe durch?
-*  Interaktionen an kritischen externen Schnittstellen:
-Wie arbeiten Bausteine mit Nutzern und Nachbarsystemen zusammen?
-* Betrieb und Administration: Inbetriebnahme, Start, Stop.
-* Fehler- und Ausnahmeszenarien
+* Damit Besucher der Platform auf eine andere Seite zugreifen können als die Hauptseite,
+müssen sie sich registrieren
 
-Anmerkung: Kriterium für die Auswahl der möglichen Szenarien (d.h. Abläufe) des Systems ist deren Architekturrelevanz.
-Es geht nicht darum, möglichst viele Abläufe darzustellen, sondern eine angemessene Auswahl zu dokumentieren.
+* Es existiert ein gut sichtbarer "Sign Up" button, der das Formular zur Registrierung
+neuer Benutzer öffnet
 
+* In der View wird mit Thymeleaf im Formular auf die Felder des Model-objekts "User" verwiesen
 
-.Motivation
-Sie sollten verstehen wie (Instanzen von) Bausteine(n) Ihres Systems ihre
-jeweiligen Aufgaben erfüllen
-und zur Laufzeit miteinander kommunizieren.
+* Bestätigt der User seine Eingaben, erhält der UserController ein neues Objekt der Klasse
+User mit den angegebenen Werten, welches über den Userservice validiert und im UserRepo persistiert wird
 
-Nutzen Sie solche Szenarien in der Dokumentation hauptsächlich zur besseren
-Kommunikation mit Stakeholdern, die statische Modelle
-(z.B. Bausteinsicht, Verteilungssicht) weniger verständlich finden.
+* Hat der Nutzer keine ProPayId angegeben, wird ihm später ein Konto erstellt
 
+* Bei erfolgreicher Erstellung des Users wird er über SpringSecurity automatisch eingeloggt
 
-.Form
-Für die Beschreibung von Szenarien gibt es zahlreiche Ausdrucksmöglichkeiten.
-Nutzen Sie beispielsweise:
+=== _Ausleihe eines Items anfragen_
 
-* Nummerierte Schrittfolgen oder Aufzählungen in Umgangssprache
-* Aktivitäts- oder Flussdiagramme
-* Sequenzdiagramme
-* BPMN oder EPKs (Ereignis-Prozessketten)
-* Zustandsautomaten
-* ...
+* Der angemeldete Benutzer sieht auf der Hauptseite die angebotenen Gegenstände, welche aus
+dem ItemRepo ausgelesen werden und öffnet die Detailseite eines Gegenstands.
 
-****
+* Der ItemRentalController überprüft ob das Item dem Nutzer gehört, und übergibt diese Information
+an die view
 
-=== _<Bezeichnung Laufzeitszenario 1>_
+* Auf der Detailseite erhält kann der Nutzer in einem Kalender sehen, in was für einem Zeitraum
+der Gegenstand vorrausichtlich verfügbar ist. Dies wird dadurch erreicht, dass die geplanten Laufzeiten der
+bestehenden "Contracts" des Gegenstands auf dem Kalender markiert werden
 
-*  <hier Laufzeitdiagramm oder Ablaufbeschreibung einfügen>
-*  <hier Besonderheiten bei dem Zusammenspiel der Bausteine in diesem Szenario erläutern>
+* Der Nutzer erfragt eine Ausleihe über einen Button im unteren Teil der Ansicht
 
-=== _<Bezeichnung Laufzeitszenario 2>_
+* Der Offercontroller liefert die Anfrageseite und erlaubt dem Nutzer die Festlegung seines bevorzugten
+Zeitraums
 
-...
+* Nach der Bestätigung des Nutzers wird die benötigte Kaution und die zu erwartende Leihgebühr bei ProPay
+reserviert und über den Offerservice eine Offer erstellt
+
+=== _Annahme einer Anfrage_
+
+* Der Besitzer eines angefragten Items kann auf seiner Accountseite eine Liste seiner erstellten Items sehen.
+
+* Für jedes Item wird die Anzahl der offenen Anfragen angezeigt und durch einen Klick auf diese Anzeige
+sieht der Besitzer eine Auflistung ebendieser
+
+* Mit Hilfe zweier Schaltflächen kann der Besitzer diese annehmen, beziehungsweise ablehnen
+
+* Durch die Annahme wird ein BorrowContract initialisiert
+
+=== _Rückgabe eines ausgeliehenen Items_
+
+* Der Ausleihende findet auf der Accountseite eine Übersicht seiner ausgeliehenen Items. An dieser Stelle
+kann er über den Button "Return Item" den Gegenstand zurückgeben
+
+* Diese Aktion löst auch die Verrechnung des BorrowContracts aus. Er berechnet die benötigten Transaktionen
+und initialisiert die Zahlung über die PropayApi
+
+=== __
+
+=== _<Bezeichnung Laufzeitszenario n>_
 
 === _<Bezeichnung Laufzeitszenario n>_
 
