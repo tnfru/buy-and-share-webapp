@@ -41,7 +41,7 @@ class UserFaker {
         }
     }
 
-    User createAdmin() {
+     public User createAdmin() {
         return createUserRole("admin");
     }
 }

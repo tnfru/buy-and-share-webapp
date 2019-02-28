@@ -47,9 +47,9 @@ public class ConflictService {
         paymentService.punishBailReservation((BorrowContract) conflict.getContract());
     }
 
-    public void setStatus(Status canceled, long conflictId) {
+    public void setStatus(Status status, long conflictId) {
         Conflict conflict = conflictRepo.findOneById(conflictId);
-        conflict.setStatus(canceled);
+        conflict.setStatus(status);
         conflictRepo.save(conflict);
     }
 }
