@@ -7,7 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class Validator {
+public class Validator {
 
     /**
      * Valid mails are like foo.bar@mail.de

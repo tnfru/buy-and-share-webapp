@@ -13,7 +13,7 @@ import java.io.IOException;
 @Component
 public class ImageService {
 
-    void store(MultipartFile file, String filename) {
+    public void store(MultipartFile file, String filename) {
         String contenttype = file.getContentType();
         if (contenttype.equals("image/png") || contenttype.equals("image/jpeg")) {
             try {
