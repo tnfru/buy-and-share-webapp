@@ -298,7 +298,7 @@ public class ConflictControllerTest {
         Offer offer = new Offer(item, borrower, start, end);
 
         BorrowContract contract = new BorrowContract(offer);
-        contract.setId(12l);
+        contract.setId(12L);
         conflict.setContract(contract);
         List<Conflict> conflicts = new ArrayList<Conflict>();
         conflicts.add(conflict);
