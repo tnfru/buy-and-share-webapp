@@ -10,7 +10,7 @@
 
 Die Anwendung ist für einen Server geschrieben. +
 Das Deployment läuft über Docker und ist von der eingesetzten Hardware und dem
-installierten Betriebssystemu nabhängig (natürlich muss genug Leistung vorhanden sein). +
+installierten Betriebssystem unabhängig (natürlich muss genug Leistung vorhanden sein). +
 Es ist dem Betreiber überlassen, ob er den zugrunde liegenden Payment-Service
 (in unserem default Fall ProPay) mit auf dem gleichen Server oder aber
 auf einem anderen laufen lässt. +
