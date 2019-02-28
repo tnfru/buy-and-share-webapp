@@ -137,6 +137,7 @@ public class ContractService {
         BorrowContract contract =
             (BorrowContract) conflictService.fetchConflictById(conflictId).getContract();
         contract.setFinished(true);
+        borrowContractRepo.save(contract);
     }
 
     public BorrowContract fetchBorrowContractById(long contractId) {
