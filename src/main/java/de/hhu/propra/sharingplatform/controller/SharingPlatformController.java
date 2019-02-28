@@ -43,16 +43,26 @@ public class SharingPlatformController extends BaseController {
     }
 
     @PostMapping("/")
-    public String mainPageSearch(Model model, Principal principal, String search) {
+    public String mainPageSearch(Model model, Principal principal, String search, String btn) {
         User user = null;
         if (principal != null) {
             user = new User();
         }
+
         List<String> keywords = itemService.searchKeywords(search);
+
         model.addAttribute("user", user);
         model.addAttribute("keywords", keywords);
-        model.addAttribute("itemRentals", itemService.filterRental(keywords));
-        return "mainpage";
+        model.addAttribute("search", String.join(" ", keywords));
+        if (btn.equals("rental")) {
+            model.addAttribute("itemRentals",
+                itemService.filterKeywords(itemRentalRepo, keywords));
+            return "mainpage";
+        } else {
+            model.addAttribute("itemSales",
+                itemService.filterKeywords(itemSaleRepo, keywords));
+            return "salepage";
+        }
     }
 
     @GetMapping("/sale")
@@ -63,19 +73,6 @@ public class SharingPlatformController extends BaseController {
         }
         model.addAttribute("user", user);
         model.addAttribute("itemSales", itemSaleRepo.findAllByDeletedIsFalse());
-        return "salepage";
-    }
-
-    @PostMapping("/sale")
-    public String saleMainPageSearch(Model model, Principal principal, String search) {
-        User user = null;
-        if (principal != null) {
-            user = new User();
-        }
-        List<String> keywords = itemService.searchKeywords(search);
-        model.addAttribute("user", user);
-        model.addAttribute("keywords", keywords);
-        model.addAttribute("itemSales", itemService.filterSale(keywords));
         return "salepage";
     }
 }

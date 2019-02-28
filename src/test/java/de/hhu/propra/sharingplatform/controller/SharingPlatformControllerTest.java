@@ -56,14 +56,17 @@ public class SharingPlatformControllerTest {
         user.setAccountName("user");
 
         ItemRental stuff = new ItemRental(user);
+        stuff.setId(1L);
         when(itemRentalRepo.findAll()).thenReturn(Collections.singleton(stuff));
 
-        when(itemRentalRepo.findAllByNameContainsIgnoreCase("stuff")).thenReturn(Collections
+        when(itemRentalRepo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse("stuff"))
+            .thenReturn(Collections
             .singletonList(stuff));
 
         mvc.perform(post("/")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .param("search","stuff"))
+            .param("search", "stuff")
+            .param("btn", "rental"))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("stuff")));
     }
@@ -85,14 +88,17 @@ public class SharingPlatformControllerTest {
         user.setAccountName("user");
 
         ItemSale stuff = new ItemSale(user);
+        stuff.setId(1L);
         when(itemSaleRepo.findAll()).thenReturn(Collections.singleton(stuff));
 
-        when(itemSaleRepo.findAllByNameContainsIgnoreCase("stuff")).thenReturn(Collections
+        when(itemSaleRepo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse("stuff"))
+            .thenReturn(Collections
             .singletonList(stuff));
 
-        mvc.perform(post("/sale")
+        mvc.perform(post("/")
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .param("search","stuff"))
+            .param("search", "stuff")
+            .param("btn", "sale"))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("stuff")));
     }

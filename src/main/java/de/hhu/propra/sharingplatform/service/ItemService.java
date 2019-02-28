@@ -5,14 +5,10 @@ import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.dao.contractdao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.items.Item;
-import de.hhu.propra.sharingplatform.model.items.ItemRental;
-import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -123,26 +119,27 @@ public class ItemService {
         return keywords;
     }
 
-    public List<ItemSale> filterSale(List<String> keywords) {
-        if (keywords == null || keywords.isEmpty()) {
-            return (List<ItemSale>) itemRepo.findAll();
+    private boolean itemIdInList(List<Item> items, long id) {
+        for (Item item : items) {
+            if (item.getId() == id) {
+                return true;
+            }
         }
-        List<ItemSale> items = new ArrayList<>();
-        for (String key : keywords) {
-            List<ItemSale> searching = itemRepo.findAllByNameContainsIgnoreCase(key);
-            items.addAll(searching);
-        }
-        return items;
+        return false;
     }
 
-    public List<ItemRental> filterRental(List<String> keywords) {
+    public List<Item> filterKeywords(ItemRepo repo, List<String> keywords) {
         if (keywords == null || keywords.isEmpty()) {
-            return (List<ItemRental>) itemRepo.findAll();
+            return repo.findAllByDeletedIsFalse();
         }
-        List<ItemRental> items = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
         for (String key : keywords) {
-            List<ItemRental> searching = itemRepo.findAllByNameContainsIgnoreCase(key);
-            items.addAll(searching);
+            List<Item> foundItems = repo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse(key);
+            for (Item found : foundItems) {
+                if (!itemIdInList(items, found.getId())) {
+                    items.add(found);
+                }
+            }
         }
         return items;
     }
