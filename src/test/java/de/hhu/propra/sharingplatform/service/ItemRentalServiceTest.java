@@ -15,9 +15,11 @@ import de.hhu.propra.sharingplatform.dao.OfferRepo;
 import de.hhu.propra.sharingplatform.dao.contractdao.ContractRepo;
 import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -214,9 +216,15 @@ public class ItemRentalServiceTest {
         assertEquals(0, keywords.size());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void searchKeywordsNullString() {
-        itemService.searchKeywords(null);
+        boolean thrown = false;
+        try {
+            itemService.searchKeywords(null);
+        } catch (NullPointerException npe) {
+            thrown = true;
+        }
+        assertTrue(thrown);
     }
 
     @Test

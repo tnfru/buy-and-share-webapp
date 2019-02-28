@@ -11,6 +11,7 @@ import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import de.hhu.propra.sharingplatform.service.OfferService;
 import de.hhu.propra.sharingplatform.service.payment.IPaymentApi;
 import de.hhu.propra.sharingplatform.service.payment.ProPayApi;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +19,15 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class DataFaker implements ServletContextInitializer {
-
-    private final Environment env;
 
     private final UserRepo userRepo;
 
@@ -45,11 +44,10 @@ public class DataFaker implements ServletContextInitializer {
     private Faker faker;
 
     @Autowired
-    public DataFaker(Environment env, UserRepo userRepo,
-        ItemRepo itemRepo, OfferRepo offerRepo,
-        OfferService offerService,
-        IPaymentApi apiService) {
-        this.env = env;
+    public DataFaker(UserRepo userRepo,
+                     ItemRepo itemRepo, OfferRepo offerRepo,
+                     OfferService offerService,
+                     IPaymentApi apiService) {
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;
         this.offerRepo = offerRepo;
@@ -60,10 +58,9 @@ public class DataFaker implements ServletContextInitializer {
         this.faker = new Faker(Locale.ENGLISH, rnd);
     }
 
-    public DataFaker(long seed, Environment env, UserRepo userRepo, ItemRepo itemRepo,
-        OfferRepo offerRepo, OfferService offerService,
-        ProPayApi proPayApi) {
-        this.env = env;
+    public DataFaker(long seed, UserRepo userRepo, ItemRepo itemRepo,
+                     OfferRepo offerRepo, OfferService offerService,
+                     ProPayApi proPayApi) {
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;
         this.offerRepo = offerRepo;

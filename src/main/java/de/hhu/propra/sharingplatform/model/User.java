@@ -141,7 +141,7 @@ public class User {
     public List<ItemSale> getSoldItems() {
         List<ItemSale> soldItems = new ArrayList<>();
         for (ItemSale item : itemSales) {
-            if (item.getContracts().size() > 0) {
+            if (!item.getContracts().isEmpty()) {
                 soldItems.add(item);
             }
         }

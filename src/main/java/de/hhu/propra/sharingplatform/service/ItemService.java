@@ -8,9 +8,11 @@ import de.hhu.propra.sharingplatform.model.items.Item;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.model.items.ItemSale;
 import de.hhu.propra.sharingplatform.service.validation.ItemValidator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -97,7 +99,7 @@ public class ItemService {
         return item.getOwner().getId() == userId;
     }
 
-    public void validateItem(Item item) {
+    private void validateItem(Item item) {
         ItemValidator.validateItem(item);
     }
 
@@ -105,12 +107,13 @@ public class ItemService {
         if (search.equals("")) {
             return new ArrayList<>();
         }
-        search = search.toLowerCase();
-        search = search.replace(",", " ");
-        search = search.replace("-", " ");
-        search = search.replace("_", " ");
-        search = search.trim().replaceAll(" +", " ");
-        String[] split = search.split(" ");
+        String[] split = search.toLowerCase()
+            .replaceAll(",", " ")
+            .replaceAll("-", " ")
+            .replaceAll("_", " ")
+            .trim().replaceAll(" +", " ")
+            .split(" ");
+
         List<String> keywords = new ArrayList<>();
         for (String word : split) {
             if (!keywords.contains(word)) {
@@ -121,7 +124,7 @@ public class ItemService {
     }
 
     public List<ItemSale> filterSale(List<String> keywords) {
-        if (keywords == null || keywords.size() == 0) {
+        if (keywords == null || keywords.isEmpty()) {
             return (List<ItemSale>) itemRepo.findAll();
         }
         List<ItemSale> items = new ArrayList<>();
@@ -133,7 +136,7 @@ public class ItemService {
     }
 
     public List<ItemRental> filterRental(List<String> keywords) {
-        if (keywords == null || keywords.size() == 0) {
+        if (keywords == null || keywords.isEmpty()) {
             return (List<ItemRental>) itemRepo.findAll();
         }
         List<ItemRental> items = new ArrayList<>();
