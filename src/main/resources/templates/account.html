@@ -92,7 +92,6 @@
                           <th scope="col">Daily Rate</th>
                             <th scope="col">Bail</th>
                             <th scope="col">Offers(Open)</th>
-                            <th scope="col">Conflict</th>
                             <th scope="col" class="mx-auto">Options</th>
                         </tr>
                         </thead>
@@ -117,7 +116,6 @@
                                     </button>
                                 </a>
                             </td>
-                            <td> Is Conflict?</td>
                             <td>
                                 <a th:href="|/item/rental/details/${itemRental.getId()}|"
                                    class="btn btn-primary btn-sm">Details</a>
@@ -140,7 +138,6 @@
                     <tr>
                       <th scope="col">Name</th>
                       <th scope="col">Price in €</th>
-                      <th scope="col">Conflict</th>
                       <th scope="col" class="mx-auto">Options</th>
                     </tr>
                     </thead>
@@ -148,7 +145,6 @@
                     <tr th:each="itemSale : ${user.getNotRemovedItems(user.getItemSales())}">
                       <td th:text="${itemSale.getName()}"> Test Name</td>
                       <td th:text="${itemSale.getPrice()}"> 33€</td>
-                      <td> Is Conflict?</td>
                       <td>
                         <a th:href="|/item/sale/details/${itemSale.getId()}|"
                            class="btn btn-primary btn-sm">Details</a>
