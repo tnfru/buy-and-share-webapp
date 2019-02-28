@@ -136,12 +136,36 @@ verkauft wurde
 
 === _Konflikte erstellen_
 
-* In der Auflistung der aktiven Contracts kann der Nutzer, unabhängig davon ob er Itembesitzer ist oder nicht,
-einen Konflikt eröffnen
+* Der Ausleihende kann bis zu dem Punkt einen Konflikt erstellen,
+indem er das Item zurückgibt. Dies geschieht über die Ansicht
+"Borrowed Items".
+
+* Der Verleiher kann bis zu dem Punkt einen Konflikt erstellen,
+indem er die Rückgabe akzeptiert. Dies geschieht über die Ansicht
+"Lent Items"
+
+* Es kann immer nur ein Konflikt gleichzeitig aktiv sein. Die Konflikte
+werden an gleicher Stelle wie die Erstellung angezeigt, sobald einer
+existiert.
+
+* Sobald es einen Konflikt gibt, ändert sich auch die Status anzeige
 
 === _Konflikte lösen_
 
-*
+* Der Admin hat in seiner Profilansicht einen Reiter "Admin"
+
+* Wenn er dort den Button klickt, kommt er auf eine Übersicht über alle
+offenen Konflikte.
+
+* In der Detailansicht eines Konflikts werden die Namen und Mails der
+Beteiligten angezeigt, zudem der Konfliktersteller.
+
+* Die vier Optionen, welche der Admin hat, sind:
+** Punish Bail: Contract wird beendet und Kaution einbehalten
+** Free Bail: Contract wird beendet und Kaution befreit
+** Cancel Contract: Contract wird beendet, es gibt keine Zahlung, alle
+Reservierungen werden befreit
+** Continue Contract: Contract läuft normal weiter
 
 === _ProPay Konto verwalten_
 
