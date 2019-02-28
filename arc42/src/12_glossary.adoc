@@ -31,4 +31,10 @@ das Offer annehmen oder Ablehnen.
 |User
 |Nutzt das System als Käufer, Verkäufer, Leihender oder Verleiher. (Mehrere gleichzeitig möglich)
 
+|Lent Items
+|Items die ein User an andere User verliehen hat.
+
+|Borrowed Items
+|Items die ein User sich geliehen hat.
+
 |===
