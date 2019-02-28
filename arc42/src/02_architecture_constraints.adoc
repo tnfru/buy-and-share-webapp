@@ -1,19 +1,58 @@
-[[section-architecture-constraints]]
-== Randbedingungen
+1 Technische Randbedingungen
 
-[role="arc42help"]
-****
-.Inhalt
-Fesseln und Vorgaben, die ihre Freiheiten bezüglich Entwurf, Implementierung oder Ihres Entwicklungsprozesses einschränken.
-Diese Randbedingungen gelten manchmal organisations- oder firmenweit über die Grenzen einzelner Systeme hinweg.
+|=======
+|Randbedingung                   |Hintergrund und Erläuterungen
+|Muss auf allen gängigen  Betriebsystemen und Webbrowsern laufen
+        |Gemeint: Linux, Mac, Windows Chome/ium, Firefox, Safari, Edge (wünschenswert, nicht zwingend)
+        Grund: Alle potentiellen interessenten sollen Zugriff haben können
 
-.Motivation
-Als Architekt sollten Sie explizit wissen, wo Ihre Freiheitsgrade bezüglich Entwurfsentscheidungen liegen und wo Sie Randbedingungen beachten müssen.
-Sie können Randbedingungen vielleicht noch verhandeln, zunächst sind sie aber da.
+|Implementierung in Java(8) als Spring Boot App |Dies gehört zu den universitären
+                Randbedingungen des Praktikums in dem
+                                   diese Aplikation entstanden ist.
+                                   Grund: Gemeinsamer Standard von allen
+                                   Studierenden und Korrektoren.
 
-.Form
-Einfache Tabellen der Randbedingungen mit Erläuterungen.
-Bei Bedarf unterscheiden Sie technische, organisatorische und politische Randbedingungen oder
-übergreifende Konventionen (beispielsweise Programmier- oder Versionierungsrichtlinien, Dokumentation- oder Namenskonvention)
+                                   Zusätzlich ist JavaScript erlaubt.
+                                   Nicht aber für die Hauptlogik
 
-****
+|Ausführbar mit docker-compose up |Grund: unabhängig von System und
+                 Konfiguaration ausführbar
+|=======
+
+
+2 Organisatorische Randbedingnungen
+
+|=======
+
+|Randbedingung          |Hintergrund und Erläuterungen
+|Team                   |Christian Laußmann,   Jonathan Bobak,
+                          Markus Günther, Sami Hamdan
+                          Ingo Kral, Lars Müller
+                          Phillip Krause,  Stefan Matz
+
+|Zeitplan               |3 Wochen
+
+|Entwicklungswerkzeuge  |Tafel und Kreide, IntelliJ
+
+|Versionsverwaltung     |Git + TraviCi
+
+|=======
+
+
+3 Konventionen
+
+|=======
+
+|Konvention| Hintergrund und Erläuterungen
+|Dokumentation |arc42
+
+|Sprache Englisch|  Bis auf die Dokumentation soll alles auf Englisch sein
+                     Grund: Englisch ist prägnanter und viele Begriffe
+                     sind sowiso auf Englisch
+
+|Google Codestyle|  Wir nuzten Java typischen Codestyle (CamelCasing etc.)
+                     Um unseren Code durch TaravisCi automatisch darauf
+                     testen zu können, haben wir uns auf Googles Codestyle
+                     geeinigt. Dieser enthält nämlich solche typischen Konventionen
+
+|=======
