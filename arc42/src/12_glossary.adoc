@@ -1,38 +1,34 @@
 [[section-glossary]]
 == Glossar
 
-
-[role="arc42help"]
-****
-.Inhalt
-Die wesentlichen fachlichen und technischen Begriffe,
-die Stakeholder im Zusammenhang mit dem System verwenden.
-
-Nutzen Sie das Glossar ebenfalls als Übersetzungsreferenz,
-falls Sie in mehrsprachigen Teams arbeiten.
-
-.Motivation
-Sie sollten relevante Begriffe klar definieren,
-so dass alle Beteiligten
-
-1. diese Begriffe identisch verstehen, und
-2. vermeiden, mehrere Begriffe für die gleiche Sache zu haben.
-
-
-.Form
-* Zweispaltige Tabelle mit <Begriff> und <Definition>
-* Eventuell weitere Spalten mit Übersetzungen, falls notwendig.
-****
-
-[cols="1,2" options="header"]
+[cols="1,5" options="header"]
 |===
 |Begriff
 |Definition
 
-|_<Begriff-1>_
-|_<Definition-1>_
+|Contract
+|Eine Beziehung zweier User über ein Item. Ein Contract dient
+dazu ein Kauf- oder Leihverhältnis zu persisitieren.
 
 
-|_<Begriff-2_
-|_<Definition-2>_
+|Borrower
+|Ein User, der ein Item ausleiht.
+
+|Owner
+|Der User, dem ein Item gehört.
+
+|Item
+|Eine Representation eines realen Gegenstandes, der über die Plattform zum
+Leihen oder Kaufen angeboten wird.
+
+|ProPay
+|Ein aus der nächsten Generation an Bezahlsystem stammendes Bezahlsystem.
+
+|Offer
+|Wird erzeugt sobald ein User ein Item zur Leihe anfragt. Der Besitzer des Item kann
+das Angebot annehmen oder Ablehnen.
+
+|User
+|Nutzt das System als Käufer, Verkäufer, Leihender oder Verleiher. (Mehrere gleichzeitig möglich)
+
 |===
