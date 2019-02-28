@@ -52,6 +52,6 @@ public class Payment {
     }
 
     public boolean isBalanced(IPaymentApi paymentApi) {
-        return paymentApi.getAccountBalance(proPayIdSender) >= amount;
+        return paymentApi.getAccountBalanceLiquid(proPayIdSender) >= amount;
     }
 }
