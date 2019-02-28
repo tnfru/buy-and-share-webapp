@@ -5,10 +5,12 @@ import de.hhu.propra.sharingplatform.model.User;
 import de.hhu.propra.sharingplatform.model.contracts.BorrowContract;
 import de.hhu.propra.sharingplatform.model.items.ItemRental;
 import de.hhu.propra.sharingplatform.service.UserService;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -44,22 +46,21 @@ public class BaseController {
     }
 
     private String writeOverdueMessage(String message, List<BorrowContract> contracts,
-        LocalDateTime now) {
+                                       LocalDateTime now) {
+        StringBuilder messageBuilder = new StringBuilder(message);
         for (BorrowContract contract : contracts) {
             if (contract.getRealEnd() == null && now.isAfter(contract.getExpectedEnd())) {
-                message += "Your Contract with User "
-                    + contract.getItem().getOwner().getAccountName()
-                    + " regarding Item "
-                    + contract.getItem().getName()
-                    + " is overdue \n";
+                messageBuilder.append("Your Contract with User ")
+                    .append(contract.getItem().getOwner().getAccountName())
+                    .append(" regarding Item ").append(contract.getItem().getName())
+                    .append(" is overdue \n");
             }
         }
-        return message;
+        return messageBuilder.toString();
     }
 
     @ModelAttribute("conflictMsg")
     public String conflictMsg(Principal principal) {
-
         String message = "";
         if (principal != null) {
             message = generateConflictMessage(principal, message);
@@ -71,7 +72,6 @@ public class BaseController {
         User user = userService.fetchUserByAccountName(principal.getName());
         Collection<BorrowContract> contracts = user.getChosenContracts(false);
         Collection<ItemRental> items = user.getItemRentals();
-        //Collection<Item> items = user.getNotRemovedItems(user.getItemRentals());
         for (ItemRental item : items) {
             contracts.addAll(item.getChosenContracts(false));
         }
@@ -81,16 +81,17 @@ public class BaseController {
     }
 
     private String writeConflictMessage(String message, User user,
-        Collection<BorrowContract> contracts) {
+                                        Collection<BorrowContract> contracts) {
+        StringBuilder messageBuilder = new StringBuilder(message);
         for (BorrowContract contract : contracts) {
             List<Conflict> conflicts = contract.getOpenConflicts();
             if (!conflicts.isEmpty() && user != conflicts.get(0).getRequester()) {
-                message += "You have a conflict regarding Item "
-                    + contract.getItem().getName()
-                    + "\n";
+                messageBuilder.append("You have a conflict regarding Item ")
+                    .append(contract.getItem().getName())
+                    .append("\n");
             }
         }
-        return message;
+        return messageBuilder.toString();
     }
 
 
