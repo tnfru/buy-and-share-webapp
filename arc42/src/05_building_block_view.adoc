@@ -22,4 +22,4 @@ mit Hilfe von Thymeleaf die Objekte des Modells in HTML-Darstellungen um. Diese 
 der Controller wiederum durch anfragen auf die Services, welche die Daten beispielsweise aus der
 Datenbank holen oder aus dem Datenbestand generieren.
 
-image:05_Ueberblick.png["FIG_1"]
+image:images/05_Ueberblick.png["FIG_1"]
