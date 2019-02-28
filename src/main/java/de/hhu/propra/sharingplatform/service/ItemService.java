@@ -125,7 +125,12 @@ public class ItemService {
         }
         List<Item> items = new ArrayList<>();
         for (String key : keywords) {
-            items.addAll(repo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse(key));
+            List<Item> foundItems = repo.findAllByNameContainsIgnoreCaseAndDeletedIsFalse(key);
+            for (Item found : foundItems) {
+                if (!items.contains(found)) {
+                    items.add(found);
+                }
+            }
         }
         return items;
     }
