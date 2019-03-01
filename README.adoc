@@ -6,6 +6,7 @@
 
 Die Anwendung kann mit 'docker-compose up --build' gebaut werden,
 danach mit 'docker-compose up' gestartet werden.
+Erreichbar ist die Seite unter localhost:8080/
 
 ==== Data-Faker
 
