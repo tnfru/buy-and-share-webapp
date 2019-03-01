@@ -75,6 +75,11 @@ einen Konflict-Button zu klicken.
 Diese Aktion löst auch die Verrechnung des BorrowContracts aus. Er berechnet die benötigten Transaktionen
 und initialisiert die Zahlung über die PropayApi.
 
+* Hier ist der Ablauf einer Zahlung zu sehen:
+
+image:images/06_PaymentProcess.png["Payment"]
+
+
 === _Item zum Verleih oder Verkauf anbieten_
 
 * Der Interessent findet auf der Accountseite unter dem Reiter "Options" die Möglichkeit einen Gegenstand
