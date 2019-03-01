@@ -10,6 +10,8 @@ namentlich(in alphabetischer Reihenfolge)
 Christian, Ingo, Jonathan, Lars, Markus, Philipp, Sami und Stefan.
 
 Die Stakeholder im Rahmen des Projekts sind die Aufgaben/Projektsteller.
+In der Realität gäbe es allerdings noch weitere Stakeholder, diese sind unter 'Stakeholder'
+aufgeführt.
 
 Mindest "Geschäftsziel" ist es hierbei die in der gegebenen Aufgabenstellung mitgelieferten
 User-Stories, Use-Caseses und genannten Mindestanforderungen zu erfüllen.
@@ -80,8 +82,10 @@ Tabellarische Darstellung der Qualitätsziele mit möglichst konkreten Szenarien
 [cols="1,1,2" options="header"]
 |===
 |Rolle |Kontakt |Erwartungshaltung
-| User | UserRepo | Nutzen der Applikation , Leihen / Kaufen
-| Admin | UserRepo | Lösen von Konflikten
-| Entwickler | Github | Entwickelung der Applikation
+| Verkäufer/Verleiher | UserRepo | Verleihen / Verkaufen von eigenen Geräten, Gegenständen
+| Käufer/Leiher | UserRepo | Einfaches ausleihen und kaufen von Geräten.
+| Admin | UserRepo | Lösen von Konflikten zwischen den Usern
+| Entwickler | Github | Entwickelung der Applikation, einfache Erweiterbarkeit
+| Betreiber der Applikation | - | Günstiger betrieb, hoher Gewinn, viele Nutzer
 
 |===
