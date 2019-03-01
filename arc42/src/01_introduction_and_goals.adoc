@@ -2,17 +2,6 @@
 ==	Einführung und Ziele
 
 
-[role="arc42help"]
-****
-Beschreibt die wesentliche Anforderungen und
-treibenden Kräfte, die Softwarearchitekten und Entwicklungsteams
-berücksichtigen müssen. Dazu gehören die
-
-* zugrunde liegenden Geschäftsziele, wesentliche Aufgabenstellung und essenzielle fachliche Anforderungen an das System
-* Qualitätsziele für die Architektur
-* relevante Stakeholder und deren Erwartungshaltung
-****
-
 Bei dem vorliegenden Projekt soll eine Webanwendung im Rahmen eines
 Universitären Praktikums erstellt werden.
 Die Bearbeiter/Entwickler sind hierbei die Mitglieder der achter-Gruppe
@@ -86,25 +75,6 @@ Tabellarische Darstellung der Qualitätsziele mit möglichst konkreten Szenarien
 ****
 
 === Stakeholder
-
-[role="arc42help"]
-****
-.Inhalt
-Expliziter Überblick über die Stakeholder des Systems, d.h. über alle Personen, Rollen oder Organisationen, die
-
-* die Architektur kennen sollten oder
-* von der Architektur überzeugt werden müssen,
-* mit Architektur oder Code arbeiten (z.B. Schnittstellen nutzen),
-* Dokumentation der Architektur für ihre eigene Arbeit benötigen,
-* Entscheidungen über das System und dessen Entwicklung treffen.
-
-.Motivation
-Sie sollten die Projektbeteiligten und -betroffenen kennen, sonst erleben Sie später im Entwicklungsprozess Überraschungen. Diese Stakeholder bestimmen unter anderem Umfang und Detaillierungsgrad der von Ihnen zu leistenden Arbeit und Ergebnisse.
-
-.Form
-Tabelle mit Rollen- oder Personennamen, sowie deren Erwartungshaltung bezüglich der Architektur und deren Dokumentation.
-****
-
 
 
 [cols="1,1,2" options="header"]
