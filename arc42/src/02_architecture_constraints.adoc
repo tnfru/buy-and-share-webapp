@@ -6,7 +6,7 @@
 |=======
 |Randbedingung                   |Hintergrund und Erläuterungen
 |Muss auf allen gängigen  Betriebssystemen und Webbrowsern laufen
-        |Gemeint: Linux, Mac, Windows Chome/ium, Firefox, Safari, Edge (wünschenswert, nicht zwingend)
+        |Gemeint: Linux, Mac, Windows; Chrome/ium, Firefox, Safari, Edge (wünschenswert, nicht zwingend)
         Grund: Alle potentiellen Interessenten sollen Zugriff haben können
 
 |Implementierung in Java(8) als Spring Boot App |Dies gehört zu den universitären
