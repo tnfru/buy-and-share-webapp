@@ -67,8 +67,13 @@ sieht der Besitzer eine Auflistung ebendieser
 * Der Ausleihende findet auf der Accountseite eine Übersicht seiner ausgeliehenen Items. An dieser Stelle
 kann er über den Button "Return Item" den Gegenstand zurückgeben
 
-* Diese Aktion löst auch die Verrechnung des BorrowContracts aus. Er berechnet die benötigten Transaktionen
-und initialisiert die Zahlung über die PropayApi
+* Der Verleiher muss nun seinerseits über einen Button auf seiner Accountseite die Rückgabe
+bestätigen. Wenn das Item nicht ordnungsgemäß zurück gegeben wurde, hat er die Möglichkeit auf
+einen Konflict-Button zu klicken.
+
+* Angenommen er bestätigt die Rückgabe:
+Diese Aktion löst auch die Verrechnung des BorrowContracts aus. Er berechnet die benötigten Transaktionen
+und initialisiert die Zahlung über die PropayApi.
 
 === _Item zum Verleih oder Verkauf anbieten_
 
