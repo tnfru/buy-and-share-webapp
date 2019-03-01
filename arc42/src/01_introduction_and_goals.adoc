@@ -35,47 +35,6 @@ Weitere generelle Ziele sind eine gute Benutzbarkeit der Oberfläche. Dies
 inkludiert eine aufgeräumte, übersichtliche und schnell reagierende Oberfläche.
 
 
-
-=== Aufgabenstellung
-
-[role="arc42help"]
-****
-.Inhalt
-Kurzbeschreibung der fachlichen Aufgabenstellung, treibenden Kräfte, Extrakt (oder Abstract) der Anforderungen.
-Verweis auf (hoffentlich vorliegende) Anforderungsdokumente (mit Versionsbezeichnungen und Ablageorten).
-
-
-.Motivation
-Aus Sicht der späteren Nutzer ist die Unterstützung einer fachlichen Aufgabe oder Verbesserung der Qualität der eigentliche Beweggrund, ein neues System zu schaffen oder ein bestehendes zu modifizieren.
-
-.Form
-Kurze textuelle Beschreibung, eventuell in tabellarischer Use-Case Form.
-Sofern vorhanden sollte die Aufgabenstellung Verweise auf die entsprechenden Anforderungsdokumente enthalten.
-
-Halten Sie diese Auszüge so knapp wie möglich und wägen Sie Lesbarkeit und Redundanzfreiheit gegeneinander ab.
-****
-
-=== Qualitätsziele
-
-[role="arc42help"]
-****
-.Inhalt
-Die Top-3 bis Top-5 der Qualitätsziele für die Architektur, deren Erfüllung oder Einhaltung den maßgeblichen Stakeholdern besonders wichtig sind.
-Gemeint sind hier wirklich Qualitätsziele, die nicht unbedingt mit den Zielen des Projekts übereinstimmen. Beachten Sie den Unterschied.
-
-
-.Motivation
-Weil Qualitätsziele grundlegende Architekturentscheidungen
-oft maßgeblich beeinflussen, sollten Sie die für Ihre Stakeholder
-relevanten Qualitätsziele kennen, möglichst konkret und
-operationalisierbar.
-
-Wenn Sie als Architekt nicht wissen, woran Ihre Arbeit gemessen wird, ....
-
-.Form
-Tabellarische Darstellung der Qualitätsziele mit möglichst konkreten Szenarien, geordnet nach Prioritäten.
-****
-
 === Stakeholder
 
 
